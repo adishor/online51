@@ -13,7 +13,9 @@ class DomainAdmin extends Admin
     public function configureFormFields(FormMapper $form)
     {
         $form->add('name')
-            ->add('baseline')
+            ->add('baseline', null, array(
+                'required' => false
+            ))
             ->add('description')
             ->add('subdomains', 'sonata_type_model', array(
                 'expanded' => false,

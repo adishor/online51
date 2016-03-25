@@ -8,7 +8,7 @@
         }
     },
     "require": {
-        "php": ">=5.3.9",
+        "php": ">=5.4",
         "symfony/symfony": "2.7.*",
         "vich/uploader-bundle": "^0.14.0",
         "doctrine/orm": "~2.2,>=2.2.3,<2.5",
@@ -30,7 +30,8 @@
         "stof/doctrine-extensions-bundle": "~1.1@dev",
         "sonata-project/user-bundle": "~2.3@dev",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "sonata-project/formatter-bundle": "^2.3"
+        "sonata-project/formatter-bundle": "^2.3",
+        "knplabs/doctrine-behaviors": "~1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
@@ -57,7 +58,7 @@
     "config": {
         "bin-dir": "bin",
         "platform": {
-            "php": "5.3.9"
+            "php": "5.4"
         }
     },
     "extra": {

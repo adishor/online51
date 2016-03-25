@@ -1,0 +1,48 @@
+<script type="text/javascript">
+    //<![CDATA[
+
+    $.ajaxSetup({ cache: false });
+
+    $(document).ready(function () {
+        $.extend($.fn.dataTable.defaults, {
+            "aaSorting": [],
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": false,
+            "iDisplayLength": 10,
+            "bAutoWidth": false,
+            "bDeferRender": true
+        });
+
+        $.blockUI.defaults.css.border = 'none';
+        $.blockUI.defaults.css.backgroundColor = 'transparent';
+        $.blockUI.defaults.baseZ = 6000;
+        $.blockUI.defaults.overlayCSS.opacity = 0.4;
+
+        $.blockUI.defaults.message = '<img src="{{ asset('assets/images/ajax-loader.gif') }}" />';
+    });
+
+    //]]>
+</script>
+
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3">
+                <img class="last" id="menulogo" src="{{ asset('assets/images/logo.png') }}" alt="logo" />
+            </div>
+            <div class="col-xs-9">
+                <h2 class="last">Platforma de consultanta pentru firme</h2>
+
+                <ul class="header-nav">
+                    <li class="last"><a href="Advantages.html"><i class="fa fa-arrow-up"></i> Avantaje</a></li>
+                    <li class="last"><a href="Subscriptions.html"><i class="fa fa-info-circle"></i> Abonamente</a></li>
+                    <li class="last"><a href="Subscriptions/Bonuses.html"><i class="fa fa-gift"></i> Bonusuri</a></li>
+                    <li class="last"><a href="FAQ.html"><i class="fa fa-question-circle"></i> FAQ</a></li>
+                    <li class="last"><a href="Home/Contact.html"><i class="fa fa-user"></i> Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+

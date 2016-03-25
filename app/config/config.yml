@@ -173,3 +173,6 @@ doctrine:
                     ApplicationSonataUserBundle: ~
                     SonataUserBundle: ~
                     FOSUserBundle: ~
+
+knp_doctrine_behaviors:
+    sluggable:      true

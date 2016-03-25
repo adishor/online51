@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -13,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Domain
 {
+    use ORMBehaviors\Sluggable\Sluggable;
+
     /**
      *
      * @var integer
@@ -271,5 +274,15 @@ class Domain
     public function getUserSubscriptionDomains()
     {
         return $this->userSubscriptionDomains;
+    }
+
+    public function getSluggableFields()
+    {
+        return [ 'name' ];
+    }
+
+    public function generateSlugValue($values)
+    {
+        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
 }

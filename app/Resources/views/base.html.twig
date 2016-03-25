@@ -2,12 +2,73 @@
 <html>
     <head>
         <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=9" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            {% stylesheets filter='cssrewrite'
+                'assets/css/Bootstrap-3.2.0/css/bootstrap-theme.min.css'
+                'assets/css/Bootstrap-3.2.0/css/bootstrap.min.css'
+                'assets/css/Site.css'
+                'assets/css/font-awesome-4.1.0/css/font-awesome.min.css'
+                'assets/css/cssd2d5.css'
+                'assets/css/css5d2a.css'
+            %}
+            <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+            {% endstylesheets %}
+        {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block body %}
+
+        {% block header %}
+          {% include 'header.html.twig' %}
+        {% endblock header %}
+
+        {% block menu %}
+          {{ render(controller('AppBundle:Default:menu')) }}
+        {% endblock %}
+
+        <hgroup class="title"></hgroup>
+        <div id="jqcontainer" style="display: none"></div>
+        <div class="container">
+          <div class="bg-white">
+            <div class="row">
+              {% block ccontainer %}
+                {% include 'center_container.html.twig' %}
+              {% endblock %}
+
+              {% block rcontainer %}
+                {% include 'right_container.html.twig' %}
+              {% endblock %}
+            </div>
+          </div>
+        </div>
+
+        {% block footer %}
+          {% include 'footer.html.twig' %}
+        {% endblock %}
+
+        {% endblock %}
+
+        {% block javascripts %}
+            {% javascripts
+              'assets/js/jquery-1.8.2.min4198.js'
+              'assets/js/jquery-ui-1.8.24.min4198.js'
+              'assets/js/jquery.linx.ui.fancy-combobox4198.js'
+              'assets/js/jquery.fileDownload4198.js'
+              'assets/js/Common4198.js'
+              'assets/js/jquery.form4198.js'
+              'assets/js/jquery.validate4198.js'
+              'assets/js/jquery.validate.unobtrusive4198.js'
+              'assets/js/jquery.unobtrusive-ajax4198.js'
+              'assets/js/jquery.blockUI4198.js'
+              'assets/js/jquery.dataTables4198.js'
+              'assets/js/jquery.jeditable4198.js'
+              'assets/js/bootstrap.min4198.js'
+            %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
     </body>
 </html>
