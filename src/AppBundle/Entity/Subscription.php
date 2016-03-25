@@ -87,6 +87,11 @@ class Subscription
      */
     private $domains;
 
+    /**
+     * @ORM\OneToMany(targetEntity="UserSubscription", mappedBy="subscription", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $userSubscriptions;
+
     public function __construct() {
         $this->domains = new ArrayCollection();
     }
@@ -298,5 +303,38 @@ class Subscription
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * Add userSubscriptions
+     *
+     * @param \AppBundle\Entity\UserSubscription $userSubscriptions
+     * @return Subscription
+     */
+    public function addUserSubscription(\AppBundle\Entity\UserSubscription $userSubscriptions)
+    {
+        $this->userSubscriptions[] = $userSubscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove userSubscriptions
+     *
+     * @param \AppBundle\Entity\UserSubscription $userSubscriptions
+     */
+    public function removeUserSubscription(\AppBundle\Entity\UserSubscription $userSubscriptions)
+    {
+        $this->userSubscriptions->removeElement($userSubscriptions);
+    }
+
+    /**
+     * Get userSubscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserSubscriptions()
+    {
+        return $this->userSubscriptions;
     }
 }

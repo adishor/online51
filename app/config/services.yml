@@ -19,3 +19,23 @@ services:
         arguments: [~, AppBundle\Entity\SubDomain, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: SubDomain, group: Data }
+    admin.usersubscription:
+        class: AppBundle\Admin\UserSubscriptionAdmin
+        arguments: [~, AppBundle\Entity\UserSubscription, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: UserSubscription, group: Subscription }
+    admin.usersubscriptiondomain:
+        class: AppBundle\Admin\UserSubscriptionDomainAdmin
+        arguments: [~, AppBundle\Entity\UserSubscriptionDomain, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: UserSubscriptionDomain, group: Subscription }
+    admin.credits:
+        class: AppBundle\Admin\CreditsAdmin
+        arguments: [~, AppBundle\Entity\Credits, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Credits, group: Credit }
+    admin.creditsusage:
+        class: AppBundle\Admin\CreditsUsageAdmin
+        arguments: [~, AppBundle\Entity\CreditsUsage, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: CreditsUsage, group: Credit }

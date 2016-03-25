@@ -31,6 +31,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
         $user->setEnabled(true);
         $user->setExpired(false);
         $user->setLocked(false);
+        $user->setName('SuperAdmin');
+        $user->setCompany('PITECH+PLUS');
         $user->addRole(User::ROLE_SUPER_ADMIN);
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
         $user->setPassword($encoder->encodePassword('admin', $user->getSalt()));

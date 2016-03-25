@@ -59,6 +59,13 @@ class Domain
      */
     private $subdomains;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="UserSubscriptionDomain", mappedBy="domain", cascade={"persist", "remove"}, orphanRemoval=true))
+     */
+    private $userSubscriptionDomains;
+
+
     public function __construct() {
         $this->subdomains = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
@@ -231,5 +238,38 @@ class Domain
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * Add userSubscriptionDomains
+     *
+     * @param \AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains
+     * @return Domain
+     */
+    public function addUserSubscriptionDomain(\AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains)
+    {
+        $this->userSubscriptionDomains[] = $userSubscriptionDomains;
+
+        return $this;
+    }
+
+    /**
+     * Remove userSubscriptionDomains
+     *
+     * @param \AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains
+     */
+    public function removeUserSubscriptionDomain(\AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains)
+    {
+        $this->userSubscriptionDomains->removeElement($userSubscriptionDomains);
+    }
+
+    /**
+     * Get userSubscriptionDomains
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserSubscriptionDomains()
+    {
+        return $this->userSubscriptionDomains;
     }
 }
