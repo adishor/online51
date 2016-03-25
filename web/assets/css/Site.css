@@ -8,7 +8,7 @@
     clear:both;
 }
 
-    
+
 header, footer, hgroup,
 nav, section {
     display: block;
@@ -286,7 +286,7 @@ input, textarea {
     margin: 5px 0 6px 0;
     padding: 3px;
     width:100%;
-    
+
 }
 
 textarea {
@@ -312,7 +312,7 @@ textarea {
         cursor: pointer;
         font-size: 1.1em;
         font-weight: 600;
-        
+
         margin-right: 8px;
         width: auto;
     }
@@ -384,7 +384,7 @@ input[type="checkbox"].input-validation-error {
 ----------------------------------------------------------*/
 table {
     border-collapse: collapse;
-    border-spacing: 0;    
+    border-spacing: 0;
     border: 0 none;
 }
 
@@ -401,13 +401,13 @@ table.users img {
          min-height: 1px;
         padding:5px 15px;
         position: relative;
-        
+
         width: 8.33333%;
     }
 
     table.users th:first-child, table.users td:first-child, table.users th:nth-child(2), table.users td:nth-child(2), table.users th:nth-child(5), table.users td:nth-child(5){
         width: 16.6667%;
-        
+
     }
 
    table.users th:nth-child(4), table.users td:nth-child(4){
@@ -416,7 +416,7 @@ table.users img {
 
      table.users td:nth-child(7), table.users td:nth-child(6), table.users td:nth-child(5){
         text-align:center;
-        
+
     }
 
     table.users.documents td:nth-child(2),table.users.documents th:nth-child(2){
@@ -482,10 +482,10 @@ transition: background 0.2s linear;
     text-decoration:none;
     background-color:#aecb06 ;
     color:#fff;
-    
+
 }
 
-   
+
 
 th {
     font-size: 1.2em;
@@ -562,9 +562,9 @@ body {
       margin:0 auto;
       font-family: 'Lato', sans-serif;
       margin-top:15px;
-   
-    
-     
+
+
+
 }
 
 
@@ -573,7 +573,7 @@ body {
 
 header, footer {
     background-color:#3B4951;
-   
+
     background-size:100% 100%;
 }
 
@@ -587,7 +587,7 @@ h1, h2 {
 }
 
 .col-xs-9 h2 {
-   
+
     color:#efefef;
     font-size:32px;
   line-height:60px;
@@ -610,9 +610,9 @@ h2.title {
 
 nav ul {
     display:block;
-    list-style-type:none;    
+    list-style-type:none;
     padding-left:0 !important;
-     
+
      border-bottom:1px solid #aecb06 ;
      font-family: "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
      font-weight:bold;
@@ -622,7 +622,7 @@ nav ul {
 
 nav ul li{
     float:left;
-    
+
 }
 
 nav ul li a{
@@ -635,14 +635,14 @@ nav ul li a:hover, nav ul li a:focus{
     text-decoration:none;
     color:#fff;
     background-color:#aecb06 ;
-   
-    
+
+
 }
-  
+
 
 nav ul li a.active-menu {
      background-color:#aecb06 ;
-     
+
      color:#fff;
 }
 
@@ -681,7 +681,7 @@ footer p {
     -moz-box-shadow: 0 0 5px #333;
 -webkit-box-shadow: 0 0 5px #333;
 box-shadow: 0px 0px 5px #333;
-    
+
 }
 
 
@@ -698,14 +698,14 @@ box-shadow: 0px 0px 5px #333;
 .nav-tabs > li {
     float:none!important;
     border:0;
-   
+
 }
- 
+
 .nav-tabs li a{
-    
+
     font-weight:bold;
 
-    color:#333;      
+    color:#333;
         background: #AFCA36;
         border:0;
 -webkit-box-shadow: 2px 2px 3px 0px rgba(77, 79, 79, 0.75);
@@ -714,25 +714,25 @@ box-shadow:         2px 2px 3px 0px rgba(77, 79, 79, 0.75);
           margin-bottom:8px;
           border-radius:0px;
 
-   
-    
+
+
 }
 
    .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-        
+
          color:#333!important;
          text-shadow: none;
-         
+
          background:#efefef;
          border:0;
       -webkit-box-shadow: inset 3px 3px 3px -2px rgba(77,79,79,0.75);
 -moz-box-shadow: inset 3px 3px 3px -2px rgba(77,79,79,0.75);
 box-shadow: inset 3px 3px 3px -2px rgba(77,79,79,0.75);
 }
-      
-       
-    
-  
+
+
+
+
 
     .nav-tabs > li > a:hover {
         color:#333;
@@ -741,7 +741,7 @@ box-shadow: inset 3px 3px 3px -2px rgba(77,79,79,0.75);
 
         -moz-box-shadow:    none;
         -webkit-box-shadow: none;
-        box-shadow:         none; 
+        box-shadow:         none;
     }
 
 .tab-content {
@@ -770,7 +770,7 @@ transform: translate(0, 0px);
 
 
 .disabled:hover {
-    
+
 }
 
 .nav-tabs > li > a.disabled:active {
@@ -810,7 +810,7 @@ ul.list-check i{
         border:1px solid #999;
         background-color:#ccc;
         color:#333;
-       
+
     }
         .login-form input.costum {
             margin-right:10px;
@@ -841,7 +841,7 @@ ul.list-check i{
     padding:0 10px 10px 10px;
     color:#333;
     margin-bottom:20px;
-   
+
 }
 
 .logedin p.first {
@@ -851,13 +851,13 @@ ul.list-check i{
         padding:10px 0;
         margin-bottom:0px;
         color:#333;
-        
-        
+
+
     }
 
-.logedin p.first i{        
-        color: #ddd ; 
-        font-size:24px;       
+.logedin p.first i{
+        color: #ddd ;
+        font-size:24px;
     }
 
 .logedin input[type=submit] {
@@ -875,8 +875,8 @@ ul.list-check i{
             float:left;
         }
     .logedin input[type=submit]:first-child {
-        width:60%;  
-        margin-right:1%;      
+        width:60%;
+        margin-right:1%;
     }
 /*.register-form {
     background-color:#ddd;
@@ -886,7 +886,7 @@ ul.list-check i{
 }
 
     .register-form p.first {
-        font-size:24px;        
+        font-size:24px;
         border-bottom:1px solid #AECB06;
         padding:15px 0;
         margin-bottom:15px;
@@ -911,7 +911,7 @@ ul.list-check i{
             transition: all 0.2s ease-in;
         }
 
-       
+
 
 */
 
@@ -928,7 +928,7 @@ input.costum {
         -o-transition: all 0.2s ease-in;
         transition: all 0.2s ease-in;
     }
-        
+
 
  input.costum:hover{
         background-color:#aecb06 ;
@@ -961,7 +961,7 @@ input.costum {
 }
 
 .register input[type="checkbox"] {
-    margin:7px 5px; 
+    margin:7px 5px;
 }
 
 .register-form2 input[type=submit] {
@@ -1020,9 +1020,9 @@ input.costum {
 }
 
 .switch input {
-  top: 0; 
-  right: 0; 
-  bottom: 0; 
+  top: 0;
+  right: 0;
+  bottom: 0;
   left: 0;
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -1142,7 +1142,7 @@ input.costum {
   content: "Da";
   right: 110%;
   color: #82a06a;
-  text-shadow: 
+  text-shadow:
     0 1px 0 #afcb9b,
     0 -1px 0 #6b8659;
 }
@@ -1158,7 +1158,7 @@ input.costum {
 
 .main-filter input[type=text], .main-filter select{
     width:100%;
-    margin-bottom:15px;    
+    margin-bottom:15px;
 }
     .main-filter select {
         padding:5px 0;
@@ -1168,7 +1168,7 @@ input.costum {
 .main-filter input[type=checkbox]{
    margin-right:10px;
    margin-top:7px;
-    
+
 }
 
     .main-filter div.last {
@@ -1181,7 +1181,7 @@ input.costum {
 }
 
 .button-container input {
-    
+
     border-style: solid;
     border-width: 1px;
     cursor: default;
@@ -1212,7 +1212,7 @@ input.costum {
         cursor:default;
     }
 
-     
+
       .active-tab {
        background:#fff;
        color:#054497;
@@ -1232,7 +1232,7 @@ input.costum {
 
 .results {
    background: #ff0000; /* Old browsers */
-   
+
     margin-bottom:30px;
     color:#efefef;
     padding:5px 0;
@@ -1243,13 +1243,13 @@ border-radius: 10px;
 
 .result-green {
     background: #00b35a; /* Old browsers */
-   
+
 }
 
 .results p{
-    
+
     font-size:20px;
-   
+
     text-align:center;
     margin-bottom:0;
 }
@@ -1299,7 +1299,7 @@ border-radius: 10px;
 #table_paginate a {
     display:block;
     border:1px solid #ddd;
- 
+
     color:#333;
     padding:5px 10px;
     margin:15px 15px 15px 0;
@@ -1333,12 +1333,12 @@ border-radius: 10px;
 
 
 input[type=checkbox].css-checkbox {
-				
+
 			}
 
 			input[type=checkbox].css-checkbox + label.css-label {
 				padding-left:43px;
-				height:26.5px; 
+				height:26.5px;
 				display:inline-block;
 				line-height:38px;
 				background-repeat:no-repeat;
@@ -1354,8 +1354,7 @@ input[type=checkbox].css-checkbox {
 				background-position: 0 -27px;
 			}
 			label.css-label {
-	background-image:url(../../../www.csscheckbox.com/checkboxes/u/csscheckbox_87cc36a8ead05e11c11fa3b6e859ea43.png);
-    background-image: url(Images/background-checked.png);
+    background-image: url(background-checked.png);
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -1402,7 +1401,7 @@ input[type=checkbox].css-checkbox {
        display:block;
        color:#333;
        margin-right:22px;
-       
+
 }
 
 .homepage-description p {
@@ -1419,7 +1418,7 @@ input[type=checkbox].css-checkbox {
         text-decoration:none;
         background-color:#afca36 ;
         color:#efefef;
-       
+
     }
 
         .homepage-description p a:hover i {
@@ -1448,12 +1447,12 @@ input[type=checkbox].css-checkbox {
     float:right;
 }
 
-.header-nav li{    
+.header-nav li{
     float:left;
 }
 
 .header-nav li a{
-   
+
     display:block;
     color:#efefef;
     padding-left:40px;
@@ -1498,7 +1497,7 @@ input[type=checkbox].css-checkbox {
 
 #start p.first, #office p.first, #enterprise p.first,#business p.first {
     padding:10px;
-    
+
     color:#ff0000;
     -webkit-border-radius: 10px 10px 10px 10px;
 
@@ -1541,7 +1540,7 @@ margin-left:-50px;
 
 .new-evaluation {
     border:1px solid #ddd;
-   
+
     margin-bottom:10px;
     cursor:pointer;
     color:#666;
@@ -1550,11 +1549,11 @@ margin-left:-50px;
 
     .new-evaluation p img {
        width:60%;
-     
+
     }
 
     .new-evaluation h4 {
-        
+
     }
 
 
@@ -1575,7 +1574,7 @@ padding:25px 50px;
         margin-top:13px;
     }
       form.contact-form label.fortextarea {
-        
+
         margin-top:45px;
     }
 
@@ -1633,24 +1632,24 @@ p.login-form input.costum {
 }
 
 @media screen and (min-width: 700px) {
-    
-    .this-is-fixed {    
+
+    .this-is-fixed {
             right:0;
     }
 
 }
 
 @media screen and (min-width: 1000px) {
-    
-    .this-is-fixed {    
+
+    .this-is-fixed {
             right:15%;
     }
 
 }
 
 @media screen and (min-width: 1500px) {
-    
-    .this-is-fixed {    
+
+    .this-is-fixed {
             right:25%;
     }
 
@@ -1665,20 +1664,20 @@ p.login-form input.costum {
 background-color: rgba(255,255,255,0.9);
     border-radius: 5px;
     border:1px solid #a5a5a5;
-   
+
     color: #333;
-    
+
     font-size: 12px;
     left:90px;
    margin-top:-45px;
-    
-    
+
+
     padding: 7px 10px;
     position: absolute;
     width: 500px;
     z-index: 4;
     display:none;
-   
+
   }
 
  .pop:before {
@@ -1689,7 +1688,7 @@ background-color: rgba(255,255,255,0.9);
         left:-7px;
         content: '';
         display: block;
-       
+
         margin-left: 0px;
         position: absolute;
       }
@@ -1714,7 +1713,7 @@ background-color: rgba(255,255,255,0.9);
     padding:10px;
    display:none;
     color: #333;
-}  
+}
 
 .show-at-hover span:before {
         border-bottom: 7px solid rgba(165, 165, 165,0.85);
@@ -1724,7 +1723,7 @@ background-color: rgba(255,255,255,0.9);
         left:22%;
         content: '';
         display: block;
-       
+
         margin-left: 0px;
         position: absolute;
       }

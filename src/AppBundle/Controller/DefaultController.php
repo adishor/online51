@@ -4,16 +4,24 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        return $this->render('default/index.html.twig', array());
+        $domains = $this->getDoctrine()->getManager()
+                    ->getRepository('AppBundle:Domain')->findAll();
+
+        $subscriptions = $this->getDoctrine()->getManager()
+                    ->getRepository('AppBundle:Subscription')->findAll();
+
+        return $this->render('default/index.html.twig', array(
+            'domains' => $domains,
+            'subscriptions' => $subscriptions
+        ));
     }
 
     public function menuAction()

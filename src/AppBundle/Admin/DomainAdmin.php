@@ -17,6 +17,7 @@ class DomainAdmin extends Admin
                 'required' => false
             ))
             ->add('description')
+            ->add('dedicated')
             ->add('subdomains', 'sonata_type_model', array(
                 'expanded' => false,
                 'multiple' => true,
@@ -41,6 +42,7 @@ class DomainAdmin extends Admin
     public function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name')
+            ->add('dedicated')
             ->add('subdomains')
             ->add('subscriptions');
     }
@@ -50,6 +52,7 @@ class DomainAdmin extends Admin
         $show->add('name')
             ->add('baseline')
             ->add('description')
+            ->add('dedicated')
             ->add('subdomains')
             ->add('subscriptions');
     }

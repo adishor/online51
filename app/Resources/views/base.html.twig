@@ -34,9 +34,9 @@
         <div class="container">
           <div class="bg-white">
             <div class="row">
-              {% block ccontainer %}
-                {% include 'center_container.html.twig' %}
-              {% endblock %}
+              <div class="col-xs-9 set-width-content">
+                {% block ccontainer %}{% endblock %}
+              </div>
 
               {% block rcontainer %}
                 {% include 'right_container.html.twig' %}

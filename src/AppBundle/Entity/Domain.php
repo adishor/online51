@@ -51,6 +51,14 @@ class Domain
 
     /**
      *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $dedicated;
+
+    /**
+     *
      * @ORM\ManyToMany(targetEntity="Subscription", mappedBy="domains", cascade={"persist"})
      * @ORM\JoinTable(name="subscription_domain")
      */
@@ -152,6 +160,29 @@ class Domain
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set dedicated
+     *
+     * @param boolean $dedicated
+     * @return Domain
+     */
+    public function setDedicated($dedicated)
+    {
+        $this->dedicated = $dedicated;
+
+        return $this;
+    }
+
+    /**
+     * Get dedicated
+     *
+     * @return boolean
+     */
+    public function getDedicated()
+    {
+        return $this->dedicated;
     }
 
     /**

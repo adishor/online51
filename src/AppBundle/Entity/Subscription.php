@@ -35,7 +35,7 @@ class Subscription
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $intro;
 
@@ -331,7 +331,7 @@ class Subscription
     /**
      * Get userSubscriptions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUserSubscriptions()
     {
