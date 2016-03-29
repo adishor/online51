@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Subscription
@@ -51,6 +52,7 @@ class Subscription
      *
      * @var integer
      *
+     * @Assert\GreaterThanOrEqual(value = 0)
      * @ORM\Column(type="integer")
      */
     private $domainAmount;
@@ -59,6 +61,7 @@ class Subscription
      *
      * @var float
      *
+     * @Assert\GreaterThanOrEqual(value = 0)
      * @ORM\Column(type="decimal", scale=2)
      */
     private $price;
@@ -67,6 +70,7 @@ class Subscription
      *
      * @var integer
      *
+     * @Assert\GreaterThanOrEqual(value = 0)
      * @ORM\Column(type="integer")
      */
     private $credit;
@@ -75,6 +79,9 @@ class Subscription
      *
      * @var integer
      *
+     * @Assert\Range(min = 1, max = 5,
+     *                  minMessage = "Your subscription should have minim 1 year valability",
+     *                  maxMessage = "Your subscription shoud have maxim 5 years valability" )
      * @ORM\Column(type="integer")
      */
     private $valability;

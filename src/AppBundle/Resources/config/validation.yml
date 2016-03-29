@@ -1,0 +1,12 @@
+Application\Sonata\UserBundle\Entity\User:
+    properties:
+        logoImage:
+            - File:
+                mimeTypes: ["image/jpeg", "image/png"]
+                mimeTypesMessage: Please upload a valid image.
+                groups: [Registration, Profile]
+        noEmployees:
+            - GreaterThanOrEqual:
+                value: 0
+                groups: [Registration, Profile]
+

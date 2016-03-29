@@ -13,8 +13,6 @@ class UserAdmin extends SonataUserAdmin
     {
         parent::configureFormFields($formMapper);
 
-        //var_dump($this->getSubject()->getCity()); die;
-
         $formMapper
             ->removeGroup('Profile', 'User')
             ->tab('User')
