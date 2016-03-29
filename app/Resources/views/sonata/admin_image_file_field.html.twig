@@ -1,0 +1,12 @@
+{% block sonata_admin_image_file_widget %}
+  {% spaceless %}
+    {% set subject =  form.parent.vars.value %}
+    {% if subject.id %}
+        <a href="{{ asset(vich_uploader_asset(subject, 'logoImage')) }}" target="_blank">
+            <img src="{{ asset(vich_uploader_asset(subject, 'logoImage')) }}" width="300" />
+        </a><br/>
+    {% endif %}
+    {% set type = type|default('file') %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endspaceless %}
+{% endblock %}

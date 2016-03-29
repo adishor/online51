@@ -29,6 +29,7 @@
 /web/uploads/
 /web/js/
 /web/css/
+/web/images/
 
 # Assets managed by Bower
 /web/assets/vendor/

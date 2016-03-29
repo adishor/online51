@@ -7,6 +7,9 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    sonata.user.admin.user.class: AppBundle\Admin\UserAdmin
+    sonata.user.admin.user.controller: AppBundle:UserAdmin
+    sonata.user.admin.user.translation_domain: SonataAdminUserBundle
 
 framework:
     #esi:             ~

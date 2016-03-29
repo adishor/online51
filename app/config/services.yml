@@ -39,3 +39,10 @@ services:
         arguments: [~, AppBundle\Entity\CreditsUsage, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: CreditsUsage, group: Credit }
+
+    sonata_admin_image_file:
+        class: AppBundle\Form\Type\AdminImageFileType
+        tags:
+            - { name: form.type }
+    logo.namer:
+        class: AppBundle\Util\FileNamer
