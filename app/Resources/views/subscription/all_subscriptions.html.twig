@@ -1,0 +1,41 @@
+{% for subscription in subscriptions %}
+  <div class="tab-pane" id="ssm{{ loop.index }}">
+    <div id="{{ subscription.name | upper }}">
+      <form action="" method="post">
+        <div class="row">
+          <div class="col-xs-9">
+              <h3 class="title">{{ subscription.name }}</h3>
+          </div>
+          <div class="col-xs-3">
+              <input class="costum pull-right" type="button" value="comanda" />
+          </div>
+        </div>
+
+        <p>{{ subscription.intro | raw }}</p>
+        <div class="selecting-checkbox" id="{{ subscription.name | lower }}">
+          {% if subscription.domains | length > 1 %}
+            {% for domain in subscription.domains %}
+              <p>
+                <input type="checkbox" class="css-checkbox " id="checkbox{{ loop.index0 }}" onclick="{{ subscription.name | lower }}" /><label class="css-label" for="checkbox{{ loop.index0 }}"></label>{{ domain.name }} - {{ domain.baseline }}
+                <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii</span>
+              </p>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="row price">
+          <div class="col-xs-4">
+               <p class="last">Pret : <span class="color-blue">{{ subscription.price }}</span> RON</p>
+          </div>
+          <div class="col-xs-4">
+               <p class="last">Numar Credite : <span class="color-blue">{{ subscription.credit }}</span></p>
+          </div>
+          <div class="col-xs-4">
+              <p class="last">Termen de valabilitate : <span class="color-blue">{{ subscription.domainAmount }}</span> an</p>
+          </div>
+        </div>
+        {{ subscription.description }}
+      </form>
+    </div>
+  </div>
+{% endfor %}
+

@@ -5,12 +5,16 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Application\Sonata\UserBundle\Entity\User;
 
 class RegisterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')
+        $builder->add('name', null, array(
+                    'required' => true,
+                    'label' => 'Nume si prenume'
+                ))
                 ->add('function', 'choice', array(
                     'required' => true,
                     'choices' => array(
@@ -21,14 +25,7 @@ class RegisterType extends AbstractType
                     )
                 ))
                 ->add('email', 'email')
-                ->add('password', 'repeated', array(
-                    'type' => 'password',
-                    'invalid_message' => 'The password fields must match.',
-                    'options' => array('attr' => array('class' => 'password-field')),
-                    'required' => true,
-                    'first_options'  => array('label' => 'Parola'),
-                    'second_options' => array('label' => 'Confirmare parola')
-                ))
+                ->add('password')
                 ->add('company')
                 ->add('cui')
                 ->add('noRegistrationORC')
@@ -38,7 +35,7 @@ class RegisterType extends AbstractType
                 ->add('phone')
                 ->add('county')
                 ->add('city')
-                ->add('logo')
+                ->add('logo', 'file')
                 ;
     }
 
@@ -48,7 +45,7 @@ class RegisterType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\User'
+            'data_class' => 'Application\Sonata\UserBundle\Entity\User'
         ));
     }
 

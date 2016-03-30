@@ -1,102 +1,63 @@
 {% extends "base.html.twig" %}
 
 {% block ccontainer %}
-  <div class="col-xs-3">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs clearfix" role="tablist">
-      {% for subscription in subscriptions %}
-        <li><a href="#ssm{{ loop.index }}" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="col-xs-9">
-    <div class="tab-content">
-      <div class="tab-pane active" id="ssm">
-        <h3>Bine ai venit !</h3>
-        <p>OnLine51 este o platforma de consultanta online pentru 5 domenii conexe activitatii de baza a firmei tale</p>
-
-        <div class="homepage-description clearfix">
-          <div class="cleafix">
-              {% for domain in domains %}
-                {% if not domain.dedicated %}
-                  <p>
-                    <a href="{{ path('domain_show', {'domain': domain.slug}) }}">
-                      <i class="fa fa-check color-green"></i>{{ domain.name }}
-                    </a>
-                  </p>
-                {% endif %}
-              {% endfor %}
-         </div>
-        </div>
-        <div class="clearfix">
-            <p class="pull-left">si un domeniu dedicat specialistilor SSM</p>
-            <div class="homepage-description">
-              {% for domain in domains %}
-                {% if domain.dedicated %}
-                  <p class="last">
-                    <a href="{{ path('domain_show', {'domain': domain.slug}) }}">
-                      <i class="fa fa-check color-green"></i>{{ domain.name }}
-                    </a>
-                  </p>
-                {% endif %}
-              {% endfor %}
-            </div>
-        </div>
-
-        <h4>CUM FUNCTIONEAZA?</h4>
-        <p>Simplu, prietenos, prin logarea online cu  username si parola, fara instalare pe computerul tau.</p>
-        <p>La crearea contului, alegi tipul de abonament. Fiecare tip de abonament  iti ofera accesul la unul sau mai multe domenii, in limita unui anumit numar de <a class="show-at-hover hover-credits">credite <span> Ai posibilitatea oricand sa achizitionezi noi credite sau sa modifici tipul de abonament. Alegerea unui tip de abonament cu un numar mai mare de credite are avantajul costului mai mic pe unitate de credit si iti ofera accesul la mai multe domenii. Pentru alte beneficii pe care le poti avea ca si abonat, consulta meniul BENEFICII.</span></a>. Creditele sunt valabile 1 an de la prima conectare. Numarul de credite se <a class="show-at-hover">diminueaza <span>La accesarea informatiilor si documentelor,  numarul de credite se diminueaza corespunzator cu valoarea afisata in titlul documentului. Astfel, esti avizat de “valoarea” unui document inainte de deschiderea acestuia. Numarul de credite disponibile se actualizeaza permanent si este afisat in caseta UTILIZATOR.</span></a>pe masura ce utilizezi facilitatile platformei OnLine51. </p>
-        <p>In fiecare domeniu, gasesti:</p>
-        <p><i class="fa fa-arrow-right color-green"></i> Informatii gratuite, prevederi legislative, link-uri utile, filme si material pentru instruire;</p>
-        <p><i class="fa fa-arrow-right color-green"></i> Documente statice si dinamice pe care le poti personaliza;</p>
-        <p><i class="fa fa-arrow-right color-green"></i> Comentarii si recomandari utile;</p>
-        <p><i class="fa fa-arrow-right color-green"></i> Exemple</p>
-        <p>Alege ABONAMENTUL care se potriveste cel mai bine profilului afacerii tale si OnLine51 va deveni cel mai fidel, discret si constiincios angajat al tau.</p>
-        <p>Pentru a vedea gradul de conformare a firmei tale cu prevederile legale pe domeniile reglementate, <a href="#"  data-toggle="modal" data-target="#myModal1" >Click aici pentru chestionar.</a></p>
-        <p>Raspunde cat mai corect (in raport cu realitatea din firma ta) la intrebarile chestionarului din fiecare sectiune si vei primi pe mail un raport confidential, impreuna cu minime recomandari din partea noastra.  </p>
-        <p>E GRATUIT si dureaza doar cateva minute. SUCCES!</p>
-        <p>Pentru orice nelamurire sau alte amanunte specifice pe care nu le gasesti pe site, iti stam la dispozitie telefonic sau pe mail</p>
-      </div>
-      {% for subscription in subscriptions %}
-        <div class="tab-pane" id="ssm{{ loop.index }}">
-          <div id="{{ subscription.name | upper }}">
-            <form action="" method="post">
-              <div class="row">
-                <div class="col-xs-9">
-                    <h3 class="title">{{ subscription.name }}</h3>
-                </div>
-                <div class="col-xs-3">
-                    <input class="costum pull-right" type="button" value="comanda" />
-                </div>
-              </div>
-
-              <p>{{ subscription.intro | raw }}</p>
-              <div class="selecting-checkbox" id="{{ subscription.name | lower }}">
-                {% if subscription.domains | length > 1 %}
-                  {% for domain in subscription.domains %}
-                    <p>
-                      <input type="checkbox" class="css-checkbox " id="checkbox{{ loop.index0 }}" onclick="{{ subscription.name | lower }}" /><label class="css-label" for="checkbox{{ loop.index0 }}"></label>{{ domain.name }} - {{ domain.baseline }}
-                      <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii</span>
-                    </p>
-                  {% endfor %}
-                {% endif %}
-              </div>
-              <div class="row price">
-                <div class="col-xs-4">
-                     <p class="last">Pret : <span class="color-blue">{{ subscription.price }}</span> RON</p>
-                </div>
-                <div class="col-xs-4">
-                     <p class="last">Numar Credite : <span class="color-blue">{{ subscription.credit }}</span></p>
-                </div>
-                <div class="col-xs-4">
-                    <p class="last">Termen de valabilitate : <span class="color-blue">{{ subscription.domainAmount }}</span> an</p>
-                </div>
-              </div>
-              {{ subscription.description }}
-            </form>
-          </div>
-        </div>
-      {% endfor %}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+          {% for subscription in subscriptions %}
+            <li><a href="#ssm{{ loop.index }}" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
+          {% endfor %}
+        </ul>
     </div>
-  </div>
+    <div class="col-xs-9">
+      <div class="tab-content">
+        <div class="tab-pane active" id="ssm">
+          <h1>Bine ai venit !</h1>
+          <p>OnLine51 este o platforma de consultanta online pentru 5 domenii conexe activitatii de baza a firmei tale</p>
+
+          <div class="homepage-description clearfix">
+            <div class="cleafix">
+                {% for domain in domains %}
+                  {% if not domain.dedicated %}
+                    <p>
+                      <a href="{{ path('domain_show', {'domain': domain.slug}) }}">
+                        <i class="fa fa-check color-green"></i>{{ domain.name }}
+                      </a>
+                    </p>
+                  {% endif %}
+                {% endfor %}
+           </div>
+          </div>
+          <div class="clearfix">
+              <p class="pull-left">si un domeniu dedicat specialistilor SSM</p>
+              <div class="homepage-description">
+                {% for domain in domains %}
+                  {% if domain.dedicated %}
+                    <p class="last">
+                      <a href="{{ path('domain_show', {'domain': domain.slug}) }}">
+                        <i class="fa fa-check color-green"></i>{{ domain.name }}
+                      </a>
+                    </p>
+                  {% endif %}
+                {% endfor %}
+              </div>
+          </div>
+
+          <h4>CUM FUNCTIONEAZA?</h4>
+          <p>Simplu, prietenos, prin logarea online cu  username si parola, fara instalare pe computerul tau.</p>
+          <p>La crearea contului, alegi tipul de abonament. Fiecare tip de abonament  iti ofera accesul la unul sau mai multe domenii, in limita unui anumit numar de <a class="show-at-hover hover-credits">credite <span> Ai posibilitatea oricand sa achizitionezi noi credite sau sa modifici tipul de abonament. Alegerea unui tip de abonament cu un numar mai mare de credite are avantajul costului mai mic pe unitate de credit si iti ofera accesul la mai multe domenii. Pentru alte beneficii pe care le poti avea ca si abonat, consulta meniul BENEFICII.</span></a>. Creditele sunt valabile 1 an de la prima conectare. Numarul de credite se <a class="show-at-hover">diminueaza <span>La accesarea informatiilor si documentelor,  numarul de credite se diminueaza corespunzator cu valoarea afisata in titlul documentului. Astfel, esti avizat de “valoarea” unui document inainte de deschiderea acestuia. Numarul de credite disponibile se actualizeaza permanent si este afisat in caseta UTILIZATOR.</span></a>pe masura ce utilizezi facilitatile platformei OnLine51. </p>
+          <p>In fiecare domeniu, gasesti:</p>
+          <p><i class="fa fa-arrow-right color-green"></i> Informatii gratuite, prevederi legislative, link-uri utile, filme si material pentru instruire;</p>
+          <p><i class="fa fa-arrow-right color-green"></i> Documente statice si dinamice pe care le poti personaliza;</p>
+          <p><i class="fa fa-arrow-right color-green"></i> Comentarii si recomandari utile;</p>
+          <p><i class="fa fa-arrow-right color-green"></i> Exemple</p>
+          <p>Alege ABONAMENTUL care se potriveste cel mai bine profilului afacerii tale si OnLine51 va deveni cel mai fidel, discret si constiincios angajat al tau.</p>
+          <p>Pentru a vedea gradul de conformare a firmei tale cu prevederile legale pe domeniile reglementate, <a href="#"  data-toggle="modal" data-target="#myModal1" >Click aici pentru chestionar.</a></p>
+          <p>Raspunde cat mai corect (in raport cu realitatea din firma ta) la intrebarile chestionarului din fiecare sectiune si vei primi pe mail un raport confidential, impreuna cu minime recomandari din partea noastra.  </p>
+          <p>E GRATUIT si dureaza doar cateva minute. SUCCES!</p>
+          <p>Pentru orice nelamurire sau alte amanunte specifice pe care nu le gasesti pe site, iti stam la dispozitie telefonic sau pe mail</p>
+        </div>
+        {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions } %}
+      </div>
+    </div>
 {% endblock %}
