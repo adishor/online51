@@ -13,7 +13,9 @@ class SubDomainAdmin extends Admin
     public function configureFormFields(FormMapper $form)
     {
         $form->add('name')
-            ->add('description')
+            ->add('description', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml'
+            ))
             ->add('domain');
     }
 

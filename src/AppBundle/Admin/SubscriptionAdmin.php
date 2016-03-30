@@ -13,8 +13,12 @@ class SubscriptionAdmin extends Admin
     public function configureFormFields(FormMapper $form)
     {
         $form->add('name')
-            ->add('intro')
-            ->add('description')
+            ->add('intro', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml'
+            ))
+            ->add('description', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml'
+            ))
             ->add('price')
             ->add('credit')
             ->add('valability')

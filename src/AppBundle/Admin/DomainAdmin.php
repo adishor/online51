@@ -16,7 +16,9 @@ class DomainAdmin extends Admin
             ->add('baseline', null, array(
                 'required' => false
             ))
-            ->add('description')
+            ->add('description', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml'
+            ))
             ->add('dedicated')
             ->add('subdomains', 'sonata_type_model', array(
                 'expanded' => false,
