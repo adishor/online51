@@ -102,15 +102,6 @@ class Ad
         return $this;
     }
 
-    /**
-     * Get image
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->imageName;
-    }
 
     /**
      *
@@ -137,16 +128,9 @@ class Ad
     }
 
     /**
-     * Set noEmployees
-     *
-     * @param string $noEmployees
-     * @return User
-     */
-
-    /**
      * Get imageName
      *
-     * @return string 
+     * @return string
      */
     public function getImageName()
     {
@@ -169,7 +153,7 @@ class Ad
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
