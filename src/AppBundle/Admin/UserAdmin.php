@@ -68,7 +68,7 @@ class UserAdmin extends SonataUserAdmin
 
     public function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('getCities', $this->getRouterIdParameter().'/getCities');
+        $collection->add('getCities', 'getCities');
     }
 
     public function getFormTheme()

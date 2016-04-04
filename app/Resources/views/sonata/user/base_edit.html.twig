@@ -34,15 +34,20 @@
             county.change(updateCities()); // Bind the function to updateCities
             county.change(); // Manual trigger to update cities in Document load.
 
-            function updateCities(){
+            function updateCities() {
                 return function () {
                     var countyId = $("#{{ admin.uniqId }}_county option:selected").val();
                     var city = $("#{{ admin.uniqId }}_city");
                     city.empty();
-                    if (countyId != {{ object.county.id }} ) {
-                      //empty city value
+
+                    {% if object.county is not null %}
+                      if ( countyId != {{ object.county.id }} ) {
+                        //empty city value
+                        jQuery(city.prev().find('a > :first-child')).html('');
+                      }
+                    {% else %}
                       jQuery(city.prev().find('a > :first-child')).html('');
-                    }
+                    {% endif %}
 
                     var locale = '{{ app.request.get('_locale') }}';
                     var objectId = '{{ admin.id(object) }}';
