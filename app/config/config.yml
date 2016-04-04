@@ -151,14 +151,14 @@ sonata_formatter:
 vich_uploader:
     db_driver: orm
     mappings:
-        user_logo_image:
+        upload_image:
             uri_prefix:         /images/uploadFile
             upload_destination: %kernel.root_dir%/../web/images/uploadFile
             inject_on_load:     false
             namer:              uploadFile.namer
             delete_on_update:   true
             delete_on_remove:   true
-
+        
 fos_user:
     db_driver:      orm
     firewall_name:  main

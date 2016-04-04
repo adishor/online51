@@ -38,7 +38,6 @@ class User extends BaseUser
     const FUNCTION_INTERN_JOB = 2;
     const FUNCTION_APPOINTED_WORKER = 3;
     const FUNCTION_ADMINISTRATOR = 4;
-
     const NO_EMPLOYEES_0_9 = 2;
     const NO_EMPLOYEES_10_49 = 3;
     const NO_EMPLOYEES_OVER_50 = 4;
@@ -79,7 +78,7 @@ class User extends BaseUser
 
     /**
      *
-     * @Vich\UploadableField(mapping="user_logo_image", fileNameProperty="logo")
+     * @Vich\UploadableField(mapping="upload_image", fileNameProperty="logo")
      * @var File
      */
     protected $uploadImage;
@@ -88,7 +87,7 @@ class User extends BaseUser
      *
      * @var string
      *
-     * @ORM\Column(name="no_employees", options={"default":0})
+     * @ORM\Column(name="no_employees", nullable = true, options={"default":0})
      */
     protected $noEmployees;
 
@@ -369,7 +368,6 @@ class User extends BaseUser
     {
         return $this->iban;
     }
-
 
     /**
      * Set cui
@@ -719,4 +717,5 @@ class User extends BaseUser
     {
         return $this->userCreditsUsage;
     }
+
 }
