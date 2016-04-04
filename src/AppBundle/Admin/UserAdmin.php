@@ -36,10 +36,17 @@ class UserAdmin extends SonataUserAdmin
                 ->end()
                 ->with('Company', array('class' => 'col-md-6'))
                     ->add('company')
-                    ->add('logoImage', 'sonata_admin_image_file', array(
+                    ->add('uploadImage', 'sonata_admin_image_file', array(
                         'required' => false
                     ))
-                    ->add('noEmployees')
+                    ->add('noEmployees', 'choice', array(
+                        'choices' => array(
+                            User::NO_EMPLOYEES_0_9 => '0-9',
+                            User::NO_EMPLOYEES_10_49 => '10-49',
+                            User::NO_EMPLOYEES_OVER_50 => 'peste 50'
+                        ),
+                        'empty_value' => 'Selectati Nr de angajati'
+                    ))
                     ->add('cui')
                     ->add('bank')
                     ->add('iban')

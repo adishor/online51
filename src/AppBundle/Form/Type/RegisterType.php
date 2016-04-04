@@ -13,7 +13,6 @@ class RegisterType extends AbstractType
     {
         $builder->add('name', null, array(
                     'required' => true,
-                    'label' => 'Nume si prenume'
                 ))
                 ->add('function', 'choice', array(
                     'required' => true,
@@ -24,18 +23,35 @@ class RegisterType extends AbstractType
                         User::FUNCTION_ADMINISTRATOR => 'Administrator'
                     )
                 ))
-                ->add('email', 'email')
-                ->add('password')
+                ->add('email', 'text')
+                ->add('password', 'repeated', array(
+                    'type' => 'password',
+                    'required' => true
+                ))
                 ->add('company')
                 ->add('cui')
                 ->add('noRegistrationORC')
-                ->add('noEmployees')
+                ->add('noEmployees', 'choice', array(
+                    'required' => true,
+                    'choices' => array(
+                        User::NO_EMPLOYEES_0_9 => '0-9',
+                        User::NO_EMPLOYEES_10_49 => '10-49',
+                        User::NO_EMPLOYEES_OVER_50 => 'peste 50'
+                    ),
+                    'empty_value' => 'Selectati Nr de angajati'
+                ))
+                ->add('noCertifiedEmpowerment')
                 ->add('bank')
                 ->add('iban')
                 ->add('phone')
-                ->add('county')
-                ->add('city')
-                ->add('logo', 'file')
+                ->add('county', null, array(
+                    'empty_value' => 'Selectati judetul'
+                ))
+                ->add('city', null, array(
+                    'required' => false
+                ))
+                ->add('address')
+                ->add('uploadImage', 'file')
                 ;
     }
 
@@ -45,7 +61,8 @@ class RegisterType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Application\Sonata\UserBundle\Entity\User'
+            'data_class' => 'Application\Sonata\UserBundle\Entity\User',
+            'validation_groups' => array('CustomRegistration')
         ));
     }
 

@@ -8,7 +8,7 @@ imports:
 parameters:
     locale: en
     sonata.user.admin.user.class: AppBundle\Admin\UserAdmin
-    sonata.user.admin.user.controller: AppBundle:UserAdmin
+    sonata.user.admin.user.controller: AppBundle:Admin\User
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
 
 framework:
@@ -152,10 +152,10 @@ vich_uploader:
     db_driver: orm
     mappings:
         user_logo_image:
-            uri_prefix:         /images/logo
-            upload_destination: %kernel.root_dir%/../web/images/logo
+            uri_prefix:         /images/uploadFile
+            upload_destination: %kernel.root_dir%/../web/images/uploadFile
             inject_on_load:     false
-            namer:              logo.namer
+            namer:              uploadFile.namer
             delete_on_update:   true
             delete_on_remove:   true
 

@@ -1,0 +1,413 @@
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    <h1 class="title-top">
+      <i class="fa fa-graduation-cap"></i>
+      Inregistrare
+    </h1>
+    {% for flash_message in app.session.flashbag.get('error-register') %}
+        <div class="flash-notice">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    {{ form_start(form, { 'attr': {'id': 'RegisterForm'} }) }}
+    <fieldset>
+      <legend>Account Information</legend>
+      <input id="Logo" name="Logo" type="hidden" value="" />
+      <input id="EmployeesNr" name="EmployeesNr" type="hidden" value="" />
+
+      <div class="row register">
+        <div class="col-xs-4">
+{#          name#}
+          <div class="editor-label" id="lblManager">
+            {{ form_label(form.name, '*Nume si prenume') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.name, {'attr':
+                { 'data-val': 'true',
+                  'data-val-required': 'Va rugam completati *Nume si prenume'
+                } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          function#}
+          <div>
+            {{ form_label(form.function, '*Functia') }}
+            {{ form_widget(form.function, {'attr':
+                { 'data-val': 'true',
+                  'data-val-number': 'The field *Functia must be a number.',
+                  'data-val-required': 'Va rugam completati *Functia',
+                  'onchange': 'ShowHideItems()'
+              } })
+            }}
+          </div>
+{#          email#}
+          <div class="editor-label">
+            {{ form_label(form.email, '*Email(utilizator)') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.email, {'attr':
+                { 'data-val': 'true',
+                  'data-val-regex': 'Va rugam introduceti o adresa de email valida',
+                  'data-val-regex-pattern': '.+\@.+\..+',
+                  'data-val-required': 'Va rugam completati *Email(utilizator)'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          parola#}
+          <div class="editor-label">
+            {{ form_label(form.password.first, '*Parola') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.password.first, {'attr':
+                { 'data-val': 'true',
+                  'data-val-length': '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.',
+                  'data-val-length-min': '6',
+                  'data-val-required': 'Va rugam completati *Parola'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          confirmare parola#}
+          <div class="editor-label">
+            {{ form_label(form.password.second, '*Confirmare parola') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.password.second, {'attr':
+                { 'data-val': 'true',
+                  'data-val-equalto': 'Parola si confirmarea nu coincid.',
+                  'data-val-equalto-other': '*.register[password][first]'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+        </div>
+
+        <div class="col-xs-4">
+{#          companie#}
+          <div class="editor-label">
+            {{ form_label(form.company, '*Nume companie') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.company, {'attr':
+              { 'data-val': 'true',
+                'data-val-required': 'Va rugam completati *Nume companie'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          cui#}
+          <div class="editor-label">
+            {{ form_label(form.cui, '*CUI') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.cui, {'attr':
+              { 'data-val': 'true',
+                'data-val-required': 'Va rugam completati *CUI',
+                'placeholder': 'RO111111 sau 1111111'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+            <p class="color-red" id ="ValidCui" hidden="hidden"> Cui invalid </p>
+          </div>
+{#          numar inregistrare orc#}
+          <div class="editor-label">
+            {{ form_label(form.noRegistrationORC, '*Numar de inregistrare la ORC') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.noRegistrationORC, {'attr':
+              { 'data-val': 'true',
+                'data-val-required': 'Va rugam completati *Numar de inregistrare la ORC',
+                'placeholder': 'J11/11/2011'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          numar de angajati#}
+          <div>
+            {{ form_label(form.noEmployees, 'Numar de angajati', {'label_attr': {'id': 'lblEmployeesNr'} }) }}
+            {{ form_widget(form.noEmployees, {'attr':
+              { 'data-val': 'true',
+                'data-val-number': 'The field EmployeesNrId must be a number.',
+                'onchange': 'EmployeesNrChanged()',
+                'class': 'form-control shortdropdown'
+              } })
+            }}
+          </div>
+{#          numar certificat de abilitare#}
+          <div class="editor-label" id="lblCertificateNumber">
+            {{ form_label(form.noCertifiedEmpowerment, 'Numar certificat de abilitare') }}
+          </div>
+          <div class="editor-field" id="tbCertificateNumber">
+            {{ form_widget(form.noCertifiedEmpowerment) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          iban#}
+          <div class="editor-label">
+            {{ form_label(form.iban, '*Contul bancar (IBAN)') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.iban, {'attr':
+              { 'data-val': 'true',
+                'data-val-required': 'Va rugam completati *Contul bancar (IBAN)'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+            <p class="color-red" id ="ValidIban" hidden="hidden"> IBAN invalid </p>
+          </div>
+          <br /><br />
+        </div>
+
+        <div class="col-xs-4">
+{#          banca#}
+          <div class="editor-label">
+            {{ form_label(form.bank, '*Banca') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.bank, {'attr':
+              { 'data-val': 'true',
+                'data-val-required': 'Va rugam completati *Banca'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          telefon#}
+          <div class="editor-label">
+            {{ form_label(form.phone, '*Telefon (07xx xxxxxx )') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.phone, {'attr':
+              { 'data-val': 'true',
+                'data-val-regex': 'Campul *Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu &#39;07&#39; si sa aiba 10 cifre',
+                'data-val-regex-pattern': '^(07|)\\d{8}$',
+                'data-val-required': 'Va rugam completati *Telefon (07xx xxxxxx )'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          judet#}
+          <div>
+            {{ form_label(form.county, '*Judet') }}
+            {{ form_widget(form.county, {'attr':
+              { 'data-val': 'true',
+                'data-val-number': 'The field *Judet must be a number.',
+                'data-val-required': 'Va rugam completati *Judet',
+                'class': 'form-control shortdropdown',
+                'onChange': 'getLocalities(null)'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          localitati#}
+          <div id="LocalitiesDiv">
+            <div class="editor-label">
+              {{ form_label(form.city, '*Localitate') }}
+            </div>
+            <div class="editor-field">
+              {{ form_widget(form.city, {'attr':
+                { 'data-val': 'true',
+                  'data-val-required': 'Va rugam completati *Localitate',
+                  'data-val-number': 'The field *Localitate must be a number.',
+                  'class': 'form-control shortdropdown'
+                } })
+              }}
+              <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+            </div>
+          </div>
+{#          adresa#}
+          <div class="editor-label">
+            {{ form_label(form.address, '*Adresa') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.address, {'attr':
+              { 'data-val': 'true',
+                'data-val-required': 'Va rugam completati *Adresa'
+              } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+          </div>
+{#          logo#}
+          <div class="editor-label">
+            {{ form_label(form.uploadImage, 'Sigla/Logo/Emblema') }}
+          </div>
+          <div class="editor-field">
+            {{ form_widget(form.uploadImage, {'attr':
+              { 'style': '260px' } })
+            }}
+          </div>
+          <br /><br />
+{#          termeni si conditii#}
+          <div class="editor-label clearfix" >
+              <input class="pull-left" type="checkbox" name="selected" id="check" onclick="goRegister()"/>
+              <a href="{{ path('terms') }}" id="acceptTerms" class="btn" onclick="return popitup('{{ path('terms') }}')">*Acceptare termeni de utilizare</a>
+          </div>
+          <p id="RegisterText" class="color-red" hidden="hidden">
+              Inregistrarea este posibila dupa acceptarea termenilor de utilizare!
+          </p>
+          <p class="register-form2">
+              <input type="button" value="Inregistrare" id="btnRegister" class="costum" onclick="SubmitRegister()" />
+          </p>
+        </div>
+
+      </div>
+    </fieldset>
+    {{ form_end(form) }}
+
+    <script type="text/javascript">
+        function popitup(url) {
+            newwindow = window.open(url, 'name', 'height=1000,width=1200');
+            if (window.focus) { newwindow.focus() }
+            return false;
+        }
+
+        function goRegister() {
+            if ($('#check').prop('checked')) {
+                $("#RegisterText").hide();
+            }
+        }
+
+        function EmployeesNrChanged() {
+            $("#EmployeesNr").val($("#{{ form.noEmployees.vars.id }} option:selected").text());
+        }
+
+        function ShowHideItems() {
+            if ($("#{{ form.function.vars.id }} option:selected").text() == "Serviciu intern" || $("#{{ form.function.vars.id }} option:selected").text() == "Administrator") {
+                $("#lblEmployeesNr").show();
+                $("#{{ form.noEmployees.vars.id }}").show();
+                $("#lblCertificateNumber").show();
+                $("#tbCertificateNumber").show();
+            }
+            else {
+                if ($("#{{ form.function.vars.id }} option:selected").text() == "Lucrator desemnat") {
+                    $("#lblEmployeesNr").show();
+                    $("#{{ form.noEmployees.vars.id }}").show();
+                    $("#lblCertificateNumber").hide();
+                    $("#tbCertificateNumber").hide();
+                }
+                else {
+                    if ($("#{{ form.function.vars.id }} option:selected").text() == "Serviciu extern") {
+                        $("#lblEmployeesNr").hide();
+                        $("#{{ form.noEmployees.vars.id }}").hide();
+                        $("#lblCertificateNumber").show();
+                        $("#tbCertificateNumber").show();
+                    }
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            if ($('#{{ form.county.vars.id }}').val()) {
+              var city = $('#{{ form.city.vars.id }} option:selected').text();
+              getLocalities(city);
+            }
+            else {
+              $("#LocalitiesDiv").hide();
+            }
+            ShowHideItems();
+            if ($("#EmployeesNr").val() != "") {
+                $("#{{ form.noEmployees.vars.id }} option:selected").text($("#EmployeesNr").val());
+            }
+        });
+
+        function SubmitRegister() {
+            if ($('#check').prop('checked')) {
+                $("#RegisterText").hide();
+
+                if ($("#ValidCui").css("display") == 'none') {
+                    if ($("#ValidIban").css("display") == 'none') {
+                        {
+                            $("#RegisterForm").submit();
+                        }
+                    }
+                }
+            }
+            else {
+                $("#RegisterText").show();
+            }
+        }
+
+        $("#{{ form.cui.vars.id }}").bind('input propertychange', function () {
+            $("#ValidCui").hide();
+            var cuiText = $("#{{ form.cui.vars.id }}").val();
+
+            if (cuiText.toString().toLowerCase().indexOf("ro") >= 0) {
+                cuiText = cuiText.toString().toLowerCase().replace("ro", "")
+            }
+            if (cuiText) {
+              var link = 'http://openapi.ro/api/validate/cif/' + cuiText + '.json';
+
+              $.ajax({
+                  type: 'get',
+                  url: link,
+                  dataType: 'jsonp',
+                  success: function (data) {
+                      if (data["valid"] == false) {
+                          $("#ValidCui").show();
+                      }
+                      else {
+                          $("#ValidCui").hide();
+                      }
+                  },
+                  error: function (data) {
+                      alert("error");
+                  }
+              })
+            }
+            else {
+              $("#ValidCui").show();
+            }
+        });
+
+        $("#{{ form.iban.vars.id }}").bind('input propertychange', function () {
+            $("#ValidIban").hide();
+            var ibanText = $("#{{ form.iban.vars.id }}").val();
+            var link = 'http://openapi.ro/api/validate/iban/' + ibanText + '.json';
+
+            $.ajax({
+                type: 'get',
+                url: link,
+                dataType: 'jsonp',
+                success: function (data) {
+                    if (data["valid"] == false) {
+                        $("#ValidIban").show();
+                    }
+                    else {
+                        $("#ValidIban").hide();
+                    }
+                },
+                error: function (data) {
+                    alert("error");
+                }
+            })
+        });
+
+        function getLocalities(city)
+        {
+          $.ajax({
+            type: 'post',
+            url: '{{ path('ajax_localities') }}',
+            data: {
+              countyId: $('#{{ form.county.vars.id }}').val()
+            },
+            success: function (msg) {
+              $("#LocalitiesDiv").hide();
+              if (msg !=='') {
+                $("#LocalitiesDiv").show();
+                msg = '<option value="">Selectati Localitatea</option>' + msg;
+                $('#LocalitiesDiv select').html(msg);
+                if (city) {
+                  $('#{{ form.city.vars.id }} option').each(function(){
+                    if ($(this).text() == city) {
+                      $(this).attr('selected', 'selected');
+                    }
+                  });
+                }
+              }
+            }
+          });
+        }
+    </script>
+{% endblock %}
+
+

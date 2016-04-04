@@ -39,6 +39,10 @@ class User extends BaseUser
     const FUNCTION_APPOINTED_WORKER = 3;
     const FUNCTION_ADMINISTRATOR = 4;
 
+    const NO_EMPLOYEES_0_9 = 2;
+    const NO_EMPLOYEES_10_49 = 3;
+    const NO_EMPLOYEES_OVER_50 = 4;
+
     /**
      *
      * @var integer
@@ -78,13 +82,13 @@ class User extends BaseUser
      * @Vich\UploadableField(mapping="user_logo_image", fileNameProperty="logo")
      * @var File
      */
-    protected $logoImage;
+    protected $uploadImage;
 
     /**
      *
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="no_employees", type="integer", nullable=true, options={"default":0})
+     * @ORM\Column(name="no_employees", options={"default":0})
      */
     protected $noEmployees;
 
@@ -278,9 +282,9 @@ class User extends BaseUser
      * @param File $logo
      * @return \Application\Sonata\UserBundle\Entity\User
      */
-    public function setLogoImage(File $logo = null)
+    public function setUploadImage(File $logo = null)
     {
-        $this->logoImage = $logo;
+        $this->uploadImage = $logo;
 
         if ($logo) {
             $this->updatedAt = new \DateTime('now');
@@ -292,15 +296,15 @@ class User extends BaseUser
     /**
      * @return File
      */
-    public function getLogoImage()
+    public function getUploadImage()
     {
-        return $this->logoImage;
+        return $this->uploadImage;
     }
 
     /**
      * Set noEmployees
      *
-     * @param integer $noEmployees
+     * @param string $noEmployees
      * @return User
      */
     public function setNoEmployees($noEmployees)
@@ -313,7 +317,7 @@ class User extends BaseUser
     /**
      * Get noEmployees
      *
-     * @return integer
+     * @return string
      */
     public function getNoEmployees()
     {

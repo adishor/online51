@@ -98,8 +98,8 @@
                 <source>form.label_company</source>
                 <target>Company</target>
             </trans-unit>
-            <trans-unit id="form.label_logo_image">
-                <source>form.label_logo_image</source>
+            <trans-unit id="form.label_upload_image">
+                <source>form.label_upload_image</source>
                 <target>Logo</target>
             </trans-unit>
             <trans-unit id="form.label_no_employees">

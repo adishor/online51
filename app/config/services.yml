@@ -44,5 +44,5 @@ services:
         class: AppBundle\Form\Type\AdminImageFileType
         tags:
             - { name: form.type }
-    logo.namer:
+    uploadFile.namer:
         class: AppBundle\Util\FileNamer

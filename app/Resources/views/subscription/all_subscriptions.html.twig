@@ -1,3 +1,4 @@
+{% set counter = 0 %}
 {% for subscription in subscriptions %}
   <div class="tab-pane" id="ssm{{ loop.index }}">
     <div id="{{ subscription.name | upper }}">
@@ -16,9 +17,10 @@
           {% if subscription.domains | length > 1 %}
             {% for domain in subscription.domains %}
               <p>
-                <input type="checkbox" class="css-checkbox " id="checkbox{{ loop.index0 }}" onclick="{{ subscription.name | lower }}" /><label class="css-label" for="checkbox{{ loop.index0 }}"></label>{{ domain.name }} - {{ domain.baseline }}
+                <input type="checkbox" class="css-checkbox " id="checkbox{{ counter }}" onclick="{{ subscription.name | lower }}" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
                 <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii</span>
               </p>
+              {% set counter = counter + 1 %}
             {% endfor %}
           {% endif %}
         </div>
@@ -33,7 +35,7 @@
               <p class="last">Termen de valabilitate : <span class="color-blue">{{ subscription.domainAmount }}</span> an</p>
           </div>
         </div>
-        {{ subscription.description }}
+        {{ subscription.description | raw }}
       </form>
     </div>
   </div>

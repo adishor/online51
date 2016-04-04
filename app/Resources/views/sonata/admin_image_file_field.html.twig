@@ -2,8 +2,8 @@
   {% spaceless %}
     {% set subject =  form.parent.vars.value %}
     {% if subject.id %}
-        <a href="{{ asset(vich_uploader_asset(subject, 'logoImage')) }}" target="_blank">
-            <img src="{{ asset(vich_uploader_asset(subject, 'logoImage')) }}" width="300" />
+        <a href="{{ asset(vich_uploader_asset(subject, 'uploadImage')) }}" target="_blank">
+            <img src="{{ asset(vich_uploader_asset(subject, 'uploadImage')) }}" width="300" />
         </a><br/>
     {% endif %}
     {% set type = type|default('file') %}

@@ -9,7 +9,7 @@ class FileNamer implements NamerInterface
 {
     public function name($object, PropertyMapping $mapping)
     {
-        return uniqid() . $object->getLogoImage()->getClientOriginalName();
+        return uniqid() . $object->getUploadImage()->getClientOriginalName();
     }
 }
 
