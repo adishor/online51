@@ -77,7 +77,8 @@
             {{ form_widget(form.password.second, {'attr':
                 { 'data-val': 'true',
                   'data-val-equalto': 'Parola si confirmarea nu coincid.',
-                  'data-val-equalto-other': '*.register[password][first]'
+                  'data-val-equalto-other': '*.register[password][first]',
+                  'data-val-required': 'Va rugam completati *Confirmare Parola'
               } })
             }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
@@ -255,158 +256,7 @@
     {{ form_end(form) }}
 
     <script type="text/javascript">
-        function popitup(url) {
-            newwindow = window.open(url, 'name', 'height=1000,width=1200');
-            if (window.focus) { newwindow.focus() }
-            return false;
-        }
-
-        function goRegister() {
-            if ($('#check').prop('checked')) {
-                $("#RegisterText").hide();
-            }
-        }
-
-        function EmployeesNrChanged() {
-            $("#EmployeesNr").val($("#{{ form.noEmployees.vars.id }} option:selected").text());
-        }
-
-        function ShowHideItems() {
-            if ($("#{{ form.function.vars.id }} option:selected").text() == "Serviciu intern" || $("#{{ form.function.vars.id }} option:selected").text() == "Administrator") {
-                $("#lblEmployeesNr").show();
-                $("#{{ form.noEmployees.vars.id }}").show();
-                $("#lblCertificateNumber").show();
-                $("#tbCertificateNumber").show();
-            }
-            else {
-                if ($("#{{ form.function.vars.id }} option:selected").text() == "Lucrator desemnat") {
-                    $("#lblEmployeesNr").show();
-                    $("#{{ form.noEmployees.vars.id }}").show();
-                    $("#lblCertificateNumber").hide();
-                    $("#tbCertificateNumber").hide();
-                }
-                else {
-                    if ($("#{{ form.function.vars.id }} option:selected").text() == "Serviciu extern") {
-                        $("#lblEmployeesNr").hide();
-                        $("#{{ form.noEmployees.vars.id }}").hide();
-                        $("#lblCertificateNumber").show();
-                        $("#tbCertificateNumber").show();
-                    }
-                }
-            }
-        }
-
-        $(document).ready(function () {
-            if ($('#{{ form.county.vars.id }}').val()) {
-              var city = $('#{{ form.city.vars.id }} option:selected').text();
-              getLocalities(city);
-            }
-            else {
-              $("#LocalitiesDiv").hide();
-            }
-            ShowHideItems();
-            if ($("#EmployeesNr").val() != "") {
-                $("#{{ form.noEmployees.vars.id }} option:selected").text($("#EmployeesNr").val());
-            }
-        });
-
-        function SubmitRegister() {
-            if ($('#check').prop('checked')) {
-                $("#RegisterText").hide();
-
-                if ($("#ValidCui").css("display") == 'none') {
-                    if ($("#ValidIban").css("display") == 'none') {
-                        {
-                            $("#RegisterForm").submit();
-                        }
-                    }
-                }
-            }
-            else {
-                $("#RegisterText").show();
-            }
-        }
-
-        $("#{{ form.cui.vars.id }}").bind('input propertychange', function () {
-            $("#ValidCui").hide();
-            var cuiText = $("#{{ form.cui.vars.id }}").val();
-
-            if (cuiText.toString().toLowerCase().indexOf("ro") >= 0) {
-                cuiText = cuiText.toString().toLowerCase().replace("ro", "")
-            }
-            if (cuiText) {
-              var link = 'http://openapi.ro/api/validate/cif/' + cuiText + '.json';
-
-              $.ajax({
-                  type: 'get',
-                  url: link,
-                  dataType: 'jsonp',
-                  success: function (data) {
-                      if (data["valid"] == false) {
-                          $("#ValidCui").show();
-                      }
-                      else {
-                          $("#ValidCui").hide();
-                      }
-                  },
-                  error: function (data) {
-                      alert("error");
-                  }
-              })
-            }
-            else {
-              $("#ValidCui").show();
-            }
-        });
-
-        $("#{{ form.iban.vars.id }}").bind('input propertychange', function () {
-            $("#ValidIban").hide();
-            var ibanText = $("#{{ form.iban.vars.id }}").val();
-            var link = 'http://openapi.ro/api/validate/iban/' + ibanText + '.json';
-
-            $.ajax({
-                type: 'get',
-                url: link,
-                dataType: 'jsonp',
-                success: function (data) {
-                    if (data["valid"] == false) {
-                        $("#ValidIban").show();
-                    }
-                    else {
-                        $("#ValidIban").hide();
-                    }
-                },
-                error: function (data) {
-                    alert("error");
-                }
-            })
-        });
-
-        function getLocalities(city)
-        {
-          $.ajax({
-            type: 'post',
-            url: '{{ path('ajax_localities') }}',
-            data: {
-              countyId: $('#{{ form.county.vars.id }}').val()
-            },
-            success: function (msg) {
-              $("#LocalitiesDiv").hide();
-              if (msg !=='') {
-                $("#LocalitiesDiv").show();
-                msg = '<option value="">Selectati Localitatea</option>' + msg;
-                $('#LocalitiesDiv select').html(msg);
-                if (city) {
-                  $('#{{ form.city.vars.id }} option').each(function(){
-                    if ($(this).text() == city) {
-                      $(this).attr('selected', 'selected');
-                    }
-                  });
-                }
-              }
-            }
-          });
-        }
+        var ajax_localities = '{{ path('ajax_localities') }}';
     </script>
 {% endblock %}
 
