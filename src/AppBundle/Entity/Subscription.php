@@ -36,7 +36,7 @@ class Subscription
      *
      * @var string
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $intro;
 
@@ -44,7 +44,7 @@ class Subscription
      *
      * @var string
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 

@@ -14,10 +14,12 @@ class SubscriptionAdmin extends Admin
     {
         $form->add('name')
             ->add('intro', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml'
+                'format' => 'richhtml',
+                'required' => false
             ))
             ->add('description', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml'
+                'format' => 'richhtml',
+                'required' => false
             ))
             ->add('price')
             ->add('credit')

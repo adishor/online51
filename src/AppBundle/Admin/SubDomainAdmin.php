@@ -14,7 +14,8 @@ class SubDomainAdmin extends Admin
     {
         $form->add('name')
             ->add('description', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml'
+                'format' => 'richhtml',
+                'required' => false
             ))
             ->add('domain');
     }

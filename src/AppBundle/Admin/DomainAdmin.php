@@ -17,7 +17,8 @@ class DomainAdmin extends Admin
                 'required' => false
             ))
             ->add('description', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml'
+                'format' => 'richhtml',
+                'required' => false
             ))
             ->add('dedicated')
             ->add('subdomains', 'sonata_type_model', array(
