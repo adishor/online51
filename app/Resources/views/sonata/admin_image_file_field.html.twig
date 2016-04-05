@@ -1,9 +1,10 @@
 {% block sonata_admin_image_file_widget %}
   {% spaceless %}
     {% set subject =  form.parent.vars.value %}
-    {% if subject.id %}
-        <a href="{{ asset(vich_uploader_asset(subject, 'uploadImage')) }}" target="_blank">
-            <img src="{{ asset(vich_uploader_asset(subject, 'uploadImage')) }}" width="300" />
+    {% set imagePath = vich_uploader_asset(subject, 'uploadImage') %}
+    {% if subject.id and imagePath %}
+        <a href="{{ asset(imagePath) }}" target="_blank">
+            <img src="{{ asset(imagePath) }}" width="300" />
         </a><br/>
     {% endif %}
     {% set type = type|default('file') %}
