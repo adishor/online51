@@ -13,7 +13,7 @@
       <!-- Tab panes -->
       <div class="tab-content">
         <div class="tab-pane active" id="ssm">
-          <h3>In sectiunea {{ domain.name }} gasesti: </h3>
+            <h3>{% trans with {'%domain%': domain.name}%}domain.in-the-section{% endtrans %}</h3>
           {{ domain.description | raw }}
         </div>
         {% for subdomain in domain.subdomains %}

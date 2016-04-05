@@ -12,8 +12,8 @@
     <div class="col-xs-9">
       <div class="tab-content">
         <div class="tab-pane active" id="ssm">
-          <h1>Bine ai venit !</h1>
-          <p>OnLine51 este o platforma de consultanta online pentru 5 domenii conexe activitatii de baza a firmei tale</p>
+          <h1>{{ 'index.welcome'|trans }}</h1>
+          <p>{{ 'index.first-description'|trans }}</p>
 
           <div class="homepage-description clearfix">
             <div class="cleafix">
@@ -29,7 +29,7 @@
            </div>
           </div>
           <div class="clearfix">
-              <p class="pull-left">si un domeniu dedicat specialistilor SSM</p>
+              <p class="pull-left">{{ 'index.second-description'|trans }}</p>
               <div class="homepage-description">
                 {% for domain in domains %}
                   {% if domain.dedicated %}

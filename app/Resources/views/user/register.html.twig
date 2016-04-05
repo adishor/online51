@@ -2,8 +2,8 @@
 
 {% block ccontainer %}
     <h1 class="title-top">
-      <i class="fa fa-graduation-cap"></i>
-      Inregistrare
+        <i class="fa fa-graduation-cap"></i>
+        {{ 'register.title'|trans }}
     </h1>
     {% for flash_message in app.session.flashbag.get('error-register') %}
         <div class="flash-notice">
@@ -12,246 +12,246 @@
     {% endfor %}
     {{ form_start(form, { 'attr': {'id': 'RegisterForm'} }) }}
     <fieldset>
-      <legend>Account Information</legend>
-      <input id="Logo" name="Logo" type="hidden" value="" />
-      <input id="EmployeesNr" name="EmployeesNr" type="hidden" value="" />
+        <legend>Account Information</legend>
+        <input id="Logo" name="Logo" type="hidden" value="" />
+        <input id="EmployeesNr" name="EmployeesNr" type="hidden" value="" />
 
-      <div class="row register">
-        <div class="col-xs-4">
-{#          name#}
-          <div class="editor-label" id="lblManager">
-            {{ form_label(form.name, '*Nume si prenume') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.name, {'attr':
+        <div class="row register">
+            <div class="col-xs-4">
+                {#          name#}
+                <div class="editor-label" id="lblManager">
+                    {{ form_label(form.name, 'form.label.name'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.name, {'attr':
                 { 'data-val': 'true',
-                  'data-val-required': 'Va rugam completati *Nume si prenume'
+                  'data-val-required': 'form.required.name'|trans
                 } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          function#}
-          <div>
-            {{ form_label(form.function, '*Functia') }}
-            {{ form_widget(form.function, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          function#}
+                <div>
+                    {{ form_label(form.function, 'form.label.job'|trans) }}
+                    {{ form_widget(form.function, {'attr':
                 { 'data-val': 'true',
-                  'data-val-number': 'The field *Functia must be a number.',
-                  'data-val-required': 'Va rugam completati *Functia',
+                  'data-val-number': 'form.valid.number.job'|trans,
+                  'data-val-required': 'form.required.job'|trans,
                   'onchange': 'ShowHideItems()'
               } })
-            }}
-          </div>
-{#          email#}
-          <div class="editor-label">
-            {{ form_label(form.email, '*Email(utilizator)') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.email, {'attr':
+                    }}
+                </div>
+                {#          email#}
+                <div class="editor-label">
+                    {{ form_label(form.email, 'form.label.email'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.email, {'attr':
                 { 'data-val': 'true',
-                  'data-val-regex': 'Va rugam introduceti o adresa de email valida',
+                  'data-val-regex': 'form.required.email'|trans,
                   'data-val-regex-pattern': '.+\@.+\..+',
-                  'data-val-required': 'Va rugam completati *Email(utilizator)'
+                  'data-val-required': 'form.valid.email'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          parola#}
-          <div class="editor-label">
-            {{ form_label(form.password.first, '*Parola') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.password.first, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          parola#}
+                <div class="editor-label">
+                    {{ form_label(form.password.first, 'form.label.password'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.password.first, {'attr':
                 { 'data-val': 'true',
-                  'data-val-length': '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.',
+                  'data-val-length': 'form.password.length'|trans,
                   'data-val-length-min': '6',
-                  'data-val-required': 'Va rugam completati *Parola'
+                  'data-val-required': 'form.required.password'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          confirmare parola#}
-          <div class="editor-label">
-            {{ form_label(form.password.second, '*Confirmare parola') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.password.second, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          confirmare parola#}
+                <div class="editor-label">
+                    {{ form_label(form.password.second, 'form.label.password-confirm'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.password.second, {'attr':
                 { 'data-val': 'true',
-                  'data-val-equalto': 'Parola si confirmarea nu coincid.',
+                  'data-val-equalto': 'form.password.same'|trans,
                   'data-val-equalto-other': '*.register[password][first]',
-                  'data-val-required': 'Va rugam completati *Confirmare Parola'
+                  'data-val-required': 'form.required.password-confirm'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-        </div>
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+            </div>
 
-        <div class="col-xs-4">
-{#          companie#}
-          <div class="editor-label">
-            {{ form_label(form.company, '*Nume companie') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.company, {'attr':
+            <div class="col-xs-4">
+                {#          companie#}
+                <div class="editor-label">
+                    {{ form_label(form.company, 'form.label.company'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.company, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'Va rugam completati *Nume companie'
+                'data-val-required': 'form.required.company'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          cui#}
-          <div class="editor-label">
-            {{ form_label(form.cui, '*CUI') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.cui, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          cui#}
+                <div class="editor-label">
+                    {{ form_label(form.cui, 'form.label.company-id'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.cui, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'Va rugam completati *CUI',
-                'placeholder': 'RO111111 sau 1111111'
+                'data-val-required': 'form.required.company-id'|trans,
+                'placeholder': 'form.placeholder.company-id'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-            <p class="color-red" id ="ValidCui" hidden="hidden"> Cui invalid </p>
-          </div>
-{#          numar inregistrare orc#}
-          <div class="editor-label">
-            {{ form_label(form.noRegistrationORC, '*Numar de inregistrare la ORC') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.noRegistrationORC, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <p class="color-red" id ="ValidCui" hidden="hidden"> {{ 'form.valid.company-id'|trans }} </p>
+                </div>
+                {#          numar inregistrare orc#}
+                <div class="editor-label">
+                    {{ form_label(form.noRegistrationORC, 'form.label.company-number'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.noRegistrationORC, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'Va rugam completati *Numar de inregistrare la ORC',
-                'placeholder': 'J11/11/2011'
+                'data-val-required': 'form.required.company-number'|trans,
+                'placeholder': 'form.placeholder.company-number'
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          numar de angajati#}
-          <div>
-            {{ form_label(form.noEmployees, 'Numar de angajati', {'label_attr': {'id': 'lblEmployeesNr'} }) }}
-            {{ form_widget(form.noEmployees, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          numar de angajati#}
+                <div>
+                    {{ form_label(form.noEmployees, 'form.label.employees'|trans, {'label_attr': {'id': 'lblEmployeesNr'} }) }}
+                    {{ form_widget(form.noEmployees, {'attr':
               { 'data-val': 'true',
-                'data-val-number': 'The field EmployeesNrId must be a number.',
+                'data-val-number': 'form.valid.number.employees'|trans,
                 'onchange': 'EmployeesNrChanged()',
                 'class': 'form-control shortdropdown'
               } })
-            }}
-          </div>
-{#          numar certificat de abilitare#}
-          <div class="editor-label" id="lblCertificateNumber">
-            {{ form_label(form.noCertifiedEmpowerment, 'Numar certificat de abilitare') }}
-          </div>
-          <div class="editor-field" id="tbCertificateNumber">
-            {{ form_widget(form.noCertifiedEmpowerment) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          iban#}
-          <div class="editor-label">
-            {{ form_label(form.iban, '*Contul bancar (IBAN)') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.iban, {'attr':
+                    }}
+                </div>
+                {#          numar certificat de abilitare#}
+                <div class="editor-label" id="lblCertificateNumber">
+                    {{ form_label(form.noCertifiedEmpowerment, 'form.label.certificate'|trans) }}
+                </div>
+                <div class="editor-field" id="tbCertificateNumber">
+                    {{ form_widget(form.noCertifiedEmpowerment) }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          iban#}
+                <div class="editor-label">
+                    {{ form_label(form.iban, 'form.label.bank-acount'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.iban, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'Va rugam completati *Contul bancar (IBAN)'
+                'data-val-required': 'form.required.bank-acount'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-            <p class="color-red" id ="ValidIban" hidden="hidden"> IBAN invalid </p>
-          </div>
-          <br /><br />
-        </div>
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-acount'|trans }} </p>
+                </div>
+                <br /><br />
+            </div>
 
-        <div class="col-xs-4">
-{#          banca#}
-          <div class="editor-label">
-            {{ form_label(form.bank, '*Banca') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.bank, {'attr':
+            <div class="col-xs-4">
+                {#          banca#}
+                <div class="editor-label">
+                    {{ form_label(form.bank, 'form.label.bank'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.bank, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'Va rugam completati *Banca'
+                'data-val-required': 'form.required.bank'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          telefon#}
-          <div class="editor-label">
-            {{ form_label(form.phone, '*Telefon (07xx xxxxxx )') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.phone, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          telefon#}
+                <div class="editor-label">
+                    {{ form_label(form.phone, 'form.label.phone'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.phone, {'attr':
               { 'data-val': 'true',
-                'data-val-regex': 'Campul *Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu &#39;07&#39; si sa aiba 10 cifre',
+                'data-val-regex': 'form.valid.phone'|trans,
                 'data-val-regex-pattern': '^(07|)\\d{8}$',
-                'data-val-required': 'Va rugam completati *Telefon (07xx xxxxxx )'
+                'data-val-required': 'form.required.phone'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          judet#}
-          <div>
-            {{ form_label(form.county, '*Judet') }}
-            {{ form_widget(form.county, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          judet#}
+                <div>
+                    {{ form_label(form.county, 'form.label.county'|trans) }}
+                    {{ form_widget(form.county, {'attr':
               { 'data-val': 'true',
-                'data-val-number': 'The field *Judet must be a number.',
-                'data-val-required': 'Va rugam completati *Judet',
+                'data-val-number': 'form.valid.number.county'|trans,
+                'data-val-required': 'form.required.county'|trans,
                 'class': 'form-control shortdropdown',
                 'onChange': 'getLocalities(null)'
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          localitati#}
-          <div id="LocalitiesDiv">
-            <div class="editor-label">
-              {{ form_label(form.city, '*Localitate') }}
-            </div>
-            <div class="editor-field">
-              {{ form_widget(form.city, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          localitati#}
+                <div id="LocalitiesDiv">
+                    <div class="editor-label">
+                        {{ form_label(form.city, 'form.label.city'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.city, {'attr':
                 { 'data-val': 'true',
-                  'data-val-required': 'Va rugam completati *Localitate',
-                  'data-val-number': 'The field *Localitate must be a number.',
+                  'data-val-required': 'form.required.city'|trans,
+                  'data-val-number': 'form.valid.number.city'|trans,
                   'class': 'form-control shortdropdown'
                 } })
-              }}
-              <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-            </div>
-          </div>
-{#          adresa#}
-          <div class="editor-label">
-            {{ form_label(form.address, '*Adresa') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.address, {'attr':
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    </div>
+                </div>
+                {#          adresa#}
+                <div class="editor-label">
+                    {{ form_label(form.address, 'form.label.address'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.address, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'Va rugam completati *Adresa'
+                'data-val-required': 'form.required.address'|trans
               } })
-            }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-          </div>
-{#          logo#}
-          <div class="editor-label">
-            {{ form_label(form.uploadImage, 'Sigla/Logo/Emblema') }}
-          </div>
-          <div class="editor-field">
-            {{ form_widget(form.uploadImage, {'attr':
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {#          logo#}
+                <div class="editor-label">
+                    {{ form_label(form.uploadImage, 'form.label.logo'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.uploadImage, {'attr':
               { 'style': '260px' } })
-            }}
-          </div>
-          <br /><br />
-{#          termeni si conditii#}
-          <div class="editor-label clearfix" >
-              <input class="pull-left" type="checkbox" name="selected" id="check" onclick="goRegister()"/>
-              <a href="{{ path('terms') }}" id="acceptTerms" class="btn" onclick="return popitup('{{ path('terms') }}')">*Acceptare termeni de utilizare</a>
-          </div>
-          <p id="RegisterText" class="color-red" hidden="hidden">
-              Inregistrarea este posibila dupa acceptarea termenilor de utilizare!
-          </p>
-          <p class="register-form2">
-              <input type="button" value="Inregistrare" id="btnRegister" class="costum" onclick="SubmitRegister()" />
-          </p>
-        </div>
+                    }}
+                </div>
+                <br /><br />
+                {#          termeni si conditii#}
+                <div class="editor-label clearfix" >
+                    <input class="pull-left" type="checkbox" name="selected" id="check" onclick="goRegister()"/>
+                    <a href="{{ path('terms') }}" id="acceptTerms" class="btn" onclick="return popitup('{{ path('terms') }}')">{{ 'form.label.terms-of-use'|trans }}</a>
+                </div>
+                <p id="RegisterText" class="color-red" hidden="hidden">
+                    {{ 'form.required.terms-of-use'|trans }}
+                </p>
+                <p class="register-form2">
+                    <input type="button" value="Inregistrare" id="btnRegister" class="costum" onclick="SubmitRegister()" />
+                </p>
+            </div>
 
-      </div>
+        </div>
     </fieldset>
     {{ form_end(form) }}
 

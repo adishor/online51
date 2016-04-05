@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=9" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %} {{ 'index.page-title'|trans }} {% endblock %}</title>
         {% block stylesheets %}
             {% stylesheets filter='cssrewrite'
                 'assets/css/Bootstrap-3.2.0/css/bootstrap-theme.min.css'

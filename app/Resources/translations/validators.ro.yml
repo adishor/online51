@@ -1,0 +1,8 @@
+## YAML Template.
+subscription:
+    valability:
+        min: 'Abonamentul trebuie sa aiba minim 1 an.'
+        max: 'Abonamentul trebuie sa aiba maxim 5 ani.'
+    at-least-0: 'Valoarea trebuie sa fie mai mare ca 0.'
+
+    
