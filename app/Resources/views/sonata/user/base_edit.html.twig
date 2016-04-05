@@ -54,8 +54,12 @@
 
                     var url = '{{ admin.generateUrl('getCities', {'id': object.id}) }}';
                     $.post(url, { countyId: countyId }, function(data){
-                        city.empty().append(data);
-                    },"text");
+                        var msg = '';
+                        $.each(data, function(index, element){
+                          msg = msg + '<option value="' + index + '">' + element + '</option>';
+                        });
+                        city.empty().append(msg);
+                    },"json");
 
                     city.val("option:first").attr("selected", true);
                 };

@@ -130,10 +130,16 @@ function getLocalities(city)
   $.ajax({
     type: 'post',
     url: ajax_localities,
+    dataType: 'json',
     data: {
       countyId: $('#register_county').val()
     },
-    success: function (msg) {
+    success: function (cities) {
+      var msg = '';
+      $.each(cities, function(index, element) {
+        msg = msg + '<option value="' + index + '">' + element + '</option>';
+      });
+
       $("#LocalitiesDiv").hide();
       if (msg !=='') {
         $("#LocalitiesDiv").show();

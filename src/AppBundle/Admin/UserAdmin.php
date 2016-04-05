@@ -45,7 +45,8 @@ class UserAdmin extends SonataUserAdmin
                             User::NO_EMPLOYEES_10_49 => '10-49',
                             User::NO_EMPLOYEES_OVER_50 => 'peste 50'
                         ),
-                        'empty_value' => 'Selectati Nr de angajati'
+                        'empty_value' => 'Selectati Nr de angajati',
+                        'required' => false
                     ))
                     ->add('cui')
                     ->add('bank')

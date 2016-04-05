@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function getCitiesAction(Request $request)
     {
-        $html = "";
+        $jsonCities = [];
 
         $countyId = $request->request->get('countyId');
         $county = $this->getDoctrine()->getRepository('AppBundle:ROCounty')->find($countyId);
@@ -18,10 +18,10 @@ class UserController extends Controller
             $cities = $county->getCities();
 
             foreach ($cities as $city) {
-                $html .= '<option value="'. $city->getId() .'">'. $city->getName() . '</option>';
+                $jsonCities[$city->getId()] = $city->getName();
             }
         }
 
-        return new Response($html, 200);
+        return new Response(json_encode($jsonCities), 200);
     }
 }
