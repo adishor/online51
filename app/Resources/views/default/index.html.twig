@@ -12,8 +12,8 @@
     <div class="col-xs-9">
       <div class="tab-content">
         <div class="tab-pane active" id="ssm">
-          <h1>Bine ai venit !</h1>
-          <p>OnLine51 este o platforma de consultanta online pentru 5 domenii conexe activitatii de baza a firmei tale</p>
+          <h1>{{ 'index.welcome'|trans }}</h1>
+          <p>{{ 'index.first-description'|trans }}</p>
 
           <div class="homepage-description clearfix">
             <div class="cleafix">
@@ -29,7 +29,7 @@
            </div>
           </div>
           <div class="clearfix">
-              <p class="pull-left">si un domeniu dedicat specialistilor SSM</p>
+              <p class="pull-left">{{ 'index.second-description'|trans }}</p>
               <div class="homepage-description">
                 {% for domain in domains %}
                   {% if domain.dedicated %}
@@ -42,7 +42,7 @@
                 {% endfor %}
               </div>
           </div>
-
+{#asta nu de jos#}
           <h4>CUM FUNCTIONEAZA?</h4>
           <p>Simplu, prietenos, prin logarea online cu  username si parola, fara instalare pe computerul tau.</p>
           <p>La crearea contului, alegi tipul de abonament. Fiecare tip de abonament  iti ofera accesul la unul sau mai multe domenii, in limita unui anumit numar de <a class="show-at-hover hover-credits">credite <span> Ai posibilitatea oricand sa achizitionezi noi credite sau sa modifici tipul de abonament. Alegerea unui tip de abonament cu un numar mai mare de credite are avantajul costului mai mic pe unitate de credit si iti ofera accesul la mai multe domenii. Pentru alte beneficii pe care le poti avea ca si abonat, consulta meniul BENEFICII.</span></a>. Creditele sunt valabile 1 an de la prima conectare. Numarul de credite se <a class="show-at-hover">diminueaza <span>La accesarea informatiilor si documentelor,  numarul de credite se diminueaza corespunzator cu valoarea afisata in titlul documentului. Astfel, esti avizat de “valoarea” unui document inainte de deschiderea acestuia. Numarul de credite disponibile se actualizeaza permanent si este afisat in caseta UTILIZATOR.</span></a>pe masura ce utilizezi facilitatile platformei OnLine51. </p>

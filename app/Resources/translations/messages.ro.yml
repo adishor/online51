@@ -1,0 +1,94 @@
+## YAML Template.
+register:
+    title: 'Inregistrare'
+form:
+    label:
+        name: '*Nume si prenume'
+        job: '*Functia'
+        email: '*Email(utilizator)'
+        password: '*Parola'
+        password-confirm: '*Confirmare parola'
+        company: '*Nume companie'
+        company-id: '*CUI'
+        company-number: '*Numar de inregistrare la ORC'
+        employees: 'Numar de angajati'
+        certificate: 'Numar certificat de abilitare'
+        bank-acount: '*Contul bancar (IBAN)'
+        bank: '*Banca'
+        phone: '*Telefon (07xx xxxxxx )'
+        county: '*Judet'
+        city: '*Localitate'
+        address: '*Adresa'
+        logo: 'Sigla/Logo/Emblema'
+        terms-of-use: '*Acceptare termeni de utilizare'
+    required:
+        name: 'Va rugam completati *Numele si prenumele.'
+        job: 'Va rugam completati *Functia.'
+        email: 'Va rugam completati *Email(utilizator)'
+        password: 'Va rugam completati *Parola'
+        password-confirm: 'Va rugam completati *Confirmarea Parolei'
+        company: 'Va rugam completati *Numele companiei'
+        company-id: 'Va rugam completati *CUI'
+        company-number: 'Va rugam completati *Numarul de inregistrare la ORC'
+        bank-acount: 'Va rugam completati *Contul bancar (IBAN)'
+        bank: 'Va rugam completati *Banca'
+        phone: 'Va rugam completati *Telefon (07xx xxxxxx )'
+        county: 'Va rugam completati *Judetul'
+        city: 'Va rugam completati *Localitatea'
+        address: 'Va rugam completati *Adresa'
+        terms-of-use: 'Inregistrarea este posibila dupa acceptarea termenilor de utilizare!'
+    valid:
+        number:
+            job: '*Functia trebuie sa fie un numar.'
+            employees: 'Numarul de angajati trebuie sa fie un numar.'
+            county: '*Judet trebuie sa fie un numar.'
+            city: '*Localitate trebuie sa fie un numar.'
+        email: 'Va rugam introduceti o adresa de email valida.'
+        company-id: 'Cui invalid'
+        bank-acount: '*Contul bancar (IBAN) invalid'
+        phone: '*Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu &#39;07&#39; si sa aiba 10 cifre'
+    password:
+        length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
+        same: '*Parola si *Confirmarea Parolei nu coincid.'
+newsletter:
+    title: 'Newsletter'
+contact:
+    title: 'Contact'
+index:
+    page-title: 'Welcome!'
+    welcome: 'Bine ai venit!'
+    first-description: 'OnLine51 este o platforma de consultanta online pentru 5 domenii conexe activitatii de baza a firmei tale'
+    second-description: 'si un domeniu dedicat specialistilor SSM'
+terms-and-conditions:
+    title: 'Termeni si conditii'
+news:
+    title: 'Stiri'
+home:
+    title: 'Acasa'
+faq:
+    title: 'FAQ'
+advantages:
+    title: 'Avantaje'
+domain:
+    in-the-section: 'In sectiunea '
+    you-will-find: ' gasesti:'
+subscription:
+    types: 'Tipuri de abonamente'
+    choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
+    price: 'Pret : '
+    number-of-credits: 'Numar Credite : '
+    valability: 'Termen de valabilitate : '
+    year: ' an'
+    years: ' ani'
+curency: ' RON'
+admin_label:
+    subscription: 'Abonament'
+    domain: 'Domeniu'
+    sub_domain: 'Sub domeniu'
+    user_subscription: 'Abonament utilizator'
+    user_subscription_domain: 'Domeniu abonament utilizator'
+    credits: 'Credite'
+    credits_usage: 'Folosire de credite'
+    ad: 'Reclame'
+
+    

@@ -1,56 +1,59 @@
 {% set counter = 0 %}
 {% for subscription in subscriptions %}
-  <div class="tab-pane" id="ssm{{ loop.index }}">
-    <div id="{{ subscription.name | upper }}">
-      <form action="" method="post">
-        <div class="row">
-          <div class="col-xs-9">
-              <h3 class="title">{{ subscription.name }}</h3>
-          </div>
-          <div class="col-xs-3">
-              <input class="costum pull-right" type="button" value="comanda" />
-          </div>
-        </div>
+    <div class="tab-pane" id="ssm{{ loop.index }}">
+        <div id="{{ subscription.name | upper }}">
+            <form action="" method="post">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <h3 class="title">{{ subscription.name }}</h3>
+                    </div>
+                    <div class="col-xs-3">
+                        <input class="costum pull-right" type="button" value="comanda" />
+                    </div>
+                </div>
 
-        <p>{{ subscription.intro | raw }}</p>
-        <div class="selecting-checkbox" id="{{ subscription.name | lower | replace({' ':'_'}) }}">
-          {% if subscription.domains | length > 1 %}
-            {% for domain in subscription.domains %}
-              {% set checked = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "checked='checked'" : "" %}
-              {% set disabled = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "disabled" : "" %}
-              <p>
-                <input {{ checked }} {{ disabled }} type="checkbox" class="css-checkbox " id="checkbox{{ counter }}" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
-                <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii</span>
-              </p>
-              {% set counter = counter + 1 %}
-            {% endfor %}
-          {% endif %}
+                <p>{{ subscription.intro | raw }}</p>
+                <div class="selecting-checkbox" id="{{ subscription.name | lower | replace({' ':'_'}) }}">
+                    {% if subscription.domains | length > 1 %}
+                        {% for domain in subscription.domains %}
+                            {% set checked = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "checked='checked'" : "" %}
+                            {% set disabled = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "disabled" : "" %}
+                            <p>
+                                <input {{ checked }} {{ disabled }} type="checkbox" class="css-checkbox " id="checkbox{{ counter }}" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
+                                <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> {{ 'subscription.choose-one-type'|trans }}</span>
+                            </p>
+                            {% set counter = counter + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="row price">
+                    <div class="col-xs-4">
+                        <p class="last">{{ 'subscription.price'|trans }}<span class="color-blue">{{ subscription.price }}</span>{{ 'curency'|trans }}</p>
+                    </div>
+                    <div class="col-xs-4">
+                        <p class="last">{{ 'subscription.number-of-credits'|trans }}<span class="color-blue">{{ subscription.credit }}</span></p>
+                    </div>
+                    <div class="col-xs-4">
+                        <p class="last">{{ 'subscription.valability'|trans }}<span class="color-blue">{{ subscription.domainAmount }}</span>
+                            {% transchoice subscription.domainAmount with {'%year%': 'subscription.year'|trans, '%years%': 'subscription.years'|trans } %}
+                            {1} %year% |]1,Inf[ %years%
+                            {% endtranschoice %}
+                        </p>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="row price">
-          <div class="col-xs-4">
-               <p class="last">Pret : <span class="color-blue">{{ subscription.price }}</span> RON</p>
-          </div>
-          <div class="col-xs-4">
-               <p class="last">Numar Credite : <span class="color-blue">{{ subscription.credit }}</span></p>
-          </div>
-          <div class="col-xs-4">
-              <p class="last">Termen de valabilitate : <span class="color-blue">{{ subscription.domainAmount }}</span> an</p>
-          </div>
-        </div>
-        {{ subscription.description | raw }}
-      </form>
     </div>
-  </div>
 
-  {% if not ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-          var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
-          $("#" + id + " input").change(function () {
-              var cb = $(this);
-              isCheckedx(cb, id, {{ subscription.domainAmount }});
-          });
-        });
-    </script>
-  {% endif %}
+    {% if not ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
+                $("#" + id + " input").change(function () {
+                    var cb = $(this);
+                    isCheckedx(cb, id, {{ subscription.domainAmount }});
+                });
+            });
+        </script>
+    {% endif %}
 {% endfor %}

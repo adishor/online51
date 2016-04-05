@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12">
       <ul class="clearfix">
-        <li><a href="{{ path('homepage') }}">Acasa</a></li>
+          <li><a href="{{ path('homepage') }}">{{ 'home.title'|trans }}</a></li>
         {% for menu in domains %}
           <li><a href="{{ path('domain_show', {'domain': menu.slug}) }}">{{ menu.name }}</a></li>
         {% endfor %}

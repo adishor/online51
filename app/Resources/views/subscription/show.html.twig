@@ -1,25 +1,25 @@
 {% extends "base.html.twig" %}
 
 {% block ccontainer %}
-  <h1 class="title-top">Tipuri de abonamente</h1>
-  <div class="col-xs-3">
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs clearfix" role="tablist">
-        {% for subscription in subscriptions %}
-          <li><a href="#ssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
-        {% endfor %}
-      </ul>
-  </div>
-  <div class="col-xs-9">
-    <div class="tab-content">
-      {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions } %}
-      <script type="text/javascript">
-          jQuery(window).load(function(){
-            jQuery(".tab-pane-menu").first().parent().addClass("active");
-            jQuery(".tab-pane").first().addClass("active");
-          });
-      </script>
+    <h1 class="title-top">{{ 'subscription.types'|trans }}</h1>
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            {% for subscription in subscriptions %}
+                <li><a href="#ssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
+                    {% endfor %}
+        </ul>
     </div>
-  </div>
+    <div class="col-xs-9">
+        <div class="tab-content">
+            {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions } %}
+            <script type="text/javascript">
+                jQuery(window).load(function () {
+                    jQuery(".tab-pane-menu").first().parent().addClass("active");
+                    jQuery(".tab-pane").first().addClass("active");
+                });
+            </script>
+        </div>
+    </div>
 {% endblock %}
 
