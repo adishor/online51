@@ -106,7 +106,7 @@
                     {{ form_widget(form.cui, {'attr':
               { 'data-val': 'true',
                 'data-val-required': 'form.required.company-id'|trans,
-                'placeholder': 'RO111111 sau 1111111'
+                'placeholder': 'form.placeholder.company-id'|trans
               } })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
@@ -120,7 +120,7 @@
                     {{ form_widget(form.noRegistrationORC, {'attr':
               { 'data-val': 'true',
                 'data-val-required': 'form.required.company-number'|trans,
-                'placeholder': 'J11/11/2011'
+                'placeholder': 'form.placeholder.company-number'
               } })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>

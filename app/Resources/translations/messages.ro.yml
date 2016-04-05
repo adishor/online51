@@ -37,6 +37,9 @@ form:
         city: 'Va rugam completati *Localitatea'
         address: 'Va rugam completati *Adresa'
         terms-of-use: 'Inregistrarea este posibila dupa acceptarea termenilor de utilizare!'
+    placeholder:
+        company-id: 'RO111111 sau 1111111'
+        company-number: 'J11/11/2011'
     valid:
         number:
             job: '*Functia trebuie sa fie un numar.'
