@@ -1,0 +1,8 @@
+{% block sonata_admin_image_file_widget %}
+    {% set imagePath = vich_uploader_asset(object, 'uploadImage') %}
+    {% if imagePath %}
+        <a href="{{ asset(imagePath) }}" target="_blank">
+            <img src="{{ asset(imagePath) }}" width="300" />
+        </a><br/>
+    {% endif %}
+{% endblock %}
