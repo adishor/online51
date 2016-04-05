@@ -13,11 +13,13 @@
         </div>
 
         <p>{{ subscription.intro | raw }}</p>
-        <div class="selecting-checkbox" id="{{ subscription.name | lower }}">
+        <div class="selecting-checkbox" id="{{ subscription.name | lower | replace({' ':'_'}) }}">
           {% if subscription.domains | length > 1 %}
             {% for domain in subscription.domains %}
+              {% set checked = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "checked='checked'" : "" %}
+              {% set disabled = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "disabled" : "" %}
               <p>
-                <input type="checkbox" class="css-checkbox " id="checkbox{{ counter }}" onclick="{{ subscription.name | lower }}" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
+                <input {{ checked }} {{ disabled }} type="checkbox" class="css-checkbox " id="checkbox{{ counter }}" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
                 <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii</span>
               </p>
               {% set counter = counter + 1 %}
@@ -39,5 +41,16 @@
       </form>
     </div>
   </div>
-{% endfor %}
 
+  {% if not ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+          var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
+          $("#" + id + " input").change(function () {
+              var cb = $(this);
+              isCheckedx(cb, id, {{ subscription.domainAmount }});
+          });
+        });
+    </script>
+  {% endif %}
+{% endfor %}

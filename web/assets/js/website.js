@@ -125,8 +125,7 @@ $("#register_iban").bind('input propertychange', function () {
     })
 });
 
-function getLocalities(city)
-{
+function getLocalities(city) {
   $.ajax({
     type: 'post',
     url: ajax_localities,
@@ -156,5 +155,22 @@ function getLocalities(city)
     }
   });
 }
+
+
+function disableCheckedCheckedbox(cb) {
+  cb.val(cb.prop('checked', false));
+  cb.siblings("span").addClass("pop-display");
+  setTimeout(function () {
+      $('span.pop').removeClass("pop-display");
+  }, 5000);
+}
+
+function isCheckedx(cb, id, no) {
+  var checkedOffice = $("#" + id + " input:checked").length;
+  if (checkedOffice > no) {
+      disableCheckedCheckedbox(cb);
+  }
+}
+
 
 
