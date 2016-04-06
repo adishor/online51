@@ -4,5 +4,15 @@ subscription:
         min: 'Abonamentul trebuie sa aiba minim 1 an.'
         max: 'Abonamentul trebuie sa aiba maxim 5 ani.'
     at-least-0: 'Valoarea trebuie sa fie mai mare ca 0.'
-
+assert:
+    required:
+        name: 'Va rugam completati *Numele'
+        email: 'Va rugam completati *Email'
+        phone: 'Va rugam completati *Telefonul (07xx xxxxxx )'
+        subject: 'Va rugam completati *Subiectul'
+        message: 'Va rugam completati *Mesajul'
+    valid:
+        email: 'Va rugam introduceti o adresa de email valida.'
+        phone: '*Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu "07" si sa aiba 10 cifre'
+        
     

@@ -51,3 +51,6 @@ services:
             - { name: form.type }
     uploadFile.namer:
         class: AppBundle\Util\FileNamer
+    app.mailer:
+        class:     AppBundle\Service\MailerService
+        arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%]

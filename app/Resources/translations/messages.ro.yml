@@ -21,6 +21,10 @@ form:
         address: '*Adresa'
         logo: 'Sigla/Logo/Emblema'
         terms-of-use: '*Acceptare termeni de utilizare'
+        captcha: '*Introduceti textul din imagine:'
+        subject: '*Subiect'
+        message: '*Mesaj'
+        save: 'Trimite'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
         job: 'Va rugam completati *Functia.'
@@ -37,9 +41,17 @@ form:
         city: 'Va rugam completati *Localitatea'
         address: 'Va rugam completati *Adresa'
         terms-of-use: 'Inregistrarea este posibila dupa acceptarea termenilor de utilizare!'
+        captcha: 'Va rugam completati textul din imagine'
+        subject: 'Va rugam completati *Subiectul'
+        message: 'Va rugam completati *Mesajul'
     placeholder:
         company-id: 'RO111111 sau 1111111'
         company-number: 'J11/11/2011'
+        name: 'Nume'
+        email: 'Adresa ta de email'
+        phone: 'Numarul tau de telefon'
+        subject: 'Subiectul mesajului'
+        message: 'Mesajul tau'
     valid:
         number:
             job: '*Functia trebuie sa fie un numar.'
@@ -53,10 +65,18 @@ form:
     password:
         length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
+contact: 
+    title: 'Contact'
+    label:  
+        name: '*Nume'
+        email: '*Email'
+        phone: '*Nr.Telefon'
+        success: 'Informatiile Dvs. au fost trimise catre suportul tehnic!'
+    required:
+        name: 'Va rugam completati *Numele'
+        email: 'Va rugam completati *Email'
 newsletter:
     title: 'Newsletter'
-contact:
-    title: 'Contact'
 index:
     page-title: 'Welcome!'
     welcome: 'Bine ai venit!'
@@ -92,5 +112,17 @@ admin_label:
     credits: 'Credite'
     credits_usage: 'Folosire de credite'
     ad: 'Reclame'
+mail:
+    contact:
+        subject: 'Formular de contact - '
+        name: 'Mesaj nou de la %name%'
+        email: 'Email: %email%'
+        phone: 'Telefon: %phone%'
+        message: 'Mesaj:'
+        confirm-name: 'Buna, %name%'
+        confirm-subject: 'Mesaj primit!'
+        confirm-sent-subject: 'Ai trimis un mesaj cu subiectul: %subject% si urmatorul mesaj:'
+        confirmation: 'In cel mai scurt timp vei primi un raspuns!'
+        confirm-thank-you: 'Multumim!'
 
     
