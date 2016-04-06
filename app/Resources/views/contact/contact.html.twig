@@ -43,12 +43,12 @@
 
             <div class="row">
                 <div class="col-xs-2">
-                    {{ form_label(contactForm.name, 'form.label.contact.name'|trans) }}
+                    {{ form_label(contactForm.name, 'contact.label.name'|trans) }}
                 </div>
                 <div class="col-xs-5">                            
                     {{ form_widget(contactForm.name, {'attr':
                     { 'data-val': 'true',
-                    'data-val-required': 'form.required.contact.name'|trans,
+                    'data-val-required': 'contact.required.name'|trans,
                     'placeholder': 'form.placeholder.name'|trans,
                     } })
                     }}
@@ -64,12 +64,12 @@
 
             <div class="row">
                 <div class="col-xs-2">
-                    {{ form_label(contactForm.email, 'form.label.contact.email'|trans) }}
+                    {{ form_label(contactForm.email, 'contact.label.email'|trans) }}
                 </div>
                 <div class="col-xs-5">                            
                     {{ form_widget(contactForm.email, {'attr':
                     { 'data-val': 'true',
-                    'data-val-required': 'form.required.contact.email'|trans,
+                    'data-val-required': 'contact.required.email'|trans,
                     'data-val-regex-pattern': '.+\@.+\..+',
                     'data-val-regex': 'form.valid.email'|trans,
                     'placeholder': 'form.placeholder.email'|trans,
@@ -87,7 +87,7 @@
 
             <div class="row">
                 <div class="col-xs-2">
-                    {{ form_label(contactForm.phone, 'form.label.contact.phone'|trans) }}
+                    {{ form_label(contactForm.phone, 'contact.label.phone'|trans) }}
                 </div>
                 <div class="col-xs-5">                            
                     {{ form_widget(contactForm.phone, {'attr':
@@ -110,12 +110,12 @@
 
             <div class="row">
                 <div class="col-xs-2">
-                    {{ form_label(contactForm.subject, 'form.label.contact.subject'|trans) }}
+                    {{ form_label(contactForm.subject, 'form.label.subject'|trans) }}
                 </div>
                 <div class="col-xs-5">                            
                     {{ form_widget(contactForm.subject, {'attr':
                     { 'data-val': 'true',
-                    'data-val-required': 'form.required.contact.subject'|trans,
+                    'data-val-required': 'form.required.subject'|trans,
                     'placeholder': 'form.placeholder.subject'|trans,
                     } })
                     }}
@@ -131,12 +131,12 @@
 
             <div class="row">
                 <div class="col-xs-2">
-                    {{ form_label(contactForm.message, 'form.label.contact.message'|trans) }}
+                    {{ form_label(contactForm.message, 'form.label.message'|trans) }}
                 </div>
                 <div class="col-xs-10">                            
                     {{ form_widget(contactForm.message, {'attr':
                     { 'data-val': 'true',
-                    'data-val-required': 'form.required.contact.message'|trans,
+                    'data-val-required': 'form.required.message'|trans,
                     'placeholder': 'form.placeholder.message'|trans,
                     } })
                     }}
@@ -178,11 +178,11 @@
             </div>
 
             <div class="row">
+                </br>
                 <div class="col-xs-2">
-                    <p></p>
                 </div>
                 <div class="col-xs-4">
-                    {{ form_row(contactForm.save, { 'label': 'form.label.contact.save'|trans }) }}
+                    {{ form_row(contactForm.save, { 'label': 'form.label.save'|trans }) }}
                 </div>
 
             </div> 

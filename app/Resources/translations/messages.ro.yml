@@ -22,14 +22,9 @@ form:
         logo: 'Sigla/Logo/Emblema'
         terms-of-use: '*Acceptare termeni de utilizare'
         captcha: '*Introduceti textul din imagine:'
-        contact: 
-            name: '*Nume'
-            email: '*Email'
-            phone: '*Nr.Telefon'
-            subject: '*Subiect'
-            message: '*Mesaj'
-            save: 'Trimite' 
-            success: 'Informatiile Dvs. au fost trimise catre suportul tehnic!'
+        subject: '*Subiect'
+        message: '*Mesaj'
+        save: 'Trimite'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
         job: 'Va rugam completati *Functia.'
@@ -47,11 +42,8 @@ form:
         address: 'Va rugam completati *Adresa'
         terms-of-use: 'Inregistrarea este posibila dupa acceptarea termenilor de utilizare!'
         captcha: 'Va rugam completati textul din imagine'
-        contact: 
-            name: 'Va rugam completati *Numele'
-            email: 'Va rugam completati *Email'
-            subject: 'Va rugam completati *Subiectul'
-            message: 'Va rugam completati *Mesajul'
+        subject: 'Va rugam completati *Subiectul'
+        message: 'Va rugam completati *Mesajul'
     placeholder:
         company-id: 'RO111111 sau 1111111'
         company-number: 'J11/11/2011'
@@ -73,6 +65,15 @@ form:
     password:
         length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
+contact: 
+    label:  
+        name: '*Nume'
+        email: '*Email'
+        phone: '*Nr.Telefon'
+        success: 'Informatiile Dvs. au fost trimise catre suportul tehnic!'
+    required:
+        name: 'Va rugam completati *Numele'
+        email: 'Va rugam completati *Email'
 newsletter:
     title: 'Newsletter'
 contact:
