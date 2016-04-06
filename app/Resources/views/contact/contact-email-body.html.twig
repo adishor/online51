@@ -1,0 +1,17 @@
+<body>
+    <p>
+        {% trans with {'%name%': name}%}mail.contact.name{% endtrans %}
+    </p>
+    <p>
+        {% trans with {'%email%': email}%}mail.contact.email{% endtrans %}
+    </p>
+    <p>
+        {% trans with {'%phone%': phone}%}mail.contact.phone{% endtrans %}
+    </p>
+    <p>
+        {{ 'mail.contact.message'|trans }}
+    </p>
+    <p>
+    {{ message }}
+    </p>
+</body>

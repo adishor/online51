@@ -35,9 +35,10 @@ class ContactController extends Controller
         $contactForm->handleRequest($request);
 
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
-            
+            $this->get('app.mailer')->sendContactMessage($contact);
+            $this->addFlash('contactSuccess', 'contact.label.success');
 
-            return $this->redirect($this->generateUrl('contact'));
+            return $this->redirectToRoute('contact');
         }
         return $this->render('contact/contact.html.twig', array(
               'contactForm' => $contactForm->createView()

@@ -66,6 +66,7 @@ form:
         length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
 contact: 
+    title: 'Contact'
     label:  
         name: '*Nume'
         email: '*Email'
@@ -76,8 +77,6 @@ contact:
         email: 'Va rugam completati *Email'
 newsletter:
     title: 'Newsletter'
-contact:
-    title: 'Contact'
 index:
     page-title: 'Welcome!'
     welcome: 'Bine ai venit!'
@@ -113,5 +112,17 @@ admin_label:
     credits: 'Credite'
     credits_usage: 'Folosire de credite'
     ad: 'Reclame'
+mail:
+    contact:
+        subject: 'Formular de contact - '
+        name: 'Mesaj nou de la %name%'
+        email: 'Email: %email%'
+        phone: 'Telefon: %phone%'
+        message: 'Mesaj:'
+        confirm-name: 'Buna, %name%'
+        confirm-subject: 'Mesaj primit!'
+        confirm-sent-subject: 'Ai trimis un mesaj cu subiectul: %subject% si urmatorul mesaj:'
+        confirmation: 'In cel mai scurt timp vei primi un raspuns!'
+        confirm-thank-you: 'Multumim!'
 
     

@@ -40,7 +40,11 @@
                 Cristiana Aldea | tel: 0743 114 768 |email: <a href="mailto:cristiana.aldea@aldex.ro">cristiana.aldea@aldex.ro</a>
             </p>
             <p>In cazul in care doresti sa ne trimiti un mesaj, poti utiliza formularul de mai jos:</p>
-
+            {% for flash_message in app.session.flashbag.get('contactSuccess') %}
+                <div class="row">
+                    <span style="font-weight: normal; color: green">{{ flash_message|trans }}</span>
+                </div>
+            {% endfor %}
             <div class="row">
                 <div class="col-xs-2">
                     {{ form_label(contactForm.name, 'contact.label.name'|trans) }}
