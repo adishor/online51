@@ -75,14 +75,6 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/contact", name="contact")
-     */
-    public function showContactAction()
-    {
-        return $this->render('user/contact.html.twig');
-    }
-
-    /**
      * @Route("/newsletter", name="newsletter")
      */
     public function showNewsletterAction()

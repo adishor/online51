@@ -21,6 +21,15 @@ form:
         address: '*Adresa'
         logo: 'Sigla/Logo/Emblema'
         terms-of-use: '*Acceptare termeni de utilizare'
+        captcha: '*Introduceti textul din imagine:'
+        contact: 
+            name: '*Nume'
+            email: '*Email'
+            phone: '*Nr.Telefon'
+            subject: '*Subiect'
+            message: '*Mesaj'
+            save: 'Trimite' 
+            success: 'Informatiile Dvs. au fost trimise catre suportul tehnic!'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
         job: 'Va rugam completati *Functia.'
@@ -37,9 +46,20 @@ form:
         city: 'Va rugam completati *Localitatea'
         address: 'Va rugam completati *Adresa'
         terms-of-use: 'Inregistrarea este posibila dupa acceptarea termenilor de utilizare!'
+        captcha: 'Va rugam completati textul din imagine'
+        contact: 
+            name: 'Va rugam completati *Numele'
+            email: 'Va rugam completati *Email'
+            subject: 'Va rugam completati *Subiectul'
+            message: 'Va rugam completati *Mesajul'
     placeholder:
         company-id: 'RO111111 sau 1111111'
         company-number: 'J11/11/2011'
+        name: 'Nume'
+        email: 'Adresa ta de email'
+        phone: 'Numarul tau de telefon'
+        subject: 'Subiectul mesajului'
+        message: 'Mesajul tau'
     valid:
         number:
             job: '*Functia trebuie sa fie un numar.'

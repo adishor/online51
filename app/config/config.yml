@@ -183,3 +183,5 @@ doctrine:
 
 knp_doctrine_behaviors:
     sluggable:      true
+
+gregwar_captcha: ~

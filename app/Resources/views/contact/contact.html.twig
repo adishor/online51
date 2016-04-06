@@ -1,0 +1,194 @@
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    {{ form_start(contactForm, { 'attr': {'class': 'contact-form'} }) }}
+    {% form_theme contactForm 'contact/form/error-template.html.twig' %}
+    {#flash#}
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="title-top">{{ 'contact.title'|trans }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-4">
+            <p>Site-ul <a href="http://www.online51.ro/">www.online51.ro</a> este proprietatea <strong>SC ALDEX SRL</strong></p>
+            <address>
+                RO2533824; J26/1500/1991<br />
+                Tg Mures, str. Tineretului nr.2<br />
+                Tel/Fax: 0265 260 052<br />
+                mail:<a href="mailto:office@aldex.ro"> office@aldex.ro</a>
+            </address>
+        </div>
+        <div class="col-xs-8">
+            <p>Pentru suport tehnic, va stam la dispozitie telefonic (L-V, h 9.00-17.00) sau email (24/7).</p>
+            <p>
+                SSM :<br />
+                Dana Aldea | tel: 0744 111 877 | email: <a href="mailto:dana.aldea@aldex.ro">dana.aldea@aldex.ro</a><br />
+                Cristiana Aldea | tel: 0743 114 768 |email: <a href="mailto:cristiana.aldea@aldex.ro">cristiana.aldea@aldex.ro</a><br />
+                PSI_SU:
+                <br />
+                Dana Aldea | tel: 0744 111 877 | email: <a href="mailto:dana.aldea@aldex.ro">dana.aldea@aldex.ro</a><br />
+                MEDIU:<br />
+                Stelian Aldea | tel: 0745 630 404 | email: <a href="mailto:stelian.aldea@aldex.ro">stelian.aldea@aldex.ro</a><br />
+                HR:<br />
+                Dana Aldea | tel: 0744 111 877 | email: <a href="mailto:dana.aldea@aldex.ro">dana.aldea@aldex.ro</a><br />
+                MANAGEMENT:<br />
+                Stelian Aldea | tel: 0745 630 404 | email: <a href="mailto:stelian.aldea@aldex.ro">stelian.aldea@aldex.ro</a><br />
+                SSM – E:<br />
+                Dana Aldea | tel: 0744 111 877 | email: <a href="mailto:dana.aldea@aldex.ro">dana.aldea@aldex.ro</a><br />
+                Cristiana Aldea | tel: 0743 114 768 |email: <a href="mailto:cristiana.aldea@aldex.ro">cristiana.aldea@aldex.ro</a>
+            </p>
+            <p>In cazul in care doresti sa ne trimiti un mesaj, poti utiliza formularul de mai jos:</p>
+
+            <div class="row">
+                <div class="col-xs-2">
+                    {{ form_label(contactForm.name, 'form.label.contact.name'|trans) }}
+                </div>
+                <div class="col-xs-5">                            
+                    {{ form_widget(contactForm.name, {'attr':
+                    { 'data-val': 'true',
+                    'data-val-required': 'form.required.contact.name'|trans,
+                    'placeholder': 'form.placeholder.name'|trans,
+                    } })
+                    }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.name.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {{ form_errors(contactForm.name) }}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-2">
+                    {{ form_label(contactForm.email, 'form.label.contact.email'|trans) }}
+                </div>
+                <div class="col-xs-5">                            
+                    {{ form_widget(contactForm.email, {'attr':
+                    { 'data-val': 'true',
+                    'data-val-required': 'form.required.contact.email'|trans,
+                    'data-val-regex-pattern': '.+\@.+\..+',
+                    'data-val-regex': 'form.valid.email'|trans,
+                    'placeholder': 'form.placeholder.email'|trans,
+                    } })
+                    }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.email.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {{ form_errors(contactForm.email) }}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-2">
+                    {{ form_label(contactForm.phone, 'form.label.contact.phone'|trans) }}
+                </div>
+                <div class="col-xs-5">                            
+                    {{ form_widget(contactForm.phone, {'attr':
+                    { 'data-val': 'true',
+                    'data-val-required': 'form.required.phone'|trans,
+                    'data-val-regex-pattern': '^07([0-9]{8})$', 
+                    'data-val-regex': 'form.valid.phone'|trans,
+                    'placeholder': 'form.placeholder.phone'|trans,
+                    } })
+                    }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.phone.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {{ form_errors(contactForm.phone) }}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-2">
+                    {{ form_label(contactForm.subject, 'form.label.contact.subject'|trans) }}
+                </div>
+                <div class="col-xs-5">                            
+                    {{ form_widget(contactForm.subject, {'attr':
+                    { 'data-val': 'true',
+                    'data-val-required': 'form.required.contact.subject'|trans,
+                    'placeholder': 'form.placeholder.subject'|trans,
+                    } })
+                    }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.subject.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {{ form_errors(contactForm.subject) }}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-2">
+                    {{ form_label(contactForm.message, 'form.label.contact.message'|trans) }}
+                </div>
+                <div class="col-xs-10">                            
+                    {{ form_widget(contactForm.message, {'attr':
+                    { 'data-val': 'true',
+                    'data-val-required': 'form.required.contact.message'|trans,
+                    'placeholder': 'form.placeholder.message'|trans,
+                    } })
+                    }}
+                    </br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.message.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {{ form_errors(contactForm.message) }}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-10">
+                    {{ form_label(contactForm.captcha, 'form.label.captcha'|trans) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2">
+                    <p></p>
+                </div>
+                <div class="col-xs-5">                            
+                    {{ form_widget(contactForm.captcha, {'attr':
+                    { 'data-val': 'true',
+                    'data-val-required': 'form.required.captcha'|trans,
+                    } })
+                    }}
+                    </br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.captcha.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                </div>
+                {{ form_errors(contactForm.captcha) }}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-2">
+                    <p></p>
+                </div>
+                <div class="col-xs-4">
+                    {{ form_row(contactForm.save, { 'label': 'form.label.contact.save'|trans }) }}
+                </div>
+
+            </div> 
+            {{ form_end(contactForm) }}
+        </div>
+    </div>
+
+{% endblock %}
+
