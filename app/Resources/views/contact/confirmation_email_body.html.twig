@@ -1,9 +1,9 @@
 <body>
     <p>
-        {% trans with {'%name%': name}%}mail.contact.confirm-name{% endtrans %}
+        {{ 'mail.contact.confirm-name'|trans({"%name%" : name}) }}
     </p>
     <p>
-        {% trans with {'%subject%': subject}%}mail.contact.confirm-sent-subject{% endtrans %}
+        {{ 'mail.contact.confirm-sent-subject'|trans({'%subject%': subject}) }}
     </p>
     <p>
         {{ message }}
