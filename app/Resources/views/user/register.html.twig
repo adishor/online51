@@ -28,7 +28,7 @@
                   'data-val-required': 'form.required.name'|trans
                 } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          function#}
                 <div>
@@ -53,7 +53,7 @@
                   'data-val-required': 'form.valid.email'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          parola#}
                 <div class="editor-label">
@@ -67,7 +67,7 @@
                   'data-val-required': 'form.required.password'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          confirmare parola#}
                 <div class="editor-label">
@@ -81,7 +81,7 @@
                   'data-val-required': 'form.required.password-confirm'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
                 'data-val-required': 'form.required.company'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          cui#}
                 <div class="editor-label">
@@ -109,7 +109,7 @@
                 'placeholder': 'form.placeholder.company-id'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
                     <p class="color-red" id ="ValidCui" hidden="hidden"> {{ 'form.valid.company-id'|trans }} </p>
                 </div>
                 {#          numar inregistrare orc#}
@@ -123,7 +123,7 @@
                 'placeholder': 'form.placeholder.company-number'|trans,
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          numar de angajati#}
                 <div>
@@ -142,7 +142,7 @@
                 </div>
                 <div class="editor-field" id="tbCertificateNumber">
                     {{ form_widget(form.noCertifiedEmpowerment) }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          iban#}
                 <div class="editor-label">
@@ -154,7 +154,7 @@
                 'data-val-required': 'form.required.bank-acount'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
                     <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-acount'|trans }} </p>
                 </div>
                 <br /><br />
@@ -171,7 +171,7 @@
                 'data-val-required': 'form.required.bank'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          telefon#}
                 <div class="editor-label">
@@ -185,7 +185,7 @@
                 'data-val-required': 'form.required.phone'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          judet#}
                 <div>
@@ -198,7 +198,7 @@
                 'onChange': 'getLocalities(null)'
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          localitati#}
                 <div id="LocalitiesDiv">
@@ -213,7 +213,7 @@
                   'class': 'form-control shortdropdown'
                 } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" ></span>
                     </div>
                 </div>
                 {#          adresa#}
@@ -226,7 +226,7 @@
                 'data-val-required': 'form.required.address'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {#          logo#}
                 <div class="editor-label">

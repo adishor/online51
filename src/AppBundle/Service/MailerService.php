@@ -31,29 +31,29 @@ class MailerService
           ->setTo($emailTo)
           ->setBody($body, 'text/html');
         $this->mailer->send($message);
-
     }
 
     public function sendContactMessage($contact)
     {
-        $name = $contact->getName();
-        $subject = $contact->getSubject();
-        $message = $contact->getMessage();
-        $email = $contact->getEmail();
+        $subject = $this->translator->trans('mail.contact.subject') . $contact->getSubject();
 
-        $confirmationBody = $this->templating->render('contact/confirmation-email-body.html.twig', array(
-            'name' => $name,
-            'subject' => $subject,
-            'message' => $message), 'text/html');
-        $this->sendMessage($email, $this->translator->trans('mail.contact.confirm-subject'), $confirmationBody);
-
-        $subject = $this->translator->trans('mail.contact.subject') . $subject;
-        $contactBody = $this->templating->render('contact/contact-email-body.html.twig', array(
-            'name' => $name,
+        $contactBody = $this->templating->render('contact/contact_email_body.html.twig', array(
+            'name' => $contact->getName(),
             'phone' => $contact->getPhone(),
-            'email' => $email,
-            'message' => $message), 'text/html');
+            'email' => $contact->getEmail(),
+            'message' => $contact->getMessage()), 'text/html');
+
         $this->sendMessage($this->contactEmail, $subject, $contactBody);
+    }
+
+    public function sendConfirmationMessage($contact)
+    {
+        $confirmationBody = $this->templating->render('contact/confirmation_email_body.html.twig', array(
+            'name' => $contact->getName(),
+            'subject' => $contact->getSubject(),
+            'message' => $contact->getMessage()), 'text/html');
+
+        $this->sendMessage($contact->getEmail(), $this->translator->trans('mail.contact.confirm-subject'), $confirmationBody);
     }
 
 }

@@ -2,7 +2,7 @@
 
 {% block ccontainer %}
     {{ form_start(contactForm, { 'attr': {'class': 'contact-form'} }) }}
-    {% form_theme contactForm 'contact/form/error-template.html.twig' %}
+    {% form_theme contactForm 'contact/form/error_template.html.twig' %}
     {#flash#}
 
     <div class="row">
@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-10">
-                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.name.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.name.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {{ form_errors(contactForm.name) }}
             </div>
@@ -84,7 +84,7 @@
             <div class="row">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-10">
-                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.email.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.email.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {{ form_errors(contactForm.email) }}
             </div>
@@ -107,7 +107,7 @@
             <div class="row">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-10">
-                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.phone.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {{ form_errors(contactForm.phone) }}
             </div>
@@ -128,7 +128,7 @@
             <div class="row">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-10">
-                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.subject.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.subject.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {{ form_errors(contactForm.subject) }}
             </div>
@@ -150,7 +150,7 @@
             <div class="row">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-10">
-                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.message.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.message.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {{ form_errors(contactForm.message) }}
             </div>
@@ -176,7 +176,7 @@
             <div class="row">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-10">
-                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.captcha.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ contactForm.captcha.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </div>
                 {{ form_errors(contactForm.captcha) }}
             </div>

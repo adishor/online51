@@ -103,14 +103,14 @@ subscription:
     year: ' an'
     years: ' ani'
 curency: ' RON'
-admin_label:
+admin-label:
     subscription: 'Abonament'
     domain: 'Domeniu'
-    sub_domain: 'Sub domeniu'
-    user_subscription: 'Abonament utilizator'
-    user_subscription_domain: 'Domeniu abonament utilizator'
+    sub-domain: 'Sub domeniu'
+    user-subscription: 'Abonament utilizator'
+    user-subscription-domain: 'Domeniu abonament utilizator'
     credits: 'Credite'
-    credits_usage: 'Folosire de credite'
+    credits-usage: 'Folosire de credite'
     ad: 'Reclame'
 mail:
     contact:
