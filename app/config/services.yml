@@ -54,3 +54,6 @@ services:
     app.mailer:
         class:     AppBundle\Service\MailerService
         arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%]
+    app.user_helper:
+        class:     AppBundle\Service\UserHelperService
+        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory]
