@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+
     /**
      * @Route("/register", name="register")
      */
@@ -21,56 +22,26 @@ class UserController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-
-            $checkUser = $this->getDoctrine()->getManager()
-                    ->getRepository('ApplicationSonataUserBundle:User')
-                    ->findByEmail($data->getEmail());
-            if ($checkUser) {
-                $this->addFlash('error-register', 'Email is already used by an account.');
+        $registerErrors = array();
+        if ($form->isSubmitted()) {
+            if ($form->get('cui')->getData()) {
+                $registerErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
             }
-            else {
-                $user = new User();
-                $user->setUsername($data->getEmail());
-                $user->setUsernameCanonical($data->getEmail());
-                $user->setEmail($data->getEmail());
-                $user->setEmailCanonical($data->getEmail());
-                $user->setEnabled(true);
-                $user->setExpired(false);
-                $user->setLocked(false);
-                $user->setName($data->getName());
-                $user->setCompany($data->getCompany());
-                $user->setCui($data->getCui());
-                $user->setNoRegistrationORC($data->getNoRegistrationORC());
-                $user->setNoEmployees($data->getNoEmployees());
-                $user->setNoCertifiedEmpowerment($data->getNoCertifiedEmpowerment());
-                $user->setIban($data->getIban());
-                $user->setBank($data->getBank());
-                $user->setPhone($data->getPhone());
-                $user->setCounty($data->getCounty());
-                $user->setCity($data->getCity());
-                $user->setAddress($data->getAddress());
-                $user->setUploadImage($data->getUploadImage());
-                $user->setFunction($data->getFunction());
-                $user->addRole(User::ROLE_DEFAULT);
-                $encoder = $this->get('security.encoder_factory')->getEncoder($user);
-                $user->setPassword($encoder->encodePassword($data->getPassword(), $user->getSalt()));
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                $this->addFlash('successfull-register', 'User was saved');
-                return $this->redirect($this->generateUrl('homepage'));
+            if ($form->get('iban')->getData()) {
+                $registerErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
             }
         }
-        else {
-             $this->addFlash('error-register', $form->getErrorsAsString());
+        if ($form->isSubmitted() && $form->isValid() && !in_array(false, $registerErrors)) {
+
+            $this->get('app.user_helper')->addUserToDatabase($register);
+            $this->addFlash('successful-register', 'success.register');
+
+            return $this->redirect($this->generateUrl('homepage'));
         }
 
         return $this->render('user/register.html.twig', array(
-                    'form' => $form->createView()
+              'form' => $form->createView(),
+              'registerErrors' => $registerErrors,
         ));
     }
 
@@ -96,10 +67,10 @@ class UserController extends Controller
 
             foreach ($cities as $city) {
                 $jsonCities[$city->getId()] = $city->getName();
-
             }
         }
 
         return new Response(json_encode($jsonCities), 200);
     }
+
 }

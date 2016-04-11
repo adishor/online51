@@ -52,7 +52,7 @@ class Subscription
      *
      * @var integer
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "subscription.at-least-0")
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
     private $domainAmount;
@@ -61,7 +61,7 @@ class Subscription
      *
      * @var float
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "subscription.at-least-0")
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="decimal", scale=2)
      */
     private $price;
@@ -70,7 +70,7 @@ class Subscription
      *
      * @var integer
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "subscription.at-least-0")
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
     private $credit;
