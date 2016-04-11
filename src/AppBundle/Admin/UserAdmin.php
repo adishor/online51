@@ -27,7 +27,7 @@ class UserAdmin extends SonataUserAdmin
                   User::FUNCTION_ADMINISTRATOR => 'Administrator'
               )
           ))
-          ->add('credits', null, array(
+          ->add('creditsTotal', null, array(
               'required' => false,
           ))
           ->end()
@@ -83,7 +83,7 @@ class UserAdmin extends SonataUserAdmin
     public function getTemplate($name)
     {
         if ($name == "edit") {
-            return 'sonata/user/base_edit.html.twig';
+            return 'sonata/base_edit.html.twig';
         }
         return parent::getTemplate($name);
     }
@@ -96,7 +96,7 @@ class UserAdmin extends SonataUserAdmin
     public function getFormTheme()
     {
         return array_merge(
-          parent::getFormTheme(), array('sonata/admin_image_file_field.html.twig')
+          parent::getFormTheme(), array('sonata/fieldType/admin_image_file_field.html.twig')
         );
     }
 
@@ -126,7 +126,7 @@ class UserAdmin extends SonataUserAdmin
           ->with('Company')
           ->add('company')
           ->add('uploadImage', 'sonata_admin_image_file', array(
-              'template' => 'sonata/show_admin_image_file_field.html.twig'
+              'template' => 'sonata/fieldType/show_admin_image_file_field.html.twig'
           ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(

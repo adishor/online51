@@ -66,9 +66,9 @@ form:
     password:
         length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
-contact: 
+contact:
     title: 'Contact'
-    label:  
+    label:
         name: '*Nume'
         email: '*Email'
         phone: '*Nr.Telefon'
@@ -108,10 +108,8 @@ admin-label:
     subscription: 'Abonament'
     domain: 'Domeniu'
     sub-domain: 'Sub domeniu'
-    user-subscription: 'Abonament utilizator'
-    user-subscription-domain: 'Domeniu abonament utilizator'
-    credits: 'Credite'
-    credits-usage: 'Folosire de credite'
+    order: 'Comenzi'
+    credits-usage: 'Credite folosite'
     ad: 'Reclame'
 mail:
     contact:
@@ -128,4 +126,3 @@ mail:
 success:
     register: 'Success! Utilizatorul a fost intregistrat!'
 
-    
