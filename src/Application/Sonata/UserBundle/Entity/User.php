@@ -187,8 +187,8 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.password", groups={"CustomRegistration"})
-     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"CustomRegistration", "ChangePassword", "Profile"})
+     * @Assert\NotBlank(message="assert.required.password", groups={"CustomRegistration", "resetPassword"})
+     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"CustomRegistration", "ChangePassword", "Profile", "resetPassword"})
      */
     protected $password;
 

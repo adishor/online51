@@ -49,6 +49,8 @@ security:
                 use_forward:    false
                 check_path:     /login_check
                 failure_path:   null
+                success_handler: app.security.authentication_handler
+                failure_handler: app.security.authentication_handler
             logout:             true
             anonymous:          true
 

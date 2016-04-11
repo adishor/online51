@@ -21,6 +21,7 @@ form:
         address: '*Adresa'
         logo: 'Sigla/Logo/Emblema'
         terms-of-use: '*Acceptare termeni de utilizare'
+        terms: '*Acceptare T&C'
         captcha: '*Introduceti textul din imagine:'
         subject: '*Subiect'
         message: '*Mesaj'
@@ -45,6 +46,7 @@ form:
         subject: 'Va rugam completati *Subiectul'
         message: 'Va rugam completati *Mesajul'
     placeholder:
+        username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
         company-number: 'J11/11/2011'
         name: 'Nume'
@@ -79,7 +81,7 @@ contact:
 newsletter:
     title: 'Newsletter'
 index:
-    page-title: 'Welcome!'
+    page-title: 'Online51'
     welcome: 'Bine ai venit!'
     first-description: 'OnLine51 este o platforma de consultanta online pentru 5 domenii conexe activitatii de baza a firmei tale'
     second-description: 'si un domeniu dedicat specialistilor SSM'
@@ -104,28 +106,52 @@ subscription:
     year: ' an'
     years: ' ani'
 curency: ' RON'
-admin-label:
+admin_label:
     subscription: 'Abonament'
     domain: 'Domeniu'
-    sub-domain: 'Sub domeniu'
-    user-subscription: 'Abonament utilizator'
-    user-subscription-domain: 'Domeniu abonament utilizator'
+    sub_domain: 'Sub domeniu'
+    user_subscription: 'Abonament utilizator'
+    user_subscription_domain: 'Domeniu abonament utilizator'
     credits: 'Credite'
-    credits-usage: 'Folosire de credite'
+    credits_usage: 'Folosire de credite'
     ad: 'Reclame'
 mail:
+    thank-you: 'Multumim!'
     contact:
         subject: 'Formular de contact - '
         name: 'Mesaj nou de la %name%'
         email: 'Email: %email%'
         phone: 'Telefon: %phone%'
         message: 'Mesaj:'
-        confirm-name: 'Buna, %name%'
-        confirm-subject: 'Mesaj primit!'
-        confirm-sent-subject: 'Ai trimis un mesaj cu subiectul: %subject% si urmatorul mesaj:'
-        confirmation: 'In cel mai scurt timp vei primi un raspuns!'
-        confirm-thank-you: 'Multumim!'
+    confirm:
+        name: 'Buna, %name%'
+        subject: 'Mesaj primit!'
+        sent-subject: 'Ai trimis un mesaj cu subiectul: %subject% si urmatorul mesaj:'
+        message: 'In cel mai scurt timp vei primi un raspuns!'
+    reset-password:
+        name: 'Buna, %name%'
+        message: 'Pentru a-ti reseta parola - acceseaza '
+        reset: 'Resetare parola!'
+        subject: 'Resetare parola.'
 success:
     register: 'Success! Utilizatorul a fost intregistrat!'
-
-    
+    login: 'Success! Login reusit!'
+    reset: 'Parola s-a resetat cu succes!'
+    reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
+login:
+    label: 'Acces abonati'
+    forgot: 'Am uitat parola!'
+    free: 'Creare cont gratuit'
+    button:
+        login: 'Login'
+        register: 'Inregistrare'
+        reset: 'Resetare parola'
+        logout: 'Logout'
+    failed: 'User sau parola invalida!'
+    close-password: 'Inchide resetare parola.'
+reset-response:
+    no-user: 'Acest email nu este alocat.'
+    link-expired: 'Link-ul de resetare parola a expirat.'
+    link-invalid: 'Link-ul de resetare parola este invalid.'
+reset:
+    title: 'Resetare parola'

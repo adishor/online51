@@ -17,47 +17,52 @@
             {% endstylesheets %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-            {% javascripts
+        {% javascripts
               'assets/js/jquery-1.8.2.min4198.js'
-            %}
-            <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
     </head>
     <body>
         {% block body %}
 
-        {% block header %}
-          {% include 'header.html.twig' %}
-        {% endblock header %}
+            {% block header %}
+                {% include 'header.html.twig' %}
+            {% endblock header %}
 
-        {% block menu %}
-          {{ render(controller('AppBundle:Default:menu')) }}
-        {% endblock %}
+            {% block menu %}
+                {{ render(controller('AppBundle:Default:menu')) }}
+            {% endblock %}
 
-        <hgroup class="title"></hgroup>
-        <div id="jqcontainer" style="display: none"></div>
-        <div class="container">
-          <div class="bg-white">
-            <div class="row">
-              <div class="col-xs-9 set-width-content">
-                {% block ccontainer %}{% endblock %}
-              </div>
+            <hgroup class="title"></hgroup>
+            <div id="jqcontainer" style="display: none"></div>
+            <div class="container">
+                <div class="bg-white">
+                    <div class="row">
+                        <div class="col-xs-9 set-width-content">
+                        {% block ccontainer %}{% endblock %}
+                    </div>
 
-              {% block rcontainer %}
-                {% include 'right_container.html.twig' %}
-              {% endblock %}
+                    {% block rcontainer %}
+                        <div class="col-xs-3 set-width">
+                            {% block login %}
+                                {% include 'login_box.html.twig' %}
+                            {% endblock %}
+                            {% include 'right_container.html.twig' %}
+                        </div>
+                    {% endblock %}
+                </div>
             </div>
-          </div>
         </div>
 
         {% block footer %}
-          {% include 'footer.html.twig' %}
+            {% include 'footer.html.twig' %}
         {% endblock %}
 
-        {% endblock %}
+    {% endblock %}
 
-        {% block javascripts %}
-            {% javascripts
+    {% block javascripts %}
+        {% javascripts
               'assets/js/jquery-1.8.2.min4198.js'
               'assets/js/jquery-ui-1.8.24.min4198.js'
               'assets/js/jquery.linx.ui.fancy-combobox4198.js'
@@ -72,9 +77,9 @@
               'assets/js/jquery.jeditable4198.js'
               'assets/js/bootstrap.min4198.js'
               'assets/js/website.js'
-            %}
-            <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
-        {% endblock %}
-    </body>
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock %}
+</body>
 </html>
