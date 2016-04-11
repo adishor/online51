@@ -27,14 +27,24 @@ class UserAdmin extends SonataUserAdmin
                   User::FUNCTION_ADMINISTRATOR => 'Administrator'
               )
           ))
-          ->add('credits')
+          ->add('credits', null, array(
+              'required' => false,
+          ))
           ->end()
           ->with('Profile', array('class' => 'col-md-6'))
           ->add('name')
-          ->add('phone')
-          ->add('county')
-          ->add('city')
-          ->add('address')
+          ->add('phone', null, array(
+              'required' => false,
+          ))
+          ->add('county', null, array(
+              'required' => false,
+          ))
+          ->add('city', null, array(
+              'required' => false,
+          ))
+          ->add('address', null, array(
+              'required' => false,
+          ))
           ->end()
           ->with('Company', array('class' => 'col-md-6'))
           ->add('company')
@@ -50,11 +60,21 @@ class UserAdmin extends SonataUserAdmin
               'empty_value' => 'Selectati Nr de angajati',
               'required' => false
           ))
-          ->add('cui')
-          ->add('bank')
-          ->add('iban')
-          ->add('noRegistrationORC')
-          ->add('noCertifiedEmpowerment')
+          ->add('cui', null, array(
+              'required' => false,
+          ))
+          ->add('bank', null, array(
+              'required' => false,
+          ))
+          ->add('iban', null, array(
+              'required' => false,
+          ))
+          ->add('noRegistrationORC', null, array(
+              'required' => false,
+          ))
+          ->add('noCertifiedEmpowerment', null, array(
+              'required' => false,
+          ))
           ->end()
           ->end()
           ->removeGroup('Social', 'User');
