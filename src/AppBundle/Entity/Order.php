@@ -496,6 +496,6 @@ class Order
 
     public function __toString()
     {
-        return "Order" . $this->getId();
+        return "Order" . " #".$this->getId();
     }
 }

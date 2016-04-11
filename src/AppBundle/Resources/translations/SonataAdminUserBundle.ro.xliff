@@ -554,9 +554,9 @@
                 <source>form.label_function</source>
                 <target>Functie</target>
             </trans-unit>
-            <trans-unit id="form.label_credits">
-                <source>form.label_credits</source>
-                <target>Credite</target>
+            <trans-unit id="form.label_credits_total">
+                <source>form.label_credits_total</source>
+                <target>Credite Total</target>
             </trans-unit>
             <trans-unit id="form.label_county">
                 <source>form.label_county</source>
@@ -581,6 +581,10 @@
             <trans-unit id="form.label_no_employees">
                 <source>form.label_no_employees</source>
                 <target>Numar de angajati</target>
+            </trans-unit>
+            <trans-unit id="user_employees_empty">
+                <source>user_employees_empty</source>
+                <target>Selectati Nr de angajati</target>
             </trans-unit>
             <trans-unit id="form.label_cui">
                 <source>form.label_cui</source>

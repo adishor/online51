@@ -15,7 +15,7 @@ class OrderAdmin extends Admin
     {
         $form->add('user')
                 ->add('subscription', 'sonata_type_model', array(
-                    'empty_value' => 'Fara abonament',
+                    'empty_value' => 'subscription.no_subscription',
                     'required' => false,
                     'btn_add' => false
                 ))
@@ -53,6 +53,7 @@ class OrderAdmin extends Admin
                 ->add('endingDate')
                 ->add('creditValue')
                 ->add('valabilityDays')
+                ->add('price')
                 ->add('domains')
                 ->add('subscription')
                 ->add('createdAt')
@@ -62,11 +63,18 @@ class OrderAdmin extends Admin
 
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('user')
-                ->add('subscription')
+        $show->add('id')
+                ->add('user')
                 ->add('active')
+                ->add('startDate')
+                ->add('endingDate')
+                ->add('creditValue')
+                ->add('valabilityDays')
+                ->add('price')
                 ->add('domains')
+                ->add('subscription')
                 ->add('createdAt')
+                ->add('mentions')
                 ->add('approvedBy')
                 ->add('approvedDate');
     }

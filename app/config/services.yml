@@ -8,32 +8,32 @@ services:
         class: AppBundle\Admin\SubscriptionAdmin
         arguments: [~, AppBundle\Entity\Subscription, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin-label.subscription, group: admin_group_data }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.subscription, group: admin_group_data }
     admin.domain:
         class: AppBundle\Admin\DomainAdmin
         arguments: [~, AppBundle\Entity\Domain, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin-label.domain, group: admin_group_data }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.domain, group: admin_group_data }
     admin.subdomain:
         class: AppBundle\Admin\SubDomainAdmin
         arguments: [~, AppBundle\Entity\SubDomain, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin-label.sub-domain, group: admin_group_data }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.sub_domain, group: admin_group_data }
     admin.order:
         class: AppBundle\Admin\OrderAdmin
         arguments: [~, AppBundle\Entity\Order, AppBundle:Admin\Order]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin-label.order, group: admin_group_credit }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.order, group: admin_group_credit }
     admin.creditsusage:
         class: AppBundle\Admin\CreditsUsageAdmin
         arguments: [~, AppBundle\Entity\CreditsUsage, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin-label.credits-usage, group: admin_group_credit }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.credits_usage, group: admin_group_credit }
     admin.ad:
         class: AppBundle\Admin\AdAdmin
         arguments: [~, AppBundle\Entity\Ad, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin-label.ad, group: admin_group_website }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.ad, group: admin_group_website }
 
     sonata_admin_image_file:
         class: AppBundle\Form\Type\AdminImageFileType
