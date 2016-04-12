@@ -31,13 +31,16 @@ class AdAdmin extends Admin
 
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('title');
+        $show->add('title')
+                ->add('uploadImage', null, array(
+                    'template' => 'sonata/fieldType/show_admin_image_file_field.html.twig'
+                ));
     }
 
     public function getFormTheme()
     {
         return array_merge(
-          parent::getFormTheme(), array('sonata/admin_image_file_field.html.twig')
+          parent::getFormTheme(), array('sonata/fieldType/admin_image_file_field.html.twig')
         );
     }
 

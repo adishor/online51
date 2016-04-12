@@ -21,13 +21,13 @@ class UserAdmin extends SonataUserAdmin
           ->with('General')
           ->add('function', 'choice', array(
               'choices' => array(
-                  User::FUNCTION_EXTERN_JOB => 'Serviciu extern',
-                  User::FUNCTION_INTERN_JOB => 'Serviciu intern',
-                  User::FUNCTION_APPOINTED_WORKER => 'Lucrator desemnat',
-                  User::FUNCTION_ADMINISTRATOR => 'Administrator'
+                  User::FUNCTION_EXTERN_JOB => 'user.function.extern_job',
+                  User::FUNCTION_INTERN_JOB => 'user.function.intern_job',
+                  User::FUNCTION_APPOINTED_WORKER => 'user.function.appointed_worker',
+                  User::FUNCTION_ADMINISTRATOR => 'user.function.administrator'
               )
           ))
-          ->add('credits', null, array(
+          ->add('creditsTotal', null, array(
               'required' => false,
           ))
           ->end()
@@ -53,11 +53,11 @@ class UserAdmin extends SonataUserAdmin
           ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(
-                  User::NO_EMPLOYEES_0_9 => '0-9',
-                  User::NO_EMPLOYEES_10_49 => '10-49',
-                  User::NO_EMPLOYEES_OVER_50 => 'peste 50'
+                  User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
+                  User::NO_EMPLOYEES_10_49 => 'user.employees.10_49',
+                  User::NO_EMPLOYEES_OVER_50 => 'user.employees.over_50'
               ),
-              'empty_value' => 'Selectati Nr de angajati',
+              'empty_value' => 'user_employees_empty',
               'required' => false
           ))
           ->add('cui', null, array(
@@ -83,7 +83,7 @@ class UserAdmin extends SonataUserAdmin
     public function getTemplate($name)
     {
         if ($name == "edit") {
-            return 'sonata/user/base_edit.html.twig';
+            return 'sonata/base_edit.html.twig';
         }
         return parent::getTemplate($name);
     }
@@ -96,7 +96,7 @@ class UserAdmin extends SonataUserAdmin
     public function getFormTheme()
     {
         return array_merge(
-          parent::getFormTheme(), array('sonata/admin_image_file_field.html.twig')
+          parent::getFormTheme(), array('sonata/fieldType/admin_image_file_field.html.twig')
         );
     }
 
@@ -108,10 +108,10 @@ class UserAdmin extends SonataUserAdmin
           ->add('email')
           ->add('function', 'choice', array(
               'choices' => array(
-                  User::FUNCTION_EXTERN_JOB => 'Serviciu extern',
-                  User::FUNCTION_INTERN_JOB => 'Serviciu intern',
-                  User::FUNCTION_APPOINTED_WORKER => 'Lucrator desemnat',
-                  User::FUNCTION_ADMINISTRATOR => 'Administrator'
+                  User::FUNCTION_EXTERN_JOB => 'user.function.extern_job',
+                  User::FUNCTION_INTERN_JOB => 'user.function.intern_job',
+                  User::FUNCTION_APPOINTED_WORKER => 'user.function.appointed_worker',
+                  User::FUNCTION_ADMINISTRATOR => 'user.function.administrator'
               )
           ))
           ->add('credits')
@@ -126,13 +126,13 @@ class UserAdmin extends SonataUserAdmin
           ->with('Company')
           ->add('company')
           ->add('uploadImage', 'sonata_admin_image_file', array(
-              'template' => 'sonata/show_admin_image_file_field.html.twig'
+              'template' => 'sonata/fieldType/show_admin_image_file_field.html.twig'
           ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(
-                  User::NO_EMPLOYEES_0_9 => '0-9',
-                  User::NO_EMPLOYEES_10_49 => '10-49',
-                  User::NO_EMPLOYEES_OVER_50 => 'peste 50'
+                  User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
+                  User::NO_EMPLOYEES_10_49 => 'user.employees.10_49',
+                  User::NO_EMPLOYEES_OVER_50 => 'user.employees.over_50'
               )))
           ->add('cui')
           ->add('bank')

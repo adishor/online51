@@ -2150,12 +2150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "44265e2695143cdf315bf083c0e996596fd87ab6"
+                "reference": "1c6a15f39ea7f41d9bc0a5f712932da0c47be27b"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/1c6a15f39ea7f41d9bc0a5f712932da0c47be27b",
-                "reference": "44265e2695143cdf315bf083c0e996596fd87ab6",
+                "reference": "1c6a15f39ea7f41d9bc0a5f712932da0c47be27b",
                 "shasum": ""
             },
             "require": {
@@ -2233,7 +2233,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2016-04-02 10:52:48"
+            "time": "2016-04-04 15:25:35"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -2858,12 +2858,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataUserBundle.git",
-                "reference": "d2c8c2bcdb4a87d32b4ac904adfafada06b1bf66"
+                "reference": "08f90d95a5be0db7fc619514f5b942c7e8c226dd"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/08f90d95a5be0db7fc619514f5b942c7e8c226dd",
-                "reference": "d2c8c2bcdb4a87d32b4ac904adfafada06b1bf66",
+                "reference": "08f90d95a5be0db7fc619514f5b942c7e8c226dd",
                 "shasum": ""
             },
             "require": {
@@ -2928,7 +2928,7 @@
                 "sonata",
                 "user"
             ],
-            "time": "2016-03-28 12:13:53"
+            "time": "2016-04-05 09:39:24"
         },
         {
             "name": "stof/doctrine-extensions-bundle",

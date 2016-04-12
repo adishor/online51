@@ -95,9 +95,11 @@ class Subscription
     private $domains;
 
     /**
-     * @ORM\OneToMany(targetEntity="UserSubscription", mappedBy="subscription", cascade={"persist", "remove"}, orphanRemoval=true)
+     *
+     * @ORM\OneToMany(targetEntity="Order", mappedBy="subscription")
      */
-    protected $userSubscriptions;
+    protected $orders;
+
 
     public function __construct() {
         $this->domains = new ArrayCollection();
@@ -307,41 +309,41 @@ class Subscription
         return $this->domains;
     }
 
-    public function __toString()
-    {
-        return $this->name;
-    }
-
     /**
-     * Add userSubscriptions
+     * Add orders
      *
-     * @param \AppBundle\Entity\UserSubscription $userSubscriptions
+     * @param \AppBundle\Entity\Order $orders
      * @return Subscription
      */
-    public function addUserSubscription(\AppBundle\Entity\UserSubscription $userSubscriptions)
+    public function addOrder(\AppBundle\Entity\Order $orders)
     {
-        $this->userSubscriptions[] = $userSubscriptions;
+        $this->orders[] = $orders;
 
         return $this;
     }
 
     /**
-     * Remove userSubscriptions
+     * Remove orders
      *
-     * @param \AppBundle\Entity\UserSubscription $userSubscriptions
+     * @param \AppBundle\Entity\Order $orders
      */
-    public function removeUserSubscription(\AppBundle\Entity\UserSubscription $userSubscriptions)
+    public function removeOrder(\AppBundle\Entity\Order $orders)
     {
-        $this->userSubscriptions->removeElement($userSubscriptions);
+        $this->orders->removeElement($orders);
     }
 
     /**
-     * Get userSubscriptions
+     * Get orders
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUserSubscriptions()
+    public function getOrders()
     {
-        return $this->userSubscriptions;
+        return $this->orders;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

@@ -205,33 +205,21 @@ class User extends BaseUser
      *
      * @ORM\Column(type="integer", nullable=true, options={"default":0})
      */
-    protected $credits;
+    protected $creditsTotal;
 
     /**
-     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\UserSubscription", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Order", mappedBy="user")
      */
-    protected $userSubscriptions;
+    protected $orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\UserSubscription", mappedBy="approvedBy", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Order", mappedBy="approvedBy")
      */
     protected $approvedSubscriptions;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\UserSubscriptionDomain", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
-    protected $userSubscriptionDomains;
-
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Credits", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
-    protected $userCredits;
-
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\CreditsUsage", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\CreditsUsage", mappedBy="user")
      */
     protected $userCreditsUsage;
 
@@ -569,68 +557,68 @@ class User extends BaseUser
     }
 
     /**
-     * Set credits
+     * Set creditsTotal
      *
-     * @param integer $credits
+     * @param integer $creditsTotal
      * @return User
      */
-    public function setCredits($credits)
+    public function setCreditsTotal($creditsTotal)
     {
-        $this->credits = $credits;
+        $this->creditsTotal = $creditsTotal;
 
         return $this;
     }
 
     /**
-     * Get credits
+     * Get creditsTotal
      *
      * @return integer
      */
-    public function getCredits()
+    public function getCreditsTotal()
     {
-        return $this->credits;
+        return $this->creditsTotal;
     }
 
     /**
-     * Add userSubscriptions
+     * Add orders
      *
-     * @param \AppBundle\Entity\UserSubscription $userSubscriptions
+     * @param \AppBundle\Entity\Order $orders
      * @return User
      */
-    public function addUserSubscription(\AppBundle\Entity\UserSubscription $userSubscriptions)
+    public function addOrder(\AppBundle\Entity\Order $orders)
     {
-        $this->userSubscriptions[] = $userSubscriptions;
+        $this->orders[] = $orders;
 
         return $this;
     }
 
     /**
-     * Remove userSubscriptions
+     * Remove orders
      *
-     * @param \AppBundle\Entity\UserSubscription $userSubscriptions
+     * @param \AppBundle\Entity\Order $orders
      */
-    public function removeUserSubscription(\AppBundle\Entity\UserSubscription $userSubscriptions)
+    public function removeOrder(\AppBundle\Entity\Order $orders)
     {
-        $this->userSubscriptions->removeElement($userSubscriptions);
+        $this->orders->removeElement($orders);
     }
 
     /**
-     * Get userSubscriptions
+     * Get orders
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUserSubscriptions()
+    public function getOrders()
     {
-        return $this->userSubscriptions;
+        return $this->orders;
     }
 
     /**
      * Add approvedSubscriptions
      *
-     * @param \AppBundle\Entity\UserSubscription $approvedSubscriptions
+     * @param \AppBundle\Entity\Order $approvedSubscriptions
      * @return User
      */
-    public function addApprovedSubscription(\AppBundle\Entity\UserSubscription $approvedSubscriptions)
+    public function addApprovedSubscription(\AppBundle\Entity\Order $approvedSubscriptions)
     {
         $this->approvedSubscriptions[] = $approvedSubscriptions;
 
@@ -640,9 +628,9 @@ class User extends BaseUser
     /**
      * Remove approvedSubscriptions
      *
-     * @param \AppBundle\Entity\UserSubscription $approvedSubscriptions
+     * @param \AppBundle\Entity\Order $approvedSubscriptions
      */
-    public function removeApprovedSubscription(\AppBundle\Entity\UserSubscription $approvedSubscriptions)
+    public function removeApprovedSubscription(\AppBundle\Entity\Order $approvedSubscriptions)
     {
         $this->approvedSubscriptions->removeElement($approvedSubscriptions);
     }
@@ -655,72 +643,6 @@ class User extends BaseUser
     public function getApprovedSubscriptions()
     {
         return $this->approvedSubscriptions;
-    }
-
-    /**
-     * Add userSubscriptionDomains
-     *
-     * @param \AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains
-     * @return User
-     */
-    public function addUserSubscriptionDomain(\AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains)
-    {
-        $this->userSubscriptionDomains[] = $userSubscriptionDomains;
-
-        return $this;
-    }
-
-    /**
-     * Remove userSubscriptionDomains
-     *
-     * @param \AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains
-     */
-    public function removeUserSubscriptionDomain(\AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains)
-    {
-        $this->userSubscriptionDomains->removeElement($userSubscriptionDomains);
-    }
-
-    /**
-     * Get userSubscriptionDomains
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserSubscriptionDomains()
-    {
-        return $this->userSubscriptionDomains;
-    }
-
-    /**
-     * Add userCredits
-     *
-     * @param \AppBundle\Entity\Credits $userCredits
-     * @return User
-     */
-    public function addUserCredit(\AppBundle\Entity\Credits $userCredits)
-    {
-        $this->userCredits[] = $userCredits;
-
-        return $this;
-    }
-
-    /**
-     * Remove userCredits
-     *
-     * @param \AppBundle\Entity\Credits $userCredits
-     */
-    public function removeUserCredit(\AppBundle\Entity\Credits $userCredits)
-    {
-        $this->userCredits->removeElement($userCredits);
-    }
-
-    /**
-     * Get userCredits
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserCredits()
-    {
-        return $this->userCredits;
     }
 
     /**
@@ -755,5 +677,4 @@ class User extends BaseUser
     {
         return $this->userCreditsUsage;
     }
-
 }
