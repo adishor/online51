@@ -64,4 +64,11 @@ class UserHelperService
         return $json->valid;
     }
 
+    public function changePassword($data, $token)
+    {
+        $user = $this->entityManager->getRepository('ApplicationSonataUserBundle:User')->findOneByConfirmationToken($token);
+        $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
+        $this->entityManager->flush();
+    }
+
 }

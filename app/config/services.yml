@@ -34,7 +34,6 @@ services:
         arguments: [~, AppBundle\Entity\Ad, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.ad, group: admin_group_website }
-
     sonata_admin_image_file:
         class: AppBundle\Form\Type\AdminImageFileType
         tags:
@@ -47,3 +46,8 @@ services:
     app.user_helper:
         class:     AppBundle\Service\UserHelperService
         arguments: [@doctrine.orm.entity_manager, @security.encoder_factory]
+    app.security.authentication_handler:
+        class: AppBundle\Listener\AuthenticationHandler
+        public: false
+        arguments: [@router, @session]
+            

@@ -53,7 +53,17 @@ class MailerService
             'subject' => $contact->getSubject(),
             'message' => $contact->getMessage()), 'text/html');
 
-        $this->sendMessage($contact->getEmail(), $this->translator->trans('mail.contact.confirm-subject'), $confirmationBody);
+        $this->sendMessage($contact->getEmail(), $this->translator->trans('mail.confirm.subject'), $confirmationBody);
+    }
+
+    public function sendResetPasswordMessage($user)
+    {
+        $confirmationBody = $this->templating->render('user/reset_password_email_body.html.twig', array(
+            'name' => $user->getName(),
+            'token' => $user->getConfirmationToken())
+          , 'text/html');
+
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.reset-password.subject'), $confirmationBody);
     }
 
 }
