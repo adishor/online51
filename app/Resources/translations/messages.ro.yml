@@ -68,9 +68,9 @@ form:
     password:
         length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
-contact: 
+contact:
     title: 'Contact'
-    label:  
+    label:
         name: '*Nume'
         email: '*Email'
         phone: '*Nr.Telefon'
@@ -105,16 +105,26 @@ subscription:
     valability: 'Termen de valabilitate : '
     year: ' an'
     years: ' ani'
+    no_subscription: Fara abonament
 curency: ' RON'
 admin_label:
     subscription: 'Abonament'
     domain: 'Domeniu'
     sub_domain: 'Sub domeniu'
-    user_subscription: 'Abonament utilizator'
-    user_subscription_domain: 'Domeniu abonament utilizator'
-    credits: 'Credite'
-    credits_usage: 'Folosire de credite'
+    order: 'Comenzi'
+    credits_usage: 'Credite folosite'
     ad: 'Reclame'
+user:
+    function:
+        extern_job: Serviciu extern
+        intern_job: Serviciu intern
+        appointed_worker: Lucrator desemnat
+        administrator: Administrator
+    employees:
+        0_9: 0-9
+        10_49: 10-49
+        over_50: peste 50
+        select_no: Selectati Nr de angajati
 mail:
     thank-you: 'Multumim!'
     contact:
@@ -155,3 +165,41 @@ reset-response:
     link-invalid: 'Link-ul de resetare parola este invalid.'
 reset:
     title: 'Resetare parola'
+
+#admin
+Subscription List: Lista Abonamente
+Domain List: Lista Domenii
+Sub Domain List: Lista Subdomenii
+Order List: Lista de comenzi
+Ad List: Lista reclame
+Name: Nume
+Price: Pret
+Credit: Credit
+Valability: Valabilitate
+Domain Amount: Nr de domenii
+Domains: Domenii
+Intro: Intro
+Description: Descriere
+Dedicated: Dedicat
+Subdomains: Subdomenii
+Subscriptions: Abonamente
+Baseline: Scurta descriere
+Domain: Domeniu
+Active: Activ
+Start Date: Data Inceput
+Ending Date: Data Sfarsit
+Credit Value: Valoare Credit
+Valability Days: Nr de zile valide
+Subscription: Abonament
+Created At: Creat la
+Approved By: Aprobat de
+Approved Date: Aprobat la data
+Mentions: Mentiuni
+Domains (You can select max %domainAmount% domains): Domenii (Poti selecta maxim %domainAmount% domenii)
+Title: Titlu
+Upload Image: Incarca Imagine
+
+
+
+
+

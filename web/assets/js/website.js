@@ -189,23 +189,6 @@ function Register() {
     window.location.href = 'Account/Register.html';
 }
 
-function FreeAccountRegister() {
-    $("#resetPassDiv").hide();
-    $("#FreeAccountExist").hide();
-
-    $("#FreeUserNameDuplicateEmail").text("");
-    $("#FreeManagerNameValid").hide();
-    $("#FreeManagerName").val("");
-    $("#FreeUserNameValid").hide();
-    $("#FreeUserNameValidEmail").hide();
-    $("#FreeUserName").val("");
-    $('#freecheck').removeAttr('checked');
-    $("#FreeAccountText").hide();
-
-    $("#createFreeAccount").show();
-    $("#freeAccountDiv").show();
-}
-
 function ResetPasswordShow() {
     $("#freeAccountDiv").hide();
 
@@ -218,67 +201,8 @@ function ResetPasswordShow() {
     $("#UserNameValidEmail").hide();
 }
 
-function FreeAccountSucceeded() {
-    $("#freeAccountDiv").hide();
-}
-
 function ResetPasswordSucceeded() {
     $("#resetPassDiv").hide();
-}
-
-function goFreeAccount() {
-    if ($('#freecheck').prop('checked')) {
-        $("#FreeAccountText").hide();
-    }
-}
-
-function SubmitFreeAccount() {
-
-    $("#FreeManagerNameValid").hide();
-    $("#FreeUserNameValid").hide();
-    $("#FreeUserNameValidEmail").hide();
-
-    var isValid = true;
-    if ($('#freecheck').prop('checked')) {
-        $("#FreeAccountText").hide();
-
-        var managerText = $("#FreeManagerName").val();
-        var emailText = $("#FreeUserName").val();
-
-        if (managerText == "") {
-            $("#FreeManagerNameValid").show();
-            isValid = false;
-        }
-
-        if (emailText == "") {
-            $("#FreeUserNameValid").show();
-            isValid = false;
-        } else {
-            if (!ValidateEmail(emailText)) {
-                $("#FreeUserNameValidEmail").show();
-                isValid = false;
-            }
-        }
-
-        if (isValid) {
-            $.ajax({
-                type: "POST",
-                url: '/Aldex/Account/CreateFreeAccountPost',
-                data: {managerName: managerText, email: emailText},
-                success: function (response) {
-                    if (response.Msg != "") {
-                        $("#FreeUserNameDuplicateEmail").text(response.Msg);
-                        $("#FreeUserNameDuplicateEmail").show();
-                    } else {
-                        $("#createFreeAccount").hide();
-                        $("#FreeAccountExist").show();
-                    }
-                }
-            })
-        }
-    } else {
-        $("#FreeAccountText").show();
-    }
 }
 
 function SubmitResetPassword(url) {
@@ -322,55 +246,6 @@ function ValidateEmail(email) {
     var re = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
     return re.test(email);
 }
-
-$("#FreeManagerName").bind('input propertychange', function () {
-    $("#validUser").hide();
-    $("#validPass").hide();
-
-    $("#FreeUserNameDuplicateEmail").hide();
-    $("#FreeManagerNameValid").hide();
-
-    if ($("#FreeManagerName").val() == "") {
-        $("#FreeManagerNameValid").show();
-    }
-});
-
-$("#FreeUserName").bind('input propertychange', function () {
-    $("#validUser").hide();
-    $("#validPass").hide();
-
-    $("#FreeUserNameDuplicateEmail").hide();
-    $("#FreeUserNameValid").hide();
-
-    $("#FreeUserNameValidEmail").hide();
-
-    var emailText = $("#FreeUserName").val();
-
-    if (emailText == "") {
-        $("#FreeUserNameValid").show();
-    } else {
-        if (!ValidateEmail(emailText)) {
-            $("#FreeUserNameValidEmail").show();
-        }
-    }
-});
-
-$("#UserNamePass").bind('input propertychange', function () {
-    $("#validUser").hide();
-    $("#validPass").hide();
-
-    $("#UserNameValid").hide();
-    $("#UserNameValidEmail").hide();
-
-    var emailText = $("#UserNamePass").val();
-    if (emailText == "") {
-        $("#UserNameValid").show();
-    } else {
-        if (!ValidateEmail(emailText)) {
-            $("#UserNameValidEmail").show();
-        }
-    }
-});
 
 function GoLogin(url, home) {
     $("#validUser").show();
@@ -442,9 +317,135 @@ function ReloadPage() {
 function UserLogOut(link) {
     window.location.href = link;
 }
+// Js not currently used.
+//function GetProfile(currentUserId) {
+//    var link = '/Aldex/User/UserDetails/1';
+//    link = link.replace("1", currentUserId);
+//    window.open(link, "_self");
+//}
+//
+//function FreeAccountRegister() {
+//    $("#resetPassDiv").hide();
+//    $("#FreeAccountExist").hide();
+//
+//    $("#FreeUserNameDuplicateEmail").text("");
+//    $("#FreeManagerNameValid").hide();
+//    $("#FreeManagerName").val("");
+//    $("#FreeUserNameValid").hide();
+//    $("#FreeUserNameValidEmail").hide();
+//    $("#FreeUserName").val("");
+//    $('#freecheck').removeAttr('checked');
+//    $("#FreeAccountText").hide();
+//
+//    $("#createFreeAccount").show();
+//    $("#freeAccountDiv").show();
+//}
+//
+//function FreeAccountSucceeded() {
+//    $("#freeAccountDiv").hide();
+//}
+//
+//function goFreeAccount() {
+//    if ($('#freecheck').prop('checked')) {
+//        $("#FreeAccountText").hide();
+//    }
+//}
+//
+//function SubmitFreeAccount() {
+//
+//    $("#FreeManagerNameValid").hide();
+//    $("#FreeUserNameValid").hide();
+//    $("#FreeUserNameValidEmail").hide();
+//
+//    var isValid = true;
+//    if ($('#freecheck').prop('checked')) {
+//        $("#FreeAccountText").hide();
+//
+//        var managerText = $("#FreeManagerName").val();
+//        var emailText = $("#FreeUserName").val();
+//
+//        if (managerText == "") {
+//            $("#FreeManagerNameValid").show();
+//            isValid = false;
+//        }
+//
+//        if (emailText == "") {
+//            $("#FreeUserNameValid").show();
+//            isValid = false;
+//        } else {
+//            if (!ValidateEmail(emailText)) {
+//                $("#FreeUserNameValidEmail").show();
+//                isValid = false;
+//            }
+//        }
+//
+//        if (isValid) {
+//            $.ajax({
+//                type: "POST",
+//                url: '/Aldex/Account/CreateFreeAccountPost',
+//                data: {managerName: managerText, email: emailText},
+//                success: function (response) {
+//                    if (response.Msg != "") {
+//                        $("#FreeUserNameDuplicateEmail").text(response.Msg);
+//                        $("#FreeUserNameDuplicateEmail").show();
+//                    } else {
+//                        $("#createFreeAccount").hide();
+//                        $("#FreeAccountExist").show();
+//                    }
+//                }
+//            })
+//        }
+//    } else {
+//        $("#FreeAccountText").show();
+//    }
+//}
+//
+//$("#FreeManagerName").bind('input propertychange', function () {
+//    $("#validUser").hide();
+//    $("#validPass").hide();
+//
+//    $("#FreeUserNameDuplicateEmail").hide();
+//    $("#FreeManagerNameValid").hide();
+//
+//    if ($("#FreeManagerName").val() == "") {
+//        $("#FreeManagerNameValid").show();
+//    }
+//});
+//
+//$("#FreeUserName").bind('input propertychange', function () {
+//    $("#validUser").hide();
+//    $("#validPass").hide();
+//
+//    $("#FreeUserNameDuplicateEmail").hide();
+//    $("#FreeUserNameValid").hide();
+//
+//    $("#FreeUserNameValidEmail").hide();
+//
+//    var emailText = $("#FreeUserName").val();
+//
+//    if (emailText == "") {
+//        $("#FreeUserNameValid").show();
+//    } else {
+//        if (!ValidateEmail(emailText)) {
+//            $("#FreeUserNameValidEmail").show();
+//        }
+//    }
+//});
+//
+//$("#UserNamePass").bind('input propertychange', function () {
+//    $("#validUser").hide();
+//    $("#validPass").hide();
+//
+//    $("#UserNameValid").hide();
+//    $("#UserNameValidEmail").hide();
+//
+//    var emailText = $("#UserNamePass").val();
+//    if (emailText == "") {
+//        $("#UserNameValid").show();
+//    } else {
+//        if (!ValidateEmail(emailText)) {
+//            $("#UserNameValidEmail").show();
+//        }
+//    }
+//});
 
-function GetProfile(currentUserId) {
-    var link = '/Aldex/User/UserDetails/1';
-    link = link.replace("1", currentUserId);
-    window.open(link, "_self");
-}
