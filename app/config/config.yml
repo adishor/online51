@@ -6,7 +6,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: ro
+    locale: en
     sonata.user.admin.user.class: AppBundle\Admin\UserAdmin
     sonata.user.admin.user.controller: AppBundle:Admin\User
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
@@ -148,6 +148,25 @@ sonata_formatter:
             extensions: []
             # Twig formatter cannot have extensions
 
+sonata_media:
+    default_context: default
+    db_driver: doctrine_orm
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.file
+
+            formats:
+                small: { width: 100 , quality: 70}
+                big:   { width: 500 , quality: 70}
+    cdn:
+        server:
+            path: /uploads/media # http://media.sonata-project.org/
+    filesystem:
+        local:
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     false
+
 vich_uploader:
     db_driver: orm
     mappings:
@@ -158,7 +177,7 @@ vich_uploader:
             namer:              uploadFile.namer
             delete_on_update:   true
             delete_on_remove:   true
-        
+
 fos_user:
     db_driver:      orm
     firewall_name:  main
@@ -180,6 +199,8 @@ doctrine:
                     ApplicationSonataUserBundle: ~
                     SonataUserBundle: ~
                     FOSUserBundle: ~
+                    ApplicationSonataMediaBundle: ~
+                    SonataMediaBundle: ~
 
 knp_doctrine_behaviors:
     sluggable:      true
