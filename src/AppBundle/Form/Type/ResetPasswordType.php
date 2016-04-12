@@ -34,6 +34,6 @@ class ResetPasswordType extends AbstractType
 
     public function getName()
     {
-        return 'reset';
+        return 'resetPassword';
     }
 }

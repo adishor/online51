@@ -1,0 +1,37 @@
+<body>
+    <p>
+        {{ 'mail.order-confirm.name'|trans({"%name%" : name}) }}
+    </p>
+    <p>
+        {{ 'mail.order-confirm.message'|trans({"%number%" : "%06d"|format(number)}) }}
+    </p>
+    {% if subscription is not null %}
+        <p>
+            {{ 'mail.order-confirm.subscription'|trans({"%subscription%" : subscription}) }}
+        </p>
+    {% endif %}
+    {% if domainAmount > 1 %}
+        <p>
+            {{ 'mail.order-confirm.domains'|trans }}
+        </p>
+    {% else %}
+        <p>
+            {{ 'mail.order-confirm.domain'|trans }}
+        </p>
+    {% endif %}
+    {% for domain in domains %}
+        <p>   * {{ domain.name }} </p>
+    {% endfor %}
+    <p>
+        {{ 'mail.order-confirm.credits'|trans({"%credits%" : credits}) }}
+    </p>
+    <p>
+        {{ 'mail.order-confirm.valability'|trans({"%date%" : endDate|date('d/m/Y H:m')}) }}
+    </p>
+    {% if mentions is defined %}
+        <p>
+            {{ 'mail.order-confirm.other-info'|trans }}</br>
+            {{ mentions }}
+        </p>
+    {% endif %}
+</body>

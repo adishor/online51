@@ -34,6 +34,11 @@ services:
         arguments: [~, AppBundle\Entity\Ad, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.ad, group: admin_group_website }
+    admin.document:
+        class: AppBundle\Admin\DocumentAdmin
+        arguments: [~, AppBundle\Entity\Document, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: admin_group_data }
     sonata_admin_image_file:
         class: AppBundle\Form\Type\AdminImageFileType
         tags:
@@ -42,7 +47,7 @@ services:
         class: AppBundle\Util\FileNamer
     app.mailer:
         class:     AppBundle\Service\MailerService
-        arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%]
+        arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%]
     app.user_helper:
         class:     AppBundle\Service\UserHelperService
         arguments: [@doctrine.orm.entity_manager, @security.encoder_factory]

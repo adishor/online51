@@ -107,13 +107,6 @@ subscription:
     years: ' ani'
     no_subscription: Fara abonament
 curency: ' RON'
-admin_label:
-    subscription: 'Abonament'
-    domain: 'Domeniu'
-    sub_domain: 'Sub domeniu'
-    order: 'Comenzi'
-    credits_usage: 'Credite folosite'
-    ad: 'Reclame'
 user:
     function:
         extern_job: Serviciu extern
@@ -143,6 +136,16 @@ mail:
         message: 'Pentru a-ti reseta parola - acceseaza '
         reset: 'Resetare parola!'
         subject: 'Resetare parola.'
+    order-confirm:
+        name: 'Buna %name%,'
+        message: 'Comanda cu numarul %number% a fost procesata.'
+        subscription: 'Abonamentul %subscription% a fost alocat contului tau!'
+        domain: 'Ai acces la urmatorul domeniu:'
+        domains: 'Ai acces la urmatoarele domenii:'
+        credits: 'Ai %credits% credite.'
+        valability: 'Valabile pana in %date%'
+        other-info: 'Alte informatii:'
+        subject: 'Comanda procesata!'
 success:
     register: 'Success! Utilizatorul a fost intregistrat!'
     login: 'Success! Login reusit!'
@@ -167,11 +170,20 @@ reset:
     title: 'Resetare parola'
 
 #admin
+admin_label:
+    subscription: 'Abonament'
+    domain: 'Domeniu'
+    sub_domain: 'Sub domeniu'
+    order: 'Comenzi'
+    credits_usage: 'Credite folosite'
+    ad: 'Reclame'
+    document: 'Documente'
 Subscription List: Lista Abonamente
 Domain List: Lista Domenii
 Sub Domain List: Lista Subdomenii
 Order List: Lista de comenzi
 Ad List: Lista reclame
+Document List: Lista documente
 Name: Nume
 Price: Pret
 Credit: Credit
@@ -182,6 +194,7 @@ Intro: Intro
 Description: Descriere
 Dedicated: Dedicat
 Subdomains: Subdomenii
+Subdomain: Sub Domeniu
 Subscriptions: Abonamente
 Baseline: Scurta descriere
 Domain: Domeniu
@@ -198,8 +211,5 @@ Mentions: Mentiuni
 Domains (You can select max %domainAmount% domains): Domenii (Poti selecta maxim %domainAmount% domenii)
 Title: Titlu
 Upload Image: Incarca Imagine
-
-
-
-
+Documents: Documente
 
