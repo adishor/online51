@@ -97,6 +97,7 @@ advantages:
     title: 'Avantaje'
 domain:
     in-the-section: 'In sectiunea %domain% gasesti :'
+    documents: 'Documente'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -212,4 +213,9 @@ Domains (You can select max %domainAmount% domains): Domenii (Poti selecta maxim
 Title: Titlu
 Upload Image: Incarca Imagine
 Documents: Documente
+#media
+sonata:
+    media:
+        provider:
+            file: Fisier
 

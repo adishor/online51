@@ -1,0 +1,18 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    sonata.media.admin.gallery:
+        class: %sonata.media.admin.gallery.class%
+        tags:
+            - { name: sonata.admin, manager_type: orm, show_in_dashboard: false, label_catalogue: %sonata.media.admin.media.translation_domain% , label_translator_strategy: sonata.admin.label.strategy.underscore }
+        arguments:
+            - ~
+            - %sonata.media.admin.gallery.entity%
+            - %sonata.media.admin.gallery.controller%
+            - "@sonata.media.pool"
+        calls:
+            - [setTranslationDomain, [%sonata.media.admin.media.translation_domain%]]
+            - [setTemplates, [{ list: SonataMediaBundle:GalleryAdmin:list.html.twig }]]

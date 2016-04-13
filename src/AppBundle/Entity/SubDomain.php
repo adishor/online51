@@ -47,7 +47,7 @@ class SubDomain
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="subdomain", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Media", mappedBy="subdomain", cascade={"persist", "remove"})
      */
     private $documents;
 
@@ -145,10 +145,10 @@ class SubDomain
     /**
      * Add documents
      *
-     * @param \AppBundle\Entity\Document $documents
+     * @param \Application\Sonata\MediaBundle\Entity\Media $documents
      * @return SubDomain
      */
-    public function addDocument(\AppBundle\Entity\Document $documents)
+    public function addDocument(\Application\Sonata\MediaBundle\Entity\Media $documents)
     {
         $this->documents[] = $documents;
 
@@ -158,9 +158,9 @@ class SubDomain
     /**
      * Remove documents
      *
-     * @param \AppBundle\Entity\Document $documents
+     * @param \Application\Sonata\MediaBundle\Entity\Media $documents
      */
-    public function removeDocument(\AppBundle\Entity\Document $documents)
+    public function removeDocument(\Application\Sonata\MediaBundle\Entity\Media $documents)
     {
         $this->documents->removeElement($documents);
     }
@@ -168,7 +168,7 @@ class SubDomain
     /**
      * Get documents
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getDocuments()
     {

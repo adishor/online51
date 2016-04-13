@@ -22,7 +22,7 @@ class CreditsUsage
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
      * @var integer
@@ -52,16 +52,19 @@ class CreditsUsage
      */
     protected $user;
 
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="mediaCreditsUsage")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=false)
+     */
+    protected $document;
 
     /**
-     * Get id
+     * @var \DateTime
      *
-     * @return integer
+     * @ORM\Column(type="datetime")
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    protected $documentExpireDate;
 
     /**
      * Set credit
@@ -161,5 +164,76 @@ class CreditsUsage
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
+        $this->documentExpireDate = new \DateTime();
+        $this->documentExpireDate->add(new \DateInterval('P' . $this->getDocument()->getValabilityDays() . 'D'));
+    }
+
+    /**
+     * Set document
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $document
+     * @return CreditsUsage
+     */
+    public function setDocument(\Application\Sonata\MediaBundle\Entity\Media $document)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    public function isDocmumentValid()
+    {
+
+        $now = new \DateTime();
+        $startDate = $this->createdAt();
+        if ($now > $startDate->add(new \DateInterval('P' . $this->getDocument()->getValabilityDays() . 'D'))) {
+            return true;
+        }
+
+        return FALSE;
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set documentExpireDate
+     *
+     * @param \DateTime $documentExpireDate
+     * @return CreditsUsage
+     */
+    public function setDocumentExpireDate($documentExpireDate)
+    {
+        $this->documentExpireDate = $documentExpireDate;
+
+        return $this;
+    }
+
+    /**
+     * Get documentExpireDate
+     *
+     * @return \DateTime 
+     */
+    public function getDocumentExpireDate()
+    {
+        return $this->documentExpireDate;
     }
 }

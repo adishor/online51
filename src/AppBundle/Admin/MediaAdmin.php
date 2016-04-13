@@ -2,25 +2,19 @@
 
 namespace AppBundle\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\MediaBundle\Admin\ORM\MediaAdmin as SonataMediaAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class DocumentAdmin extends Admin
+class MediaAdmin extends SonataMediaAdmin
 {
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $form->add('title')
-          ->add('creditValue')
-          ->add('valabilityDays');
-    }
-
-    protected function configureDatagridFilters(DatagridMapper $filter)
-    {
-        $filter->add('title')
+        $datagridMapper
+          ->add('title')
+          ->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('subdomain');
@@ -28,7 +22,8 @@ class DocumentAdmin extends Admin
 
     protected function configureListFields(ListMapper $list)
     {
-        $list->addIdentifier('title')
+        $list->add('title')
+          ->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('subdomain');
@@ -37,9 +32,18 @@ class DocumentAdmin extends Admin
     protected function configureShowFields(ShowMapper $show)
     {
         $show->add('title')
+          ->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('subdomain');
+    }
+
+    public function getTemplate($name)
+    {
+        if ($name == "list") {
+            return 'sonata/base_list.html.twig';
+        }
+        return parent::getTemplate($name);
     }
 
 }
