@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
  * CreditsUsage
  *
  * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CreditsUsageRepository")
  * @HasLifecycleCallbacks
  */
 class CreditsUsage
@@ -54,7 +54,7 @@ class CreditsUsage
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="mediaCreditsUsage")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="documentCreditsUsage")
      * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=false)
      */
     protected $document;
@@ -165,7 +165,9 @@ class CreditsUsage
     {
         $this->createdAt = new \DateTime();
         $this->documentExpireDate = new \DateTime();
-        $this->documentExpireDate->add(new \DateInterval('P' . $this->getDocument()->getValabilityDays() . 'D'));
+        $this->documentExpireDate->add(new \DateInterval('P' . $this->document->getValabilityDays() . 'D'));
+        $this->mentions = 'Document deblocat de utilizator.';
+        $this->credit = $this->document->getCreditValue();
     }
 
     /**
@@ -230,7 +232,7 @@ class CreditsUsage
     /**
      * Get documentExpireDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDocumentExpireDate()
     {

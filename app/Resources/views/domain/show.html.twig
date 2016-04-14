@@ -20,12 +20,46 @@
                 <div class="tab-pane" id="ssm{{ loop.index0 }}">
                     <h3>{{ subdomain.name | upper }}</h3>
                     {{ subdomain.description | raw }}
-                    <h4>{{ 'domain.documents' | trans }}</h4>
-                    <ul>
-                        {% for document in subdomain.documents %}
-                            <li><a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a></li>
-                        {% endfor %}
-                    </ul>
+                    {% if app.user %}
+                        {% if isValid %}
+                            {% if subdomain.documents is not empty %}
+                                <h4>{{ 'domain.documents' | trans }}</h4>
+                                <ul>
+                                    {% for document in subdomain.documents %}
+                                        <li>
+                                            {% if validDocuments[document.id] is defined %}
+                                            <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
+                                            {% else %}
+                                            {{ document.title }}
+                                            {% endif %}  
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                                {% else %}
+                                <br/>
+                                <br/>
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <p> 
+                                            {{ 'domain.go-to-subscription'|trans }} <a href="{{ path('subscriptions')}}">{{ 'domain.subscriptions'|trans }}</a>
+                                             {{ 'domain.go-to-contact'|trans }} <a href="{{ path('contact')}}">{{ 'domain.contact'|trans }}</a><br />
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endif %}  
+                        </ul>
+                    {% elseif not app.user %}
+                        <br/>
+                        <br/>
+                        <div class="panel">
+                            <div class="panel-body">
+                                <p> 
+                                    {{ 'domain.not-logged-in'|trans }}<br />
+                                    {{ 'domain.please-login'|trans }}<br />
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
