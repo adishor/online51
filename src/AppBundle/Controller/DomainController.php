@@ -16,13 +16,23 @@ class DomainController extends Controller
      */
     public function showDomainAction(Domain $domain)
     {
-        $userId = $this->getUser()->getId();
-        $domainId = $domain->getId();
-        $userHelper = $this->get('app.user_helper');
+
+        $isValid = false;
+        $validDocuments = null;
+        $isUserException = false;
+        if ($this->getUser()) {
+            $userId = $this->getUser()->getId();
+            $domainId = $domain->getId();
+            $userHelper = $this->get('app.user_helper');
+            $isValid = $userHelper->isDomainValidForUser($userId, $domainId);
+            $validDocuments = $userHelper->getValidUserDocuments($userId, $domainId);
+            $isUserException = $userHelper->getIsUserException($userId);
+        }
         return $this->render('domain/show.html.twig', array(
               'domain' => $domain,
-              'isValid' => $userHelper->isDomainValidForUser($userId, $domainId),
-              'validDocuments' => $userHelper->getValidUserDocuments($userId, $domainId),
+              'isValid' => $isValid,
+              'validDocuments' => $validDocuments,
+              'isUserException' => $isUserException,
         ));
     }
 

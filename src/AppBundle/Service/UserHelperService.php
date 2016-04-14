@@ -5,16 +5,22 @@ namespace AppBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Application\Sonata\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class UserHelperService
 {
     protected $entityManager;
     protected $encoderFactory;
+    protected $authorizationChecker;
+    protected $tokenStorage;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage)
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function addUserToDatabase($data)
@@ -73,7 +79,7 @@ class UserHelperService
 
     public function isDomainValidForUser($userId, $domainId)
     {
-        $domains = $this->entityManager->getRepository('AppBundle:Order')->findAllValidUserOrders($userId);
+        $domains = $this->entityManager->getRepository('AppBundle:Order')->findAllValidUserDomains($userId);
         $domainIds = array();
         array_walk_recursive($domains, function($v, $k) use (&$domainIds) {
             $domainIds[] = $v;
@@ -93,6 +99,17 @@ class UserHelperService
         });
 
         return $validDocuments;
+    }
+
+    public function getValidUserCredits($userId)
+    {
+
+        return $this->entityManager->getRepository('AppBundle:Order')->findValidUserCredits($userId);
+    }
+
+    public function getIsUserException()
+    {
+        return $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
     }
 
 }

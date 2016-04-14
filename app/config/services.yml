@@ -45,7 +45,7 @@ services:
         arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%]
     app.user_helper:
         class:     AppBundle\Service\UserHelperService
-        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory]
+        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage]
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false

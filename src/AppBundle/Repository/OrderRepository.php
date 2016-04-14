@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class OrderRepository extends EntityRepository
 {
 
-    public function findAllValidUserOrders($userId)
+    public function findAllValidUserDomains($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -29,6 +29,23 @@ class OrderRepository extends EntityRepository
         $query = $queryBuilder->getQuery();
 
         return $query->getArrayResult();
+    }
+
+    public function findValidUserCredits($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('SUM(o.credits)')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :now')
+          ->setParameter('now', new \DateTime);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getSingleScalarResultResult();
     }
 
 }
