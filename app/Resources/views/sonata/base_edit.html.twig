@@ -67,6 +67,7 @@
             }
           {% endif %}
 
+{#          used for OrderAdmin#}
           {% if admin.formFieldDescriptions.subscription is defined %}
             var subscription = $("#{{ admin.uniqId }}_subscription");
             subscription.change(updateDomains()); // Bind the function to updateDomains
@@ -138,13 +139,15 @@
 
                           //add validation for check
                           $("#{{ admin.uniqId }}_domains input").on("click", function(){
-                              if ($(this).is(':checked')) {
-                                var noChecked = $("#{{ admin.uniqId }}_domains input").filter(':checked').length;
-                                if ($("#{{ admin.uniqId }}_domainAmount").val() < noChecked) {
+                              if ($("#{{ admin.uniqId }}_domainAmount").val() > 0) {
+                                if ($(this).is(':checked')) {
+                                  var noChecked = $("#{{ admin.uniqId }}_domains input").filter(':checked').length;
+                                  if ($("#{{ admin.uniqId }}_domainAmount").val() < noChecked) {
+                                    $(this).removeAttr('checked');
+                                  }
+                                } else {
                                   $(this).removeAttr('checked');
                                 }
-                              } else {
-                                $(this).removeAttr('checked');
                               }
                           });
                         }

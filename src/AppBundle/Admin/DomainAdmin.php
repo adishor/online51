@@ -69,4 +69,12 @@ class DomainAdmin extends Admin
     {
         $object->setSubdomains($object->getSubdomains());
     }
+
+    public function getFormTheme()
+    {
+        return array_merge(
+            parent::getFormTheme(),
+            array('sonata/admin_orm_one_to_many_field.html.twig')
+        );
+    }
 }
