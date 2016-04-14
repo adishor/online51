@@ -16,3 +16,18 @@ services:
         calls:
             - [setTranslationDomain, [%sonata.media.admin.media.translation_domain%]]
             - [setTemplates, [{ list: SonataMediaBundle:GalleryAdmin:list.html.twig }]]
+    sonata.media.admin.media:
+        class: %sonata.media.admin.media.class%
+        tags:
+            - { name: sonata.admin, manager_type: orm, label_catalogue: %sonata.media.admin.media.translation_domain% , label: media, group: sonata_media, label_translator_strategy: sonata.admin.label.strategy.underscore }
+        arguments:
+            - ~
+            - %sonata.media.admin.media.entity%
+            - %sonata.media.admin.media.controller%
+            - "@sonata.media.pool"
+        calls:
+            - [setModelManager, ["@sonata.media.admin.media.manager"]]
+            - [setTranslationDomain, [%sonata.media.admin.media.translation_domain%]]
+            - [setTemplates, [{ list: SonataMediaBundle:MediaAdmin:list.html.twig , edit: SonataAdminBundle:CRUD:edit.html.twig }]]
+
+    

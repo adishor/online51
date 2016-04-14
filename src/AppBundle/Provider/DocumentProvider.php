@@ -41,12 +41,4 @@ class DocumentProvider extends FileProvider
         ));
     }
 
-    public function getTemplate($name)
-    {
-        if ($name == "list") {
-            return 'sonata/base_list.html.twig';
-        }
-        return parent::getTemplate($name);
-    }
-
 }

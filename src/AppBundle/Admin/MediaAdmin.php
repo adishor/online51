@@ -22,7 +22,7 @@ class MediaAdmin extends SonataMediaAdmin
 
     protected function configureListFields(ListMapper $list)
     {
-        $list->add('title')
+        $list->addIdentifier('title')
           ->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
@@ -36,14 +36,6 @@ class MediaAdmin extends SonataMediaAdmin
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('subdomain');
-    }
-
-    public function getTemplate($name)
-    {
-        if ($name == "list") {
-            return 'sonata/base_list.html.twig';
-        }
-        return parent::getTemplate($name);
     }
 
 }

@@ -2,14 +2,14 @@
 
 namespace AppBundle\Security\Sonata;
 
-use Sonata\MediaBundle\Security\ForbiddenDownloadStrategy;
+use Sonata\MediaBundle\Security\DownloadStrategyInterface;
 use Sonata\MediaBundle\Model\MediaInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class UserDownloadStrategy extends ForbiddenDownloadStrategy
+class UserDownloadStrategy implements DownloadStrategyInterface
 {
     protected $translator;
     protected $authorizationChecker;
