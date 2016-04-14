@@ -52,4 +52,4 @@ services:
         arguments: [@router, @session]
     app.media.security.user_strategy:
         class:     AppBundle\Security\Sonata\UserDownloadStrategy
-        arguments: [@translator, @security.authorization_checker, @security.token_storage]
+        arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user_helper]

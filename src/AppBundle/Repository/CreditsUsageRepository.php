@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class CreditsUsageRepository extends EntityRepository
 {
 
-    public function findAllValidUserDocuments($user, $now, $domain)
+    public function findAllValidUserDocuments($userId, $domainId = null)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -22,11 +22,13 @@ class CreditsUsageRepository extends EntityRepository
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
           ->where('cu.user = :user')
-          ->setParameter('user', $user)
+          ->setParameter('user', $userId)
           ->andWhere('cu.documentExpireDate > :now')
-          ->setParameter('now', $now)
-          ->andWhere('sd.domain = :domain')
-          ->setParameter('domain', $domain);
+          ->setParameter('now', new \DateTime);
+        if (null !== $domainId) {
+            $queryBuilder->andWhere('sd.domain = :domain')
+              ->setParameter('domain', $domainId);
+        }
 
         $query = $queryBuilder->getQuery();
 

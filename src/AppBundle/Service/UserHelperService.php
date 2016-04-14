@@ -71,24 +71,22 @@ class UserHelperService
         $this->entityManager->flush();
     }
 
-    public function isDomainValidForUser($user, $domain)
+    public function isDomainValidForUser($userId, $domainId)
     {
-        $now = new \DateTime;
-        $domains = $this->entityManager->getRepository('AppBundle:Order')->findAllValidUserOrders($user, $now);
+        $domains = $this->entityManager->getRepository('AppBundle:Order')->findAllValidUserOrders($userId);
         $domainIds = array();
         array_walk_recursive($domains, function($v, $k) use (&$domainIds) {
             $domainIds[] = $v;
         });
-        if (in_array($domain->getId(), $domainIds)) {
+        if (in_array($domainId, $domainIds)) {
             return true;
         }
         return false;
     }
 
-    public function getValidUserDocuments($user, $domain)
+    public function getValidUserDocuments($userId, $domainId = null)
     {
-        $now = new \DateTime;
-        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($user, $now, $domain);
+        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId);
         $validDocuments = array();
         array_walk_recursive($documents, function($v, $k) use (&$validDocuments) {
             $validDocuments[$v] = true;
