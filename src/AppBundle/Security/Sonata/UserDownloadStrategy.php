@@ -43,8 +43,6 @@ class UserDownloadStrategy implements DownloadStrategyInterface
         if (!isset($validDocuments[$media->getId()])) {
             throw new AccessDeniedHttpException();
         }
-        var_dump($validDocuments[$media->getId()]);
-        die;
 
         return true;
     }
