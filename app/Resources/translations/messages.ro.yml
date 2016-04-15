@@ -105,6 +105,11 @@ domain:
     go-to-contact: ', sau sa luati legatura cu noi prin'
     subscriptions: 'abonament'
     contact: 'formularul de contact.'
+    confirm-unlock: 'Pentru a debloca documentul %title% apasati Ok. Atentie veti consuma %credits% credite!'
+    document:
+        already-unlocked: 'Documetul este deja deblocat.'
+        no-credits: 'Nu aveti suficiente credite pentru a debloca acest document.'
+        success: 'Document deblocat cu succes.'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -163,6 +168,7 @@ login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
     free: 'Creare cont gratuit'
+    total-credits: 'Credite Totale:'
     button:
         login: 'Login'
         register: 'Inregistrare'

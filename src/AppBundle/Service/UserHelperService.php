@@ -6,18 +6,21 @@ use Doctrine\ORM\EntityManager;
 use Application\Sonata\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class UserHelperService
 {
     protected $entityManager;
     protected $encoderFactory;
     protected $authorizationChecker;
+    protected $tokenStorage;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage)
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
         $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function addUserToDatabase($data)
@@ -94,10 +97,27 @@ class UserHelperService
         return $validDocuments;
     }
 
-    public function getValidUserCredits($userId)
+    public function isValidUserDocument($userId, $documentId)
     {
+        if (empty($this->entityManager->getRepository('AppBundle:CreditsUsage')->findValidUserDocument($userId, $documentId))) {
+            return false;
+        }
+        return true;
+    }
 
-        return $this->entityManager->getRepository('AppBundle:Order')->findValidUserCredits($userId);
+    public function updateValidUserCredits()
+    {
+        $userId = $this->tokenStorage->getToken()->getUser()->getId();
+        $user = $this->entityManager->find('ApplicationSonataUserBundle:User', $userId);
+        $userCredits = $user->getCreditsTotal();
+        $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
+        $validBeforeCredits = $orderRepository->findValidUserCredits($userId, $user->getLastCreditUpdate());
+        $validNowCredits = $orderRepository->findValidUserCredits($userId);
+        if (null !== $userCredits) {
+            $user->setCreditsTotal(min($userCredits, $validBeforeCredits) + ($validNowCredits - $validBeforeCredits));
+            $user->setLastCreditUpdate(new \DateTime());
+        }
+        $this->entityManager->flush();
     }
 
     public function getIsUserException()

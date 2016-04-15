@@ -8,6 +8,12 @@
     <p class="color-green" >{{ flash_message|trans }}</p>
 {% endfor %}
 {% if app.user %}
+    {% if app.user.creditsTotal %}
+        <div class="login-form" id="loginDiv">
+            <p class="first">{{ 'login.total-credits'|trans }}</p>
+            <h4 id="totalUserCredits">{{ app.user.creditsTotal }}</h4>
+        </div>
+    {% endif %}
     <input type="button" class="costum" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
 {% else %}
     <form action="" method="post" onsubmit="return false">

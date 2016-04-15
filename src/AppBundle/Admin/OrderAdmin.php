@@ -108,6 +108,8 @@ class OrderAdmin extends Admin
             $endDate->add(new \DateInterval('P' . $object->getValabilityDays() . 'D'));
             $object->setStartDate($startDate);
             $object->setEndingDate($endDate);
+            $object->getUser()->setCreditsTotal($object->getUser()->getCreditsTotal() + $object->getCreditValue());
+            $object->getUser()->setLastCreditUpdate(new \DateTime());
         }
     }
 

@@ -28,21 +28,26 @@
                                     {% for document in subdomain.documents %}
                                         <li>
                                             {% if validDocuments[document.id] is defined or isUserException %}
-                                            <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
+                                                <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
                                             {% else %}
-                                            {{ document.title }}
+                                                <a id="downloadLink{{document.id}}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
+                                                            '{{ 'domain.confirm-unlock'|trans({'%title%': document.title, '%credits%': document.creditValue }) }}',
+                                                            '{{ path('unlock_document') }}',
+                                                            {{ document.id }},
+                                                            '{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}'
+                                                            );">{{ document.title }}</a>
                                             {% endif %}  
                                         </li>
                                     {% endfor %}
                                 {% endif %}
-                                {% else %}
+                            {% else %}
                                 <br/>
                                 <br/>
                                 <div class="panel">
                                     <div class="panel-body">
                                         <p> 
                                             {{ 'domain.go-to-subscription'|trans }} <a href="{{ path('subscriptions')}}">{{ 'domain.subscriptions'|trans }}</a>
-                                             {{ 'domain.go-to-contact'|trans }} <a href="{{ path('contact')}}">{{ 'domain.contact'|trans }}</a><br />
+                                            {{ 'domain.go-to-contact'|trans }} <a href="{{ path('contact')}}">{{ 'domain.contact'|trans }}</a><br />
                                         </p>
                                     </div>
                                 </div>

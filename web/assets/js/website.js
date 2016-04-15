@@ -235,7 +235,6 @@ function SubmitResetPassword(url) {
                 } else {
                     $("#resetPass").hide();
                     $("#resetPassSucc").show();
-                    console.log(1);
                 }
             }
         })
@@ -317,6 +316,25 @@ function ReloadPage() {
 function UserLogOut(link) {
     window.location.href = link;
 }
+
+function DocumentConfirmPopup(message, path, documentId, downloadPath) {
+    var answer = confirm(message);
+    if (answer)
+        $.ajax({
+            type: "POST",
+            url: path,
+            data: {documentId: documentId},
+            success: function (response) {
+                window.alert(response.message);
+                if (response.success) {
+                    window.location.href = downloadPath;
+                    $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
+                    $('#totalUserCredits').text(response.credits);
+                }
+            }
+        });
+}
+
 // Js not currently used.
 //function GetProfile(currentUserId) {
 //    var link = '/Aldex/User/UserDetails/1';

@@ -208,6 +208,14 @@ class User extends BaseUser
     protected $creditsTotal;
 
     /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $lastCreditUpdate;
+
+    /**
      * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Order", mappedBy="user")
      */
     protected $orders;
@@ -676,5 +684,29 @@ class User extends BaseUser
     public function getUserCreditsUsage()
     {
         return $this->userCreditsUsage;
+    }
+
+
+    /**
+     * Set lastCreditUpdate
+     *
+     * @param \DateTime $lastCreditUpdate
+     * @return User
+     */
+    public function setLastCreditUpdate($lastCreditUpdate)
+    {
+        $this->lastCreditUpdate = $lastCreditUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastCreditUpdate
+     *
+     * @return \DateTime 
+     */
+    public function getLastCreditUpdate()
+    {
+        return $this->lastCreditUpdate;
     }
 }

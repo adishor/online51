@@ -33,21 +33,28 @@ class OrderRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
-    public function findValidUserCredits($userId)
+    public function findValidUserCredits($userId, $endDate = null)
     {
+        if (null === $endDate) {
+            $endDate = new \DateTime;
+        }
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('SUM(o.credits)')
+          ->select('SUM(o.creditValue)')
           ->from('AppBundle:Order', 'o')
           ->where('o.active = TRUE')
           ->andWhere('o.user = :user')
           ->setParameter('user', $userId)
-          ->andWhere('o.endingDate > :now')
-          ->setParameter('now', new \DateTime);
+          ->andWhere('o.endingDate > :endDate')
+          ->setParameter('endDate', $endDate);
+        if (null !== $endDate) {
+            $queryBuilder->andWhere('o.startDate < :endDate')
+              ->setParameter('endDate', $endDate);
+        }
 
         $query = $queryBuilder->getQuery();
 
-        return $query->getSingleScalarResultResult();
+        return $query->getSingleScalarResult();
     }
 
 }

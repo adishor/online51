@@ -35,4 +35,23 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
+    public function findValidUserDocument($userId, $documentId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('d.id')
+          ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
+          ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.documentExpireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('d.id = :document')
+          ->setParameter('document', $documentId);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
 }
