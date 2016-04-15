@@ -12,12 +12,37 @@ class SubDomainAdmin extends Admin
 {
     public function configureFormFields(FormMapper $form)
     {
+        $domainOptions = array(
+            'expanded' => false,
+            'multiple' => false,
+            'by_reference' => false,
+            'required' => false,
+            'btn_add' => false,
+        );
+
         $form->add('name')
             ->add('description', 'sonata_simple_formatter_type', array(
                 'format' => 'richhtml',
                 'required' => false
             ))
-            ->add('domain');
+            ->add('domain', 'sonata_type_model', $domainOptions);
+
+        $pDomainId = $this->request->query->get('pDomainId');
+
+        if (isset($pDomainId)) {
+            $form->remove('domain');
+            if ($pDomainId > 0) {
+                $em = $this->modelManager->getEntityManager('AppBundle:Domain');
+                $query = $em->createQueryBuilder('d')
+                    ->select('d')
+                    ->from('AppBundle:Domain', 'd')
+                    ->where('d.id = :domainId')
+                    ->setParameter('domainId', $pDomainId);
+
+                $domainOptions['query'] = $query;
+                $form->add('domain', 'sonata_type_model', $domainOptions);
+            }
+        }
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
