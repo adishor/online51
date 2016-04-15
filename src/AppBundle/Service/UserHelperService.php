@@ -6,21 +6,18 @@ use Doctrine\ORM\EntityManager;
 use Application\Sonata\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class UserHelperService
 {
     protected $entityManager;
     protected $encoderFactory;
     protected $authorizationChecker;
-    protected $tokenStorage;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
         $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
     }
 
     public function addUserToDatabase($data)
@@ -79,15 +76,11 @@ class UserHelperService
 
     public function isDomainValidForUser($userId, $domainId)
     {
-        $domains = $this->entityManager->getRepository('AppBundle:Order')->findAllValidUserDomains($userId);
-        $domainIds = array();
-        array_walk_recursive($domains, function($v, $k) use (&$domainIds) {
-            $domainIds[] = $v;
-        });
-        if (in_array($domainId, $domainIds)) {
-            return true;
+
+        if (empty($this->entityManager->getRepository('AppBundle:Order')->findValidUserDomain($userId, $domainId))) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public function getValidUserDocuments($userId, $domainId = null)

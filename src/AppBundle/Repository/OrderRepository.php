@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class OrderRepository extends EntityRepository
 {
 
-    public function findAllValidUserDomains($userId)
+    public function findValidUserDomain($userId, $domainId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -23,6 +23,8 @@ class OrderRepository extends EntityRepository
           ->where('o.active = TRUE')
           ->andWhere('o.user = :user')
           ->setParameter('user', $userId)
+          ->andWhere('d.id = :domain')
+          ->setParameter('domain', $domainId)
           ->andWhere('o.endingDate > :now')
           ->setParameter('now', new \DateTime);
 
