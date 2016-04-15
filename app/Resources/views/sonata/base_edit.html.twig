@@ -83,6 +83,7 @@
                           $(this).iCheck('destroy');
                           $(this).removeAttr('disabled');
                           $(this).removeAttr('onclick');
+                          $(this).parent().parent().show();
                           $(this).removeAttr('checked');
                       });
 
@@ -111,11 +112,12 @@
                       if (typeof data.domainAmount !== "undefined") {
                         $("#{{ admin.uniqId }}_domainAmount").val(data.domainAmount);
 
-                        // add disabled to domain that are not part of subscription
+                        // add disabled & hide to domain that are not part of subscription
                         var counter = 0;
                         $("#{{ admin.uniqId }}_domains li input").each(function(){
                           if (!data.domains.hasOwnProperty($(this).val())) {
                             $(this).prop('disabled', 'true');
+                            $(this).parent().parent().hide();
                           } else {
                             counter++;
                           }
@@ -159,6 +161,7 @@
                           $(this).removeAttr('disabled');
                           $(this).removeAttr('onclick');
                           $(this).removeAttr('checked');
+                          $(this).parent().parent().show();
                         });
                       }
 
@@ -166,6 +169,11 @@
                       var load_domains = true;
                       {% if object.subscription is not null %}
                         if (subscriptionId != {{ object.subscription.id }}) {
+                          load_domains = false;
+                        }
+                      {% else %}
+                        console.log(subscriptionId);
+                        if (subscriptionId > 0) {
                           load_domains = false;
                         }
                       {% endif %}

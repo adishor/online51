@@ -37,7 +37,7 @@ class Domain
     /**
      * var string
      *
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     private $baseline;
 
