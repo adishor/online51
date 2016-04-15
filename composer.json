@@ -31,7 +31,10 @@
         "sonata-project/user-bundle": "~2.3@dev",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sonata-project/formatter-bundle": "~2.3@dev",
-        "knplabs/doctrine-behaviors": "~1.1"
+        "knplabs/doctrine-behaviors": "~1.1",
+        "gregwar/captcha-bundle": "1.*",
+        "jms/serializer-bundle": "~0.13",
+        "sonata-project/media-bundle": "2.3.x-dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
@@ -68,5 +71,11 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         }
-    }
+    },
+    "repositories": [
+        {
+        "type": "vcs",
+            "url": "https://github.com/sidz/SonataMediaBundle.git"
+        }
+    ]
 }

@@ -4,7 +4,7 @@ register:
 form:
     label:
         name: '*Nume si prenume'
-        job: '*Functia'
+        function: '*Functia'
         email: '*Email(utilizator)'
         password: '*Parola'
         password-confirm: '*Confirmare parola'
@@ -13,7 +13,7 @@ form:
         company-number: '*Numar de inregistrare la ORC'
         employees: 'Numar de angajati'
         certificate: 'Numar certificat de abilitare'
-        bank-acount: '*Contul bancar (IBAN)'
+        bank-account: '*Contul bancar (IBAN)'
         bank: '*Banca'
         phone: '*Telefon (07xx xxxxxx )'
         county: '*Judet'
@@ -21,44 +21,67 @@ form:
         address: '*Adresa'
         logo: 'Sigla/Logo/Emblema'
         terms-of-use: '*Acceptare termeni de utilizare'
+        terms: '*Acceptare T&C'
+        captcha: '*Introduceti textul din imagine:'
+        subject: '*Subiect'
+        message: '*Mesaj'
+        save: 'Trimite'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
-        job: 'Va rugam completati *Functia.'
+        function: 'Va rugam completati *Functia.'
         email: 'Va rugam completati *Email(utilizator)'
         password: 'Va rugam completati *Parola'
         password-confirm: 'Va rugam completati *Confirmarea Parolei'
         company: 'Va rugam completati *Numele companiei'
         company-id: 'Va rugam completati *CUI'
         company-number: 'Va rugam completati *Numarul de inregistrare la ORC'
-        bank-acount: 'Va rugam completati *Contul bancar (IBAN)'
+        bank-account: 'Va rugam completati *Contul bancar (IBAN)'
         bank: 'Va rugam completati *Banca'
         phone: 'Va rugam completati *Telefon (07xx xxxxxx )'
         county: 'Va rugam completati *Judetul'
         city: 'Va rugam completati *Localitatea'
         address: 'Va rugam completati *Adresa'
         terms-of-use: 'Inregistrarea este posibila dupa acceptarea termenilor de utilizare!'
+        captcha: 'Va rugam completati textul din imagine'
+        subject: 'Va rugam completati *Subiectul'
+        message: 'Va rugam completati *Mesajul'
     placeholder:
+        username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
         company-number: 'J11/11/2011'
+        name: 'Nume'
+        email: 'Adresa ta de email'
+        phone: 'Numarul tau de telefon'
+        subject: 'Subiectul mesajului'
+        message: 'Mesajul tau'
     valid:
         number:
-            job: '*Functia trebuie sa fie un numar.'
+            function: '*Functia trebuie sa fie un numar.'
             employees: 'Numarul de angajati trebuie sa fie un numar.'
             county: '*Judet trebuie sa fie un numar.'
             city: '*Localitate trebuie sa fie un numar.'
         email: 'Va rugam introduceti o adresa de email valida.'
         company-id: 'Cui invalid'
-        bank-acount: '*Contul bancar (IBAN) invalid'
+        bank-account: '*Contul bancar (IBAN) invalid'
         phone: '*Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu &#39;07&#39; si sa aiba 10 cifre'
+        orc: '*Numar inregistrare ORC sa aiba forma: tip+cod judet/numar/an (tip: J, F, C, cod judet: din 2 cifre) ex: J11/11/2011'
     password:
         length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
-newsletter:
-    title: 'Newsletter'
 contact:
     title: 'Contact'
+    label:
+        name: '*Nume'
+        email: '*Email'
+        phone: '*Nr.Telefon'
+        success: 'Informatiile Dvs. au fost trimise catre suportul tehnic!'
+    required:
+        name: 'Va rugam completati *Numele'
+        email: 'Va rugam completati *Email'
+newsletter:
+    title: 'Newsletter'
 index:
-    page-title: 'Welcome!'
+    page-title: 'Online51'
     welcome: 'Bine ai venit!'
     first-description: 'OnLine51 este o platforma de consultanta online pentru 5 domenii conexe activitatii de baza a firmei tale'
     second-description: 'si un domeniu dedicat specialistilor SSM'
@@ -82,15 +105,101 @@ subscription:
     valability: 'Termen de valabilitate : '
     year: ' an'
     years: ' ani'
+    no_subscription: Fara abonament
 curency: ' RON'
 admin_label:
     subscription: 'Abonament'
     domain: 'Domeniu'
     sub_domain: 'Sub domeniu'
-    user_subscription: 'Abonament utilizator'
-    user_subscription_domain: 'Domeniu abonament utilizator'
-    credits: 'Credite'
-    credits_usage: 'Folosire de credite'
+    order: 'Comenzi'
+    credits_usage: 'Credite folosite'
     ad: 'Reclame'
+user:
+    function:
+        extern_job: Serviciu extern
+        intern_job: Serviciu intern
+        appointed_worker: Lucrator desemnat
+        administrator: Administrator
+    employees:
+        0_9: 0-9
+        10_49: 10-49
+        over_50: peste 50
+        select_no: Selectati Nr de angajati
+mail:
+    thank-you: 'Multumim!'
+    contact:
+        subject: 'Formular de contact - '
+        name: 'Mesaj nou de la %name%'
+        email: 'Email: %email%'
+        phone: 'Telefon: %phone%'
+        message: 'Mesaj:'
+    confirm:
+        name: 'Buna, %name%'
+        subject: 'Mesaj primit!'
+        sent-subject: 'Ai trimis un mesaj cu subiectul: %subject% si urmatorul mesaj:'
+        message: 'In cel mai scurt timp vei primi un raspuns!'
+    reset-password:
+        name: 'Buna, %name%'
+        message: 'Pentru a-ti reseta parola - acceseaza '
+        reset: 'Resetare parola!'
+        subject: 'Resetare parola.'
+success:
+    register: 'Success! Utilizatorul a fost intregistrat!'
+    login: 'Success! Login reusit!'
+    reset: 'Parola s-a resetat cu succes!'
+    reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
+login:
+    label: 'Acces abonati'
+    forgot: 'Am uitat parola!'
+    free: 'Creare cont gratuit'
+    button:
+        login: 'Login'
+        register: 'Inregistrare'
+        reset: 'Resetare parola'
+        logout: 'Logout'
+    failed: 'User sau parola invalida!'
+    close-password: 'Inchide resetare parola.'
+reset-response:
+    no-user: 'Acest email nu este alocat.'
+    link-expired: 'Link-ul de resetare parola a expirat.'
+    link-invalid: 'Link-ul de resetare parola este invalid.'
+reset:
+    title: 'Resetare parola'
 
-    
+#admin
+Subscription List: Lista Abonamente
+Domain List: Lista Domenii
+Sub Domain List: Lista Subdomenii
+Order List: Lista de comenzi
+Ad List: Lista reclame
+Name: Nume
+Price: Pret
+Credit: Credit
+Valability: Valabilitate(valori intre 1-5)
+Domain Amount: Nr de domenii
+Domains: Domenii
+Intro: Intro
+Description: Descriere
+Dedicated: Dedicat
+Subdomains: Subdomenii
+Subscriptions: Abonamente
+Baseline: Scurta descriere
+Domain: Domeniu
+Active: Activ
+Start Date: Data Inceput
+Ending Date: Data Sfarsit
+Credit Value: Valoare Credit
+Valability Days: Nr de zile valide
+Subscription: Abonament
+Created At: Creat la
+Approved By: Aprobat de
+Approved Date: Aprobat la data
+Mentions: Mentiuni
+Domains (You can select max %domainAmount% domains): Domenii (Poti selecta maxim %domainAmount% domenii)
+Title: Titlu
+Upload Image: Incarca Imagine
+
+
+
+
+

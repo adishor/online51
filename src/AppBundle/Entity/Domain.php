@@ -37,7 +37,7 @@ class Domain
     /**
      * var string
      *
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     private $baseline;
 
@@ -72,9 +72,9 @@ class Domain
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="UserSubscriptionDomain", mappedBy="domain", cascade={"persist", "remove"}, orphanRemoval=true))
+     * @ORM\ManyToMany(targetEntity="Order", mappedBy="domains")
      */
-    private $userSubscriptionDomains;
+    private $orders;
 
 
     public function __construct() {
@@ -269,42 +269,42 @@ class Domain
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->name;
-    }
-
     /**
-     * Add userSubscriptionDomains
+     * Add orders
      *
-     * @param \AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains
+     * @param \AppBundle\Entity\Order $orders
      * @return Domain
      */
-    public function addUserSubscriptionDomain(\AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains)
+    public function addOrder(\AppBundle\Entity\Order $orders)
     {
-        $this->userSubscriptionDomains[] = $userSubscriptionDomains;
+        $this->orders[] = $orders;
 
         return $this;
     }
 
     /**
-     * Remove userSubscriptionDomains
+     * Remove orders
      *
-     * @param \AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains
+     * @param \AppBundle\Entity\Order $orders
      */
-    public function removeUserSubscriptionDomain(\AppBundle\Entity\UserSubscriptionDomain $userSubscriptionDomains)
+    public function removeOrder(\AppBundle\Entity\Order $orders)
     {
-        $this->userSubscriptionDomains->removeElement($userSubscriptionDomains);
+        $this->orders->removeElement($orders);
     }
 
     /**
-     * Get userSubscriptionDomains
+     * Get orders
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUserSubscriptionDomains()
+    public function getOrders()
     {
-        return $this->userSubscriptionDomains;
+        return $this->orders;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getSluggableFields()

@@ -3,6 +3,45 @@ subscription:
     valability:
         min: 'Abonamentul trebuie sa aiba minim 1 an.'
         max: 'Abonamentul trebuie sa aiba maxim 5 ani.'
+assert:
+    required:
+        name: 'Va rugam completati *Numele'
+        email: 'Va rugam completati *Email'
+        phone: 'Va rugam completati *Telefonul (07xx xxxxxx )'
+        subject: 'Va rugam completati *Subiectul'
+        message: 'Va rugam completati *Mesajul'
+        function: 'Va rugam completati *Functia.'
+        password: 'Va rugam completati *Parola'
+        password-confirm: 'Va rugam completati *Confirmarea Parolei'
+        company: 'Va rugam completati *Numele companiei'
+        company-id: 'Va rugam completati *CUI'
+        company-number: 'Va rugam completati *Numarul de inregistrare la ORC'
+        bank-account: 'Va rugam completati *Contul bancar (IBAN)'
+        bank: 'Va rugam completati *Banca'
+        county: 'Va rugam completati *Judetul'
+        city: 'Va rugam completati *Localitatea'
+        address: 'Va rugam completati *Adresa'
+        terms-of-use: 'Inregistrarea este posibila dupa acceptarea termenilor de utilizare!'
+        captcha: 'Va rugam completati textul din imagine'
+        subject: 'Va rugam completati *Subiectul'
+        message: 'Va rugam completati *Mesajul'
+    valid:
+        email: 'Va rugam introduceti o adresa de email valida.'
+        phone: '*Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu "07" si sa aiba 10 cifre'
+        image: 'Va rugam introduceti o imagine valida. (jpeg, png)'
+        orc: '*Numar inregistrare ORC sa aiba forma: tip+cod judet/numar/an (tip: J, F, C, cod judet: din 2 cifre) ex: J11/11/2011'
     at-least-0: 'Valoarea trebuie sa fie mai mare ca 0.'
-
-    
+    password:
+        length: '*Parola trebuie sa aiba minim 6 caractere.'
+        same: '*Parola si *Confirmarea Parolei nu coincid.'
+    unique:
+        email: 'Acest email exista la alt cont, va rugam introduceti alt email.'
+user:
+    required:
+        name: 'Va rugam completati *Numele si prenumele.'
+        email: 'Va rugam completati *Email(utilizator)'
+fos_user:
+    email:
+        already_used: 'Acest email exista la alt cont, va rugam introduceti alt email.'
+    password:
+        short: 'Parola trebuie sa aiba minim 2 caractere.'

@@ -354,7 +354,6 @@ textarea {
 /* styles for validation helpers */
 .field-validation-error {
     color: #e80c4d;
-    font-weight: bold;
 }
 
 .field-validation-valid {
@@ -1739,4 +1738,10 @@ background-color: rgba(255,255,255,0.9);
 .yellow {
     color:#e5e500;
     font-size:16px;
+}
+
+#freecheck {
+    
+    display:inline-block;
+    width:20px;
 }

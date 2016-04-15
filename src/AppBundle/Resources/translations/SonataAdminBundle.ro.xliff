@@ -470,10 +470,6 @@
                 <source>admin_group_data</source>
                 <target>Date</target>
             </trans-unit>
-            <trans-unit id="admin_group_subscription">
-                <source>admin_group_subscription</source>
-                <target>Abonament</target>
-            </trans-unit>
             <trans-unit id="admin_group_credit">
                 <source>admin_group_credit</source>
                 <target>Credite</target>

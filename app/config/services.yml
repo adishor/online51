@@ -19,21 +19,11 @@ services:
         arguments: [~, AppBundle\Entity\SubDomain, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.sub_domain, group: admin_group_data }
-    admin.usersubscription:
-        class: AppBundle\Admin\UserSubscriptionAdmin
-        arguments: [~, AppBundle\Entity\UserSubscription, ~]
+    admin.order:
+        class: AppBundle\Admin\OrderAdmin
+        arguments: [~, AppBundle\Entity\Order, AppBundle:Admin\Order]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.user_subscription, group: admin_group_subscription }
-    admin.usersubscriptiondomain:
-        class: AppBundle\Admin\UserSubscriptionDomainAdmin
-        arguments: [~, AppBundle\Entity\UserSubscriptionDomain, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.user_subscription_domain, group: admin_group_subscription }
-    admin.credits:
-        class: AppBundle\Admin\CreditsAdmin
-        arguments: [~, AppBundle\Entity\Credits, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.credits, group: admin_group_credit }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.order, group: admin_group_credit }
     admin.creditsusage:
         class: AppBundle\Admin\CreditsUsageAdmin
         arguments: [~, AppBundle\Entity\CreditsUsage, ~]
@@ -44,10 +34,20 @@ services:
         arguments: [~, AppBundle\Entity\Ad, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.ad, group: admin_group_website }
-            
     sonata_admin_image_file:
         class: AppBundle\Form\Type\AdminImageFileType
         tags:
             - { name: form.type }
     uploadFile.namer:
         class: AppBundle\Util\FileNamer
+    app.mailer:
+        class:     AppBundle\Service\MailerService
+        arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%]
+    app.user_helper:
+        class:     AppBundle\Service\UserHelperService
+        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory]
+    app.security.authentication_handler:
+        class: AppBundle\Listener\AuthenticationHandler
+        public: false
+        arguments: [@router, @session]
+            

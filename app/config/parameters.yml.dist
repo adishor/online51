@@ -17,3 +17,8 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    email_from: null
+    contact_email: null
+    # link valid {reset_password_hours} hours
+    reset_password_hours: 0

@@ -11,6 +11,7 @@
         </div>
     {% endfor %}
     {{ form_start(form, { 'attr': {'id': 'RegisterForm'} }) }}
+    {% form_theme form 'user/form/error_template.html.twig' %}
     <fieldset>
         <legend>Account Information</legend>
         <input id="Logo" name="Logo" type="hidden" value="" />
@@ -28,18 +29,20 @@
                   'data-val-required': 'form.required.name'|trans
                 } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.name) }}
                 </div>
                 {#          function#}
                 <div>
-                    {{ form_label(form.function, 'form.label.job'|trans) }}
+                    {{ form_label(form.function, 'form.label.function'|trans) }}
                     {{ form_widget(form.function, {'attr':
                 { 'data-val': 'true',
-                  'data-val-number': 'form.valid.number.job'|trans,
-                  'data-val-required': 'form.required.job'|trans,
+                  'data-val-number': 'form.valid.number.function'|trans,
+                  'data-val-required': 'form.required.function'|trans,
                   'onchange': 'ShowHideItems()'
               } })
                     }}
+                    {{ form_errors(form.function) }}
                 </div>
                 {#          email#}
                 <div class="editor-label">
@@ -48,12 +51,13 @@
                 <div class="editor-field">
                     {{ form_widget(form.email, {'attr':
                 { 'data-val': 'true',
-                  'data-val-regex': 'form.required.email'|trans,
+                  'data-val-regex': 'form.valid.email'|trans,
                   'data-val-regex-pattern': '.+\@.+\..+',
-                  'data-val-required': 'form.valid.email'|trans
+                  'data-val-required': 'form.required.email'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.email) }}
                 </div>
                 {#          parola#}
                 <div class="editor-label">
@@ -67,7 +71,8 @@
                   'data-val-required': 'form.required.password'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.password.first) }}
                 </div>
                 {#          confirmare parola#}
                 <div class="editor-label">
@@ -81,7 +86,8 @@
                   'data-val-required': 'form.required.password-confirm'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.password.second) }}
                 </div>
             </div>
 
@@ -96,7 +102,8 @@
                 'data-val-required': 'form.required.company'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.company) }}
                 </div>
                 {#          cui#}
                 <div class="editor-label">
@@ -109,7 +116,9 @@
                 'placeholder': 'form.placeholder.company-id'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.cui) }}
+                    {% if registerErrors.cui is defined and registerErrors.cui == false %} <span class="field-validation-error" >{{ 'form.valid.company-id'|trans }}</span> {% endif%}
                     <p class="color-red" id ="ValidCui" hidden="hidden"> {{ 'form.valid.company-id'|trans }} </p>
                 </div>
                 {#          numar inregistrare orc#}
@@ -120,10 +129,13 @@
                     {{ form_widget(form.noRegistrationORC, {'attr':
               { 'data-val': 'true',
                 'data-val-required': 'form.required.company-number'|trans,
-                'placeholder': 'form.placeholder.company-number'
+                'placeholder': 'form.placeholder.company-number'|trans,
+                'data-val-regex-pattern': '(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})',
+                'data-val-regex': 'form.valid.orc'|trans,
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.noRegistrationORC) }}
                 </div>
                 {#          numar de angajati#}
                 <div>
@@ -135,6 +147,7 @@
                 'class': 'form-control shortdropdown'
               } })
                     }}
+                    {{ form_errors(form.noEmployees) }}
                 </div>
                 {#          numar certificat de abilitare#}
                 <div class="editor-label" id="lblCertificateNumber">
@@ -142,20 +155,23 @@
                 </div>
                 <div class="editor-field" id="tbCertificateNumber">
                     {{ form_widget(form.noCertifiedEmpowerment) }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.noCertifiedEmpowerment) }}
                 </div>
                 {#          iban#}
                 <div class="editor-label">
-                    {{ form_label(form.iban, 'form.label.bank-acount'|trans) }}
+                    {{ form_label(form.iban, 'form.label.bank-account'|trans) }}
                 </div>
                 <div class="editor-field">
                     {{ form_widget(form.iban, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'form.required.bank-acount'|trans
+                'data-val-required': 'form.required.bank-account'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
-                    <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-acount'|trans }} </p>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.iban) }}
+                    {% if registerErrors.iban is defined and registerErrors.iban == false %} <span class="field-validation-error" >{{ 'form.valid.bank-account'|trans }}</span> {% endif%}
+                    <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-account'|trans }} </p>
                 </div>
                 <br /><br />
             </div>
@@ -171,7 +187,8 @@
                 'data-val-required': 'form.required.bank'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.bank) }}
                 </div>
                 {#          telefon#}
                 <div class="editor-label">
@@ -185,7 +202,8 @@
                 'data-val-required': 'form.required.phone'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.phone) }}
                 </div>
                 {#          judet#}
                 <div>
@@ -198,7 +216,8 @@
                 'onChange': 'getLocalities(null)'
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.county) }}
                 </div>
                 {#          localitati#}
                 <div id="LocalitiesDiv">
@@ -213,7 +232,8 @@
                   'class': 'form-control shortdropdown'
                 } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.city) }}
                     </div>
                 </div>
                 {#          adresa#}
@@ -226,7 +246,8 @@
                 'data-val-required': 'form.required.address'|trans
               } })
                     }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" style="font-weight: normal;"></span>
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.address) }}
                 </div>
                 {#          logo#}
                 <div class="editor-label">
@@ -236,6 +257,7 @@
                     {{ form_widget(form.uploadImage, {'attr':
               { 'style': '260px' } })
                     }}
+                    {{ form_errors(form.uploadImage) }}
                 </div>
                 <br /><br />
                 {#          termeni si conditii#}
@@ -250,11 +272,9 @@
                     <input type="button" value="Inregistrare" id="btnRegister" class="costum" onclick="SubmitRegister()" />
                 </p>
             </div>
-
         </div>
     </fieldset>
     {{ form_end(form) }}
-
     <script type="text/javascript">
         var ajax_localities = '{{ path('ajax_localities') }}';
     </script>

@@ -12,6 +12,27 @@ class DomainAdmin extends Admin
 {
     public function configureFormFields(FormMapper $form)
     {
+        //get all subdomains associated to domains
+        $domains = $this->modelManager->findBy('AppBundle:Domain');
+        $choices = [];
+        foreach ($domains as $domain) {
+            $subdomains = [];
+            foreach ($domain->getSubdomains() as $subdomain) {
+                $subdomains[$subdomain->getId()] = $subdomain;
+            }
+            $choices[$domain->getName()] = $subdomains;
+        }
+
+        //get all subdomains that are not associated
+        $em = $this->modelManager->getEntityManager('AppBundle:SubDomain');
+        $noDomainSubdomains = $em->createQueryBuilder('s')
+                ->select('s')
+                ->from('AppBundle:SubDomain', 's')
+                ->where('s.domain is NULL')
+                ->getQuery()
+                ->getResult();
+        $choices['No Domain'] = $noDomainSubdomains;
+
         $form->add('name')
             ->add('baseline', null, array(
                 'required' => false
@@ -21,11 +42,13 @@ class DomainAdmin extends Admin
                 'required' => false
             ))
             ->add('dedicated')
-            ->add('subdomains', 'sonata_type_model', array(
+            ->add('subdomains', 'entity', array(
                 'expanded' => false,
                 'multiple' => true,
                 'by_reference' => false,
-                'required' => false
+                'required' => false,
+                'class' => 'AppBundle:SubDomain',
+                'choices' => $choices,
             ))
             ->add('subscriptions', 'sonata_type_model', array(
                 'expanded' => false,
@@ -68,5 +91,13 @@ class DomainAdmin extends Admin
     public function preUpdate($object)
     {
         $object->setSubdomains($object->getSubdomains());
+    }
+
+    public function getFormTheme()
+    {
+        return array_merge(
+            parent::getFormTheme(),
+            array('sonata/admin_orm_one_to_many_field.html.twig')
+        );
     }
 }

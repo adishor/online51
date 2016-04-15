@@ -1,0 +1,17 @@
+<body>
+    <p>
+        {{ 'mail.confirm.name'|trans({"%name%" : name}) }}
+    </p>
+    <p>
+        {{ 'mail.confirm.sent-subject'|trans({'%subject%': subject}) }}
+    </p>
+    <p>
+        {{ message }}
+    </p>
+    <p>
+        {{ 'mail.confirm.message'|trans }}
+    </p>
+    <p>
+        {{ 'mail.thank-you'|trans }}
+    </p>
+</body>

@@ -1,0 +1,53 @@
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    <h1 class="title-top">
+        <i class="fa fa-graduation-cap"></i>
+        {{ 'reset.title'|trans }}
+    </h1>
+    {{ form_start(form, { 'attr': {'id': 'ResetForm'} }) }}
+    {% form_theme form 'user/form/error_template.html.twig' %}
+    <fieldset>
+        <div class="row register">
+            <div class="col-xs-10">
+                {#          parola#}
+                <div class="editor-label">
+                    {{ form_label(form.password.first, 'form.label.password'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.password.first, {'attr':
+                { 'data-val': 'true',
+                  'data-val-length': 'form.password.length'|trans,
+                  'data-val-length-min': '6',
+                  'data-val-required': 'form.required.password'|trans
+              } })
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.password.first) }}
+                </div>
+                {#          confirmare parola#}
+                <div class="editor-label">
+                    {{ form_label(form.password.second, 'form.label.password-confirm'|trans) }}
+                </div>
+                <div class="editor-field">
+                    {{ form_widget(form.password.second, {'attr':
+                { 'data-val': 'true',
+                  'data-val-equalto': 'form.password.same'|trans,
+                  'data-val-equalto-other': '*.reset[password][first]',
+                  'data-val-required': 'form.required.password-confirm'|trans
+              } })
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" ></span>
+                    {{ form_errors(form.password.second) }}
+                    {{ form_row(form.save, { 'label': 'form.label.save'|trans })}}
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block rcontainer %}
+{% endblock %}    
+
