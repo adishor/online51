@@ -106,6 +106,10 @@ class OrderAdmin extends Admin
             $endDate->add(new \DateInterval('P'.$object->getValabilityDays().'D'));
             $object->setStartDate($startDate);
             $object->setEndingDate($endDate);
+
+            $user = $this->getConfigurationPool()->getContainer()->get('security.context')->getToken()->getUser();
+            $object->setApprovedBy($user);
+            $object->setApprovedDate(new \DateTime());
         }
     }
 }
