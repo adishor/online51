@@ -11,20 +11,22 @@ class MailerService
     protected $templating;
     protected $emailFrom;
     protected $contactEmail;
+    protected $emailTitle;
     protected $translator;
 
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, TranslatorInterface $translator, $emailFrom, $contactEmail)
+    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, TranslatorInterface $translator, $emailFrom, $contactEmail, $emailTitle)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
         $this->translator = $translator;
         $this->emailFrom = $emailFrom;
         $this->contactEmail = $contactEmail;
+        $this->emailTitle = $emailTitle;
     }
 
     public function sendMessage($emailTo, $subject, $body)
     {
-
+        $subject = $this->emailTitle . ' ' . $subject;
         $message = \Swift_Message::newInstance()
           ->setSubject($subject)
           ->setFrom($this->emailFrom)
@@ -64,6 +66,24 @@ class MailerService
           , 'text/html');
 
         $this->sendMessage($user->getEmail(), $this->translator->trans('mail.reset-password.subject'), $confirmationBody);
+    }
+
+    public function sendOrderConfirmationMessage($order)
+    {
+        $user = $order->getUser();
+        $subscription = ($order->getSubscription()) ? $order->getSubscription()->getName() : null;
+        $orderBody = $this->templating->render('order/order_confirmation_email_body.html.twig', array(
+            'name' => $user->getName(),
+            'number' => $order->getId(),
+            'subscription' => $subscription,
+            'domains' => $order->getDomains(),
+            'domainAmount' => $order->getDomainAmount(),
+            'credits' => $order->getCreditValue(),
+            'endDate' => $order->getEndingDate(),
+            'mentions' => $order->getMentions(),
+          ), 'text/html');
+
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.order-confirm.subject'), $orderBody);
     }
 
 }

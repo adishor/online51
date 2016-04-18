@@ -10,9 +10,12 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class SubDomainAdmin extends Admin
 {
+
     public function configureFormFields(FormMapper $form)
     {
         $domainOptions = array(
+            'class' => 'AppBundle:Domain',
+            'empty_value' => 'No Domain',
             'expanded' => false,
             'multiple' => false,
             'by_reference' => false,
@@ -22,7 +25,7 @@ class SubDomainAdmin extends Admin
 
         $form->add('name')
             ->add('description', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml',
+              'format' => 'richhtml',
                 'required' => false
             ))
             ->add('domain', 'sonata_type_model', $domainOptions);
@@ -48,19 +51,23 @@ class SubDomainAdmin extends Admin
     public function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name')
-                ->add('domain');
+          ->add('domain')
+          ->add('documents');
     }
 
     public function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name')
-            ->add('domain');
+          ->add('domain')
+          ->add('documents');
     }
 
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name')
-            ->add('description')
-            ->add('domain');
+          ->add('description', 'html')
+          ->add('domain')
+          ->add('documents');
     }
+
 }

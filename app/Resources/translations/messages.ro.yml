@@ -97,6 +97,19 @@ advantages:
     title: 'Avantaje'
 domain:
     in-the-section: 'In sectiunea %domain% gasesti :'
+    documents: 'Documente'
+    not-logged-in: 'Documentele sunt accesibile dupa acces in sistem:'
+    please-login: 'Va rugam sa faceti login in formularul din dreapta.'
+    no-subscription: 'Nu aveti acces la documentele din acest domeniu!'
+    go-to-subscription: 'Daca doriti sa accesati documentele aferente acestui domeniu va rugam sa achizitionati un'
+    go-to-contact: ', sau sa luati legatura cu noi prin'
+    subscriptions: 'abonament'
+    contact: 'formularul de contact.'
+    confirm-unlock: 'Pentru a debloca documentul %title% apasati Ok. Atentie veti consuma %credits% credite!'
+    document:
+        already-unlocked: 'Documetul este deja deblocat.'
+        no-credits: 'Nu aveti suficiente credite pentru a debloca acest document.'
+        success: 'Document deblocat cu succes.'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -107,13 +120,6 @@ subscription:
     years: ' ani'
     no_subscription: Fara abonament
 curency: ' RON'
-admin_label:
-    subscription: 'Abonament'
-    domain: 'Domeniu'
-    sub_domain: 'Sub domeniu'
-    order: 'Comenzi'
-    credits_usage: 'Credite folosite'
-    ad: 'Reclame'
 user:
     function:
         extern_job: Serviciu extern
@@ -143,6 +149,16 @@ mail:
         message: 'Pentru a-ti reseta parola - acceseaza '
         reset: 'Resetare parola!'
         subject: 'Resetare parola.'
+    order-confirm:
+        name: 'Buna %name%,'
+        message: 'Comanda cu numarul %number% a fost procesata.'
+        subscription: 'Abonamentul %subscription% a fost alocat contului tau!'
+        domain: 'Ai acces la urmatorul domeniu:'
+        domains: 'Ai acces la urmatoarele domenii:'
+        credits: 'Ai %credits% credite.'
+        valability: 'Valabile pana in %date%'
+        other-info: 'Alte informatii:'
+        subject: 'Comanda procesata!'
 success:
     register: 'Success! Utilizatorul a fost intregistrat!'
     login: 'Success! Login reusit!'
@@ -152,6 +168,7 @@ login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
     free: 'Creare cont gratuit'
+    total-credits: 'Credite Totale:'
     button:
         login: 'Login'
         register: 'Inregistrare'
@@ -165,13 +182,24 @@ reset-response:
     link-invalid: 'Link-ul de resetare parola este invalid.'
 reset:
     title: 'Resetare parola'
+credit-usage:
+    unlocked-by-user: 'Document deblocat de utilizator'
 
 #admin
+admin_label:
+    subscription: 'Abonament'
+    domain: 'Domeniu'
+    sub_domain: 'Sub domeniu'
+    order: 'Comenzi'
+    credits_usage: 'Credite folosite'
+    ad: 'Reclame'
+    document: 'Documente'
 Subscription List: Lista Abonamente
 Domain List: Lista Domenii
 Sub Domain List: Lista Subdomenii
 Order List: Lista de comenzi
 Ad List: Lista reclame
+Document List: Lista documente
 Name: Nume
 Price: Pret
 Credit: Credit
@@ -182,6 +210,7 @@ Intro: Intro
 Description: Descriere
 Dedicated: Dedicat
 Subdomains: Subdomenii
+Subdomain: Sub Domeniu
 Subscriptions: Abonamente
 Baseline: Scurta descriere
 Domain: Domeniu
@@ -198,8 +227,14 @@ Mentions: Mentiuni
 Domains (You can select max %domainAmount% domains): Domenii (Poti selecta maxim %domainAmount% domenii)
 Title: Titlu
 Upload Image: Incarca Imagine
-
-
-
-
+Documents: Documente
+Document: Document
+User: Utilizator
+Document Expire Date: Data de expirare a documentului
+No Domain: Fara domeniu
+#media
+sonata:
+    media:
+        provider:
+            file: Fisier
 

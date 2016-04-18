@@ -31,6 +31,33 @@ class Media extends BaseMedia
     protected $id;
 
     /**
+     *
+     * @var string
+     */
+    protected $title;
+
+    /**
+     *
+     * @var int
+     */
+    protected $creditValue;
+
+    /**
+     *
+     * @var int
+     */
+    protected $valabilityDays;
+
+    /**
+     */
+    private $subdomain;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $documentCreditsUsage;
+
+    /**
      * Get id
      *
      * @return int $id
@@ -39,4 +66,153 @@ class Media extends BaseMedia
     {
         return $this->id;
     }
+
+    function getTitle()
+    {
+        return $this->title;
+    }
+
+    function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set creditValue
+     *
+     * @param integer $creditValue
+     * @return Media
+     */
+    public function setCreditValue($creditValue)
+    {
+        $this->creditValue = $creditValue;
+
+        return $this;
+    }
+
+    /**
+     * Get creditValue
+     *
+     * @return integer
+     */
+    public function getCreditValue()
+    {
+        return $this->creditValue;
+    }
+
+    /**
+     * Set valabilityDays
+     *
+     * @param integer $valabilityDays
+     * @return Media
+     */
+    public function setValabilityDays($valabilityDays)
+    {
+        $this->valabilityDays = $valabilityDays;
+
+        return $this;
+    }
+
+    /**
+     * Get valabilityDays
+     *
+     * @return integer
+     */
+    public function getValabilityDays()
+    {
+        return $this->valabilityDays;
+    }
+
+    /**
+     * Set subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     * @return Media
+     */
+    public function setSubdomain(\AppBundle\Entity\SubDomain $subdomain = null)
+    {
+        $this->subdomain = $subdomain;
+
+        return $this;
+    }
+
+    /**
+     * Get subdomain
+     *
+     * @return \AppBundle\Entity\SubDomain
+     */
+    public function getSubdomain()
+    {
+        return $this->subdomain;
+    }
+
+    /**
+     * Add galleryHasMedias
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias
+     * @return Media
+     */
+    public function addGalleryHasMedia(\Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias)
+    {
+        $this->galleryHasMedias[] = $galleryHasMedias;
+
+        return $this;
+    }
+
+    /**
+     * Remove galleryHasMedias
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias
+     */
+    public function removeGalleryHasMedia(\Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias)
+    {
+        $this->galleryHasMedias->removeElement($galleryHasMedias);
+    }
+
+    /**
+     * Add documentCreditsUsage
+     *
+     * @param \AppBundle\Entity\CreditsUsage $documentCreditsUsage
+     * @return Media
+     */
+    public function addDocumentCreditsUsage(\AppBundle\Entity\CreditsUsage $documentCreditsUsage)
+    {
+        $this->documentCreditsUsage[] = $documentCreditsUsage;
+
+        return $this;
+    }
+
+    /**
+     * Remove documentCreditsUsage
+     *
+     * @param \AppBundle\Entity\CreditsUsage $documentCreditsUsage
+     */
+    public function removeDocumentCreditsUsage(\AppBundle\Entity\CreditsUsage $documentCreditsUsage)
+    {
+        $this->documentCreditsUsage->removeElement($documentCreditsUsage);
+    }
+
+    /**
+     * Get documentCreditsUsage
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocumentCreditsUsage()
+    {
+        return $this->documentCreditsUsage;
+    }
+
 }

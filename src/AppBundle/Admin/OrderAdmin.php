@@ -11,79 +11,79 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class OrderAdmin extends Admin
 {
+
     protected function configureFormFields(FormMapper $form)
     {
         $form->add('user')
-                ->add('subscription', 'sonata_type_model', array(
-                    'empty_value' => 'subscription.no_subscription',
-                    'required' => false,
-                    'btn_add' => false
-                ))
-                ->add('creditValue')
-                ->add('valabilityDays')
-                ->add('price', null, array(
-                    'required' => false
-                ))
-                ->add('domainAmount', 'hidden')
-                ->add('domains', 'sonata_type_model', array(
-                    'expanded' => true,
-                    'multiple' => true,
-                    'btn_add' => false,
-                ))
-                ->add('mentions', null, array(
-                    'required' => false
-                ))
-                ->add('active');
+          ->add('subscription', 'sonata_type_model', array(
+              'empty_value' => 'subscription.no_subscription',
+              'required' => false,
+              'btn_add' => false
+          ))
+          ->add('creditValue')
+          ->add('valabilityDays')
+          ->add('price', null, array(
+              'required' => false
+          ))
+          ->add('domainAmount', 'hidden')
+          ->add('domains', 'sonata_type_model', array(
+              'expanded' => true,
+              'multiple' => true,
+              'btn_add' => false,
+          ))
+          ->add('mentions', null, array(
+              'required' => false
+          ))
+          ->add('active');
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('user')
-                ->add('subscription')
-                ->add('active')
-                ->add('domains');
+          ->add('subscription')
+          ->add('active')
+          ->add('domains');
     }
 
     protected function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('id')
-                ->add('user')
-                ->add('active')
-                ->add('startDate')
-                ->add('endingDate')
-                ->add('creditValue')
-                ->add('valabilityDays')
-                ->add('price')
-                ->add('domains')
-                ->add('subscription')
-                ->add('createdAt')
-                ->add('approvedBy')
-                ->add('approvedDate');
+          ->add('user')
+          ->add('active')
+          ->add('startDate')
+          ->add('endingDate')
+          ->add('creditValue')
+          ->add('valabilityDays')
+          ->add('price')
+          ->add('domains')
+          ->add('subscription')
+          ->add('createdAt')
+          ->add('approvedBy')
+          ->add('approvedDate');
     }
 
     protected function configureShowFields(ShowMapper $show)
     {
         $show->add('id')
-                ->add('user')
-                ->add('active')
-                ->add('startDate')
-                ->add('endingDate')
-                ->add('creditValue')
-                ->add('valabilityDays')
-                ->add('price')
-                ->add('domains')
-                ->add('subscription')
-                ->add('createdAt')
-                ->add('mentions')
-                ->add('approvedBy')
-                ->add('approvedDate');
+          ->add('user')
+          ->add('active')
+          ->add('startDate')
+          ->add('endingDate')
+          ->add('creditValue')
+          ->add('valabilityDays')
+          ->add('price')
+          ->add('domains')
+          ->add('subscription')
+          ->add('createdAt')
+          ->add('mentions')
+          ->add('approvedBy')
+          ->add('approvedDate');
     }
 
     public function getTemplate($name)
     {
-        if ( $name == "edit" )
-        {
-            return 'sonata/base_edit.html.twig' ;
+        if ($name == "edit") {
+            return 'sonata/base_edit.html.twig';
         }
         return parent::getTemplate($name);
     }
@@ -93,24 +93,41 @@ class OrderAdmin extends Admin
         $collection->add('getDomains', 'getDomains');
     }
 
-    public function prePersist($object) {
+    public function prePersist($object)
+    {
         $this->preUpdate($object);
     }
 
-    public function preUpdate($object) {
+    public function preUpdate($object)
+    {
         $object->setDomainAmount(count($object->getDomains()));
 
         if ($object->getActive()) {
-            $startDate = new \DateTime(date('Y-m-d'));
-            $endDate =  new \DateTime(date('Y-m-d'));
-            $endDate->add(new \DateInterval('P'.$object->getValabilityDays().'D'));
+            $startDate = new \DateTime();
+            $endDate = new \DateTime();
+            $endDate->add(new \DateInterval('P' . $object->getValabilityDays() . 'D'));
             $object->setStartDate($startDate);
             $object->setEndingDate($endDate);
+
+            $object->getUser()->setCreditsTotal($object->getUser()->getCreditsTotal() + $object->getCreditValue());
+            $object->getUser()->setLastCreditUpdate(new \DateTime());
 
             $user = $this->getConfigurationPool()->getContainer()->get('security.context')->getToken()->getUser();
             $object->setApprovedBy($user);
             $object->setApprovedDate(new \DateTime());
         }
     }
-}
 
+    public function postPersist($object)
+    {
+        $this->postUpdate($object);
+    }
+
+    public function postUpdate($object)
+    {
+        if ($object->getActive()) {
+            $this->configurationPool->getContainer()->get('app.mailer')->sendOrderConfirmationMessage($object);
+        }
+    }
+
+}

@@ -1,29 +1,74 @@
 {% extends "base.html.twig" %}
 
 {% block ccontainer %}
-  <div class="col-xs-3">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs clearfix" role="tablist">
-      {% for subdomain in domain.subdomains %}
-      <li><a href="#ssm{{ loop.index0 }}" role="tab" data-toggle="tab">{{ subdomain.name | upper }}</a><span></span></li>
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="col-xs-9">
-      <!-- Tab panes -->
-      <div class="tab-content">
-        <div class="tab-pane active" id="ssm">
-            <h3>{{ 'domain.in-the-section'|trans({'%domain%': domain.name}) }}</h3>
-          {{ domain.description | raw }}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            {% for subdomain in domain.subdomains %}
+                <li><a href="#ssm{{ loop.index0 }}" role="tab" data-toggle="tab">{{ subdomain.name | upper }}</a><span></span></li>
+                    {% endfor %}
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <!-- Tab panes -->
+        <div class="tab-content domain-description">
+            <div class="tab-pane active" id="ssm">
+                <h3>{{ 'domain.in-the-section'|trans({'%domain%': domain.name}) }}</h3>
+                {{ domain.description | raw }}
+            </div>
+            {% for subdomain in domain.subdomains %}
+                <div class="tab-pane" id="ssm{{ loop.index0 }}">
+                    <h3>{{ subdomain.name | upper }}</h3>
+                    {{ subdomain.description | raw }}
+                    {% if app.user %}
+                        {% if isValid or isUserException %}
+                            {% if subdomain.documents is not empty %}
+                                <h4>{{ 'domain.documents' | trans }}</h4>
+                                <ul>
+                                    {% for document in subdomain.documents %}
+                                        <li>
+                                            {% if validDocuments[document.id] is defined or isUserException %}
+                                                <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
+                                            {% else %}
+                                                <a id="downloadLink{{document.id}}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
+                                                            '{{ 'domain.confirm-unlock'|trans({'%title%': document.title, '%credits%': document.creditValue }) }}',
+                                                            '{{ path('unlock_document') }}',
+                                                            {{ document.id }},
+                                                            '{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}'
+                                                            );">{{ document.title }}</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                <br/>
+                                <br/>
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <p>
+                                            {{ 'domain.go-to-subscription'|trans }} <a href="{{ path('subscriptions')}}">{{ 'domain.subscriptions'|trans }}</a>
+                                            {{ 'domain.go-to-contact'|trans }} <a href="{{ path('contact')}}">{{ 'domain.contact'|trans }}</a><br />
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </ul>
+                    {% elseif not app.user %}
+                        <br/>
+                        <br/>
+                        <div class="panel">
+                            <div class="panel-body">
+                                <p>
+                                    {{ 'domain.not-logged-in'|trans }}<br />
+                                    {{ 'domain.please-login'|trans }}<br />
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
-        {% for subdomain in domain.subdomains %}
-          <div class="tab-pane" id="ssm{{ loop.index0 }}">
-            <h3>{{ subdomain.name | upper }}</h3>
-            {{ subdomain.description | raw }}
-          </div>
-        {% endfor %}
-      </div>
-  </div>
+    </div>
 
 {% endblock %}
 

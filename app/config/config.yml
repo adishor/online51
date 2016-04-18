@@ -10,7 +10,10 @@ parameters:
     sonata.user.admin.user.class: AppBundle\Admin\UserAdmin
     sonata.user.admin.user.controller: AppBundle:Admin\User
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
-
+    sonata.media.provider.file.class: AppBundle\Provider\DocumentProvider
+    sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
+    
+    
 framework:
     #esi:             ~
     translator:      { fallbacks: ["%locale%"] }
@@ -155,10 +158,12 @@ sonata_media:
         default:  # the default context is mandatory
             providers:
                 - sonata.media.provider.file
-
             formats:
                 small: { width: 100 , quality: 70}
                 big:   { width: 500 , quality: 70}
+            download:
+                strategy: app.media.security.user_strategy
+                mode: http
     cdn:
         server:
             path: /uploads/media # http://media.sonata-project.org/
@@ -166,7 +171,7 @@ sonata_media:
         local:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
-
+    
 vich_uploader:
     db_driver: orm
     mappings:

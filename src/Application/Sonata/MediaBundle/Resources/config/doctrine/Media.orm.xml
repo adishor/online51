@@ -11,11 +11,17 @@
     <entity
         name="Application\Sonata\MediaBundle\Entity\Media"
         table="media__media"
-        >
+    >
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-
+        <field name="title" column="title" type="string"/>
+        <field name="creditValue" column="credit_value" type="integer"/>
+        <field name="valabilityDays" column="valability_days" type="integer"/>
+        <many-to-one field="subdomain" target-entity="AppBundle\Entity\SubDomain" inversed-by="documents">
+        </many-to-one>
+        <one-to-many field="documentCreditsUsage" target-entity="AppBundle\Entity\CreditsUsage" mapped-by="document">
+        </one-to-many>
     </entity>
 </doctrine-mapping>
