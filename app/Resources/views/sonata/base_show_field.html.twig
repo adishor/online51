@@ -1,0 +1,11 @@
+{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+
+{% block field %}
+  {{ dump(value) }}
+  {% if field_description.options.safe %}
+    {{ value|raw|trans }}
+  {% else %}
+    {{ value|nl2br|trans }}
+  {% endif %}
+{% endblock %}
+

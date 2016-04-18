@@ -14,6 +14,8 @@ class SubDomainAdmin extends Admin
     public function configureFormFields(FormMapper $form)
     {
         $domainOptions = array(
+            'class' => 'AppBundle:Domain',
+            'empty_value' => 'No Domain',
             'expanded' => false,
             'multiple' => false,
             'by_reference' => false,

@@ -231,6 +231,7 @@ Documents: Documente
 Document: Document
 User: Utilizator
 Document Expire Date: Data de expirare a documentului
+No Domain: Fara domeniu
 #media
 sonata:
     media:

@@ -11,7 +11,7 @@
     </div>
     <div class="col-xs-9">
         <!-- Tab panes -->
-        <div class="tab-content">
+        <div class="tab-content domain-description">
             <div class="tab-pane active" id="ssm">
                 <h3>{{ 'domain.in-the-section'|trans({'%domain%': domain.name}) }}</h3>
                 {{ domain.description | raw }}
@@ -36,7 +36,7 @@
                                                             {{ document.id }},
                                                             '{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}'
                                                             );">{{ document.title }}</a>
-                                            {% endif %}  
+                                            {% endif %}
                                         </li>
                                     {% endfor %}
                                 {% endif %}
@@ -45,20 +45,20 @@
                                 <br/>
                                 <div class="panel">
                                     <div class="panel-body">
-                                        <p> 
+                                        <p>
                                             {{ 'domain.go-to-subscription'|trans }} <a href="{{ path('subscriptions')}}">{{ 'domain.subscriptions'|trans }}</a>
                                             {{ 'domain.go-to-contact'|trans }} <a href="{{ path('contact')}}">{{ 'domain.contact'|trans }}</a><br />
                                         </p>
                                     </div>
                                 </div>
-                            {% endif %}  
+                            {% endif %}
                         </ul>
                     {% elseif not app.user %}
                         <br/>
                         <br/>
                         <div class="panel">
                             <div class="panel-body">
-                                <p> 
+                                <p>
                                     {{ 'domain.not-logged-in'|trans }}<br />
                                     {{ 'domain.please-login'|trans }}<br />
                                 </p>

@@ -827,6 +827,7 @@ ul.list-check i{
             width:130px;
             text-align:center;
             margin-left:50px;
+            font-size: 13px;
         }
 
 .login-form p a{
@@ -913,6 +914,21 @@ ul.list-check i{
 
 
 */
+
+.domain-description ul {
+  list-style: none;
+}
+
+.domain-description li:before {
+  font-family: 'FontAwesome';
+  content: '\f00c';
+  margin:0 5px 0 -15px;
+  color: #aecb06;
+}
+
+.domain-description ul ul li:before {
+  content: '\f1b6';
+}
 
 input.costum {
         font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
@@ -1741,12 +1757,12 @@ background-color: rgba(255,255,255,0.9);
 }
 
 #freecheck {
-    
+
     display:inline-block;
     width:20px;
 }
 
 #totalUserCredits {
-    
+
     text-align: center;
 }
