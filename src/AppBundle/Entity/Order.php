@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table("`order`")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  * @HasLifecycleCallbacks
  */
 class Order

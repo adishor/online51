@@ -52,9 +52,9 @@ class SubscriptionAdmin extends Admin
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name')
-            ->add('intro')
-            ->add('description')
-            ->add('price')
+          ->add('intro', 'html')
+          ->add('description', 'html')
+          ->add('price')
             ->add('credit')
             ->add('valability')
             ->add('domainAmount')

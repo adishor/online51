@@ -20,5 +20,6 @@ parameters:
 
     email_from: null
     contact_email: null
+    email_title: null
     # link valid {reset_password_hours} hours
     reset_password_hours: 0

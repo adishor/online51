@@ -12,11 +12,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use AppBundle\Service\UserHelperService;
 
 class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
 {
     private $router;
     private $session;
+    protected $userHelper;
 
     /**
      * Constructor
@@ -24,10 +26,11 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
      * @param 	RouterInterface $router
      * @param 	Session $session
      */
-    public function __construct(RouterInterface $router, Session $session)
+    public function __construct(RouterInterface $router, Session $session, UserHelperService $userHelper)
     {
         $this->router = $router;
         $this->session = $session;
+        $this->userHelper = $userHelper;
     }
 
     /**
@@ -45,6 +48,7 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
             $response = new Response(json_encode($array));
             $response->headers->set('Content-Type', 'application/json');
             $request->getSession()->getFlashBag()->add('successful-login', 'success.login');
+            $this->userHelper->updateValidUserCredits();
 
             return $response;
 

@@ -46,6 +46,12 @@ class SubDomain
     private $domain;
 
     /**
+     *
+     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Media", mappedBy="subdomain", cascade={"persist", "remove"})
+     */
+    private $documents;
+
+    /**
      * Get id
      *
      * @return integer
@@ -127,5 +133,45 @@ class SubDomain
     public function __toString()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add documents
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $documents
+     * @return SubDomain
+     */
+    public function addDocument(\Application\Sonata\MediaBundle\Entity\Media $documents)
+    {
+        $this->documents[] = $documents;
+
+        return $this;
+    }
+
+    /**
+     * Remove documents
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $documents
+     */
+    public function removeDocument(\Application\Sonata\MediaBundle\Entity\Media $documents)
+    {
+        $this->documents->removeElement($documents);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 }

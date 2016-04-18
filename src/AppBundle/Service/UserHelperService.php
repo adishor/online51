@@ -5,16 +5,22 @@ namespace AppBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Application\Sonata\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class UserHelperService
 {
     protected $entityManager;
     protected $encoderFactory;
+    protected $authorizationChecker;
+    protected $tokenStorage;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage)
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function addUserToDatabase($data)
@@ -69,6 +75,54 @@ class UserHelperService
         $user = $this->entityManager->getRepository('ApplicationSonataUserBundle:User')->findOneByConfirmationToken($token);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
         $this->entityManager->flush();
+    }
+
+    public function isDomainValidForUser($userId, $domainId)
+    {
+
+        if (empty($this->entityManager->getRepository('AppBundle:Order')->findValidUserDomain($userId, $domainId))) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getValidUserDocuments($userId, $domainId = null)
+    {
+        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId);
+        $validDocuments = array();
+        array_walk_recursive($documents, function($v, $k) use (&$validDocuments) {
+            $validDocuments[$v] = true;
+        });
+
+        return $validDocuments;
+    }
+
+    public function isValidUserDocument($userId, $documentId)
+    {
+        if (empty($this->entityManager->getRepository('AppBundle:CreditsUsage')->findValidUserDocument($userId, $documentId))) {
+            return false;
+        }
+        return true;
+    }
+
+    public function updateValidUserCredits()
+    {
+        $userId = $this->tokenStorage->getToken()->getUser()->getId();
+        $user = $this->entityManager->find('ApplicationSonataUserBundle:User', $userId);
+        $userCredits = $user->getCreditsTotal();
+        $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
+        $validBeforeCredits = $orderRepository->findValidUserCredits($userId, $user->getLastCreditUpdate());
+        $validNowCredits = $orderRepository->findValidUserCredits($userId);
+        if (null !== $userCredits) {
+            $user->setCreditsTotal(min($userCredits, $validBeforeCredits) + ($validNowCredits - $validBeforeCredits));
+            $user->setLastCreditUpdate(new \DateTime());
+        }
+        $this->entityManager->flush();
+    }
+
+    public function getIsUserException()
+    {
+        return $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
     }
 
 }
