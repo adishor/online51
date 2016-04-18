@@ -48,7 +48,7 @@ class OrderRepository extends EntityRepository
           ->andWhere('o.endingDate > :endDate')
           ->setParameter('endDate', $endDate);
         if (null !== $endDate) {
-            $queryBuilder->andWhere('o.startDate < :endDate')
+            $queryBuilder->andWhere('o.startDate <= :endDate')
               ->setParameter('endDate', $endDate);
         }
 

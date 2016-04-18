@@ -1,19 +1,19 @@
 {% for flash_message in app.session.flashbag.get('successful-register') %}
-    <p class="color-green" >{{ flash_message|trans }}</p>
+    <h5 class="color-blue text-center first bold-row" >{{ flash_message|trans }}</h5>
 {% endfor %}
 {% for flash_message in app.session.flashbag.get('successful-login') %}
-    <p class="color-green" >{{ flash_message|trans }}</p>
+    <h5 class="color-blue text-center first bold-row" >{{ flash_message|trans }}</h5>
 {% endfor %}
 {% for flash_message in app.session.flashbag.get('successful-reset') %}
-    <p class="color-green" >{{ flash_message|trans }}</p>
+    <h5 class="color-blue text-center first bold-row" >{{ flash_message|trans }}</h5>
 {% endfor %}
 {% if app.user %}
-    {% if app.user.creditsTotal %}
-        <div class="login-form" id="loginDiv">
+    <div class="login-form" id="loginDiv">
+        {% if app.user.creditsTotal %}
             <p class="first">{{ 'login.total-credits'|trans }}</p>
             <h4 id="totalUserCredits">{{ app.user.creditsTotal }}</h4>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
     <input type="button" class="costum" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
 {% else %}
     <form action="" method="post" onsubmit="return false">

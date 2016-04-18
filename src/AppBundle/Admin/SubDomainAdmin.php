@@ -65,7 +65,7 @@ class SubDomainAdmin extends Admin
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name')
-          ->add('description')
+          ->add('description', 'html')
           ->add('domain')
           ->add('documents');
     }
