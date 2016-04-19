@@ -36,10 +36,15 @@ class UserController extends Controller
         }
         if ($form->isSubmitted() && $form->isValid() && !in_array(false, $registerErrors)) {
 
+            if (null === $register->getConfirmationToken()) {
+                /** @var $tokenGenerator TokenGeneratorInterface */
+                $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+                $register->setConfirmationToken($tokenGenerator->generateToken());
+            }
+            $this->container->get('app.mailer')->sendActivationMessage($register);
             $this->get('app.user_helper')->addUserToDatabase($register);
-            $this->addFlash('successful-register', 'success.register');
 
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->render('user/register-success.html.twig');
         }
 
         return $this->render('user/register.html.twig', array(
@@ -97,7 +102,6 @@ class UserController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
-        $this->container->get('session')->set('session_mail', $email);
         $this->container->get('app.mailer')->sendResetPasswordMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->container->get('fos_user.user_manager')->updateUser($user);
@@ -118,7 +122,7 @@ class UserController extends Controller
         $hours = $this->getParameter('reset_password_hours');
         $now = new \DateTime();
 
-        if ($now > ($user->getPasswordRequestedAt()->add(new \DateInterval("PT{$hours}H")))) {
+        if (($user->getPasswordRequestedAt() === null) || ($now > ($user->getPasswordRequestedAt()->add(new \DateInterval("PT{$hours}H"))))) {
 
             $user->setConfirmationToken(null);
             $user->setPasswordRequestedAt(null);
@@ -143,6 +147,25 @@ class UserController extends Controller
         return $this->render('user/reset.html.twig', array(
               'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * @Route("/activate-account/{token}", name="activate_account")
+     */
+    public function activateAccountAction(Request $request, $token)
+    {
+        $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
+
+        if ((null === $user) || $user->isEnabled()) {
+            throw new NotFoundHttpException($this->get('translator')->trans('activate-account.link-invalid'));
+        }
+        if (false === $user->isEnabled()) {
+            $user->setEnabled(true);
+            $this->addFlash('successful-activate', 'success.activate');
+            $this->container->get('fos_user.user_manager')->updateUser($user);
+        }
+
+        return $this->redirect($this->generateUrl('homepage'));
     }
 
 }

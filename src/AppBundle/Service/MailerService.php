@@ -86,4 +86,14 @@ class MailerService
         $this->sendMessage($user->getEmail(), $this->translator->trans('mail.order-confirm.subject'), $orderBody);
     }
 
+    public function sendActivationMessage($user)
+    {
+        $confirmationBody = $this->templating->render('user/activate_account_email_body.html.twig', array(
+            'name' => $user->getName(),
+            'token' => $user->getConfirmationToken())
+          , 'text/html');
+
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.activate-account.subject'), $confirmationBody);
+    }
+
 }

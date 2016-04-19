@@ -30,7 +30,7 @@ class UserHelperService
         $user->setUsernameCanonical($data->getEmail());
         $user->setEmail($data->getEmail());
         $user->setEmailCanonical($data->getEmail());
-        $user->setEnabled(true);
+        $user->setEnabled(false);
         $user->setExpired(false);
         $user->setLocked(false);
         $user->setName($data->getName());
@@ -47,6 +47,7 @@ class UserHelperService
         $user->setAddress($data->getAddress());
         $user->setUploadImage($data->getUploadImage());
         $user->setFunction($data->getFunction());
+        $user->setConfirmationToken($data->getConfirmationToken());
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
         $this->entityManager->persist($user);

@@ -1,15 +1,17 @@
 {% extends "base.html.twig" %}
 
 {% block ccontainer %}
-    <h1 class="title-top">
-        <i class="fa fa-graduation-cap"></i>
-        {{ 'reset.title'|trans }}
-    </h1>
-    {{ form_start(form, { 'attr': {'id': 'ResetForm'} }) }}
-    {% form_theme form 'user/form/error_template.html.twig' %}
-    <fieldset>
-        <div class="row register">
-            <div class="col-xs-10">
+    {{ render(controller('AppBundle:Default:subscriptionsNav')) }}
+    <div class="col-xs-9">
+        <h1 class="title-top">
+            <i class="fa"></i>
+            {{ 'reset.title'|trans }}
+        </h1>
+        {{ form_start(form, { 'attr': {'id': 'ResetForm'} }) }}
+        {% form_theme form 'user/form/error_template.html.twig' %}
+        <fieldset>
+            <div class="row register">
+
                 {#          parola#}
                 <div class="editor-label">
                     {{ form_label(form.password.first, 'form.label.password'|trans) }}
@@ -42,12 +44,10 @@
                     {{ form_row(form.save, { 'label': 'form.label.save'|trans })}}
                 </div>
             </div>
-        </div>
-    </fieldset>
-    {{ form_end(form) }}
 
+        </fieldset>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
 
-{% block rcontainer %}
-{% endblock %}    
 

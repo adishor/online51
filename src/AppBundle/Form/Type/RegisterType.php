@@ -50,6 +50,11 @@ class RegisterType extends AbstractType
           ->add('city')
           ->add('address')
           ->add('uploadImage', 'file')
+          ->add('captcha', 'captcha', array(
+              'width' => 200,
+              'height' => 40,
+              'length' => 6,
+          ))
         ;
     }
 

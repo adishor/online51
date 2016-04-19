@@ -149,6 +149,11 @@ mail:
         message: 'Pentru a-ti reseta parola - acceseaza '
         reset: 'Resetare parola!'
         subject: 'Resetare parola.'
+    activate-account:
+        name: 'Buna, %name%'
+        message: 'Pentru a-ti activa contul - acceseaza '
+        activate: 'Activare cont!'
+        subject: 'Activare cont.'
     order-confirm:
         name: 'Buna %name%,'
         message: 'Comanda cu numarul %number% a fost procesata.'
@@ -160,7 +165,7 @@ mail:
         other-info: 'Alte informatii:'
         subject: 'Comanda procesata!'
 success:
-    register: 'Success! Utilizatorul a fost intregistrat!'
+    activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
     reset: 'Parola s-a resetat cu succes!'
     reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
@@ -169,6 +174,9 @@ login:
     forgot: 'Am uitat parola!'
     free: 'Creare cont gratuit'
     total-credits: 'Credite Totale:'
+    user-information: 'Informatii'
+    change-password: 'Schimbare parola'
+    change-user-information: 'Editare informatii'
     button:
         login: 'Login'
         register: 'Inregistrare'
@@ -180,10 +188,17 @@ reset-response:
     no-user: 'Acest email nu este alocat.'
     link-expired: 'Link-ul de resetare parola a expirat.'
     link-invalid: 'Link-ul de resetare parola este invalid.'
+activate-account:
+    link-invalid: 'Link-ul de activare cont este invalid.'
 reset:
     title: 'Resetare parola'
 credit-usage:
     unlocked-by-user: 'Document deblocat de utilizator'
+register-success:
+    title: 'Succes!'
+    success: 'V-ati inregistrat cu succes!'
+    email-sent: 'In cel mai scurt timp veti primi pe adresa de email furnizata un email cu instructiunile pentru activarea contului dumneavoastra.'
+    thank-you: 'Va multumim!'
 
 #admin
 admin_label:
