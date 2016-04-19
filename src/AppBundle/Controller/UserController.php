@@ -95,6 +95,11 @@ class UserController extends Controller
 
             return new Response(json_encode($forgotPasswordErrors), 200);
         }
+        if (!$user->isEnabled()) {
+            $forgotPasswordErrors['Msg'] = $this->get('translator')->trans('reset-response.not-enabled-user');
+
+            return new Response(json_encode($forgotPasswordErrors), 200);
+        }
 
         if (null === $user->getConfirmationToken()) {
             /** @var $tokenGenerator TokenGeneratorInterface */
@@ -117,6 +122,9 @@ class UserController extends Controller
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
         if (null === $user) {
+            throw new NotFoundHttpException($this->get('translator')->trans('reset-response.link-invalid'));
+        }
+        if (!$user->isEnabled()) {
             throw new NotFoundHttpException($this->get('translator')->trans('reset-response.link-invalid'));
         }
         $hours = $this->getParameter('reset_password_hours');

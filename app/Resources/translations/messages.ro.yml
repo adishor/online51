@@ -186,6 +186,7 @@ login:
     close-password: 'Inchide resetare parola.'
 reset-response:
     no-user: 'Acest email nu este alocat.'
+    not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
     link-expired: 'Link-ul de resetare parola a expirat.'
     link-invalid: 'Link-ul de resetare parola este invalid.'
 activate-account:
