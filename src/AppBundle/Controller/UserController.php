@@ -87,18 +87,18 @@ class UserController extends Controller
     public function forgotPasswordAction(Request $request)
     {
         $email = $request->request->get('email');
-        $forgotPasswordErrors = [];
+        $errors = [];
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($email);
 
         if (null === $user) {
-            $forgotPasswordErrors['Msg'] = $this->get('translator')->trans('reset-response.no-user');
+            $errors['Msg'] = $this->get('translator')->trans('json-response.no-user');
 
-            return new Response(json_encode($forgotPasswordErrors), 200);
+            return new Response(json_encode($errors), 200);
         }
         if (!$user->isEnabled()) {
-            $forgotPasswordErrors['Msg'] = $this->get('translator')->trans('reset-response.not-enabled-user');
+            $errors['Msg'] = $this->get('translator')->trans('json-response.not-enabled-user');
 
-            return new Response(json_encode($forgotPasswordErrors), 200);
+            return new Response(json_encode($errors), 200);
         }
 
         if (null === $user->getConfirmationToken()) {
@@ -111,7 +111,7 @@ class UserController extends Controller
         $user->setPasswordRequestedAt(new \DateTime());
         $this->container->get('fos_user.user_manager')->updateUser($user);
 
-        return new Response(json_encode($forgotPasswordErrors), 200);
+        return new Response(json_encode($errors), 200);
     }
 
     /**
@@ -122,10 +122,10 @@ class UserController extends Controller
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            throw new NotFoundHttpException($this->get('translator')->trans('reset-response.link-invalid'));
+            throw new NotFoundHttpException($this->get('translator')->trans('json-response.link-invalid'));
         }
         if (!$user->isEnabled()) {
-            throw new NotFoundHttpException($this->get('translator')->trans('reset-response.link-invalid'));
+            throw new NotFoundHttpException($this->get('translator')->trans('json-response.link-invalid'));
         }
         $hours = $this->getParameter('reset_password_hours');
         $now = new \DateTime();
@@ -135,7 +135,7 @@ class UserController extends Controller
             $user->setConfirmationToken(null);
             $user->setPasswordRequestedAt(null);
             $this->container->get('fos_user.user_manager')->updateUser($user);
-            throw new AccessDeniedHttpException($this->get('translator')->trans('reset-response.link-expired'));
+            throw new AccessDeniedHttpException($this->get('translator')->trans('json-response.link-expired'));
         }
 
         $reset = new User();
@@ -230,6 +230,37 @@ class UserController extends Controller
               'form' => $form->createView(),
               'changeInfoErrors' => $changeInfoErrors,
         ));
+    }
+
+    /**
+     * @Route("/resend-activation", name="resend_activation_email")
+     */
+    public function resendActivationAction(Request $request)
+    {
+        $email = $request->request->get('email');
+        $errors = [];
+        $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($email);
+
+        if (null === $user) {
+            $errors['Msg'] = $this->get('translator')->trans('json-response.no-user');
+
+            return new Response(json_encode($errors), 200);
+        }
+        if ($user->isEnabled()) {
+            $errors['Msg'] = $this->get('translator')->trans('json-response.enabled-user');
+
+            return new Response(json_encode($errors), 200);
+        }
+
+        if (null === $user->getConfirmationToken()) {
+            /** @var $tokenGenerator TokenGeneratorInterface */
+            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+        }
+        $this->container->get('app.mailer')->sendActivationMessage($user);
+        $this->container->get('fos_user.user_manager')->updateUser($user);
+
+        return new Response(json_encode($errors), 200);
     }
 
 }

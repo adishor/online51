@@ -33,7 +33,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity()
  * @Vich\Uploadable
- * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration", "ChangeInfo"})
+ * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration", "ChangeInfo", "AdminRegistration", "AdminProfile"})
  */
 class User extends BaseUser
 {
@@ -58,7 +58,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="user.required.name", groups={"CustomRegistration", "Profile", "ChangeInfo"})
+     * @Assert\NotBlank(message="user.required.name", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column()
      */
     protected $name;
@@ -66,7 +66,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company", groups={"CustomRegistration", "Profile", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.company", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column()
      */
     protected $company;
@@ -83,7 +83,7 @@ class User extends BaseUser
      * @Assert\File(
      *     mimeTypes = {"image/jpeg", "image/png"},
      *     mimeTypesMessage = "assert.valid.image",
-     *     groups={"CustomRegistration", "Registration", "Profile", "ChangeInfo"},
+     *     groups={"CustomRegistration", "Registration", "AdminRegistration", "AdminProfile", "ChangeInfo"},
      * )
      * @Vich\UploadableField(mapping="upload_image", fileNameProperty="logo")
      * @var File
@@ -163,7 +163,7 @@ class User extends BaseUser
     /**
      *
      * @var integer
-     * @Assert\NotBlank(message="assert.required.function", groups={"CustomRegistration", "Profile", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.function", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $function;
@@ -171,8 +171,8 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="user.required.email", groups={"CustomRegistration", "Profile", "ChangeInfo"})
-     * @Assert\Email(message="assert.valid.email", groups={"CustomRegistration", "Profile", "ChangeInfo"})
+     * @Assert\NotBlank(message="user.required.email", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
+     * @Assert\Email(message="assert.valid.email", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      */
     protected $email;
 
@@ -188,16 +188,24 @@ class User extends BaseUser
      *
      * @var string
      * @Assert\NotBlank(message="assert.required.password", groups={"CustomRegistration", "resetPassword"})
-     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"CustomRegistration", "ChangePassword", "Profile", "resetPassword"})
+     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"CustomRegistration", "ChangePassword", "resetPassword"})
      */
     protected $password;
 
     /**
      *
      * @var string
-     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"Profile"})
+     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"AdminRegistration", "AdminProfile"})
+     * @Assert\NotBlank(message="assert.required.password", groups={"AdminRegistration"})
      */
     protected $plainPassword;
+
+    /**
+     *
+     * @var string
+     * @Assert\NotBlank(message="assert.required.username", groups={"AdminRegistration", "AdminProfile"})
+     */
+    protected $username;
 
     /**
      *

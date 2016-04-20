@@ -212,6 +212,10 @@ function ResetPasswordSucceeded() {
     $("#resetPassDiv").hide();
 }
 
+function ResendActivationSucceeded() {
+    $("#resendActivationEmailDiv").hide();
+}
+
 function SubmitResetPassword(url) {
     $("#UserNameValid").hide();
     $("#UserNameValidEmail").hide();
@@ -267,12 +271,39 @@ function GoLogin(url, home) {
                 if (response.success) {
                     window.location.href = home;
                 } else {
-                    $("#loginValidation").show();
+                    if (response.message === "User account is disabled.") {
+                        $("#resendActivationEmailDiv").show();
+                        $("#activationEmail").val($("#LoginUserName").val());
+                    } else {
+                        $("#loginValidation").show();
+                        $("#resendActivationEmailDiv").hide();
+                    }
                 }
 
             }
         })
     }
+}
+
+function SubmitResendActivationEmail(url) {
+
+    var emailText = $("#activationEmail").val();
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {email: emailText},
+        dataType: 'json',
+        success: function (response) {
+            if (response.Msg) {
+                $("#activationEmailError").text(response.Msg);
+                $("#activationEmailError").show();
+            } else {
+                $("#resendActivationEmail").hide();
+                $("#resendActivationEmailSucc").show();
+            }
+        }
+    });
 }
 
 $("#LoginUserName").bind('input propertychange', function () {

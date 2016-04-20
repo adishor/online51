@@ -174,6 +174,7 @@ success:
     change: 'Parola s-a schimbat cu succes!'
     change-info: Informatiile s-au actualizat cu succes!
     reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
+    resend-activation: 'Un nou email de activare a fost trimis.'
 login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
@@ -186,12 +187,15 @@ login:
         login: 'Login'
         register: 'Inregistrare'
         reset: 'Resetare parola'
+        resend: 'Retrimite'
         logout: 'Logout'
+        close: 'Inchide'
     failed: 'User sau parola invalida!'
     close-password: 'Inchide resetare parola.'
-reset-response:
+json-response:
     no-user: 'Acest email nu este alocat.'
     not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
+    enabled-user: 'Acest email este alocat deja unui utilizator activ.'
     link-expired: 'Link-ul de resetare parola a expirat.'
     link-invalid: 'Link-ul de resetare parola este invalid.'
 activate-account:
@@ -211,6 +215,7 @@ register-success:
     success: 'V-ati inregistrat cu succes!'
     email-sent: 'In cel mai scurt timp veti primi pe adresa de email furnizata un email cu instructiunile pentru activarea contului dumneavoastra.'
     thank-you: 'Va multumim!'
+resend-activation: 'Acest utilizator nu este inca activat. Va rugam sa urmati instructiunile din email-ul de activare. Daca doriti sa reprimiti email-ul de activare apasati pe butonul RETRIMITE de mai jos'
 
 #admin
 admin_label:
