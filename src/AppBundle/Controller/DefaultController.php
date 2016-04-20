@@ -81,15 +81,6 @@ class DefaultController extends Controller
         return $this->render("default/news.html.twig");
     }
 
-    /**
-     *
-     * @Route("/login", name="block_normal_login")
-     */
-    public function blockNormalLoginAction()
-    {
-        return $this->redirectToRoute("homepage");
-    }
-
     public function subscriptionsNavAction()
     {
         $subscriptions = $this->getDoctrine()->getManager()
