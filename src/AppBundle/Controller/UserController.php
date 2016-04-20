@@ -143,7 +143,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->get('app.user_helper')->changePassword($reset, $token);
+            $this->get('app.user_helper')->changePassword($reset, $user);
             $this->addFlash('successful-reset', 'success.reset');
             $user->setConfirmationToken(null);
             $user->setPasswordRequestedAt(null);
@@ -174,6 +174,64 @@ class UserController extends Controller
         }
 
         return $this->redirect($this->generateUrl('homepage'));
+    }
+
+    /**
+     * @Route("/change/password", name="change_password")
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        $change = new User();
+        $form = $this->createForm(new ResetPasswordType(), $change);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->get('app.user_helper')->changePassword($change, $user);
+            $this->addFlash('successful-change', 'success.change');
+            $this->container->get('fos_user.user_manager')->updateUser($user);
+
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
+        return $this->render('user/change_password.html.twig', array(
+              'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @Route("/change/information", name="change_info")
+     */
+    public function changeInformationAction(Request $request)
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(new registerType(), $user);
+        $form->remove('password')->remove('captcha');
+
+        $form->handleRequest($request);
+
+        $changeInfoErrors = array();
+        if ($form->isSubmitted()) {
+            if ($form->get('cui')->getData()) {
+                $changeInfoErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
+            }
+            if ($form->get('iban')->getData()) {
+                $changeInfoErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
+            }
+        }
+        if ($form->isSubmitted() && $form->isValid() && !in_array(false, $changeInfoErrors)) {
+
+            $this->container->get('fos_user.user_manager')->updateUser($user);
+            $this->addFlash('successful-change-info', 'success.change-info');
+
+            return $this->redirect($this->generateUrl('change_info'));
+        }
+
+        return $this->render('user/change_info.html.twig', array(
+              'form' => $form->createView(),
+              'changeInfoErrors' => $changeInfoErrors,
+        ));
     }
 
 }

@@ -4,6 +4,9 @@
 {% for flash_message in app.session.flashbag.get('successful-activate') %}
     <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
 {% endfor %}
+{% for flash_message in app.session.flashbag.get('successful-change') %}
+    <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
+{% endfor %}
 {% if app.user %}
     <div class="login-form" id="loginDiv">
         <p class="first text-center text-small">{{ 'login.user-information'|trans }}</p>
@@ -14,8 +17,8 @@
             <h4 id="totalUserCredits" class="text-center">0</h4>    
         {% endif %}
         <input type="button" class="costum centered" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
-        <p class="last"><a href="#">{{ 'login.change-password'|trans }}</a></p>
-        <p class="last"><a href="#">{{ 'login.change-user-information'|trans }}</a></p>
+        <p class="last"><a href="{{ path('change_password') }}">{{ 'login.change-password'|trans }}</a></p>
+        <p class="last"><a href="{{ path('change_info') }}">{{ 'login.change-user-information'|trans }}</a></p>
     </div>    
 {% else %}
     <form action="" method="post" onsubmit="return false">

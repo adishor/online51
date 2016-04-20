@@ -6,19 +6,9 @@ use Sonata\MediaBundle\Provider\FileProvider;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Doctrine\ORM\EntityRepository;
-
-//use Doctrine\ORM\EntityManager;
 
 class DocumentProvider extends FileProvider
 {
-//    protected $entityManager;
-//
-//    public function __construct($name, \Gaufrette\Filesystem $filesystem, \Sonata\MediaBundle\CDN\CDNInterface $cdn, \Sonata\MediaBundle\Generator\GeneratorInterface $pathGenerator, \Sonata\MediaBundle\Thumbnail\ThumbnailInterface $thumbnail, EntityManager $entityManager, array $allowedExtensions = array(), array $allowedMimeTypes = array(), \Sonata\MediaBundle\Metadata\MetadataBuilderInterface $metadata = null)
-//    {
-//        parent::__construct($name, $filesystem, $cdn, $pathGenerator, $thumbnail, $allowedExtensions, $allowedMimeTypes, $metadata);
-//        $this->entityManager = $entityManager;
-//    }
 
     /**
      * {@inheritdoc}

@@ -168,6 +168,8 @@ success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
     reset: 'Parola s-a resetat cu succes!'
+    change: 'Parola s-a schimbat cu succes!'
+    change-info: Informatiile s-au actualizat cu succes!
     reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
 login:
     label: 'Acces abonati'
@@ -193,6 +195,12 @@ activate-account:
     link-invalid: 'Link-ul de activare cont este invalid.'
 reset:
     title: 'Resetare parola'
+change-password:
+    title: 'Schimbare parola'
+change-info:
+    title: 'Schimbare date cont'
+    save: Salveaza
+    back: Inapoi
 credit-usage:
     unlocked-by-user: 'Document deblocat de utilizator'
 register-success:

@@ -53,6 +53,13 @@ function ShowHideItems() {
 }
 
 function SubmitRegister() {
+    if ($("#ValidCui").css("display") == 'none') {
+        if ($("#ValidIban").css("display") == 'none') {
+            {
+                $("#ChangeInfoForm").submit();
+            }
+        }
+    }
     if ($('#check').prop('checked')) {
         $("#RegisterText").hide();
 
