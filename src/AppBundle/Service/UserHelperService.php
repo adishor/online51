@@ -7,6 +7,7 @@ use Application\Sonata\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserHelperService
 {
@@ -14,13 +15,15 @@ class UserHelperService
     protected $encoderFactory;
     protected $authorizationChecker;
     protected $tokenStorage;
+    protected $session;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage, Session $session)
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenStorage = $tokenStorage;
+        $this->session = $session;
     }
 
     public function addUserToDatabase($data)
@@ -123,6 +126,18 @@ class UserHelperService
     public function getIsUserException()
     {
         return $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
+    }
+
+    public function checkOldPassword($password, $user)
+    {
+        if ($user->getPassword() === $this->encoderFactory->getEncoder($user)->encodePassword($password, $user->getSalt())) {
+
+            return true;
+        }
+
+        $this->session->getFlashBag()->add('change-password-error', 'form.valid.old-password');
+
+        return false;
     }
 
 }

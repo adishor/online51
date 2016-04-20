@@ -185,16 +185,14 @@ class UserController extends Controller
 
         $change = new User();
         $form = $this->createForm(new ResetPasswordType(), $change);
+        $form->add('oldPassword', 'password', array('mapped' => false));
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->get('app.user_helper')->changePassword($change, $user);
+        if ($form->isSubmitted() && $form->isValid() && ($this->get('app.user_helper')->checkOldPassword($form->get('oldPassword')->getData(), $user))) {
             $this->addFlash('successful-change', 'success.change');
-            $this->container->get('fos_user.user_manager')->updateUser($user);
-
+            $this->get('app.user_helper')->changePassword($change, $user);
             return $this->redirect($this->generateUrl('homepage'));
         }
-
         return $this->render('user/change_password.html.twig', array(
               'form' => $form->createView(),
         ));
