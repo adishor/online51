@@ -3,9 +3,12 @@
 {% block ccontainer %}
     <h1 class="title-top">
         <i class="fa fa-graduation-cap"></i>
-        {{ 'register.title'|trans }}
+        {{ 'change-info.title'|trans }}
     </h1>
-    {{ form_start(form, { 'attr': {'id': 'RegisterForm'} }) }}
+    {% for flash_message in app.session.flashbag.get('successful-change-info') %}
+        <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
+    {% endfor %}
+    {{ form_start(form, { 'attr': {'id': 'ChangeInfoForm'} }) }}
     {% form_theme form 'user/form/error_template.html.twig' %}
     <fieldset>
         <legend>Account Information</legend>
@@ -54,36 +57,6 @@
                     <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.email) }}
                 </div>
-                {#          parola#}
-                <div class="editor-label">
-                    {{ form_label(form.password.first, 'form.label.password'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.password.first, {'attr':
-                { 'data-val': 'true',
-                  'data-val-length': 'form.password.length'|trans,
-                  'data-val-length-min': '6',
-                  'data-val-required': 'form.required.password'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.password.first) }}
-                </div>
-                {#          confirmare parola#}
-                <div class="editor-label">
-                    {{ form_label(form.password.second, 'form.label.password-confirm'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.password.second, {'attr':
-                { 'data-val': 'true',
-                  'data-val-equalto': 'form.password.same'|trans,
-                  'data-val-equalto-other': '*.register[password][first]',
-                  'data-val-required': 'form.required.password-confirm'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.password.second) }}
-                </div>
                 {#          companie#}
                 <div class="editor-label">
                     {{ form_label(form.company, 'form.label.company'|trans) }}
@@ -110,7 +83,7 @@
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.cui) }}
-                    {% if registerErrors.cui is defined and registerErrors.cui == false %} <span class="field-validation-error" >{{ 'form.valid.company-id'|trans }}</span> {% endif%}
+                    {% if changeInfoErrors.cui is defined and changeInfoErrors.cui == false %} <span class="field-validation-error" >{{ 'form.valid.company-id'|trans }}</span> {% endif%}
                     <p class="color-red" id ="ValidCui" hidden="hidden"> {{ 'form.valid.company-id'|trans }} </p>
                 </div>
                 {#          numar inregistrare orc#}
@@ -150,8 +123,6 @@
                     <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.noCertifiedEmpowerment) }}
                 </div>
-            </div>
-            <div class="col-xs-6">
                 {#          iban#}
                 <div class="editor-label">
                     {{ form_label(form.iban, 'form.label.bank-account'|trans) }}
@@ -164,7 +135,7 @@
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.iban) }}
-                    {% if registerErrors.iban is defined and registerErrors.iban == false %} <span class="field-validation-error" >{{ 'form.valid.bank-account'|trans }}</span> {% endif%}
+                    {% if changeInfoErrors.iban is defined and changeInfoErrors.iban == false %} <span class="field-validation-error" >{{ 'form.valid.bank-account'|trans }}</span> {% endif%}
                     <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-account'|trans }} </p>
                 </div>
                 {#          banca#}
@@ -180,6 +151,8 @@
                     <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.bank) }}
                 </div>
+            </div>
+            <div class="col-xs-6">
                 {#          telefon#}
                 <div class="editor-label">
                     {{ form_label(form.phone, 'form.label.phone'|trans) }}
@@ -243,35 +216,23 @@
                 <div class="editor-label">
                     {{ form_label(form.uploadImage, 'form.label.logo'|trans) }}
                 </div>
+                {% set imagePath = vich_uploader_asset(app.user, 'uploadImage') %}
+                {% if imagePath %}
+                    <a href="{{ asset(imagePath) }}" target="_blank">
+                        <img src="{{ asset(imagePath) }}" width="200" />
+                    </a>
+                    <br/>
+                {% endif %}
                 <div class="editor-field">
                     {{ form_widget(form.uploadImage, {'attr':
               { 'style': '260px'} , 'required' : false })
                     }}
                     {{ form_errors(form.uploadImage) }}
                 </div>
-                {#          captcha#}
-                <div class="editor-label">
-                    {{ form_label(form.captcha, 'form.label.captcha'|trans) }}
-                    {{ form_widget(form.captcha, {'attr':
-                    { 'data-val': 'true',
-                    'data-val-required': 'form.required.captcha'|trans,
-                    } })
-                    }}
-                    </br>
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.captcha.vars.full_name }}" data-valmsg-replace="true" ></span>
+                <div class="register-form2">
+                    <input type="button" value="{{ 'change-info.save'|trans }}" id="btnRegister" class="costum pull-right" onclick="SubmitRegister()" />
+                    <a href="{{ path('homepage') }}"><input type="button" value="{{ 'change-info.back'|trans }}" id="btnRegister" class="costum pull-left"/></a>
                 </div>
-                {{ form_errors(form.captcha) }}
-                {#          termeni si conditii#}
-                <div class="editor-label clearfix" >
-                    <input class="pull-left" type="checkbox" name="selected" id="check" onclick="goRegister()"/>
-                    <a href="{{ path('terms') }}" id="acceptTerms" class="btn" onclick="return popitup('{{ path('terms') }}')">{{ 'form.label.terms-of-use'|trans }}</a>
-                </div>
-                <p id="RegisterText" class="color-red" hidden="hidden">
-                    {{ 'form.required.terms-of-use'|trans }}
-                </p>
-                <p class="register-form2 pull-right">
-                    <input type="button" value="{{ 'form.label.save'|trans }}" id="btnRegister" class="costum" onclick="SubmitRegister()" />
-                </p>
             </div>
         </div>
     </fieldset>

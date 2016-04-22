@@ -25,6 +25,7 @@ assert:
         captcha: 'Va rugam completati textul din imagine'
         subject: 'Va rugam completati *Subiectul'
         message: 'Va rugam completati *Mesajul'
+        username: 'Va rugam completati *Utilizator.'
     valid:
         email: 'Va rugam introduceti o adresa de email valida.'
         phone: '*Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu "07" si sa aiba 10 cifre'
@@ -42,7 +43,11 @@ user:
         name: 'Va rugam completati *Numele si prenumele.'
         email: 'Va rugam completati *Email(utilizator)'
 fos_user:
+    username:
+        blank: 'Va rugam completati *Utilizator.'
     email:
         already_used: 'Acest email exista la alt cont, va rugam introduceti alt email.'
+        blank: 'Va rugam completati *Email'
     password:
         short: 'Parola trebuie sa aiba minim 2 caractere.'
+        blank: 'Va rugam completati *Parola'

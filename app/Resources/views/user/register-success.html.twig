@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    {{ render(controller('AppBundle:Default:subscriptionsNav')) }}
+    <div class="col-xs-9">
+        <h1 class="title-top">
+            <i class="fa"></i>
+            {{ 'register-success.title'|trans }}
+        </h1>
+        <p>{{ 'register-success.success'|trans }}</p>
+        <p>{{ 'register-success.email-sent'|trans }}</p>
+        <p>{{ 'register-success.thank-you'|trans }}</p>
+    </div>
+{% endblock %}
+
+

@@ -33,7 +33,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity()
  * @Vich\Uploadable
- * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration"})
+ * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration", "ChangeInfo", "AdminRegistration", "AdminProfile"})
  */
 class User extends BaseUser
 {
@@ -58,7 +58,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="user.required.name", groups={"CustomRegistration", "Profile"})
+     * @Assert\NotBlank(message="user.required.name", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column()
      */
     protected $name;
@@ -66,7 +66,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company", groups={"CustomRegistration", "Profile"})
+     * @Assert\NotBlank(message="assert.required.company", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column()
      */
     protected $company;
@@ -83,7 +83,7 @@ class User extends BaseUser
      * @Assert\File(
      *     mimeTypes = {"image/jpeg", "image/png"},
      *     mimeTypesMessage = "assert.valid.image",
-     *     groups={"CustomRegistration", "Registration", "Profile"},
+     *     groups={"CustomRegistration", "Registration", "AdminRegistration", "AdminProfile", "ChangeInfo"},
      * )
      * @Vich\UploadableField(mapping="upload_image", fileNameProperty="logo")
      * @var File
@@ -100,7 +100,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.bank", groups={"CustomRegistration"})
+     * @Assert\NotBlank(message="assert.required.bank", groups={"CustomRegistration", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $bank;
@@ -108,7 +108,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.bank-account", groups={"CustomRegistration"})
+     * @Assert\NotBlank(message="assert.required.bank-account", groups={"CustomRegistration", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $iban;
@@ -116,7 +116,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company-id", groups={"CustomRegistration"})
+     * @Assert\NotBlank(message="assert.required.company-id", groups={"CustomRegistration", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $cui;
@@ -124,8 +124,8 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company-number", groups={"CustomRegistration"})
-     * @Assert\Regex(pattern="/(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})/", message="assert.valid.orc", groups={"CustomRegistration"})
+     * @Assert\NotBlank(message="assert.required.company-number", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\Regex(pattern="/(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})/", message="assert.valid.orc", groups={"CustomRegistration", "ChangeInfo"})
      * @ORM\Column(name="no_registration_orc", nullable=true)
      */
     protected $noRegistrationORC;
@@ -155,7 +155,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.address", groups={"CustomRegistration"})
+     * @Assert\NotBlank(message="assert.required.address", groups={"CustomRegistration", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $address;
@@ -163,7 +163,7 @@ class User extends BaseUser
     /**
      *
      * @var integer
-     * @Assert\NotBlank(message="assert.required.function", groups={"CustomRegistration", "Profile"})
+     * @Assert\NotBlank(message="assert.required.function", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $function;
@@ -171,16 +171,16 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="user.required.email", groups={"CustomRegistration", "Profile"})
-     * @Assert\Email(message="assert.valid.email", groups={"CustomRegistration", "Profile"})
+     * @Assert\NotBlank(message="user.required.email", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
+     * @Assert\Email(message="assert.valid.email", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      */
     protected $email;
 
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.phone", groups={"CustomRegistration"})
-     * @Assert\Regex(pattern="/^07([0-9]{8})$/", message="assert.valid.phone", groups={"CustomRegistration"})
+     * @Assert\NotBlank(message="assert.required.phone", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\Regex(pattern="/^07([0-9]{8})$/", message="assert.valid.phone", groups={"CustomRegistration", "ChangeInfo"})
      */
     protected $phone;
 
@@ -188,16 +188,24 @@ class User extends BaseUser
      *
      * @var string
      * @Assert\NotBlank(message="assert.required.password", groups={"CustomRegistration", "resetPassword"})
-     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"CustomRegistration", "ChangePassword", "Profile", "resetPassword"})
+     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"CustomRegistration", "ChangePassword", "resetPassword"})
      */
     protected $password;
 
     /**
      *
      * @var string
-     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"Profile"})
+     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"AdminRegistration", "AdminProfile"})
+     * @Assert\NotBlank(message="assert.required.password", groups={"AdminRegistration"})
      */
     protected $plainPassword;
+
+    /**
+     *
+     * @var string
+     * @Assert\NotBlank(message="assert.required.username", groups={"AdminRegistration", "AdminProfile"})
+     */
+    protected $username;
 
     /**
      *
@@ -703,7 +711,7 @@ class User extends BaseUser
     /**
      * Get lastCreditUpdate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastCreditUpdate()
     {
