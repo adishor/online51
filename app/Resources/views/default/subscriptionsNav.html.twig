@@ -1,0 +1,7 @@
+<div class="col-xs-3">
+    <ul class="nav nav-tabs clearfix" role="tablist">
+        {% for subscription in subscriptions %}
+            <li><a href="{{path('subscriptions')}}#ssm{{ loop.index }}">{{ subscription.name | upper }}</a><span></span></li>
+                {% endfor %}
+    </ul>
+</div>

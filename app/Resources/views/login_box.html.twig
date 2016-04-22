@@ -1,30 +1,35 @@
-{% for flash_message in app.session.flashbag.get('successful-register') %}
-    <h5 class="color-blue text-center first bold-row" >{{ flash_message|trans }}</h5>
-{% endfor %}
-{% for flash_message in app.session.flashbag.get('successful-login') %}
-    <h5 class="color-blue text-center first bold-row" >{{ flash_message|trans }}</h5>
-{% endfor %}
 {% for flash_message in app.session.flashbag.get('successful-reset') %}
-    <h5 class="color-blue text-center first bold-row" >{{ flash_message|trans }}</h5>
+    <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
+{% endfor %}
+{% for flash_message in app.session.flashbag.get('successful-activate') %}
+    <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
+{% endfor %}
+{% for flash_message in app.session.flashbag.get('successful-change') %}
+    <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
 {% endfor %}
 {% if app.user %}
     <div class="login-form" id="loginDiv">
+        <p class="first text-center text-small">{{ 'login.user-information'|trans }}</p>
+        <h4 class="text-center">{{ 'login.total-credits'|trans }}</h4>
         {% if app.user.creditsTotal %}
-            <p class="first">{{ 'login.total-credits'|trans }}</p>
-            <h4 id="totalUserCredits">{{ app.user.creditsTotal }}</h4>
+            <h4 id="totalUserCredits" class="text-center">{{ app.user.creditsTotal }}</h4>
+        {%else%}
+            <h4 id="totalUserCredits" class="text-center">0</h4>    
         {% endif %}
-    </div>
-    <input type="button" class="costum" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
+        <input type="button" class="costum centered" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
+        <p class="last"><a href="{{ path('change_password') }}">{{ 'login.change-password'|trans }}</a></p>
+        <p class="last"><a href="{{ path('change_info') }}">{{ 'login.change-user-information'|trans }}</a></p>
+    </div>    
 {% else %}
     <form action="" method="post" onsubmit="return false">
         <input id="SubscriptionType" name="SubscriptionType" type="hidden" value="" />
         <div class="login-form" id="loginDiv">
             <p class="first">{{ 'login.label'|trans }}</p>
-            <p class="color-red" id="loginValidation" hidden="hidden">{{ 'login.failed'|trans }}</p>
+            <p class="color-red text-center" id="loginValidation" hidden="hidden">{{ 'login.failed'|trans }}</p>
             <input data-val="true" data-val-required="{{ 'form.required.email'|trans }}" id="LoginUserName" name="UserName" placeholder="{{ 'form.label.email'|trans }}" type="text" value="" />
-            <span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true" id="validUser" ></span>
+            <span class="field-validation-valid text-center" data-valmsg-for="UserName" data-valmsg-replace="true" id="validUser" ></span>
             <input data-val="true" data-val-required="{{ 'form.required.password'|trans }}" id="LoginPassword" name="Password" placeholder="{{ 'form.label.password'|trans }}" type="password" />
-            <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true" id="validPass" ></span>
+            <span class="field-validation-valid text-center" data-valmsg-for="Password" data-valmsg-replace="true" id="validPass" ></span>
             <input type="submit" class="costum" value="{{ 'login.button.login'|trans }}" onclick="GoLogin('{{ path('sonata_user_security_check') }}', '{{ path('homepage') }}')" />
             <br class="clear" />
             <p class="last"><a onclick="ResetPasswordShow()" href="#">{{ 'login.forgot'|trans }}</a></p>
@@ -41,8 +46,8 @@
                 </div>
                 <div class="editor-field">
                     <input id="FreeUserName" name="UserName" placeholder="{{ 'form.label.email'|trans }}" type="text" value="" />
-                    <p id="FreeUserNameValid" class="color-red" hidden="hidden">{{ 'form.required.email'|trans }}</p>
-                    <p id="FreeUserNameValidEmail" class="color-red" hidden="hidden">{{ 'form.valid.email'|trans }}</p>
+                    <p id="FreeUserNameValid" class="color-red text-center" hidden="hidden">{{ 'form.required.email'|trans }}</p>
+                    <p id="FreeUserNameValidEmail" class="color-red text-center" hidden="hidden">{{ 'form.valid.email'|trans }}</p>
                 </div>
                 <div class="editor-label clearfix">
                     <input class="pull-left" type="checkbox" name="selected" id="freecheck" onclick="goFreeAccount()" />
@@ -79,6 +84,25 @@
             <div id="resetPassSucc" hidden="hidden">
                 <p>&nbsp;&nbsp; {{ 'success.reset-password'|trans }} </p>
                 <p><a href="#"  data-toggle="modal" data-target="#myModal1" onclick="ResetPasswordSucceeded()" > {{ 'login.close-password'|trans }}</a></p>
+            </div>
+        </div>
+    </form>
+    <form action="" method="post" onsubmit="return false">
+        <div class="login-form" id="resendActivationEmailDiv" hidden="hidden">
+            <div id="resendActivationEmail">
+                <p id="activationEmailError" class="color-red" hidden="hidden"></p>
+                <p> {{ 'resend-activation'|trans }} </p>
+                <div class="editor-field">
+                    <input id="activationEmail" name="activationEmail" type="hidden" value="" />
+                </div>    
+                <p class="login-form">
+                    <input type="button" value="{{ 'login.button.resend'|trans }}" id="btnResendActivationEmail" class="costum" onclick="SubmitResendActivationEmail('{{ path('resend_activation_email') }}')" />
+                </p>
+                <br class="clear" />
+            </div>
+            <div id="resendActivationEmailSucc" hidden="hidden">
+                <p>&nbsp;&nbsp; {{ 'success.resend-activation'|trans }} </p>
+                <p><a href="#"  data-toggle="modal" data-target="#myModal1" onclick="ResendActivationSucceeded()" > {{ 'login.button.close'|trans }}</a></p>
             </div>
         </div>
     </form>

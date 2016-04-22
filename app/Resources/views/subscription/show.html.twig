@@ -6,7 +6,7 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs clearfix" role="tablist">
             {% for subscription in subscriptions %}
-                <li><a href="#ssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
+                <li><a href="#ssm{{ loop.index }}" id="navssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
                     {% endfor %}
         </ul>
     </div>
@@ -17,6 +17,13 @@
                 jQuery(window).load(function () {
                     jQuery(".tab-pane-menu").first().parent().addClass("active");
                     jQuery(".tab-pane").first().addClass("active");
+                    if (window.location.hash) {
+                        extension = window.location.hash.replace('#','');
+                        jQuery(".tab-pane-menu").first().parent().removeClass("active");
+                        jQuery(".tab-pane").first().removeClass("active");
+                        jQuery('#nav' + extension + ".tab-pane-menu").parent().addClass("active");
+                        jQuery('#' + extension + ".tab-pane").addClass("active");
+                    }
                 });
             </script>
         </div>

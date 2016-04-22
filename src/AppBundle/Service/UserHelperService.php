@@ -7,6 +7,7 @@ use Application\Sonata\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserHelperService
 {
@@ -14,13 +15,15 @@ class UserHelperService
     protected $encoderFactory;
     protected $authorizationChecker;
     protected $tokenStorage;
+    protected $session;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage, Session $session)
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenStorage = $tokenStorage;
+        $this->session = $session;
     }
 
     public function addUserToDatabase($data)
@@ -30,7 +33,7 @@ class UserHelperService
         $user->setUsernameCanonical($data->getEmail());
         $user->setEmail($data->getEmail());
         $user->setEmailCanonical($data->getEmail());
-        $user->setEnabled(true);
+        $user->setEnabled(false);
         $user->setExpired(false);
         $user->setLocked(false);
         $user->setName($data->getName());
@@ -47,6 +50,7 @@ class UserHelperService
         $user->setAddress($data->getAddress());
         $user->setUploadImage($data->getUploadImage());
         $user->setFunction($data->getFunction());
+        $user->setConfirmationToken($data->getConfirmationToken());
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
         $this->entityManager->persist($user);
@@ -70,9 +74,8 @@ class UserHelperService
         return $json->valid;
     }
 
-    public function changePassword($data, $token)
+    public function changePassword($data, $user)
     {
-        $user = $this->entityManager->getRepository('ApplicationSonataUserBundle:User')->findOneByConfirmationToken($token);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
         $this->entityManager->flush();
     }
@@ -123,6 +126,18 @@ class UserHelperService
     public function getIsUserException()
     {
         return $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
+    }
+
+    public function checkOldPassword($password, $user)
+    {
+        if ($user->getPassword() === $this->encoderFactory->getEncoder($user)->encodePassword($password, $user->getSalt())) {
+
+            return true;
+        }
+
+        $this->session->getFlashBag()->add('change-password-error', 'form.valid.old-password');
+
+        return false;
     }
 
 }
