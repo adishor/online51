@@ -12,7 +12,7 @@
     </div>
     <div class="col-xs-9">
         <div class="tab-content">
-            {% for flash_message in app.session.flashbag.get('cart-error') %}
+            {% for flash_message in app.session.flashbag.get('order-error') %}
                 <h5 class="color-red text-center first" >{{ flash_message|trans }}</h5>
             {% endfor %}
             {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions } %}

@@ -36,7 +36,7 @@ class OrderHelperService
             }
         } else {
             if (null === $domains) {
-                $this->session->getFlashBag()->add('cart-error', 'cart.error.select-all-domains');
+                $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
 
                 return false;
             }
@@ -44,7 +44,7 @@ class OrderHelperService
 
         if (null !== $domains) {
             if (count($domains) !== $subscription->getDomainAmount()) {
-                $this->session->getFlashBag()->add('cart-error', 'cart.error.select-all-domains');
+                $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
 
                 return false;
             }
