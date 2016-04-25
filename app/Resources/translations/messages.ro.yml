@@ -179,6 +179,8 @@ success:
     change-info: Informatiile s-au actualizat cu succes!
     reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
     resend-activation: 'Un nou email de activare a fost trimis.'
+    order: 'Comanda s-a efectutat cu succes.'
+    order-remove: 'Comanda s-a anulat cu succes.'
 login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
@@ -228,11 +230,16 @@ order:
     active-subscriptions: 'Aveti urmatoarele abonamente active:'
     active-subscription: 'Aveti urmatorul abonament activ:'
     no-active-subscriptions: 'Nu aveti abonamente active.'
+    total-active-credits: 'Total credite primite'
     pending-orders: 'Aveti urmatoarele comenzi in asteptare:'
     pending-order: 'Aveti urmatoarea comanda in asteptare:'
     no-pending-orders: 'Nu aveti comenzi in asteptare.'
     bonus-orders: 'Aveti urmatoarele credite suplimentare:'
-    no-domains: 'Nu aveti domenii selectate pentru acest abonament.'
+    unlocked-documents: 'Aveti urmatoarele documente deblocate:'
+    no-unlocked-documents: 'Nu aveti documente deblocate.'
+    no-domains: 'Fara domenii'
+    remove-order: 'Anuleaza comanda!'
+    remove-confirm: 'Sunteti sigur ca doriti sa anulati comanda?'
     tab:
         active-credits: 'Credite active'
         unlocked-documents: 'Documente deblocate'   
@@ -258,6 +265,9 @@ order:
     until: 'Valabil pana la'
     price: 'Pret'
     days: ' zile'
+    domain: 'Domeniu'
+    subdomain: 'Subdomeniu'
+    document: 'Document'
 
 #admin
 admin_label:

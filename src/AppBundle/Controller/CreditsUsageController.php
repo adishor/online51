@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\CreditsUsage;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class CreditsUsageController extends Controller
 {

@@ -17,10 +17,11 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('DISTINCT(d.id) as id, cu.documentExpireDate as date')
+          ->select('DISTINCT(d.id) as id, d.title, cu.documentExpireDate as date, sd.name as subDomain, dom.name as domain')
           ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
+          ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.documentExpireDate > :now')
@@ -29,6 +30,8 @@ class CreditsUsageRepository extends EntityRepository
             $queryBuilder->andWhere('sd.domain = :domain')
               ->setParameter('domain', $domainId);
         }
+        $queryBuilder->orderBy('dom.id')
+          ->orderBy('sd.id');
 
         $query = $queryBuilder->getQuery();
 

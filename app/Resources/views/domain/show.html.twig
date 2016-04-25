@@ -29,7 +29,7 @@
                                         <li>
                                             {% if validDocuments[document.id] is defined or isUserException %}
                                                 <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
-                                                <span >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]|date('d M Y H:m') }) }}</span>            
+                                                <span >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]|date('d M Y H:i') }) }}</span>            
                                             {% else %}
                                                 <a id="downloadLink{{document.id}}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
                                                             '{{ 'domain.confirm-unlock'|trans({'%title%': document.title, '%credits%': document.creditValue }) }}',

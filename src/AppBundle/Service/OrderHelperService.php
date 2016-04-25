@@ -7,7 +7,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use AppBundle\Entity\Order;
-use AppBundle\Entity\Cart;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderHelperService
 {
@@ -65,8 +66,44 @@ class OrderHelperService
         $order->setActive(false);
         $this->entityManager->persist($order);
         $this->entityManager->flush();
+        $this->session->getFlashBag()->add('order-success', 'success.order');
 
         return true;
+    }
+
+    public function getActiveCreditTotal($activeOrders, $bonusOrders)
+    {
+        $sum = 0;
+        if (null !== $activeOrders) {
+            foreach ($activeOrders as $order) {
+                $sum += $order->getCreditValue();
+            }
+        }
+        if (null !== $bonusOrders) {
+            foreach ($bonusOrders as $order) {
+                $sum += $order->getCreditValue();
+            }
+        }
+
+        return $sum;
+    }
+
+    public function removeOrder($orderId)
+    {
+        $user = $this->tokenStorage->getToken()->getUser();
+        $order = $this->entityManager->getRepository('AppBundle:Order')->find($orderId);
+        if (null === $order) {
+
+            throw new NotFoundHttpException();
+        }
+        if (($user->getId()) !== ($order->getUser()->getId())) {
+
+            throw new AccessDeniedHttpException();
+        }
+
+        $this->entityManager->remove($order);
+        $this->entityManager->flush();
+        $this->session->getFlashBag()->add('order-success', 'success.order-remove');
     }
 
 }

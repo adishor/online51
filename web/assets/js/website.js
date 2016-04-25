@@ -174,11 +174,11 @@ function isCheckedx(cb, id, no) {
     }
 }
 
-function areAllChecked(id, max){
+function areAllChecked(id, max) {
     var checked = $("#" + id + " input:checked").length;
-     if (checked === max){
-         return true;
-     }
+    if (checked === max) {
+        return true;
+    }
 }
 
 function popitup(url) {
@@ -379,8 +379,15 @@ function DocumentConfirmPopup(message, path, documentId, downloadPath) {
             }
         });
 }
-function alertNotLoggedIn(message){
+function alertNotLoggedIn(message) {
     window.alert(message);
+}
+
+function removeOrder(path, message) {
+    var answer = confirm(message);
+    if (answer) {
+         window.location.href = path;
+    }
 }
 
 // Js not currently used.
