@@ -46,6 +46,9 @@ services:
     app.user_helper:
         class:     AppBundle\Service\UserHelperService
         arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session]
+    app.order_helper:
+        class:     AppBundle\Service\OrderHelperService
+        arguments: [@doctrine.orm.entity_manager, @translator,  @security.token_storage, @session]
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false

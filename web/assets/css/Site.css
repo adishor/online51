@@ -1770,4 +1770,8 @@ p.login-form input.costum {
 
 h5.first {
     padding-top:10px;
-} 
+}
+
+.text-big li {
+    font-size: 18px;
+}

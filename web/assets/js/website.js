@@ -174,6 +174,13 @@ function isCheckedx(cb, id, no) {
     }
 }
 
+function areAllChecked(id, max){
+    var checked = $("#" + id + " input:checked").length;
+     if (checked === max){
+         return true;
+     }
+}
+
 function popitup(url) {
     newwindow = window.open(url, 'name', 'height=1000,width=1000');
     if (window.focus) {
@@ -363,14 +370,17 @@ function DocumentConfirmPopup(message, path, documentId, downloadPath) {
             url: path,
             data: {documentId: documentId},
             success: function (response) {
-                window.alert(response.message);
                 if (response.success) {
-                    window.location.href = downloadPath;
+                    $('#errorOrSuccess' + documentId).text(response.message);
+                    $('#errorOrSuccess' + documentId).show();
                     $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
                     $('#totalUserCredits').text(response.credits);
                 }
             }
         });
+}
+function alertNotLoggedIn(message){
+    window.alert(message);
 }
 
 // Js not currently used.

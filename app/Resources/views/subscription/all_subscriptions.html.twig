@@ -1,17 +1,21 @@
 {% set counter = 0 %}
 {% for subscription in subscriptions %}
-    <div class="tab-pane" id="ssm{{ loop.index }}">
+    {% set subscripionNumber = loop.index %}
+    <div class="tab-pane" id="ssm{{ subscripionNumber }}">
         <div id="{{ subscription.name | upper }}">
-            <form action="" method="post">
+            <form action="{{ path("show_orders") }}#pending" id="ssm{{ subscripionNumber }}form" method="post">
                 <div class="row">
                     <div class="col-xs-9">
                         <h3 class="title">{{ subscription.name }}</h3>
+                        <p class="color-red text-center" id="ssm{{ subscripionNumber }}error" hidden="hidden"></p>
+                        <input type="hidden" value="{{ subscription.id }}" name="subscriptionId"/>
                     </div>
                     <div class="col-xs-3">
-                        <input class="costum pull-right" type="button" value="comanda" />
+                        {% if app.user %}
+                            <input id="ssm{{ subscripionNumber }}button" class="costum pull-right" type="button" value="{{ 'subscription.add-to-order'|trans }}" />
+                        {% endif %}
                     </div>
                 </div>
-
                 <p>{{ subscription.intro | raw }}</p>
                 <div class="selecting-checkbox" id="{{ subscription.name | lower | replace({' ':'_'}) }}">
                     {% if subscription.domains | length > 1 %}
@@ -19,7 +23,7 @@
                             {% set checked = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "checked='checked'" : "" %}
                             {% set disabled = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "disabled" : "" %}
                             <p>
-                                <input {{ checked }} {{ disabled }} type="checkbox" class="css-checkbox " id="checkbox{{ counter }}" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
+                                <input {{ checked }} {{ disabled }} type="checkbox" class="css-checkbox" id="checkbox{{ counter }}" name="domains[{{domain.id}}]" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
                                 <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> {{ 'subscription.choose-one-type'|trans }}</span>
                             </p>
                             {% set counter = counter + 1 %}
@@ -34,25 +38,62 @@
                         <p class="last">{{ 'subscription.number-of-credits'|trans }}<span class="color-blue">{{ subscription.credit }}</span></p>
                     </div>
                     <div class="col-xs-4">
-                        <p class="last">{{ 'subscription.valability'|trans }}<span class="color-blue">{{ subscription.domainAmount }}</span>
-                            {% transchoice subscription.domainAmount with {'%year%': 'subscription.year'|trans, '%years%': 'subscription.years'|trans } %}
+                        <p class="last">{{ 'subscription.valability'|trans }}<span class="color-blue">{{ subscription.valability }}</span>
+                            {% transchoice subscription.valability with {'%year%': 'subscription.year'|trans, '%years%': 'subscription.years'|trans } %}
                             {1} %year% |]1,Inf[ %years%
                             {% endtranschoice %}
                         </p>
                     </div>
                 </div>
                 {{ subscription.description | raw }}
+                {% if not app.user %}
+                    <div class="panel">
+                        <div class="panel-body">
+                            <p>
+                                {{ 'subscription.not-logged-in'|trans }}<br />
+                                {{ 'please-login'|trans }}<br />
+                            </p>
+                        </div>
+                    </div>
+                {% endif%}
             </form>
         </div>
     </div>
-
     {% if not ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
         <script type="text/javascript">
             $(document).ready(function () {
                 var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
                 $("#" + id + " input").change(function () {
                     var cb = $(this);
-                    isCheckedx(cb, id, {{ subscription.domainAmount }});
+                            isCheckedx(cb, id, {{ subscription.domainAmount }});
+                });
+                $("#" + "ssm" +    {{ subscripionNumber }} +"button").click(function () {
+                    if (!areAllChecked(id, {{ subscription.domainAmount }})){
+                    {% if subscription.domainAmount == 1 %}
+                    $("#" + "ssm" + "{{ subscripionNumber }}" + "error").text('{{ "order.error.select-one"|trans }}');
+                    {% else %}
+                    $("#" + "ssm" + "{{ subscripionNumber }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
+                    {% endif %}
+                    $("#" + "ssm" + "{{ subscripionNumber }}" + "error").show();
+                }
+                if (areAllChecked(id, {{ subscription.domainAmount }})) {
+                    var awnser = confirm('{{ "order.button.confirm"|trans }}');
+                    if (awnser) {
+                        $("#" + "ssm" + "{{ subscripionNumber }}" + "form").submit();
+                    }
+                }
+                });
+            });
+        </script>
+    {% endif %}
+    {% if ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#" + "ssm" +    {{ subscripionNumber }} +"button").click(function () {
+                    var awnser = confirm('{{ "order.button.confirm"|trans }}');
+                    if (awnser) {
+                        $("#" + "ssm" + "{{ subscripionNumber }}" + "form").submit();
+                    }
                 });
             });
         </script>

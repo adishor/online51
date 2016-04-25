@@ -57,4 +57,55 @@ class OrderRepository extends EntityRepository
         return $query->getSingleScalarResult();
     }
 
+    public function findAllActiveOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :now')
+          ->andWhere('o.subscription is not NULL')
+          ->setParameter('now', new \DateTime);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllBonusOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :now')
+          ->andWhere('o.subscription is NULL')
+          ->setParameter('now', new \DateTime);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllPendingOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = FALSE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
 }

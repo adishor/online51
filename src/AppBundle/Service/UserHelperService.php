@@ -93,9 +93,9 @@ class UserHelperService
     {
         $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId);
         $validDocuments = array();
-        array_walk_recursive($documents, function($v, $k) use (&$validDocuments) {
-            $validDocuments[$v] = true;
-        });
+        foreach ($documents as $document) {
+            $validDocuments[$document['id']] = $document['date'];
+        }
 
         return $validDocuments;
     }

@@ -17,7 +17,7 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('DISTINCT(d.id)')
+          ->select('DISTINCT(d.id) as id, cu.documentExpireDate as date')
           ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
@@ -52,6 +52,20 @@ class CreditsUsageRepository extends EntityRepository
         $query = $queryBuilder->getQuery();
 
         return $query->getArrayResult();
+    }
+
+    public function findAllUsedCredits($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('cu')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
     }
 
 }

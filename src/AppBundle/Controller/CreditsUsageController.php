@@ -40,6 +40,7 @@ class CreditsUsageController extends Controller
         }
         $creditsUsage->getUser()->setCreditsTotal($creditsUsage->getUser()->getCreditsTotal() - $document->getCreditValue());
         $creditsUsage->getUser()->setLastCreditUpdate(new \DateTime());
+        $creditsUsage->setMentions($this->get('translator')->trans('credit-usage.unlocked-by-user'));
         $em->persist($creditsUsage);
         $em->flush();
 

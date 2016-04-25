@@ -12,13 +12,16 @@
     </div>
     <div class="col-xs-9">
         <div class="tab-content">
+            {% for flash_message in app.session.flashbag.get('cart-error') %}
+                <h5 class="color-red text-center first" >{{ flash_message|trans }}</h5>
+            {% endfor %}
             {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions } %}
             <script type="text/javascript">
                 jQuery(window).load(function () {
                     jQuery(".tab-pane-menu").first().parent().addClass("active");
                     jQuery(".tab-pane").first().addClass("active");
                     if (window.location.hash) {
-                        extension = window.location.hash.replace('#','');
+                        extension = window.location.hash.replace('#', '');
                         jQuery(".tab-pane-menu").first().parent().removeClass("active");
                         jQuery(".tab-pane").first().removeClass("active");
                         jQuery('#nav' + extension + ".tab-pane-menu").parent().addClass("active");

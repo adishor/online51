@@ -13,14 +13,15 @@
         <h4 class="text-center">{{ 'login.total-credits'|trans }}</h4>
         {% if app.user.creditsTotal %}
             <h4 id="totalUserCredits" class="text-center">{{ app.user.creditsTotal }}</h4>
-        {%else%}
+        {% else %}
             <h4 id="totalUserCredits" class="text-center">0</h4>    
         {% endif %}
         <input type="button" class="costum centered" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
         <p class="last"><a href="{{ path('change_password') }}">{{ 'login.change-password'|trans }}</a></p>
         <p class="last"><a href="{{ path('change_info') }}">{{ 'login.change-user-information'|trans }}</a></p>
+        <p class="last"><a href="{{ path('show_orders') }}">{{ 'login.credit-status'|trans }}</a></p>
     </div>    
-{% else %}
+{% elseif not app.user %}
     <form action="" method="post" onsubmit="return false">
         <input id="SubscriptionType" name="SubscriptionType" type="hidden" value="" />
         <div class="login-form" id="loginDiv">

@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table("`order`")
+ * @ORM\Table("orders")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  * @HasLifecycleCallbacks
  */

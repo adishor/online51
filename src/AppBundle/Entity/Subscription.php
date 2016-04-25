@@ -102,8 +102,8 @@ class Subscription
      */
     protected $orders;
 
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->domains = new ArrayCollection();
     }
 
@@ -348,4 +348,5 @@ class Subscription
     {
         return $this->name;
     }
+
 }

@@ -166,7 +166,6 @@ class CreditsUsage
         $this->createdAt = new \DateTime();
         $this->documentExpireDate = new \DateTime();
         $this->documentExpireDate->add(new \DateInterval('P' . $this->document->getValabilityDays() . 'D'));
-        $this->mentions = 'Document deblocat de utilizator.';
         $this->credit = $this->document->getCreditValue();
     }
 
