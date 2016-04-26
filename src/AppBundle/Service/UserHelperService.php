@@ -53,6 +53,7 @@ class UserHelperService
         $user->setConfirmationToken($data->getConfirmationToken());
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
+        $user->setDeleted(false);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }

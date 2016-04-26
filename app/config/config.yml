@@ -12,6 +12,7 @@ parameters:
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
     sonata.media.provider.file.class: AppBundle\Provider\DocumentProvider
     sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
+    stof_doctrine_extensions.listener.softdeleteable.class: AppBundle\Listener\SoftDeleteableListener
 
 
 framework:
@@ -97,9 +98,10 @@ sonata_admin:
         handler: sonata.admin.security.handler.role
     title: Online51
     options:
-        html5_validate: false
+        html5_validate: true
     templates:
         layout: sonata/layout.html.twig
+        batch: sonata/batch.html.twig
 
 sonata_user:
     security_acl: false
@@ -204,12 +206,21 @@ doctrine:
     orm:
         entity_managers:
             default:
+                filters:
+                    softdeleteable:
+                        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                        enabled: true
                 mappings:
                     ApplicationSonataUserBundle: ~
                     SonataUserBundle: ~
                     FOSUserBundle: ~
                     ApplicationSonataMediaBundle: ~
                     SonataMediaBundle: ~
+
+stof_doctrine_extensions:
+    orm:
+        default:
+            softdeleteable: true
 
 knp_doctrine_behaviors:
     sluggable:      true
