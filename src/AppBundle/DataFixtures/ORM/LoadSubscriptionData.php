@@ -24,6 +24,7 @@ class LoadSubscriptionData extends AbstractFixture implements OrderedFixtureInte
                 ->addDomain($this->getReference('domain2'))
                 ->addDomain($this->getReference('domain3'))
                 ->addDomain($this->getReference('domain4'));
+        $subscription->setDeleted(FALSE);
 
         $subscription1 = new Subscription();
         $subscription1->setName('Office');
@@ -38,6 +39,7 @@ class LoadSubscriptionData extends AbstractFixture implements OrderedFixtureInte
                 ->addDomain($this->getReference('domain2'))
                 ->addDomain($this->getReference('domain3'))
                 ->addDomain($this->getReference('domain4'));
+        $subscription1->setDeleted(FALSE);
 
         $subscription2 = new Subscription();
         $subscription2->setName('Enterprise');
@@ -52,6 +54,7 @@ class LoadSubscriptionData extends AbstractFixture implements OrderedFixtureInte
                 ->addDomain($this->getReference('domain2'))
                 ->addDomain($this->getReference('domain3'))
                 ->addDomain($this->getReference('domain4'));
+        $subscription2->setDeleted(FALSE);
 
         $subscription3 = new Subscription();
         $subscription3->setName('Business');
@@ -66,6 +69,7 @@ class LoadSubscriptionData extends AbstractFixture implements OrderedFixtureInte
                 ->addDomain($this->getReference('domain2'))
                 ->addDomain($this->getReference('domain3'))
                 ->addDomain($this->getReference('domain4'));
+        $subscription3->setDeleted(FALSE);
 
         $subscription4 = new Subscription();
         $subscription4->setName('Expert');
@@ -76,6 +80,7 @@ class LoadSubscriptionData extends AbstractFixture implements OrderedFixtureInte
         $subscription4->setValability(1);
         $subscription4->setDomainAmount(1);
         $subscription4->addDomain($this->getReference('domain5'));
+        $subscription4->setDeleted(FALSE);
 
         $manager->persist($subscription);
         $manager->persist($subscription1);

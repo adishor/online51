@@ -9,7 +9,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "symfony/symfony": "2.7.*",
+        "symfony/symfony": "2.8.*",
         "vich/uploader-bundle": "^0.14.0",
         "doctrine/orm": "~2.2,>=2.2.3,<2.5",
         "doctrine/dbal": "<2.5",
@@ -34,7 +34,8 @@
         "knplabs/doctrine-behaviors": "~1.1",
         "gregwar/captcha-bundle": "1.*",
         "jms/serializer-bundle": "~0.13",
-        "sonata-project/media-bundle": "2.3.x-dev"
+        "sonata-project/media-bundle": "2.3.x-dev",
+        "gedmo/doctrine-extensions": "^2.4"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

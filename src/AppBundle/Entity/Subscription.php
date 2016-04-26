@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,6 +14,7 @@ use AppBundle\Validator\Constraints as CustomAssert;
  * @ORM\Table()
  * @ORM\Entity()
  * @CustomAssert\MinDomains
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Subscription
 {
@@ -31,6 +33,7 @@ class Subscription
      * @var string
      *
      * @ORM\Column()
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -101,6 +104,22 @@ class Subscription
      * @ORM\OneToMany(targetEntity="Order", mappedBy="subscription")
      */
     protected $orders;
+
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $deleted;
+
+    /**
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
 
     public function __construct() {
@@ -343,6 +362,53 @@ class Subscription
     {
         return $this->orders;
     }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return SubDomain
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return SubDomain
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
 
     public function __toString()
     {

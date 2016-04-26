@@ -2,15 +2,17 @@
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table("`order`")
+ * @ORM\Table("orders")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  * @HasLifecycleCallbacks
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Order
 {
@@ -70,6 +72,14 @@ class Order
 
     /**
      *
+     * @var integer
+     *
+     * @ORM\Column(name="first_active", type="boolean", nullable=false, options={"default":0})
+     */
+    private $firstActive;
+
+    /**
+     *
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -120,6 +130,7 @@ class Order
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     private $user;
 
@@ -135,6 +146,23 @@ class Order
      * @ORM\JoinTable(name="order_domain")
      */
     private $domains;
+
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $deleted;
+
+    /**
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
+
 
     /**
      * @ORM\PrePersist
@@ -274,6 +302,29 @@ class Order
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set firstActive
+     *
+     * @param boolean $firstActive
+     * @return Order
+     */
+    public function setFirstActive($firstActive)
+    {
+        $this->firstActive = $firstActive;
+
+        return $this;
+    }
+
+    /**
+     * Get firstActive
+     *
+     * @return boolean
+     */
+    public function getFirstActive()
+    {
+        return $this->firstActive;
     }
 
     /**
@@ -492,6 +543,52 @@ class Order
     public function getDomains()
     {
         return $this->domains;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return SubDomain
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return SubDomain
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 
     public function __toString()

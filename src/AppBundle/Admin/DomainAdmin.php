@@ -7,82 +7,119 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\CoreBundle\Form\Type\EqualType;
+use Sonata\CoreBundle\Form\Type\BooleanType;
 
 class DomainAdmin extends Admin
 {
 
     public function configureFormFields(FormMapper $form)
     {
+        $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
+
         //get all subdomains associated to domains
         $choices = [];
         $subdomains = [];
         foreach ($this->getSubject()->getSubdomains() as $subdomain) {
-            $subdomains[$subdomain->getId()] = $subdomain;
+            if (!$subdomain->getDeleted()) {
+                $subdomains[$subdomain->getId()] = $subdomain;
+            }
         }
         $choices[$this->getSubject()->getName()] = $subdomains;
 
         //get all subdomains that are not associated
-        $em = $this->modelManager->getEntityManager('AppBundle:SubDomain');
-        $noDomainSubdomains = $em->createQueryBuilder('s')
-          ->select('s')
-          ->from('AppBundle:SubDomain', 's')
-          ->where('s.domain is NULL')
-          ->getQuery()
-          ->getResult();
+        $noDomainSubdomains = $this->modelManager
+                ->getEntityManager('AppBundle:SubDomain')
+                ->createQueryBuilder()
+                ->select('s')
+                ->from('AppBundle:SubDomain', 's')
+                ->where('s.domain is NULL')
+                ->andWhere('s.deleted = 0')
+                ->getQuery()
+                ->getResult();
         $choices['No Domain'] = $noDomainSubdomains;
 
-        $form->add('name')
-          ->add('baseline', null, array(
-              'required' => false
-          ))
-          ->add('description', 'sonata_simple_formatter_type', array(
-              'format' => 'richhtml',
-              'required' => false
-          ))
-          ->add('dedicated')
-          ->add('subdomains', 'entity', array(
-              'expanded' => false,
-              'multiple' => true,
-              'by_reference' => false,
-              'required' => false,
-              'class' => 'AppBundle:SubDomain',
-              'choices' => $choices,
-          ))
-          ->add('subscriptions', 'sonata_type_model', array(
-              'expanded' => false,
-              'multiple' => true,
-              'by_reference' => false,
-              'required' => false
-        ));
+        $subdomainsOptions = array(
+                'expanded' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'required' => false,
+                'class' => 'AppBundle:SubDomain',
+                'choices' => $choices,
+                'disabled' => $disabled
+            );
+
+        $querySubscription = $this->modelManager
+                ->getEntityManager('AppBundle:Subscription')
+                ->createQueryBuilder()
+                ->select('s')
+                ->from('AppBundle:Subscription', 's')
+                ->where('s.deleted = 0');
+
+        $subscriptionsOptions = array(
+                'query' => $querySubscription,
+                'expanded' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'required' => false,
+                'disabled' => $disabled
+            );
+
+        if ($this->getSubject()->getDeleted()) {
+            $subscriptionsOptions['btn_add'] = FALSE;
+        }
+
+        $form->add('name', null, array(
+                'disabled' => $disabled
+            ))
+            ->add('baseline', null, array(
+                'required' => false,
+                'disabled' => $disabled
+            ))
+            ->add('description', 'sonata_simple_formatter_type', array(
+                'format' => 'richhtml',
+                'required' => false,
+                'disabled' => $disabled
+            ))
+            ->add('dedicated', null, array(
+                'disabled' => $disabled
+            ))
+            ->add('subdomains', 'entity', $subdomainsOptions)
+            ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions);
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name')
-          ->add('subdomains')
-          ->add('subscriptions');
+            ->add('subdomains')
+            ->add('subscriptions')
+            ->add('deleted');
     }
 
     public function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name')
-          ->add('dedicated')
-          ->add('subdomains')
-          ->add('subscriptions');
+            ->add('dedicated')
+            ->add('subdomains')
+            ->add('subscriptions')
+            ->add('deleted');
     }
 
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name')
-          ->add('baseline')
-          ->add('description', 'html')
-          ->add('dedicated')
-          ->add('subdomains')
-          ->add('subscriptions');
+            ->add('baseline')
+            ->add('description', 'html')
+            ->add('dedicated')
+            ->add('subdomains')
+            ->add('subscriptions')
+            ->add('deleted')
+            ->add('deletedAt');
     }
 
     public function prePersist($object)
     {
+        $object->setDeleted(false);
         $this->preUpdate($object);
     }
 
@@ -98,4 +135,25 @@ class DomainAdmin extends Admin
         );
     }
 
+    public function getFilterParameters()
+    {
+        $parameters = parent::getFilterParameters();
+
+        if (!array_key_exists("deleted", $parameters)) {
+            $parameters['deleted'] = array (
+                'type' => EqualType::TYPE_IS_EQUAL,
+                'value' => BooleanType::TYPE_NO
+            );
+        }
+
+        return $parameters;
+    }
+
+    public function getTemplate($name)
+    {
+        if ($name == "edit") {
+            return 'sonata/base_edit.html.twig';
+        }
+        return parent::getTemplate($name);
+    }
 }

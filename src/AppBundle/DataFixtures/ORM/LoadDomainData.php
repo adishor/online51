@@ -30,6 +30,7 @@ class LoadDomainData extends AbstractFixture implements OrderedFixtureInterface 
         $domain->addSubdomain($this->getReference('subdomain_ssm12'));
         $domain->addSubdomain($this->getReference('subdomain_ssm13'));
         $domain->addSubdomain($this->getReference('subdomain_ssm14'));
+        $domain->setDeleted(FALSE);
 
         $domain1 = new Domain();
         $domain1->setName('PSI/SU');
@@ -42,6 +43,7 @@ class LoadDomainData extends AbstractFixture implements OrderedFixtureInterface 
         $domain1->addSubdomain($this->getReference('subdomain_psi_su4'));
         $domain1->addSubdomain($this->getReference('subdomain_psi_su5'));
         $domain1->addSubdomain($this->getReference('subdomain_psi_su6'));
+        $domain1->setDeleted(FALSE);
 
         $domain2 = new Domain();
         $domain2->setName('Mediu');
@@ -53,6 +55,7 @@ class LoadDomainData extends AbstractFixture implements OrderedFixtureInterface 
         $domain2->addSubdomain($this->getReference('subdomain_mediu3'));
         $domain2->addSubdomain($this->getReference('subdomain_mediu4'));
         $domain2->addSubdomain($this->getReference('subdomain_mediu5'));
+        $domain2->setDeleted(FALSE);
 
         $domain3 = new Domain();
         $domain3->setName('HR');
@@ -67,6 +70,7 @@ class LoadDomainData extends AbstractFixture implements OrderedFixtureInterface 
         $domain3->addSubdomain($this->getReference('subdomain_hr6'));
         $domain3->addSubdomain($this->getReference('subdomain_hr7'));
         $domain3->addSubdomain($this->getReference('subdomain_hr8'));
+        $domain3->setDeleted(FALSE);
 
         $domain4 = new Domain();
         $domain4->setName('Management');
@@ -81,6 +85,7 @@ class LoadDomainData extends AbstractFixture implements OrderedFixtureInterface 
         $domain4->addSubdomain($this->getReference('subdomain_mng6'));
         $domain4->addSubdomain($this->getReference('subdomain_mng7'));
         $domain4->addSubdomain($this->getReference('subdomain_mng8'));
+        $domain4->setDeleted(FALSE);
 
         $domain5 = new Domain();
         $domain5->setName('SSM - E');
@@ -89,6 +94,7 @@ class LoadDomainData extends AbstractFixture implements OrderedFixtureInterface 
         $domain5->setDedicated(TRUE);
         $domain5->addSubdomain($this->getReference('subdomain_ssme1'));
         $domain5->addSubdomain($this->getReference('subdomain_ssme2'));
+        $domain5->setDeleted(FALSE);
 
         $manager->persist($domain);
         $manager->persist($domain1);

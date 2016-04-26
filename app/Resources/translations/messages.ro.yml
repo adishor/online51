@@ -230,6 +230,7 @@ Subscription List: Lista Abonamente
 Domain List: Lista Domenii
 Sub Domain List: Lista Subdomenii
 Order List: Lista de comenzi
+Credits Usage List: Lista de credite folosite(consumate)
 Ad List: Lista reclame
 Document List: Lista documente
 Name: Nume
@@ -262,8 +263,10 @@ Upload Image: Incarca Imagine
 Documents: Documente
 Document: Document
 User: Utilizator
-Document Expire Date: Data de expirare a documentului
+Expire Date: Data de expirare
 No Domain: Fara domeniu
+Deleted: Sters
+Deleted At: Sters la
 #media
 sonata:
     media:
