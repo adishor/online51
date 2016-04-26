@@ -54,6 +54,8 @@ class RegisterType extends AbstractType
               'width' => 200,
               'height' => 40,
               'length' => 6,
+              'reload' => true,
+              'as_url' => true,
           ))
         ;
     }

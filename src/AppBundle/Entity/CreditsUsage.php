@@ -55,7 +55,7 @@ class CreditsUsage
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="documentCreditsUsage")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
     protected $document;
 
@@ -64,7 +64,7 @@ class CreditsUsage
      *
      * @ORM\Column(type="datetime")
      */
-    protected $documentExpireDate;
+    protected $expireDate;
 
     /**
      * Set credit
@@ -164,8 +164,8 @@ class CreditsUsage
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
-        $this->documentExpireDate = new \DateTime();
-        $this->documentExpireDate->add(new \DateInterval('P' . $this->document->getValabilityDays() . 'D'));
+        $this->expireDate = new \DateTime();
+        $this->expireDate->add(new \DateInterval('P' . $this->document->getValabilityDays() . 'D'));
         $this->credit = $this->document->getCreditValue();
     }
 
@@ -216,14 +216,14 @@ class CreditsUsage
     }
 
     /**
-     * Set documentExpireDate
+     * Set expireDate
      *
-     * @param \DateTime $documentExpireDate
+     * @param \DateTime $expireDate
      * @return CreditsUsage
      */
-    public function setDocumentExpireDate($documentExpireDate)
+    public function setExpireDate($expireDate)
     {
-        $this->documentExpireDate = $documentExpireDate;
+        $this->expireDate = $expireDate;
 
         return $this;
     }
@@ -233,8 +233,8 @@ class CreditsUsage
      *
      * @return \DateTime
      */
-    public function getDocumentExpireDate()
+    public function getExpireDate()
     {
-        return $this->documentExpireDate;
+        return $this->expireDate;
     }
 }

@@ -108,4 +108,20 @@ class OrderRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function findAllHistoryOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o.id, s.name as title, o.mentions, o.startDate as unlockDate, o.creditValue as credit, o.endingDate as expireDate')
+          ->from('AppBundle:Order', 'o')
+          ->leftjoin('o.subscription', 's')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
 }

@@ -50,9 +50,7 @@ class OrderHelperService
                 return false;
             }
             foreach ($domains as $key => $value) {
-                if ('on' === $value) {
-                    $order->addDomain($this->entityManager->getRepository('AppBundle:Domain')->find($key));
-                }
+                $order->addDomain($this->entityManager->getRepository('AppBundle:Domain')->find($key));
             }
         }
 
@@ -71,8 +69,11 @@ class OrderHelperService
         return true;
     }
 
-    public function getActiveCreditTotal($activeOrders, $bonusOrders)
+    public function getActiveCreditTotal($userId)
     {
+        $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
+        $activeOrders = $orderRepository->findAllActiveOrders($userId);
+        $bonusOrders = $orderRepository->findAllBonusOrders($userId);
         $sum = 0;
         if (null !== $activeOrders) {
             foreach ($activeOrders as $order) {
@@ -104,6 +105,59 @@ class OrderHelperService
         $this->entityManager->remove($order);
         $this->entityManager->flush();
         $this->session->getFlashBag()->add('order-success', 'success.order-remove');
+    }
+
+    public function addInfoToUnlockedDocuments($unlockedDocuments)
+    {
+        foreach ($unlockedDocuments as $key => $document) {
+            $unlockedDocuments[$key]['subject'] = 'order.document';
+            $unlockedDocuments[$key]['sign'] = '-';
+        }
+
+        return $unlockedDocuments;
+    }
+
+    public function getDocumentObjects($unlockedDocuments)
+    {
+        $documentObjects = [];
+        foreach ($unlockedDocuments as $document) {
+            $documentObjects[$document['id']] = $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['id']);
+        }
+
+        return $documentObjects;
+    }
+
+    public function addInfoToHistoryOrders($allHistoryOrders)
+    {
+        foreach ($allHistoryOrders as $key => $order) {
+            if ($order['title'] !== null) {
+                $allHistoryOrders[$key]['subject'] = 'order.subscription';
+            } else {
+                $allHistoryOrders[$key]['subject'] = 'order.credits';
+            }
+            $allHistoryOrders[$key]['sign'] = '+';
+        }
+
+        return $allHistoryOrders;
+    }
+
+    public function prepareCreditHistory($allHistoryOrders, $unlockedDocuments)
+    {
+        $creditHistoryItems = array_merge($allHistoryOrders, $unlockedDocuments);
+        $expireDates = [];
+        $now = new \DateTime;
+        foreach ($creditHistoryItems as $key => $value) {
+            $expireDates[$key] = $value['unlockDate'];
+            if ($now > $value['expireDate']) {
+                $creditHistoryItems[$key]['status'] = 'order.expired';
+                $creditHistoryItems[$key]['sign'] = '*';
+            } else {
+                $creditHistoryItems[$key]['status'] = 'order.active';
+            }
+        }
+        array_multisort($expireDates, SORT_DESC, $creditHistoryItems);
+
+        return $creditHistoryItems;
     }
 
 }

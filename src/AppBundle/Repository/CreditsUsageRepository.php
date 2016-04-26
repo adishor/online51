@@ -17,14 +17,14 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('DISTINCT(d.id) as id, d.title, cu.documentExpireDate as date, sd.name as subDomain, dom.name as domain')
+          ->select('DISTINCT(d.id) as id, d.title, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, sd.name as subDomain, dom.name as domain')
           ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
-          ->andWhere('cu.documentExpireDate > :now')
+          ->andWhere('cu.expireDate > :now')
           ->setParameter('now', new \DateTime);
         if (null !== $domainId) {
             $queryBuilder->andWhere('sd.domain = :domain')
@@ -32,6 +32,22 @@ class CreditsUsageRepository extends EntityRepository
         }
         $queryBuilder->orderBy('dom.id')
           ->orderBy('sd.id');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    public function findAllUserDocuments($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('d.id, d.title, cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate')
+          ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
+          ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->orderBy('unlockDate', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
@@ -47,7 +63,7 @@ class CreditsUsageRepository extends EntityRepository
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
-          ->andWhere('cu.documentExpireDate > :now')
+          ->andWhere('cu.expireDate > :now')
           ->setParameter('now', new \DateTime)
           ->andWhere('d.id = :document')
           ->setParameter('document', $documentId);
@@ -57,18 +73,18 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
-    public function findAllUsedCredits($userId)
+    public function findTotalUsedCredits($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('cu')
+          ->select('sum(cu.credit)')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->where('cu.user = :user')
           ->setParameter('user', $userId);
 
         $query = $queryBuilder->getQuery();
 
-        return $query->getResult();
+        return $query->getSingleScalarResult();
     }
 
 }

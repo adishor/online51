@@ -124,7 +124,7 @@ subscription:
     years: ' ani'
     not-logged-in: 'Abonamentele se pot comanda dupa acces in sistem:'
     no_subscription: 'Fara abonament'
-    bought: 'Achizitionat de utilizator.'
+    bought: 'Abonament achizitionat de utilizator.'
     add-to-order: 'Adaugati la comanda'
 curency: ' RON'
 user:
@@ -185,7 +185,6 @@ login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
     free: 'Creare cont gratuit'
-    total-credits: 'Credite Totale:'
     user-information: 'Informatii'
     change-password: 'Schimbare parola'
     change-user-information: 'Editare informatii'
@@ -237,6 +236,11 @@ order:
     bonus-orders: 'Aveti urmatoarele credite suplimentare:'
     unlocked-documents: 'Aveti urmatoarele documente deblocate:'
     no-unlocked-documents: 'Nu aveti documente deblocate.'
+    used-credits: 'Ati consumat urmatoarele credite:'
+    no-used-credits: 'Nu ati consumat credite.'
+    total-used-credits: 'Total credite consumate'
+    credit-history: 'Istoric credite:'
+    no-credit-history: 'Nu aveti activitate la credite.'
     no-domains: 'Fara domenii'
     remove-order: 'Anuleaza comanda!'
     remove-confirm: 'Sunteti sigur ca doriti sa anulati comanda?'
@@ -268,6 +272,13 @@ order:
     domain: 'Domeniu'
     subdomain: 'Subdomeniu'
     document: 'Document'
+    unlocked-at: 'Deblocat la data'
+    mentions: 'Mentiuni'
+    subject: 'Subiect'
+    status: 'Stare'
+    active: 'Activ'
+    expired: 'Expirat'
+total-credits: 'Credite Totale:'
 
 #admin
 admin_label:

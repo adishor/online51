@@ -17,7 +17,7 @@ class CreditsUsageAdmin extends Admin
           ->add('document')
           ->add('credit', null, array('read_only' => true, 'required' => false))
           ->add('mentions', null, array('required' => false))
-          ->add('documentExpireDate', null, array('required' => false));
+          ->add('expireDate', null, array('required' => false));
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter)
@@ -27,7 +27,7 @@ class CreditsUsageAdmin extends Admin
           ->add('credit')
           ->add('mentions')
           ->add('createdAt')
-          ->add('documentExpireDate');
+          ->add('expireDate');
     }
 
     protected function configureListFields(ListMapper $list)
@@ -38,7 +38,7 @@ class CreditsUsageAdmin extends Admin
           ->add('document')
           ->add('credit')
           ->add('mentions')
-          ->add('documentExpireDate');
+          ->add('expireDate');
     }
 
     protected function configureShowFields(ShowMapper $show)
@@ -48,7 +48,7 @@ class CreditsUsageAdmin extends Admin
           ->add('credit')
           ->add('mentions')
           ->add('createdAt')
-          ->add('documentExpireDate');
+          ->add('expireDate');
     }
 
 }

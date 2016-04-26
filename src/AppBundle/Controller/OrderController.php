@@ -12,31 +12,37 @@ class OrderController extends Controller
     /**
      * @Route("/information/", name="show_orders")
      */
-    public function showOrderAction(Request $request)
+    public function showOrderAction()
     {
 
-        $user = $this->getUser();
+        $userId = $this->getUser()->getId();
+        $orderRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order');
+        $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
+        $orderHelper = $this->get('app.order_helper');
         $this->get('app.user_helper')->updateValidUserCredits();
-        $activeOrders = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order')->findAllActiveOrders($user->getId());
-        $bonusOrders = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order')->findAllBonusOrders($user->getId());
-        $activeOrderTotal = $this->get('app.order_helper')->getActiveCreditTotal($activeOrders, $bonusOrders);
-        $pendingOrders = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order')->findAllPendingOrders($user->getId());
-        $unlockedDocuments = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($user->getId());
-        $documentObjects = [];
-        foreach ($unlockedDocuments as $document) {
-            $documentObjects[$document['id']] = $this->getDoctrine()->getManager()->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['id']);
-        }
-        $usedCredits = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findAllUsedCredits($user->getId());
-
+        $unlockedDocuments = $orderHelper->addInfoToUnlockedDocuments($creditUsageRepository->findAllUserDocuments($userId));
+        $allHistoryOrders = $orderHelper->addInfoToHistoryOrders($orderRepository->findAllHistoryOrders($userId));
 
         return $this->render('order/order_page.html.twig', array(
-              'activeOrders' => $activeOrders,
-              'bonusOrders' => $bonusOrders,
-              'activeOrderTotal' => $activeOrderTotal,
-              'pendingOrders' => $pendingOrders,
+              'activeOrders' => $orderRepository->findAllActiveOrders($userId),
+              'bonusOrders' => $orderRepository->findAllBonusOrders($userId),
+              'pendingOrders' => $orderRepository->findAllPendingOrders($userId),
+              'validDocuments' => $creditUsageRepository->findAllValidUserDocuments($userId),
               'unlockedDocuments' => $unlockedDocuments,
-              'documentObjects' => $documentObjects,
-              'usedCredits' => $usedCredits,
+              'documentObjects' => $orderHelper->getDocumentObjects($unlockedDocuments),
+              'creditHistoryItems' => $orderHelper->prepareCreditHistory($allHistoryOrders, $unlockedDocuments),
+        ));
+    }
+
+    public function showCreditTotalsAction()
+    {
+        $userId = $this->getUser()->getId();
+        $activeOrderTotal = $this->get('app.order_helper')->getActiveCreditTotal($userId);
+        $usedCreditsTotal = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findTotalUsedCredits($userId);
+
+        return $this->render('order/order_credit_totals.html.twig', array(
+              'activeOrderTotal' => $activeOrderTotal,
+              'usedCreditsTotal' => $usedCreditsTotal,
         ));
     }
 

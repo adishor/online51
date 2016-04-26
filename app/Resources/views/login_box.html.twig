@@ -10,7 +10,7 @@
 {% if app.user %}
     <div class="login-form" id="loginDiv">
         <p class="first text-center text-small">{{ 'login.user-information'|trans }}</p>
-        <h4 class="text-center">{{ 'login.total-credits'|trans }}</h4>
+        <h4 class="text-center">{{ 'total-credits'|trans }}</h4>
         {% if app.user.creditsTotal %}
             <h4 id="totalUserCredits" class="text-center">{{ app.user.creditsTotal }}</h4>
         {% else %}

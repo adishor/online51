@@ -9,7 +9,6 @@
             <li><a href="#documents" id="nav-documents" role="tab" data-toggle="tab">{{ 'order.tab.unlocked-documents'|trans|upper }}</a><span></span></li>
             <li><a href="#usage" id="nav-usage" role="tab" data-toggle="tab">{{ 'order.tab.credit-usage'|trans|upper }}</a><span></span></li>
             <li><a href="#history" id="nav-history" role="tab" data-toggle="tab">{{ 'order.tab.credit-history'|trans|upper }}</a><span></span></li>
-            <li><a href="#sumary" id="nav-sumary" role="tab" data-toggle="tab">{{ 'order.tab.credit-sumary'|trans|upper }}</a><span></span></li>
         </ul>
     </div>
     <div class="col-xs-9">
@@ -23,169 +22,18 @@
                     <li>{{ 'order.tab.unlocked-documents'|trans }}</li>
                     <li>{{ 'order.tab.credit-usage'|trans }}</li>
                     <li>{{ 'order.tab.credit-history'|trans }}</li>
-                    <li>{{ 'order.tab.credit-sumary'|trans }}</li>
                 </ul>
             </div>
             {# active-credits #}
-            <div class="tab-pane" id="active-credits">
-                {% if activeOrders is not empty %}
-                    <h4>{{ 'order.active-subscriptions'|trans }}</h4>
-                    <table class="col-xs-12 table-bordered text-center small">
-                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
-                        <th class="text-center ">{{ 'order.subscription'|trans }}</th>
-                        <th class="text-center ">{{ 'order.domains'|trans }}</th>
-                        <th class="text-center ">{{ 'order.credits'|trans }}</th>
-                        <th class="text-center ">{{ 'order.until'|trans }}</th>
-                        <th class="text-center ">{{ 'order.price'|trans }}</th>
-                            {% for order in activeOrders %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ order.subscription.name }}</td>
-                                <td>
-                                    {% if order.domains is not empty %}
-                                        {% for domain in order.domains %}
-                                            {% if loop.last %}
-                                                {{ domain.name }}
-                                            {% else %}
-                                                {{ domain.name ~ ', ' }}
-                                            {% endif %}    
-                                        {% endfor %}
-                                    {% else %}
-                                        {{ 'order.no-domains'|trans }}
-                                    {% endif%}    
-                                </td>
-                                <td>{{ order.creditValue }}</td>
-                                <td>
-                                    {{ order.endingDate|date('d M Y H:m') }}
-                                </td>
-                                <td>{{ order.price }}</td>
-                            </tr>    
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <h4>{{ 'order.no-active-subscriptions'|trans }}</h4>
-                {% endif %}
-                <div class="row"><hr></div>
-                    {% if bonusOrders is not empty %}
-                    <h4>{{ 'order.bonus-orders'|trans }}</h4>
-                    <table class="col-xs-12 table-bordered text-center small">
-                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
-                        <th class="text-center ">{{ 'order.domains'|trans }}</th>
-                        <th class="text-center ">{{ 'order.credits'|trans }}</th>
-                        <th class="text-center ">{{ 'order.until'|trans }}</th>
-                        <th class="text-center ">{{ 'order.price'|trans }}</th>
-                            {% for order in bonusOrders %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>
-                                    {% if order.domains is not empty %}
-                                        {% for domain in order.domains %}
-                                            {% if loop.last %}
-                                                {{ domain.name }}
-                                            {% else %}
-                                                {{ domain.name ~ ', ' }}
-                                            {% endif %}    
-                                        {% endfor %}
-                                    {% else %}
-                                        {{ 'order.no-domains'|trans }}
-                                    {% endif%}    
-                                </td>
-                                <td>{{ order.creditValue }}</td>
-                                <td>
-                                    {{ order.endingDate|date('d M Y H:i') }}
-                                </td>
-                                <td>{{ order.price }}</td>
-                            </tr>    
-                        {% endfor %}
-                    </table>
-                    <div class="row"><hr></div>
-                    <h5>{{ 'order.total-active-credits'|trans }}: {{ activeOrderTotal }}</h5>
-                {% endif %}
-            </div>    
+            {% include 'order/order_active_credits.html.twig' with { 'activeOrders': activeOrders, 'bonusOrders': bonusOrders } %} 
             {#  pending orders  #}
-            <div class="tab-pane" id="pending">
-                {% for flash_message in app.session.flashbag.get('order-success') %}
-                    <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
-                {% endfor %}
-                {% if pendingOrders is not empty %}
-                    <h4>{{ 'order.pending-orders'|trans }}</h4>
-                    <table class="col-xs-12 table-bordered text-center small">
-                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
-                        <th class="text-center ">{{ 'order.subscription'|trans }}</th>
-                        <th class="text-center ">{{ 'order.domains'|trans }}</th>
-                        <th class="text-center ">{{ 'order.credits'|trans }}</th>
-                        <th class="text-center ">{{ 'order.valability'|trans }}</th>
-                        <th class="text-center ">{{ 'order.price'|trans }}</th>
-                        <th></th>
-                            {% for order in pendingOrders %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ order.subscription.name }}</td>
-                                <td>
-                                    {% if order.domains is not empty %}
-                                        {% for domain in order.domains %}
-                                            {% if loop.last %}
-                                                {{ domain.name }}
-                                            {% else %}
-                                                {{ domain.name ~ ', ' }}
-                                            {% endif %}    
-                                        {% endfor %}
-                                    {% else %}
-                                        {{ 'order.no-domains'|trans }}
-                                    {% endif%}    
-                                </td>
-                                <td>{{ order.creditValue }}</td>
-                                <td>
-                                    {{ order.subscription.valability }}
-                                    {% transchoice order.subscription.valability with {'%year%': 'subscription.year'|trans, '%years%': 'subscription.years'|trans } %}
-                                    {1} %year% |]1,Inf[ %years%
-                                    {% endtranschoice %}
-                                </td>
-                                <td>{{ order.price }}</td>
-                                <td><a href="javascript:;" onclick="removeOrder('{{ path("remove_order", { "orderId" : order.id }) }}','{{ 'order.remove-confirm'|trans }}');">{{ 'order.remove-order'|trans }}</a></td>
-                            </tr>    
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <h4>{{ 'order.no-pending-orders'|trans }}</h4>
-                {% endif %}
-            </div>    
-            {#  unlocked documents  #}
-            <div class="tab-pane" id="documents">
-                {% if unlockedDocuments is not empty %}
-                    <h4>{{ 'order.unlocked-documents'|trans }}</h4>
-                    <table class="col-xs-12 table-bordered text-center small">
-                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
-                        <th class="text-center ">{{ 'order.document'|trans }}</th>
-                        <th class="text-center ">{{ 'order.domain'|trans }}</th>
-                        <th class="text-center ">{{ 'order.subdomain'|trans }}</th>
-                        <th class="text-center ">{{ 'order.until'|trans }}</th>
-                            {% for document in unlockedDocuments %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td><a href="{{ path('sonata_media_download', {'id': documentObjects[document.id]|sonata_urlsafeid }) }}">{{ document.title }}</a></td>
-                                <td>{{ document.domain }}</td>
-                                <td>{{ document.subDomain }}</td>
-                                <td>{{ document.date|date('d M Y H:i') }}</td>
-                            </tr>    
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <h4>{{ 'order.no-unlocked-documents'|trans }}</h4>
-                {% endif %}
-            </div>  
+            {% include 'order/order_pending_orders.html.twig' with { 'pendingOrders': pendingOrders } %} 
+            {#  valid documents  #}
+            {% include 'order/order_valid_documents.html.twig' with { 'validDocuments': validDocuments } %} 
             {#  credit usage  #}
-            <div class="tab-pane" id="usage">
-                usage
-            </div>  
+            {% include 'order/order_credit_usage.html.twig' with { 'unlockedDocuments': unlockedDocuments } %} 
             {#  credit history  #}
-            <div class="tab-pane" id="history">
-                history
-            </div>  
-            {#  credit sumary  #}
-            <div class="tab-pane" id="sumary">
-                sumary
-            </div>  
+            {% include 'order/order_credit_history.html.twig' with { 'creditHistoryItems': creditHistoryItems } %} 
         </div>
     </div>
     <script type="text/javascript">

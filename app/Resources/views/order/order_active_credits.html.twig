@@ -1,0 +1,74 @@
+<div class="tab-pane" id="active-credits">
+    {% if activeOrders is not empty %}
+        <h4>{{ 'order.active-subscriptions'|trans }}</h4>
+        <table class="col-xs-12 table-bordered text-center small">
+            <th class="text-center ">{{ 'order.nr'|trans }}</th>
+            <th class="text-center ">{{ 'order.subscription'|trans }}</th>
+            <th class="text-center ">{{ 'order.domains'|trans }}</th>
+            <th class="text-center ">{{ 'order.credits'|trans }}</th>
+            <th class="text-center ">{{ 'order.until'|trans }}</th>
+            <th class="text-center ">{{ 'order.price'|trans }}</th>
+                {% for order in activeOrders %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ order.subscription.name }}</td>
+                    <td>
+                        {% if order.domains is not empty %}
+                            {% for domain in order.domains %}
+                                {% if loop.last %}
+                                    {{ domain.name }}
+                                {% else %}
+                                    {{ domain.name ~ ', ' }}
+                                {% endif %}    
+                            {% endfor %}
+                        {% else %}
+                            {{ 'order.no-domains'|trans }}
+                        {% endif%}    
+                    </td>
+                    <td>{{ order.creditValue }}</td>
+                    <td>
+                        {{ order.endingDate|date('d M Y H:i') }}
+                    </td>
+                    <td>{{ order.price }}</td>
+                </tr>    
+            {% endfor %}
+        </table>
+        <div class="row"><hr></div>
+        {% else %}
+        <h4>{{ 'order.no-active-subscriptions'|trans }}</h4>
+    {% endif %}
+    {% if bonusOrders is not empty %}
+        <h4>{{ 'order.bonus-orders'|trans }}</h4>
+        <table class="col-xs-12 table-bordered text-center small">
+            <th class="text-center ">{{ 'order.nr'|trans }}</th>
+            <th class="text-center ">{{ 'order.domains'|trans }}</th>
+            <th class="text-center ">{{ 'order.credits'|trans }}</th>
+            <th class="text-center ">{{ 'order.until'|trans }}</th>
+            <th class="text-center ">{{ 'order.price'|trans }}</th>
+                {% for order in bonusOrders %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        {% if order.domains is not empty %}
+                            {% for domain in order.domains %}
+                                {% if loop.last %}
+                                    {{ domain.name }}
+                                {% else %}
+                                    {{ domain.name ~ ', ' }}
+                                {% endif %}    
+                            {% endfor %}
+                        {% else %}
+                            {{ 'order.no-domains'|trans }}
+                        {% endif%}    
+                    </td>
+                    <td>{{ order.creditValue }}</td>
+                    <td>
+                        {{ order.endingDate|date('d M Y H:i') }}
+                    </td>
+                    <td>{{ order.price }}</td>
+                </tr>    
+            {% endfor %}
+        </table>
+        {{ render(controller('AppBundle:Order:showCreditTotals')) }}
+    {% endif %}
+</div>  
