@@ -1780,3 +1780,8 @@ h5.first {
     width: 500px;
     margin: 0 auto;
 }
+
+.domain-description th, 
+.domain-description td {
+    padding: 10px;
+} 
