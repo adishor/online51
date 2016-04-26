@@ -33,14 +33,25 @@ class UserAdmin extends SonataUserAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        parent::configureFormFields($formMapper);
+        // define group zoning
+        $formMapper
+            ->tab('User')
+                ->with('General', array('class' => 'col-md-6'))->end()
+                ->with('Company', array('class' => 'col-md-6'))->end()
+            ->end()
+            ->tab('Security')
+                ->with('Status', array('class' => 'col-md-4'))->end()
+                ->with('Groups', array('class' => 'col-md-4'))->end()
+                ->with('Keys', array('class' => 'col-md-4'))->end()
+                ->with('Roles', array('class' => 'col-md-12'))->end()
+            ->end()
+        ;
 
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         $formMapper
-            ->removeGroup('Profile', 'User')
             ->tab('User')
-            ->with('General', array('class' => 'col-md-6'))
+            ->with('General')
             ->add('username', null, array(
                 'disabled' => $disabled
             ))
@@ -75,7 +86,7 @@ class UserAdmin extends SonataUserAdmin
                 'disabled' => $disabled
             ))
             ->end()
-            ->with('Company', array('class' => 'col-md-6'))
+            ->with('Company')
             ->add('function', 'choice', array(
                 'choices' => array(
                     User::FUNCTION_EXTERN_JOB => 'user.function.extern_job',
@@ -124,7 +135,30 @@ class UserAdmin extends SonataUserAdmin
             ))
             ->end()
             ->end()
-            ->removeGroup('Social', 'User');
+            ->tab('Security')
+                ->with('Status')
+                    ->add('locked', null, array('required' => false))
+                    ->add('expired', null, array('required' => false))
+                    ->add('enabled', null, array('required' => false))
+                    ->add('credentialsExpired', null, array('required' => false))
+                ->end()
+                ->with('Groups')
+                    ->add('groups', 'sonata_type_model', array(
+                        'required' => false,
+                        'expanded' => true,
+                        'multiple' => true,
+                    ))
+                ->end()
+                ->with('Roles')
+                    ->add('realRoles', 'sonata_security_roles', array(
+                        'label'    => 'form.label_roles',
+                        'expanded' => true,
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                ->end()
+            ->end()
+        ;
     }
 
     public function getTemplate($name)
