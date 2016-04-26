@@ -12,8 +12,8 @@ parameters:
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
     sonata.media.provider.file.class: AppBundle\Provider\DocumentProvider
     sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
-    
-    
+
+
 framework:
     #esi:             ~
     translator:      { fallbacks: ["%locale%"] }
@@ -88,6 +88,8 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
+    port:      "%mailer_port%"
+    encryption: "%mailer_encryption%"
     spool:     { type: memory }
 
 sonata_admin:
@@ -173,7 +175,7 @@ sonata_media:
         local:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
-    
+
 vich_uploader:
     db_driver: orm
     mappings:

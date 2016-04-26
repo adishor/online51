@@ -83,8 +83,9 @@ class CreditsUsageRepository extends EntityRepository
           ->setParameter('user', $userId);
 
         $query = $queryBuilder->getQuery();
+        $result = $query->getSingleScalarResult();
 
-        return $query->getSingleScalarResult();
+        return ($result) ? $result : 0;
     }
 
 }
