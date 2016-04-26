@@ -1,18 +1,17 @@
 {% set counter = 0 %}
 {% for subscription in subscriptions %}
-    {% set subscripionNumber = loop.index %}
-    <div class="tab-pane" id="ssm{{ subscripionNumber }}">
+    <div class="tab-pane" id="ssm{{ loop.index }}">
         <div id="{{ subscription.name | upper }}">
-            <form action="{{ path("add_subscription") }}" id="ssm{{ subscripionNumber }}form" method="post">
+            <form action="{{ path("add_subscription") }}" id="ssm{{ loop.index }}form" method="post">
                 <div class="row">
                     <div class="col-xs-9">
                         <h3 class="title">{{ subscription.name }}</h3>
-                        <p class="color-red text-center" id="ssm{{ subscripionNumber }}error" hidden="hidden"></p>
+                        <p class="color-red text-center" id="ssm{{ loop.index }}error" hidden="hidden"></p>
                         <input type="hidden" value="{{ subscription.id }}" name="subscriptionId"/>
                     </div>
                     <div class="col-xs-3">
                         {% if app.user %}
-                            <input id="ssm{{ subscripionNumber }}button" class="costum pull-right" type="button" value="{{ 'subscription.add-to-order'|trans }}" />
+                            <input id="ssm{{ loop.index }}button" class="costum pull-right" type="button" value="{{ 'subscription.add-to-order'|trans }}" />
                         {% endif %}
                     </div>
                 </div>
@@ -67,20 +66,18 @@
                     var cb = $(this);
                             isCheckedx(cb, id, {{ subscription.domainAmount }});
                 });
-                $("#" + "ssm" +    {{ subscripionNumber }} +"button").click(function () {
+                $("#" + "ssm" +    {{ loop.index }} +"button").click(function () {
                     if (!areAllChecked(id, {{ subscription.domainAmount }})){
                     {% if subscription.domainAmount == 1 %}
-                    $("#" + "ssm" + "{{ subscripionNumber }}" + "error").text('{{ "order.error.select-one"|trans }}');
+                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
                     {% else %}
-                    $("#" + "ssm" + "{{ subscripionNumber }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
+                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
                     {% endif %}
-                    $("#" + "ssm" + "{{ subscripionNumber }}" + "error").show();
+                    $("#" + "ssm" + "{{ loop.index }}" + "error").show();
                 }
                 if (areAllChecked(id, {{ subscription.domainAmount }})) {
-                    var awnser = confirm('{{ "order.button.confirm"|trans }}');
-                    if (awnser) {
-                        $("#" + "ssm" + "{{ subscripionNumber }}" + "form").submit();
-                    }
+                    $('#subscriptionAddConfirmModal').modal();
+                    $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
                 }
                 });
             });
@@ -89,11 +86,9 @@
     {% if ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
         <script type="text/javascript">
             $(document).ready(function () {
-                $("#" + "ssm" +    {{ subscripionNumber }} +"button").click(function () {
-                    var awnser = confirm('{{ "order.button.confirm"|trans }}');
-                    if (awnser) {
-                        $("#" + "ssm" + "{{ subscripionNumber }}" + "form").submit();
-                    }
+                $("#" + "ssm" +    {{ loop.index }} +"button").click(function () {
+                    $('#subscriptionAddConfirmModal').modal();
+                    $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
                 });
             });
         </script>

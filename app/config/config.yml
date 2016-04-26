@@ -95,7 +95,7 @@ sonata_admin:
         handler: sonata.admin.security.handler.role
     title: Online51
     options:
-        html5_validate: false
+        html5_validate: true
     templates:
         layout: sonata/layout.html.twig
 

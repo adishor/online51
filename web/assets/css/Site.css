@@ -1775,3 +1775,8 @@ h5.first {
 .text-big li {
     font-size: 18px;
 }
+
+.bs-modal-sm {
+    width: 500px;
+    margin: 0 auto;
+}

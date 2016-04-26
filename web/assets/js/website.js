@@ -363,32 +363,58 @@ function UserLogOut(link) {
 }
 
 function DocumentConfirmPopup(message, path, documentId, downloadPath) {
-    var answer = confirm(message);
-    if (answer)
-        $.ajax({
-            type: "POST",
-            url: path,
-            data: {documentId: documentId},
-            success: function (response) {
-                if (response.success) {
-                    $('#errorOrSuccess' + documentId).text(response.message);
-                    $('#errorOrSuccess' + documentId).show();
-                    $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
-                    $('#totalUserCredits').text(response.credits);
-                }
-            }
-        });
+
+    $('#documentConfirmModalBody').text(message);
+    $('#documentConfirmModal').modal();
+    $('#documentConfirmModalPath').val(path);
+    $('#documentConfirmModalId').val(documentId);
+    $('#documentConfirmModalDownload').val(downloadPath);
 }
+
+$('#documentConfirmModalYes').click(function () {
+    var path = $('#documentConfirmModalPath').val();
+    var documentId = $('#documentConfirmModalId').val();
+    var downloadPath = $('#documentConfirmModalDownload').val();
+    $.ajax({
+        type: "POST",
+        url: path,
+        data: {documentId: documentId},
+        success: function (response) {
+            if (response.success) {
+                window.location.href = downloadPath;
+                $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
+                $('#totalUserCredits').text(response.credits);
+                $('#errorOrSuccess' + documentId).addClass('color-green');
+            } else {
+                $('#errorOrSuccess' + documentId).addClass('color-red');
+            }
+            $('#errorOrSuccess' + documentId).text(response.message);
+            $('#errorOrSuccess' + documentId).show();
+            $('#documentConfirmModal').modal('toggle');
+        }
+    });
+});
+
+$('#subscriptionAddConfirmModalYes').click(function () {
+    var formId = $('#subscriptionAddConfirmModalId').val();
+    $(formId).submit();
+    $('#subscriptionAddConfirmModal').modal('toggle');
+});
+
 function alertNotLoggedIn(message) {
     window.alert(message);
 }
 
-function removeOrder(path, message) {
-    var answer = confirm(message);
-    if (answer) {
-         window.location.href = path;
-    }
+function removeOrder(path) {
+    $('#orderRemoveConfirmModal').modal();
+    $('#orderRemoveConfirmModalPath').val(path);
 }
+
+$('#orderRemoveConfirmModalYes').click(function () {
+    var path = $('#orderRemoveConfirmModalPath').val();
+     window.location.href = path;
+    $('#orderRemoveConfirmModal').modal('toggle');
+});
 
 // Js not currently used.
 //function GetProfile(currentUserId) {

@@ -104,6 +104,8 @@ class OrderHelperService
 
         $this->entityManager->remove($order);
         $this->entityManager->flush();
+        $order->setMentions($this->translator->trans('subscription.canceled'));
+        $this->entityManager->flush();
         $this->session->getFlashBag()->add('order-success', 'success.order-remove');
     }
 

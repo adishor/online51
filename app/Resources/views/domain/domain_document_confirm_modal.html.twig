@@ -1,0 +1,19 @@
+<div class="modal fade bs-modal-sm" id="documentConfirmModal" tabindex="-1" role="dialog" aria-labelledby="documentConfirmModalLabel">
+    <div class="modal-dialog  modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="documentConfirmModalLabel">{{ 'modal.document-confirm.title'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                <p id="documentConfirmModalBody"></p>
+                <input type="hidden" id="documentConfirmModalId">
+                <input type="hidden" id="documentConfirmModalPath">
+                <input type="hidden" id="documentConfirmModalDownload">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.button.no'|trans }}</button>
+                <button type="button" class="btn btn-primary" id="documentConfirmModalYes">{{ 'modal.button.yes'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>

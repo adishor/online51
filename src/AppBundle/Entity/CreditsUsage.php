@@ -164,9 +164,7 @@ class CreditsUsage
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
-        $this->expireDate = new \DateTime();
-        $this->expireDate->add(new \DateInterval('P' . $this->document->getValabilityDays() . 'D'));
-        $this->credit = $this->document->getCreditValue();
+        
     }
 
     /**
