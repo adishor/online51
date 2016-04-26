@@ -108,7 +108,6 @@ domain:
     go-to-contact: ', sau sa luati legatura cu noi prin'
     subscriptions: 'abonament'
     contact: 'formularul de contact.'
-    confirm-unlock: 'Pentru a debloca documentul %title% apasati Ok. Atentie veti consuma %credits% credite!'
     document:
         already-unlocked: 'Documetul este deja deblocat.'
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest document.'
@@ -243,7 +242,6 @@ order:
     no-credit-history: 'Nu aveti activitate la credite.'
     no-domains: 'Fara domenii'
     remove-order: 'Anuleaza comanda!'
-    remove-confirm: 'Sunteti sigur ca doriti sa anulati comanda?'
     tab:
         active-credits: 'Credite active'
         unlocked-documents: 'Documente deblocate'   
@@ -257,7 +255,6 @@ order:
         select-all-domains: 'Va rugam selectati toate domeniile.'
         no-delete: 'Nu se poate sterge aceasta comanda.'
     button:
-        confirm: 'Esti sigur ca vrei sa comanzi acest abonament?'
         subscriptions: 'Inapoi la abonamente'
         cancel: 'Renunta'
     valability-years: 'Valabilitate(Ani):'
@@ -278,6 +275,19 @@ order:
     status: 'Stare'
     active: 'Activ'
     expired: 'Expirat'
+modal:
+    document-confirm:
+        title: 'Confirma deblocare'
+        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% credite!'
+    subscription-add-confirm:
+        title: 'Confirma comanda'
+        body: 'Sunteti sigur ca doriti sa comandati acest abonament?'
+    order-remove-confirm:
+        title: 'Anuleaza comanda'
+        body: 'Sunteti sigur ca doriti sa anulati comanda?'
+    button:
+        yes: 'Da'
+        no: 'Nu'
 total-credits: 'Credite Totale:'
 
 #admin

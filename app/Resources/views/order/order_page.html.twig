@@ -1,5 +1,9 @@
 {% extends "base.html.twig" %}
 
+{% block modal %}
+    {% include 'order/order_remove_confirm_modal.html.twig' %} 
+{% endblock modal %}
+
 {% block ccontainer %}
     <div class="col-xs-3">
         <!-- Nav tabs -->

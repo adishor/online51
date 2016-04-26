@@ -42,6 +42,10 @@ class CreditsUsageController extends Controller
         $creditsUsage->getUser()->setCreditsTotal($creditsUsage->getUser()->getCreditsTotal() - $document->getCreditValue());
         $creditsUsage->getUser()->setLastCreditUpdate(new \DateTime());
         $creditsUsage->setMentions($this->get('translator')->trans('credit-usage.unlocked-by-user'));
+        $expireDate = new \DateTime();
+        $expireDate->add(new \DateInterval('P' . $creditsUsage->getDocument()->getValabilityDays() . 'D'));
+        $creditsUsage->setExpireDate($expireDate);
+        $creditsUsage->setCredit($creditsUsage->getDocument()->getCreditValue());
         $em->persist($creditsUsage);
         $em->flush();
 
