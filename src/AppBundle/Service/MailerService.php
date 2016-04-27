@@ -24,7 +24,7 @@ class MailerService
         $this->emailTitle = $emailTitle;
     }
 
-    public function sendMessage($emailTo, $subject, $body)
+    public function sendMessage($emailTo, $subject, $body, $attachment = null)
     {
         $subject = $this->emailTitle . ' ' . $subject;
         $message = \Swift_Message::newInstance()
@@ -32,6 +32,10 @@ class MailerService
           ->setFrom($this->emailFrom)
           ->setTo($emailTo)
           ->setBody($body, 'text/html');
+        if (null !== $attachment) {
+            $message->attach($attachment);
+        }
+
         $this->mailer->send($message);
     }
 
@@ -94,6 +98,25 @@ class MailerService
           , 'text/html');
 
         $this->sendMessage($user->getEmail(), $this->translator->trans('mail.activate-account.subject'), $confirmationBody);
+    }
+
+    public function sendOrderInvoice($order, $attachment)
+    {
+        $user = $order->getUser();
+        $subscription = ($order->getSubscription()) ? $order->getSubscription()->getName() : null;
+        $orderBody = $this->templating->render('order/order_confirmation_email_body.html.twig', array(
+            'name' => $user->getName(),
+            'number' => $order->getId(),
+            'subscription' => $subscription,
+            'domains' => $order->getDomains(),
+            'domainAmount' => $order->getDomainAmount(),
+            'credits' => $order->getCreditValue(),
+            'endDate' => $order->getEndingDate(),
+            'mentions' => $order->getMentions(),
+          ), 'text/html');
+
+
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.order-confirm.subject'), $orderBody, $attachment);
     }
 
 }

@@ -35,7 +35,9 @@
         "gregwar/captcha-bundle": "1.*",
         "jms/serializer-bundle": "~0.13",
         "sonata-project/media-bundle": "2.3.x-dev",
-        "gedmo/doctrine-extensions": "^2.4"
+        "gedmo/doctrine-extensions": "^2.4",
+        "knplabs/knp-snappy-bundle": "dev-master",
+        "h4cc/wkhtmltopdf-amd64": "0.12.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

@@ -118,7 +118,7 @@ class UserHelperService
         $validBeforeCredits = $orderRepository->findValidUserCredits($userId, $user->getLastCreditUpdate());
         $validNowCredits = $orderRepository->findValidUserCredits($userId);
         if (null !== $userCredits) {
-            $user->setCreditsTotal(min($userCredits, $validBeforeCredits) + ($validNowCredits - $validBeforeCredits));
+            $user->setCreditsTotal(min($userCredits, $validBeforeCredits) + min(0, ($validNowCredits - $validBeforeCredits)));
             $user->setLastCreditUpdate(new \DateTime());
         }
         $this->entityManager->flush();

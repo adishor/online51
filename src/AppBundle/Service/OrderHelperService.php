@@ -67,7 +67,7 @@ class OrderHelperService
         $this->entityManager->flush();
         $this->session->getFlashBag()->add('order-success', 'success.order');
 
-        return true;
+        return $order;
     }
 
     public function getActiveCreditTotal($userId)
