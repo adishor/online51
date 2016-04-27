@@ -113,6 +113,7 @@ class OrderHelperService
     {
         foreach ($unlockedDocuments as $key => $document) {
             $unlockedDocuments[$key]['subject'] = 'order.document';
+            $unlockedDocuments[$key]['orderId'] = '';
             $unlockedDocuments[$key]['sign'] = '-';
         }
 
@@ -134,8 +135,10 @@ class OrderHelperService
         foreach ($allHistoryOrders as $key => $order) {
             if ($order['title'] !== null) {
                 $allHistoryOrders[$key]['subject'] = 'order.subscription';
+                $allHistoryOrders[$key]['orderId'] = $order['id'];
             } else {
                 $allHistoryOrders[$key]['subject'] = 'order.credits';
+                $allHistoryOrders[$key]['orderId'] = '';
             }
             $allHistoryOrders[$key]['sign'] = '+';
         }
@@ -160,6 +163,15 @@ class OrderHelperService
         array_multisort($expireDates, SORT_DESC, $creditHistoryItems);
 
         return $creditHistoryItems;
+    }
+
+    public function getCreditHistory($userId)
+    {
+
+        $unlockedDocuments = $this->addInfoToUnlockedDocuments($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserDocuments($userId));
+        $allHistoryOrders = $this->addInfoToHistoryOrders($this->entityManager->getRepository('AppBundle:Order')->findAllHistoryOrders($userId));
+
+        return $this->prepareCreditHistory($allHistoryOrders, $unlockedDocuments);
     }
 
 }

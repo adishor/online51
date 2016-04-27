@@ -8,6 +8,7 @@
                 <th class="text-center ">{{ 'order.unlocked-at'|trans }}</th>
                 <th class="text-center ">{{ 'order.until'|trans }}</th>
                 <th class="text-center ">{{ 'order.credits'|trans }}</th>
+{#                <th class="text-center ">{{ 'order.order-nr'|trans }}</th>#}
                 <th class="text-center ">{{ 'order.mentions'|trans }}</th>
                 <th class="text-center ">{{ 'order.status'|trans }}</th>
                     {% for item in creditHistoryItems %}
@@ -17,7 +18,13 @@
                         <td>{{ item.unlockDate|date('d M Y H:i') }}</td>
                         <td>{{ item.expireDate|date('d M Y H:i') }}</td>
                         <td>{{ item.sign ~ item.credit }}</td>
-                        <td>{{ item.mentions }}</td>
+{#                        <td>{% if item.orderId != '' %}#{{ "%06d"|format(item.orderId) }}{% endif %}</td>#}
+                        <td>{% if item.mentions != '' %}
+                                {{ item.mentions }}
+                            {% else %}
+                                {{ 'order.no-mentions'|trans }}
+                            {% endif %}
+                            </td>
                         <td>{{ item.status|trans }}</td>
                     </tr>    
                 {% endfor %}

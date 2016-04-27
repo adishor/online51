@@ -18,10 +18,8 @@ class OrderController extends Controller
         $userId = $this->getUser()->getId();
         $orderRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order');
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
-        $orderHelper = $this->get('app.order_helper');
         $this->get('app.user_helper')->updateValidUserCredits();
-        $unlockedDocuments = $orderHelper->addInfoToUnlockedDocuments($creditUsageRepository->findAllUserDocuments($userId));
-        $allHistoryOrders = $orderHelper->addInfoToHistoryOrders($orderRepository->findAllHistoryOrders($userId));
+        $unlockedDocuments = $creditUsageRepository->findAllUserDocuments($userId);
 
         return $this->render('order/order_page.html.twig', array(
               'activeOrders' => $orderRepository->findAllActiveOrders($userId),
@@ -29,8 +27,8 @@ class OrderController extends Controller
               'pendingOrders' => $orderRepository->findAllPendingOrders($userId),
               'validDocuments' => $creditUsageRepository->findAllValidUserDocuments($userId),
               'unlockedDocuments' => $unlockedDocuments,
-              'documentObjects' => $orderHelper->getDocumentObjects($unlockedDocuments),
-              'creditHistoryItems' => $orderHelper->prepareCreditHistory($allHistoryOrders, $unlockedDocuments),
+              'documentObjects' => $this->get('app.order_helper')->getDocumentObjects($unlockedDocuments),
+              'creditHistoryItems' => $this->get('app.order_helper')->getCreditHistory($userId),
         ));
     }
 

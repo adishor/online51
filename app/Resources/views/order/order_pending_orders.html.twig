@@ -4,8 +4,9 @@
     {% endfor %}
     {% if pendingOrders is not empty %}
         <h4>{{ 'order.pending-orders'|trans }}</h4>
-        <table class="col-xs-12 table-bordered text-center small">
+        <table class="col-xs-8 table-bordered text-center small">
             <th class="text-center ">{{ 'order.nr'|trans }}</th>
+            <th class="text-center ">{{ 'order.order-nr'|trans }}</th>
             <th class="text-center ">{{ 'order.subscription'|trans }}</th>
             <th class="text-center ">{{ 'order.domains'|trans }}</th>
             <th class="text-center ">{{ 'order.credits'|trans }}</th>
@@ -15,6 +16,7 @@
                 {% for order in pendingOrders %}
                 <tr>
                     <td>{{ loop.index }}</td>
+                    <td>#{{ "%06d"|format(order.id) }}</td>
                     <td>{{ order.subscription.name }}</td>
                     <td>
                         {% if order.domains is not empty %}

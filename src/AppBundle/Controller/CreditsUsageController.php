@@ -21,7 +21,7 @@ class CreditsUsageController extends Controller
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
-
+        $this->get('app.user_helper')->updateValidUserCredits();
         $documentId = $request->request->get('documentId');
         if (true === $this->get('app.user_helper')->isValidUserDocument($user->getId(), $documentId)) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.document.already-unlocked'));

@@ -178,7 +178,7 @@ success:
     change-info: Informatiile s-au actualizat cu succes!
     reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
     resend-activation: 'Un nou email de activare a fost trimis.'
-    order: 'Comanda s-a efectutat cu succes.'
+    order: 'Comanda s-a efectuat cu succes.'
     order-remove: 'Comanda s-a anulat cu succes.'
 login:
     label: 'Acces abonati'
@@ -259,6 +259,7 @@ order:
         cancel: 'Renunta'
     valability-years: 'Valabilitate(Ani):'
     nr: Numar
+    order-nr: Numar comanda
     subscription: 'Abonament'
     domains: 'Domenii accesibile'
     credits: 'Credite'
@@ -271,6 +272,7 @@ order:
     document: 'Document'
     unlocked-at: 'Deblocat la data'
     mentions: 'Mentiuni'
+    no-mentions: 'Fara mentiuni'
     subject: 'Subiect'
     status: 'Stare'
     active: 'Activ'

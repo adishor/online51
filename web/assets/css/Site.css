@@ -1782,6 +1782,7 @@ h5.first {
 }
 
 .domain-description th, 
-.domain-description td {
+.domain-description td
+{
     padding: 10px;
 } 
