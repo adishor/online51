@@ -77,6 +77,7 @@ class SubDomain
     public function __construct()
     {
         $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->deleted = FALSE;
     }
 
     /**

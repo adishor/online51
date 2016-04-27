@@ -163,7 +163,6 @@ class Order
      */
     private $deletedAt;
 
-
     /**
      * @ORM\PrePersist
      */
@@ -171,11 +170,13 @@ class Order
     {
         $this->createdAt = new \DateTime();
     }
+
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->deleted = FALSE;
         $this->domains = new ArrayCollection();
     }
 
@@ -511,7 +512,6 @@ class Order
         return $this->subscription;
     }
 
-
     /**
      * Add domains
      *
@@ -593,6 +593,7 @@ class Order
 
     public function __toString()
     {
-        return "Order" . " #".$this->getId();
+        return "Order" . " #" . $this->getId();
     }
+
 }

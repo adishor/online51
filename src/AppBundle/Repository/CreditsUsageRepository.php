@@ -25,7 +25,11 @@ class CreditsUsageRepository extends EntityRepository
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
-          ->setParameter('now', new \DateTime);
+          ->setParameter('now', new \DateTime)
+          ->andWhere('d.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('sd.deleted = FALSE')
+          ->andWhere('dom.deleted = FALSE');
         if (null !== $domainId) {
             $queryBuilder->andWhere('sd.domain = :domain')
               ->setParameter('domain', $domainId);
@@ -47,6 +51,8 @@ class CreditsUsageRepository extends EntityRepository
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
+          ->andWhere('d.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE')
           ->orderBy('unlockDate', 'DESC');
 
         $query = $queryBuilder->getQuery();
@@ -66,7 +72,9 @@ class CreditsUsageRepository extends EntityRepository
           ->andWhere('cu.expireDate > :now')
           ->setParameter('now', new \DateTime)
           ->andWhere('d.id = :document')
-          ->setParameter('document', $documentId);
+          ->setParameter('document', $documentId)
+          ->andWhere('d.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
 
@@ -80,6 +88,7 @@ class CreditsUsageRepository extends EntityRepository
           ->select('sum(cu.credit)')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->where('cu.user = :user')
+          ->andWhere('cu.deleted = FALSE')
           ->setParameter('user', $userId);
 
         $query = $queryBuilder->getQuery();

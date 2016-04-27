@@ -17,8 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Domain
 {
-    use ORMBehaviors\Sluggable\Sluggable;
 
+    use ORMBehaviors\Sluggable\Sluggable;
     /**
      *
      * @var integer
@@ -96,12 +96,12 @@ class Domain
      */
     private $deletedAt;
 
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->subdomains = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
+        $this->deleted = FALSE;
     }
-
 
     /**
      * Get id
@@ -281,7 +281,7 @@ class Domain
     public function setSubdomains($subdomains)
     {
         if (count($subdomains) > 0) {
-        foreach ($subdomains as $i) {
+            foreach ($subdomains as $i) {
                 $this->addSubdomain($i);
             }
         }
@@ -375,11 +375,12 @@ class Domain
 
     public function getSluggableFields()
     {
-        return [ 'name' ];
+        return [ 'name'];
     }
 
     public function generateSlugValue($values)
     {
         return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
+
 }

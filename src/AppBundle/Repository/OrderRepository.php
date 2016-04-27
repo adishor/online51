@@ -16,17 +16,19 @@ class OrderRepository extends EntityRepository
     public function findValidUserDomain($userId, $domainId)
     {
         $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('DISTINCT(d.id) as id')
-            ->from('AppBundle:Order', 'o')
-            ->join('o.domains', 'd')
-            ->where('o.active = TRUE')
-            ->andWhere('o.user = :user')
-            ->setParameter('user', $userId)
-            ->andWhere('d.id = :domain')
-            ->setParameter('domain', $domainId)
-            ->andWhere('o.endingDate > :now')
-            ->setParameter('now', new \DateTime);
+          ->createQueryBuilder()
+          ->select('DISTINCT(d.id) as id')
+          ->from('AppBundle:Order', 'o')
+          ->join('o.domains', 'd')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('d.id = :domain')
+          ->setParameter('domain', $domainId)
+          ->andWhere('o.endingDate > :now')
+          ->andWhere('d.deleted = FALSE')
+          ->andWhere('o.deleted = FALSE')
+          ->setParameter('now', new \DateTime);
 
         $query = $queryBuilder->getQuery();
 
@@ -39,17 +41,18 @@ class OrderRepository extends EntityRepository
             $endDate = new \DateTime;
         }
         $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('SUM(o.creditValue)')
-            ->from('AppBundle:Order', 'o')
-            ->where('o.active = TRUE')
-            ->andWhere('o.user = :user')
-            ->setParameter('user', $userId)
-            ->andWhere('o.endingDate > :endDate')
-            ->setParameter('endDate', $endDate);
+          ->createQueryBuilder()
+          ->select('SUM(o.creditValue)')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :endDate')
+          ->setParameter('endDate', $endDate)
+          ->andWhere('o.deleted = FALSE');
         if (null !== $endDate) {
             $queryBuilder->andWhere('o.startDate <= :endDate')
-                ->setParameter('endDate', $endDate);
+              ->setParameter('endDate', $endDate);
         }
 
         $query = $queryBuilder->getQuery();
@@ -60,15 +63,16 @@ class OrderRepository extends EntityRepository
     public function findAllActiveOrders($userId)
     {
         $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o')
-            ->from('AppBundle:Order', 'o')
-            ->where('o.active = TRUE')
-            ->andWhere('o.user = :user')
-            ->setParameter('user', $userId)
-            ->andWhere('o.endingDate > :now')
-            ->andWhere('o.subscription is not NULL')
-            ->setParameter('now', new \DateTime);
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :now')
+          ->andWhere('o.subscription is not NULL')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('o.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
 
@@ -78,15 +82,16 @@ class OrderRepository extends EntityRepository
     public function findAllBonusOrders($userId)
     {
         $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o')
-            ->from('AppBundle:Order', 'o')
-            ->where('o.active = TRUE')
-            ->andWhere('o.user = :user')
-            ->setParameter('user', $userId)
-            ->andWhere('o.endingDate > :now')
-            ->andWhere('o.subscription is NULL')
-            ->setParameter('now', new \DateTime);
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :now')
+          ->andWhere('o.subscription is NULL')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('o.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
 
@@ -96,13 +101,14 @@ class OrderRepository extends EntityRepository
     public function findAllPendingOrders($userId)
     {
         $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o')
-            ->from('AppBundle:Order', 'o')
-            ->where('o.active = FALSE')
-            ->andWhere('o.user = :user')
-            ->andWhere('o.subscription IS NOT NULL')
-            ->setParameter('user', $userId);
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = FALSE')
+          ->andWhere('o.user = :user')
+          ->andWhere('o.subscription IS NOT NULL')
+          ->setParameter('user', $userId)
+          ->andWhere('o.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
 
@@ -112,13 +118,14 @@ class OrderRepository extends EntityRepository
     public function findAllHistoryOrders($userId)
     {
         $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o.id, s.name as title, o.mentions, o.startDate as unlockDate, o.creditValue as credit, o.endingDate as expireDate')
-            ->from('AppBundle:Order', 'o')
-            ->leftjoin('o.subscription', 's')
-            ->where('o.active = TRUE')
-            ->andWhere('o.user = :user')
-            ->setParameter('user', $userId);
+          ->createQueryBuilder()
+          ->select('o.id, s.name as title, o.mentions, o.startDate as unlockDate, o.creditValue as credit, o.endingDate as expireDate')
+          ->from('AppBundle:Order', 'o')
+          ->leftjoin('o.subscription', 's')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
 

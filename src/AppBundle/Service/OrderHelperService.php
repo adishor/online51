@@ -62,6 +62,7 @@ class OrderHelperService
         $order->setDomainAmount($subscription->getDomainAmount());
         $order->setMentions($this->translator->trans('subscription.bought'));
         $order->setActive(false);
+        $order->setFirstActive(false);
         $this->entityManager->persist($order);
         $this->entityManager->flush();
         $this->session->getFlashBag()->add('order-success', 'success.order');
@@ -93,7 +94,7 @@ class OrderHelperService
     {
         $user = $this->tokenStorage->getToken()->getUser();
         $order = $this->entityManager->getRepository('AppBundle:Order')->find($orderId);
-        if (null === $order) {
+        if ((null === $order) || ($order->getDeleted())) {
 
             throw new NotFoundHttpException();
         }
