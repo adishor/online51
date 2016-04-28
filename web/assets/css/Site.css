@@ -1782,7 +1782,9 @@ h5.first {
 }
 
 .domain-description th, 
-.domain-description td
+.domain-description td,
+.field-validation-error
 {
     padding: 10px;
+
 } 

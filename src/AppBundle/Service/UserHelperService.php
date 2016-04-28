@@ -4,10 +4,13 @@ namespace AppBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Application\Sonata\UserBundle\Entity\User;
+use AppBundle\Entity\CreditsUsage;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class UserHelperService
 {
@@ -16,14 +19,16 @@ class UserHelperService
     protected $authorizationChecker;
     protected $tokenStorage;
     protected $session;
+    protected $translator;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage, Session $session)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage, Session $session, TranslatorInterface $translator)
     {
         $this->entityManager = $entityManager;
         $this->encoderFactory = $encoderFactory;
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenStorage = $tokenStorage;
         $this->session = $session;
+        $this->translator = $translator;
     }
 
     public function addUserToDatabase($data)
@@ -139,6 +144,33 @@ class UserHelperService
         $this->session->getFlashBag()->add('change-password-error', 'form.valid.old-password');
 
         return false;
+    }
+
+    public function unlockDocument($user, $documentId)
+    {
+        if (true === $this->isValidUserDocument($user->getId(), $documentId)) {
+            throw new AccessDeniedHttpException($this->translator->trans('domain.document.already-unlocked'));
+        }
+        $document = $this->entityManager->getRepository('ApplicationSonataMediaBundle:Media')->find($documentId);
+
+        if (($user->getCreditsTotal() - $document->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
+            $response = new Response(json_encode(array('success' => false, 'message' => $this->translator->trans('domain.document.no-credits'))));
+
+            return $response;
+        }
+
+        $creditsUsage = new CreditsUsage();
+        $creditsUsage->setUser($user);
+        $creditsUsage->setDocument($document);
+        $user->setCreditsTotal($user->getCreditsTotal() - $document->getCreditValue());
+        $user->setLastCreditUpdate(new \DateTime());
+        $creditsUsage->setMentions($this->translator->trans('credit-usage.unlocked-by-user'));
+        $expireDate = new \DateTime();
+        $expireDate->add(new \DateInterval('P' . $creditsUsage->getDocument()->getValabilityDays() . 'D'));
+        $creditsUsage->setExpireDate($expireDate);
+        $creditsUsage->setCredit($document->getCreditValue());
+        $this->entityManager->persist($creditsUsage);
+        $this->entityManager->flush();
     }
 
 }

@@ -30,6 +30,7 @@
 /web/js/
 /web/css/
 /web/images/
+/web/invoice/
 
 # Assets managed by Bower
 /web/assets/vendor/

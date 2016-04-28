@@ -92,6 +92,11 @@ class CreditsUsage
      */
     private $deletedAt;
 
+    public function __construct()
+    {
+        $this->deleted = FALSE;
+    }
+
     /**
      * Get id
      *

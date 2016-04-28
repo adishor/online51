@@ -40,10 +40,11 @@ class UserDownloadStrategy implements DownloadStrategyInterface
         }
         $user = $this->tokenStorage->getToken()->getUser();
         if ($this->userHelper->getIsUserException($user->getId())) {
+
             return true;
         }
-        $validDocuments = $this->userHelper->getValidUserDocuments($user->getId());
-        if (!isset($validDocuments[$media->getId()])) {
+        if (!$this->userHelper->isValidUserDocument($user->getId(), $media->getId())) {
+
             throw new AccessDeniedHttpException();
         }
 
