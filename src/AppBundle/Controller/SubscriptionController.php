@@ -13,7 +13,7 @@ class SubscriptionController extends Controller
     public function showAction()
     {
         $subscriptions = $this->getDoctrine()->getManager()
-            ->getRepository('AppBundle:Subscription')->findAll();
+            ->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false));
 
         return $this->render('subscription/show.html.twig', array(
               'subscriptions' => $subscriptions

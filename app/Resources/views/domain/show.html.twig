@@ -34,7 +34,9 @@
                                             {% if validDocuments[document.id] is defined or isUserException %}
                                                 <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
                                                 </br>
+                                                {% if not isUserException %}
                                                 <span >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]|date('d M Y H:i') }) }}</span>            
+                                                {% endif %}
                                             {% else %}
                                                 <a id="downloadLink{{document.id}}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
                                                             '{{ 'modal.document-confirm.body'|trans({'%title%': document.title, '%credits%': document.creditValue }) }}',

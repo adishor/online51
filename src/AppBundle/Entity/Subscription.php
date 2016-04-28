@@ -121,9 +121,10 @@ class Subscription
      */
     private $deletedAt;
 
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->domains = new ArrayCollection();
+        $this->deleted = FALSE;
     }
 
     /**
@@ -408,7 +409,6 @@ class Subscription
     {
         return $this->deletedAt;
     }
-
 
     public function __toString()
     {

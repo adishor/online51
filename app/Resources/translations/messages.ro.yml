@@ -125,6 +125,7 @@ subscription:
     no_subscription: 'Fara abonament'
     bought: 'Abonament achizitionat de utilizator.'
     add-to-order: 'Adaugati la comanda'
+    canceled: 'Anulata de utilizator'
 curency: ' RON'
 user:
     function:
