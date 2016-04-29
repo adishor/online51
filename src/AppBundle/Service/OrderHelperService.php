@@ -31,9 +31,11 @@ class OrderHelperService
         $order = new Order();
 
         $subscription = $this->entityManager->getRepository('AppBundle:Subscription')->find($subscriptionId);
-        if (count($subscription->getDomains()) === $subscription->getDomainAmount()) {
+        if ($this->getTotalValidDomains($subscription) === $subscription->getDomainAmount()) {
             foreach ($subscription->getDomains() as $domain) {
-                $order->addDomain($domain);
+                if (!$domain->getDeleted()) {
+                    $order->addDomain($domain);
+                }
             }
         } else {
             if (null === $domains) {
@@ -155,10 +157,7 @@ class OrderHelperService
         foreach ($creditHistoryItems as $key => $value) {
             $expireDates[$key] = $value['unlockDate'];
             if ($now > $value['expireDate']) {
-                $creditHistoryItems[$key]['status'] = 'order.expired';
                 $creditHistoryItems[$key]['sign'] = '*';
-            } else {
-                $creditHistoryItems[$key]['status'] = 'order.active';
             }
         }
         array_multisort($expireDates, SORT_DESC, $creditHistoryItems);
@@ -173,6 +172,18 @@ class OrderHelperService
         $allHistoryOrders = $this->addInfoToHistoryOrders($this->entityManager->getRepository('AppBundle:Order')->findAllHistoryOrders($userId));
 
         return $this->prepareCreditHistory($allHistoryOrders, $unlockedDocuments);
+    }
+
+    public function getTotalValidDomains($subscription)
+    {
+        $validDomains = 0;
+        foreach ($subscription->getDomains() as $domain) {
+            if (!$domain->getDeleted()) {
+                $validDomains++;
+            }
+        }
+
+        return $validDomains;
     }
 
 }

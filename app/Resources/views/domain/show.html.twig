@@ -9,7 +9,9 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs clearfix" role="tablist">
             {% for subdomain in domain.subdomains %}
-                <li><a href="#ssm{{ loop.index0 }}" role="tab" data-toggle="tab">{{ subdomain.name | upper }}</a><span></span></li>
+                {% if not subdomain.deleted %}
+                    <li><a href="#ssm{{ loop.index0 }}" role="tab" data-toggle="tab">{{ subdomain.name | upper }}</a><span></span></li>
+                        {% endif %}
                     {% endfor %}
         </ul>
     </div>
@@ -21,34 +23,44 @@
                 {{ domain.description | raw }}
             </div>
             {% for subdomain in domain.subdomains %}
-                <div class="tab-pane" id="ssm{{ loop.index0 }}">
-                    <h3>{{ subdomain.name | upper }}</h3>
-                    {{ subdomain.description | raw }}
-                    {% if app.user %}
-                        {% if isValid or isUserException %}
-                            {% if subdomain.documents is not empty %}
-                                <h4>{{ 'domain.documents' | trans }}</h4>
-                                <ul>
-                                    {% for document in subdomain.documents %}
-                                        <li>
-                                            {% if validDocuments[document.id] is defined or isUserException %}
-                                                <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
-                                                </br>
-                                                {% if not isUserException %}
-                                                <span >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]|date('d M Y H:i') }) }}</span>            
-                                                {% endif %}
-                                            {% else %}
-                                                <a id="downloadLink{{document.id}}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
-                                                            '{{ 'modal.document-confirm.body'|trans({'%title%': document.title, '%credits%': document.creditValue }) }}',
-                                                            '{{ path('unlock_document') }}',
-                                                            {{ document.id }},
-                                                            '{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}'
-                                                            );">{{ document.title }}</a>
-                                                </br>
-                                                <span id="errorOrSuccess{{document.id}}" hidden="hidden"></span>            
+                {% if not subdomain.deleted %}
+                    <div class="tab-pane" id="ssm{{ loop.index0 }}">
+                        <h3>{{ subdomain.name | upper }}</h3>
+                        {{ subdomain.description | raw }}
+                        {% if app.user %}
+                            {% if isValid or isUserException %}
+                                {% set subdomainEmpty = TRUE %}
+                                {% for document in subdomain.documents %}
+                                    {% if not document.deleted %}
+                                        {% set subdomainEmpty = FALSE %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if not subdomainEmpty %}
+                                    <h4>{{ 'domain.documents' | trans }}</h4>
+                                    <ul>
+                                        {% for document in subdomain.documents %}
+                                            {% if not document.deleted %}
+                                                <li>
+                                                    {% if validDocuments[document.id] is defined or isUserException %}
+                                                        <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
+                                                        </br>
+                                                        {% if not isUserException %}
+                                                            <span >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]|date('d M Y H:i') }) }}</span>            
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a id="downloadLink{{document.id}}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
+                                                                        '{{ 'modal.document-confirm.body'|trans({'%title%': document.title, '%credits%': document.creditValue }) }}',
+                                                                        '{{ path('unlock_document') }}',
+                                                           {{ document.id }},
+                                                                           '{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}'
+                                                                           );">{{ document.title }}</a>
+                                                        </br>
+                                                        <span id="errorOrSuccess{{document.id}}" hidden="hidden"></span>            
+                                                    {% endif %}
+                                                </li>
                                             {% endif %}
-                                        </li>
-                                    {% endfor %}
+                                        {% endfor %}
+                                    </ul>    
                                 {% endif %}
                             {% else %}
                                 <br/>
@@ -62,20 +74,20 @@
                                     </div>
                                 </div>
                             {% endif %}
-                        </ul>
-                    {% elseif not app.user %}
-                        <br/>
-                        <br/>
-                        <div class="panel">
-                            <div class="panel-body">
-                                <p>
-                                    {{ 'domain.not-logged-in'|trans }}<br />
-                                    {{ 'please-login'|trans }}<br />
-                                </p>
+                        {% elseif not app.user %}
+                            <br/>
+                            <br/>
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <p>
+                                        {{ 'domain.not-logged-in'|trans }}<br />
+                                        {{ 'please-login'|trans }}<br />
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
-                </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

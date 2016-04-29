@@ -1,5 +1,11 @@
 {% set counter = 0 %}
 {% for subscription in subscriptions %}
+    {% set validDomainsCount = 0 %}
+    {% for domain in subscription.domains %}
+        {% if not domain.deleted %}
+            {% set validDomainsCount = validDomainsCount + 1 %}
+        {% endif %}
+    {% endfor%}
     <div class="tab-pane" id="ssm{{ loop.index }}">
         <div id="{{ subscription.name | upper }}">
             <form action="{{ path("add_subscription") }}" id="ssm{{ loop.index }}form" method="post">
@@ -17,15 +23,17 @@
                 </div>
                 <p>{{ subscription.intro | raw }}</p>
                 <div class="selecting-checkbox" id="{{ subscription.name | lower | replace({' ':'_'}) }}">
-                    {% if subscription.domains | length > 1 %}
+                    {% if validDomainsCount > 1 %}
                         {% for domain in subscription.domains %}
-                            {% set checked = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "checked='checked'" : "" %}
-                            {% set disabled = ((subscription.domainAmount == subscription.domains | length) and subscription.domainAmount != 1) ? "disabled" : "" %}
-                            <p>
-                                <input {{ checked }} {{ disabled }} type="checkbox" class="css-checkbox" id="checkbox{{ counter }}" name="domains[{{domain.id}}]" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
-                                <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> {{ 'subscription.choose-one-type'|trans }}</span>
-                            </p>
-                            {% set counter = counter + 1 %}
+                            {% if not domain.deleted %}
+                                {% set checked = ((subscription.domainAmount == validDomainsCount) and subscription.domainAmount != 1) ? "checked='checked'" : "" %}
+                                {% set disabled = ((subscription.domainAmount == validDomainsCount) and subscription.domainAmount != 1) ? "disabled" : "" %}
+                                <p>
+                                    <input {{ checked }} {{ disabled }} type="checkbox" class="css-checkbox" id="checkbox{{ counter }}" name="domains[{{domain.id}}]" /><label class="css-label" for="checkbox{{ counter }}"></label>{{ domain.name }} - {{ domain.baseline }}
+                                    <span class="pop"><i class="fa fa-exclamation-triangle yellow"></i> {{ 'subscription.choose-one-type'|trans }}</span>
+                                </p>
+                                {% set counter = counter + 1 %}
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 </div>
@@ -58,7 +66,7 @@
             </form>
         </div>
     </div>
-    {% if not ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
+    {% if not ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
         <script type="text/javascript">
             $(document).ready(function () {
                 var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
@@ -66,27 +74,27 @@
                     var cb = $(this);
                             isCheckedx(cb, id, {{ subscription.domainAmount }});
                 });
-                $("#" + "ssm" +    {{ loop.index }} +"button").click(function () {
-                    if (!areAllChecked(id, {{ subscription.domainAmount }})){
-                    {% if subscription.domainAmount == 1 %}
-                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
-                    {% else %}
-                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
-                    {% endif %}
-                    $("#" + "ssm" + "{{ loop.index }}" + "error").show();
-                }
-                if (areAllChecked(id, {{ subscription.domainAmount }})) {
-                    $('#subscriptionAddConfirmModal').modal();
-                    $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
-                }
-                });
-            });
+                $("#" + "ssm" +     {{ loop.index }} + "button").click(function () {
+                if (!areAllChecked(id, {{ subscription.domainAmount }})){
+            {% if subscription.domainAmount == 1 %}
+                            $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
+            {% else %}
+                            $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
+            {% endif %}
+                            $("#" + "ssm" + "{{ loop.index }}" + "error").show();
+                            }
+                            if (areAllChecked(id, {{ subscription.domainAmount }})) {
+                            $('#subscriptionAddConfirmModal').modal();
+                            $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
+                            }
+                        });
+                        });
         </script>
     {% endif %}
-    {% if ((subscription.domainAmount == 1) and (subscription.domains | length == 1)) %}
+    {% if ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
         <script type="text/javascript">
-            $(document).ready(function () {
-                $("#" + "ssm" +    {{ loop.index }} +"button").click(function () {
+                    $(document).ready(function () {
+                $("#" + "ssm" +     {{ loop.index }} +"button").click(function () {
                     $('#subscriptionAddConfirmModal').modal();
                     $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
                 });

@@ -56,3 +56,8 @@ services:
     app.media.security.user_strategy:
         class:     AppBundle\Security\Sonata\UserDownloadStrategy
         arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user_helper]
+    app.validator.different_email:
+        class: AppBundle\Validator\Constraints\DifferentEmailValidator
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            - { name: validator.constraint_validator, alias: DifferentEmail }
