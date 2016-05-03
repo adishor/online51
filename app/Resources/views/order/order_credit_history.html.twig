@@ -13,8 +13,8 @@
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ item.subject|trans }}: {{ item.title|trans }}</td>
-                        <td>{{ item.unlockDate|date('d M Y H:i') }}</td>
-                        <td>{{ item.expireDate|date('d M Y H:i') }}</td>
+                        <td>{{ item.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
+                        <td>{{ item.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                         <td>{{ item.sign ~ item.credit }}</td>
                         <td>{% if item.mentions != '' %}
                                 {{ item.mentions }}

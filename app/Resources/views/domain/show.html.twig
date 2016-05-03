@@ -45,7 +45,7 @@
                                                         <a href="{{ path('sonata_media_download', {'id': document|sonata_urlsafeid }) }}">{{ document.title }}</a>
                                                         </br>
                                                         {% if not isUserException %}
-                                                            <span >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]|date('d M Y H:i') }) }}</span>            
+                                                            <span >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</span>            
                                                         {% endif %}
                                                     {% else %}
                                                         <a id="downloadLink{{document.id}}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
