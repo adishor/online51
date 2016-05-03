@@ -236,6 +236,11 @@ class User extends BaseUser
     protected $approvedSubscriptions;
 
     /**
+     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Order", mappedBy="lastModifiedBy")
+     */
+    protected $modifiedSubscriptions;
+
+    /**
      *
      * @ORM\OneToMany(targetEntity="\AppBundle\Entity\CreditsUsage", mappedBy="user")
      */
@@ -780,5 +785,38 @@ class User extends BaseUser
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+    /**
+     * Add modifiedSubscriptions
+     *
+     * @param \AppBundle\Entity\Order $modifiedSubscriptions
+     * @return User
+     */
+    public function addModifiedSubscription(\AppBundle\Entity\Order $modifiedSubscriptions)
+    {
+        $this->modifiedSubscriptions[] = $modifiedSubscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove modifiedSubscriptions
+     *
+     * @param \AppBundle\Entity\Order $modifiedSubscriptions
+     */
+    public function removeModifiedSubscription(\AppBundle\Entity\Order $modifiedSubscriptions)
+    {
+        $this->modifiedSubscriptions->removeElement($modifiedSubscriptions);
+    }
+
+    /**
+     * Get modifiedSubscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getModifiedSubscriptions()
+    {
+        return $this->modifiedSubscriptions;
     }
 }

@@ -73,7 +73,7 @@ class OrderRepository extends EntityRepository
           ->andWhere('o.subscription is not NULL')
           ->setParameter('now', new \DateTime)
           ->andWhere('o.deleted = FALSE')
-          ->orderBy('o.id', 'DESC');
+          ->orderBy('o.startDate', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
@@ -93,7 +93,7 @@ class OrderRepository extends EntityRepository
           ->andWhere('o.subscription is NULL')
           ->setParameter('now', new \DateTime)
           ->andWhere('o.deleted = FALSE')
-          ->orderBy('o.id', 'DESC');
+          ->orderBy('o.startDate', 'DESC');
 
         $query = $queryBuilder->getQuery();
 

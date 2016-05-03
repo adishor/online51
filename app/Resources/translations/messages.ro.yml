@@ -171,6 +171,11 @@ mail:
         valability: 'Valabile pana in %date%.'
         other-info: 'Alte informatii:'
         subject: 'Comanda procesata!'
+    pending-order-remove:
+        name: 'Buna %name%,'
+        message: 'Comanda cu numarul %number% a fost anulata.'
+        other-info: 'Alte informatii:'
+        subject: 'Comanda anulata!'
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -249,6 +254,9 @@ order:
     total-expired-credits: 'Total credite expirate'
     credits-expired: 'expirate'
     credits-bonus: 'suplimantare'
+    removed-by-administrator: 'Comanda anulata de administrator.'
+    modified-by-administrator: 'Comanda modificata de administrator.'
+    approved-by-administrator: 'Comanda aprobata de administrator.'
     tab:
         active-credits: 'Credite active'
         unlocked-documents: 'Documente deblocate'   
@@ -298,6 +306,7 @@ modal:
         yes: 'Da'
         no: 'Nu'
 total-credits: 'Credite Totale:'
+
 
 #admin
 admin_label:

@@ -96,4 +96,16 @@ class MailerService
         $this->sendMessage($user->getEmail(), $this->translator->trans('mail.activate-account.subject'), $confirmationBody);
     }
 
+    public function sendPendingOrderRemoveMessage($order)
+    {
+        $user = $order->getUser();
+        $removePendingOrderBody = $this->templating->render('order/pending_order_remove_email_body.html.twig', array(
+            'name' => $user->getName(),
+            'number' => $order->getId(),
+            'mentions' => $order->getMentions(),
+          ), 'text/html');
+
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.pending-order-remove.subject'), $removePendingOrderBody);
+    }
+
 }
