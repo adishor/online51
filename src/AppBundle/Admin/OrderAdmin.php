@@ -18,7 +18,7 @@ class OrderAdmin extends Admin
     {
         $disabled = ($this->getSubject()->getDeleted() ||
                     ($this->getSubject()->getFirstActive())) ? TRUE : FALSE;
-        $disabledActive = ($this->getSubject()->getDeleted() === true) ? TRUE : FALSE;
+        $disabledActive = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
         $disabledUser = ($this->getSubject()->getId()) ? TRUE : FALSE;
 
         $queryUser = $this->modelManager

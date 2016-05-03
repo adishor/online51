@@ -60,7 +60,7 @@ class OrderRepository extends EntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function findAllActiveOrders($userId)
+    public function findAllActiveUserOrders($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -72,14 +72,15 @@ class OrderRepository extends EntityRepository
           ->andWhere('o.endingDate > :now')
           ->andWhere('o.subscription is not NULL')
           ->setParameter('now', new \DateTime)
-          ->andWhere('o.deleted = FALSE');
+          ->andWhere('o.deleted = FALSE')
+          ->orderBy('o.id', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
         return $query->getResult();
     }
 
-    public function findAllBonusOrders($userId)
+    public function findAllActiveBonusUserOrders($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -91,6 +92,41 @@ class OrderRepository extends EntityRepository
           ->andWhere('o.endingDate > :now')
           ->andWhere('o.subscription is NULL')
           ->setParameter('now', new \DateTime)
+          ->andWhere('o.deleted = FALSE')
+          ->orderBy('o.id', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllUserOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.subscription is not NULL')
+          ->andWhere('o.deleted = FALSE');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllBonusUserOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.subscription is NULL')
           ->andWhere('o.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
@@ -104,11 +140,12 @@ class OrderRepository extends EntityRepository
           ->createQueryBuilder()
           ->select('o')
           ->from('AppBundle:Order', 'o')
-          ->where('o.active = FALSE')
+          ->where('o.firstActive = FALSE')
           ->andWhere('o.user = :user')
           ->andWhere('o.subscription IS NOT NULL')
           ->setParameter('user', $userId)
-          ->andWhere('o.deleted = FALSE');
+          ->andWhere('o.deleted = FALSE')
+          ->orderBy('o.id', 'DESC');
 
         $query = $queryBuilder->getQuery();
 

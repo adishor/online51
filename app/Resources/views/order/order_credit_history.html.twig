@@ -12,7 +12,7 @@
                     {% for item in creditHistoryItems %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ item.subject|trans }}: {{ item.title }}</td>
+                        <td>{{ item.subject|trans }}: {{ item.title|trans }}</td>
                         <td>{{ item.unlockDate|date('d M Y H:i') }}</td>
                         <td>{{ item.expireDate|date('d M Y H:i') }}</td>
                         <td>{{ item.sign ~ item.credit }}</td>

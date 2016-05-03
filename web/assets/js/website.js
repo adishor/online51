@@ -264,7 +264,7 @@ function ValidateEmail(email) {
     return re.test(email);
 }
 
-function GoLogin(url, home) {
+function GoLogin(url, home, admin) {
     $("#validUser").show();
     $("#validPass").show();
     $("#LoginUserName").valid();
@@ -277,7 +277,11 @@ function GoLogin(url, home) {
             dataType: 'json',
             success: function (response) {
                 if (response.success) {
-                    window.location.href = home;
+                    if (response.admin) {
+                        window.location.href = admin;
+                    } else {
+                        window.location.href = home;
+                    }
                 } else {
                     if (response.message === "User account is disabled.") {
                         $("#resendActivationEmailDiv").show();
@@ -414,7 +418,7 @@ function removeOrder(path) {
 
 $('#orderRemoveConfirmModalYes').click(function () {
     var path = $('#orderRemoveConfirmModalPath').val();
-     window.location.href = path;
+    window.location.href = path;
     $('#orderRemoveConfirmModal').modal('toggle');
 });
 

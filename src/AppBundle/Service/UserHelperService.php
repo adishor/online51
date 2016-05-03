@@ -123,8 +123,13 @@ class UserHelperService
         $validBeforeCredits = $orderRepository->findValidUserCredits($userId, $user->getLastCreditUpdate());
         $validNowCredits = $orderRepository->findValidUserCredits($userId);
         if (null !== $userCredits) {
-            $user->setCreditsTotal(min($userCredits, $validBeforeCredits) + ($validNowCredits - $validBeforeCredits));
+
+            $updatedCredits = min($userCredits, $validBeforeCredits) + ($validNowCredits - $validBeforeCredits);
+            $user->setCreditsTotal($updatedCredits);
             $user->setLastCreditUpdate(new \DateTime());
+            if ($userCredits > $updatedCredits) {
+                $this->createExpiredCreditUsage($user, $userCredits - $updatedCredits);
+            }
         }
         $this->entityManager->flush();
     }
@@ -169,8 +174,29 @@ class UserHelperService
         $expireDate->add(new \DateInterval('P' . $creditsUsage->getDocument()->getValabilityDays() . 'D'));
         $creditsUsage->setExpireDate($expireDate);
         $creditsUsage->setCredit($document->getCreditValue());
+        $creditsUsage->setUsageType(CreditsUsage::TYPE_DOCUMENT);
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
+    }
+
+    public function createExpiredCreditUsage($user, $credit)
+    {
+
+        $creditsUsage = new CreditsUsage();
+        $creditsUsage->setUser($user);
+        $user->setLastCreditUpdate(new \DateTime());
+        $creditsUsage->setMentions($this->translator->trans('credit-usage.expired'));
+        $expireDate = new \DateTime();
+        $creditsUsage->setExpireDate($expireDate);
+        $creditsUsage->setCredit($credit);
+        $creditsUsage->setUsageType(CreditsUsage::TYPE_EXPIRED);
+        $this->entityManager->persist($creditsUsage);
+        $this->entityManager->flush();
+    }
+
+    public function isUserAdmin()
+    {
+        return $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
     }
 
 }

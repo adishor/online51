@@ -260,27 +260,11 @@ class UserAdmin extends SonataUserAdmin
         $object->setDeleted(false);
     }
 
-//    public function preUpdate($object)
-//    {
-//        var_dump(1);
-//        die;
-//        $object->setUsernameCanonical($object->getUsernameCanonical() . $object->getCreatedAt()->format('Y-m-d H:i:s'));
-//        $object->setEmailCanonical($object->getEmailCanonical() . $object->getCreatedAt()->format('Y-m-d H:i:s'));
-//    }
-//
-//    public function postUpdate($object)
-//    {
-//        var_dump(2);
-//        die;
-//        $object->setUsernameCanonical($object->getUsernameCanonical() . $object->getCreatedAt()->format('Y-m-d H:i:s'));
-//        $object->setEmailCanonical($object->getEmailCanonical() . $object->getCreatedAt()->format('Y-m-d H:i:s'));
-//    }
-
     public function postRemove($object)
     {
         $object->setLocked(true);
-        $object->setUsernameCanonical($object->getUsernameCanonical() . $object->getCreatedAt()->format('Y-m-d H:i:s'));
-        $object->setEmailCanonical($object->getEmailCanonical() . $object->getCreatedAt()->format('Y-m-d H:i:s'));
+        $object->setUsername($object->getUsername() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
+        $object->setEmail($object->getEmail() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
         $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
         $em->flush();
     }
