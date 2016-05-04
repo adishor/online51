@@ -110,6 +110,14 @@ class Order
     private $mentions;
 
     /**
+     * @var \Application\Sonata\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", inversedBy="modifiedSubscriptions")
+     * @ORM\JoinColumn(name="last_modified_user_id", referencedColumnName="id")
+     */
+    private $lastModifiedBy;
+
+    /**
      *
      * @var \DateTime
      *
@@ -596,4 +604,27 @@ class Order
         return "Order" . " #" . $this->getId();
     }
 
+
+    /**
+     * Set lastModifiedBy
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $lastModifiedBy
+     * @return Order
+     */
+    public function setLastModifiedBy(\Application\Sonata\UserBundle\Entity\User $lastModifiedBy = null)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get lastModifiedBy
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User 
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
 }

@@ -31,9 +31,11 @@ class OrderHelperService
         $order = new Order();
 
         $subscription = $this->entityManager->getRepository('AppBundle:Subscription')->find($subscriptionId);
-        if (count($subscription->getDomains()) === $subscription->getDomainAmount()) {
+        if ($this->getTotalValidDomains($subscription) === $subscription->getDomainAmount()) {
             foreach ($subscription->getDomains() as $domain) {
-                $order->addDomain($domain);
+                if (!$domain->getDeleted()) {
+                    $order->addDomain($domain);
+                }
             }
         } else {
             if (null === $domains) {
@@ -73,8 +75,28 @@ class OrderHelperService
     public function getActiveCreditTotal($userId)
     {
         $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
-        $activeOrders = $orderRepository->findAllActiveOrders($userId);
-        $bonusOrders = $orderRepository->findAllBonusOrders($userId);
+        $activeOrders = $orderRepository->findAllActiveUserOrders($userId);
+        $bonusOrders = $orderRepository->findAllActiveBonusUserOrders($userId);
+        $sum = 0;
+        if (null !== $activeOrders) {
+            foreach ($activeOrders as $order) {
+                $sum += $order->getCreditValue();
+            }
+        }
+        if (null !== $bonusOrders) {
+            foreach ($bonusOrders as $order) {
+                $sum += $order->getCreditValue();
+            }
+        }
+
+        return $sum;
+    }
+
+    public function getCreditTotal($userId)
+    {
+        $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
+        $activeOrders = $orderRepository->findAllUserOrders($userId);
+        $bonusOrders = $orderRepository->findAllBonusUserOrders($userId);
         $sum = 0;
         if (null !== $activeOrders) {
             foreach ($activeOrders as $order) {
@@ -140,6 +162,7 @@ class OrderHelperService
             } else {
                 $allHistoryOrders[$key]['subject'] = 'order.credits';
                 $allHistoryOrders[$key]['orderId'] = '';
+                $allHistoryOrders[$key]['title'] = 'order.credits-bonus';
             }
             $allHistoryOrders[$key]['sign'] = '+';
         }
@@ -147,19 +170,23 @@ class OrderHelperService
         return $allHistoryOrders;
     }
 
-    public function prepareCreditHistory($allHistoryOrders, $unlockedDocuments)
+    public function addInfoToExpiredCredits($allExpiredCredits)
     {
-        $creditHistoryItems = array_merge($allHistoryOrders, $unlockedDocuments);
+        foreach ($allExpiredCredits as $key => $credit) {
+            $allExpiredCredits[$key]['subject'] = 'order.credits';
+            $allExpiredCredits[$key]['title'] = 'order.credits-expired';
+            $allExpiredCredits[$key]['sign'] = '-';
+        }
+
+        return $allExpiredCredits;
+    }
+
+    public function prepareCreditHistory($allHistoryOrders, $unlockedDocuments, $allExpiredCredits)
+    {
+        $creditHistoryItems = array_merge($allHistoryOrders, $unlockedDocuments, $allExpiredCredits);
         $expireDates = [];
-        $now = new \DateTime;
         foreach ($creditHistoryItems as $key => $value) {
             $expireDates[$key] = $value['unlockDate'];
-            if ($now > $value['expireDate']) {
-                $creditHistoryItems[$key]['status'] = 'order.expired';
-                $creditHistoryItems[$key]['sign'] = '*';
-            } else {
-                $creditHistoryItems[$key]['status'] = 'order.active';
-            }
         }
         array_multisort($expireDates, SORT_DESC, $creditHistoryItems);
 
@@ -171,8 +198,21 @@ class OrderHelperService
 
         $unlockedDocuments = $this->addInfoToUnlockedDocuments($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserDocuments($userId));
         $allHistoryOrders = $this->addInfoToHistoryOrders($this->entityManager->getRepository('AppBundle:Order')->findAllHistoryOrders($userId));
+        $allExpiredCredits = $this->addInfoToExpiredCredits($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserExpiredCredit($userId));
 
-        return $this->prepareCreditHistory($allHistoryOrders, $unlockedDocuments);
+        return $this->prepareCreditHistory($allHistoryOrders, $unlockedDocuments, $allExpiredCredits);
+    }
+
+    public function getTotalValidDomains($subscription)
+    {
+        $validDomains = 0;
+        foreach ($subscription->getDomains() as $domain) {
+            if (!$domain->getDeleted()) {
+                $validDomains++;
+            }
+        }
+
+        return $validDomains;
     }
 
 }

@@ -112,7 +112,7 @@ domain:
         already-unlocked: 'Documetul este deja deblocat.'
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest document.'
         success: 'Document deblocat cu succes.'
-        available-until: 'Documentul este deblocat pana la data %date%'
+        available-until: 'Documentul este deblocat pana la data de %date%'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -167,10 +167,15 @@ mail:
         subscription: 'Abonamentul %subscription% a fost alocat contului tau!'
         domain: 'Ai acces la urmatorul domeniu:'
         domains: 'Ai acces la urmatoarele domenii:'
-        credits: 'Ai %credits% credite.'
-        valability: 'Valabile pana in %date%'
+        credits: 'Ai %credits% credite,'
+        valability: 'Valabile pana in %date%.'
         other-info: 'Alte informatii:'
         subject: 'Comanda procesata!'
+    pending-order-remove:
+        name: 'Buna %name%,'
+        message: 'Comanda cu numarul %number% a fost anulata.'
+        other-info: 'Alte informatii:'
+        subject: 'Comanda anulata!'
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -192,6 +197,7 @@ login:
     failed: 'User sau parola invalida!'
     close-password: 'Inchide resetare parola.'
     credit-status: 'Situatie credite'
+    administration: 'Administrare'
     button:
         login: 'Login'
         register: 'Inregistrare'
@@ -217,6 +223,7 @@ change-info:
     back: Inapoi
 credit-usage:
     unlocked-by-user: 'Document deblocat de utilizator'
+    expired: 'Credite expirate.'
 register-success:
     title: 'Succes!'
     success: 'V-ati inregistrat cu succes!'
@@ -229,7 +236,8 @@ order:
     active-subscriptions: 'Aveti urmatoarele abonamente active:'
     active-subscription: 'Aveti urmatorul abonament activ:'
     no-active-subscriptions: 'Nu aveti abonamente active.'
-    total-active-credits: 'Total credite primite'
+    total-credits: 'Total credite primite'
+    total-active-credits: 'Total credite active'
     pending-orders: 'Aveti urmatoarele comenzi in asteptare:'
     pending-order: 'Aveti urmatoarea comanda in asteptare:'
     no-pending-orders: 'Nu aveti comenzi in asteptare.'
@@ -243,6 +251,12 @@ order:
     no-credit-history: 'Nu aveti activitate la credite.'
     no-domains: 'Fara domenii'
     remove-order: 'Anuleaza comanda!'
+    total-expired-credits: 'Total credite expirate'
+    credits-expired: 'expirate'
+    credits-bonus: 'suplimantare'
+    removed-by-administrator: 'Comanda anulata de administrator.'
+    modified-by-administrator: 'Comanda modificata de administrator.'
+    approved-by-administrator: 'Comanda aprobata de administrator.'
     tab:
         active-credits: 'Credite active'
         unlocked-documents: 'Documente deblocate'   
@@ -292,6 +306,7 @@ modal:
         yes: 'Da'
         no: 'Nu'
 total-credits: 'Credite Totale:'
+
 
 #admin
 admin_label:

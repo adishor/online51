@@ -13,9 +13,9 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ document.mentions }}</td>
                     <td>{{ document.title }}</td>
-                    <td>{{ document.unlockDate|date('d M Y H:i') }}</td>
+                    <td>{{ document.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                     <td>{{ document.credit }}</td>
-                    <td>{{ document.expireDate|date('d M Y H:i') }}</td>
+                    <td>{{ document.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                 </tr>    
             {% endfor %}
         </table>

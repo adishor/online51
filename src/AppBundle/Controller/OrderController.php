@@ -23,8 +23,8 @@ class OrderController extends Controller
         $unlockedDocuments = $creditUsageRepository->findAllUserDocuments($userId);
 
         return $this->render('order/order_page.html.twig', array(
-              'activeOrders' => $orderRepository->findAllActiveOrders($userId),
-              'bonusOrders' => $orderRepository->findAllBonusOrders($userId),
+              'activeOrders' => $orderRepository->findAllActiveUserOrders($userId),
+              'bonusOrders' => $orderRepository->findAllActiveBonusUserOrders($userId),
               'pendingOrders' => $orderRepository->findAllPendingOrders($userId),
               'validDocuments' => $creditUsageRepository->findAllValidUserDocuments($userId),
               'unlockedDocuments' => $unlockedDocuments,
@@ -36,12 +36,15 @@ class OrderController extends Controller
     public function showCreditTotalsAction()
     {
         $userId = $this->getUser()->getId();
-        $activeOrderTotal = $this->get('app.order_helper')->getActiveCreditTotal($userId);
-        $usedCreditsTotal = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findTotalUsedCredits($userId);
+        $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
+        $orderTotal = $this->get('app.order_helper')->getCreditTotal($userId);
+        $usedCreditsTotal = $creditUsageRepository->findTotalUsedCredits($userId);
+        $expiredCreditsTotal = $creditUsageRepository->findTotalExpiredCredits($userId);
 
         return $this->render('order/order_credit_totals.html.twig', array(
-              'activeOrderTotal' => $activeOrderTotal,
+              'orderTotal' => $orderTotal,
               'usedCreditsTotal' => $usedCreditsTotal,
+              'expiredCreditsTotal' => $expiredCreditsTotal,
         ));
     }
 

@@ -45,7 +45,7 @@ services:
         arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%]
     app.user_helper:
         class:     AppBundle\Service\UserHelperService
-        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session]
+        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session, @translator]
     app.order_helper:
         class:     AppBundle\Service\OrderHelperService
         arguments: [@doctrine.orm.entity_manager, @translator,  @security.token_storage, @session]
@@ -56,3 +56,8 @@ services:
     app.media.security.user_strategy:
         class:     AppBundle\Security\Sonata\UserDownloadStrategy
         arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user_helper]
+    app.validator.different_email:
+        class: AppBundle\Validator\Constraints\DifferentEmailValidator
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            - { name: validator.constraint_validator, alias: DifferentEmail }

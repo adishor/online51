@@ -93,7 +93,7 @@ class DomainAdmin extends Admin
         $filter->add('name')
             ->add('subdomains')
             ->add('subscriptions')
-            ->add('deleted');
+            ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     public function configureListFields(ListMapper $list)

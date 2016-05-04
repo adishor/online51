@@ -25,11 +25,11 @@
                             {% endfor %}
                         {% else %}
                             {{ 'order.no-domains'|trans }}
-                        {% endif%}    
+                        {% endif%} 
                     </td>
                     <td>{{ order.creditValue }}</td>
                     <td>
-                        {{ order.endingDate|date('d M Y H:i') }}
+                        {{ order.endingDate| localizeddate('medium', 'short', app.request.locale ) }}
                     </td>
                     <td>{{ order.price }}</td>
                 </tr>    
@@ -43,6 +43,7 @@
         <h4>{{ 'order.bonus-orders'|trans }}</h4>
         <table class="col-xs-12 table-bordered text-center small">
             <th class="text-center ">{{ 'order.nr'|trans }}</th>
+            <th class="text-center ">{{ 'order.order-nr'|trans }}</th>
             <th class="text-center ">{{ 'order.domains'|trans }}</th>
             <th class="text-center ">{{ 'order.credits'|trans }}</th>
             <th class="text-center ">{{ 'order.until'|trans }}</th>
@@ -50,6 +51,7 @@
                 {% for order in bonusOrders %}
                 <tr>
                     <td>{{ loop.index }}</td>
+                    <td>#{{ "%06d"|format(order.id) }}</td>
                     <td>
                         {% if order.domains is not empty %}
                             {% for domain in order.domains %}
@@ -61,16 +63,16 @@
                             {% endfor %}
                         {% else %}
                             {{ 'order.no-domains'|trans }}
-                        {% endif%}    
+                        {% endif%}
                     </td>
                     <td>{{ order.creditValue }}</td>
                     <td>
-                        {{ order.endingDate|date('d M Y H:i') }}
+                        {{ order.endingDate| localizeddate('medium', 'short', app.request.locale ) }}
                     </td>
                     <td>{{ order.price }}</td>
                 </tr>    
             {% endfor %}
         </table>
-        {{ render(controller('AppBundle:Order:showCreditTotals')) }}
     {% endif %}
+    {{ render(controller('AppBundle:Order:showCreditTotals')) }}
 </div>  

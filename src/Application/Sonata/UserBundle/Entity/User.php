@@ -34,7 +34,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity()
  * @Vich\Uploadable
- * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration", "ChangeInfo", "AdminRegistration", "AdminProfile"})
+ * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class User extends BaseUser
@@ -234,6 +234,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Order", mappedBy="approvedBy")
      */
     protected $approvedSubscriptions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Order", mappedBy="lastModifiedBy")
+     */
+    protected $modifiedSubscriptions;
 
     /**
      *
@@ -780,5 +785,38 @@ class User extends BaseUser
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+    /**
+     * Add modifiedSubscriptions
+     *
+     * @param \AppBundle\Entity\Order $modifiedSubscriptions
+     * @return User
+     */
+    public function addModifiedSubscription(\AppBundle\Entity\Order $modifiedSubscriptions)
+    {
+        $this->modifiedSubscriptions[] = $modifiedSubscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove modifiedSubscriptions
+     *
+     * @param \AppBundle\Entity\Order $modifiedSubscriptions
+     */
+    public function removeModifiedSubscription(\AppBundle\Entity\Order $modifiedSubscriptions)
+    {
+        $this->modifiedSubscriptions->removeElement($modifiedSubscriptions);
+    }
+
+    /**
+     * Get modifiedSubscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getModifiedSubscriptions()
+    {
+        return $this->modifiedSubscriptions;
     }
 }

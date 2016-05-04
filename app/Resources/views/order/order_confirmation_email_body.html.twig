@@ -26,7 +26,7 @@
         {{ 'mail.order-confirm.credits'|trans({"%credits%" : credits}) }}
     </p>
     <p>
-        {{ 'mail.order-confirm.valability'|trans({"%date%" : endDate|date('d/m/Y H:i')}) }}
+        {{ 'mail.order-confirm.valability'|trans({"%date%" : endDate| localizeddate('medium', 'short', app.request.locale ) }) }}
     </p>
     {% if mentions is defined %}
         <p>

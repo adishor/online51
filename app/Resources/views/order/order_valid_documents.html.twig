@@ -13,7 +13,7 @@
                     <td><a href="{{ path('sonata_media_download', {'id': documentObjects[document.id]|sonata_urlsafeid }) }}">{{ document.title }}</a></td>
                     <td>{{ document.domain }}</td>
                     <td>{{ document.subDomain }}</td>
-                    <td>{{ document.date|date('d M Y H:i') }}</td>
+                    <td>{{ document.date| localizeddate('medium', 'short', app.request.locale ) }}</td>
                 </tr>    
             {% endfor %}
         </table>

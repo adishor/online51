@@ -17,6 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CreditsUsage
 {
+    const TYPE_DOCUMENT = 'document';
+    const TYPE_EXPIRED = 'expired';
+
     /**
      *
      * @var integer
@@ -91,6 +94,14 @@ class CreditsUsage
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     *
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     */
+    protected $usageType;
 
     public function __construct()
     {
@@ -313,6 +324,30 @@ class CreditsUsage
 
     public function __toString()
     {
-        return "Credit Usage" . " #".$this->getId();
+        return "Credit Usage" . " #" . $this->getId();
     }
+
+    /**
+     * Set usageType
+     *
+     * @param string $usageType
+     * @return CreditsUsage
+     */
+    public function setUsageType($usageType)
+    {
+        $this->usageType = $usageType;
+
+        return $this;
+    }
+
+    /**
+     * Get usageType
+     *
+     * @return string
+     */
+    public function getUsageType()
+    {
+        return $this->usageType;
+    }
+
 }
