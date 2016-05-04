@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
+use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 
 class CreditsUsageAdmin extends Admin
 {
@@ -58,7 +59,7 @@ class CreditsUsageAdmin extends Admin
             ->add('credit')
             ->add('createdAt')
             ->add('expireDate')
-            ->add('deleted', 'checkbox');
+            ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     protected function configureListFields(ListMapper $list)

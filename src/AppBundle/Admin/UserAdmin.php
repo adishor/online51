@@ -231,7 +231,9 @@ class UserAdmin extends SonataUserAdmin
     {
         parent::configureDatagridFilters($filterMapper);
 
-        $filterMapper->add('deleted');
+        $filterMapper->add('deleted', null, array(), null, array('choices_as_values' => true))
+          ->remove('locked')
+          ->remove('id');
     }
 
     protected function configureListFields(\Sonata\AdminBundle\Datagrid\ListMapper $listMapper)

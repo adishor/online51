@@ -20,7 +20,7 @@ class MediaAdmin extends SonataMediaAdmin
             ->add('creditValue')
             ->add('valabilityDays')
             ->add('subdomain')
-            ->add('deleted');
+            ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     protected function configureListFields(ListMapper $list)

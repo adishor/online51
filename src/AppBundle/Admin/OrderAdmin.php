@@ -88,9 +88,9 @@ class OrderAdmin extends Admin
     {
         $filter->add('user')
           ->add('subscription')
-          ->add('active')
+          ->add('active', null, array(), null, array('choices_as_values' => true))
           ->add('domains')
-          ->add('deleted');
+          ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     protected function configureListFields(ListMapper $list)

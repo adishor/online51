@@ -69,7 +69,7 @@ class SubscriptionAdmin extends Admin
     {
         $filter->add('name')
                 ->add('domains')
-                ->add('deleted');
+                ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     public function configureListFields(ListMapper $list)
