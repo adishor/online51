@@ -29,97 +29,96 @@ class DomainAdmin extends Admin
 
         //get all subdomains that are not associated
         $noDomainSubdomains = $this->modelManager
-                ->getEntityManager('AppBundle:SubDomain')
-                ->createQueryBuilder()
-                ->select('s')
-                ->from('AppBundle:SubDomain', 's')
-                ->where('s.domain is NULL')
-                ->andWhere('s.deleted = 0')
-                ->getQuery()
-                ->getResult();
+          ->getEntityManager('AppBundle:SubDomain')
+          ->createQueryBuilder()
+          ->select('s')
+          ->from('AppBundle:SubDomain', 's')
+          ->where('s.domain is NULL')
+          ->andWhere('s.deleted = 0')
+          ->getQuery()
+          ->getResult();
         $choices['No Domain'] = $noDomainSubdomains;
 
         $subdomainsOptions = array(
-                'expanded' => false,
-                'multiple' => true,
-                'by_reference' => false,
-                'required' => false,
-                'class' => 'AppBundle:SubDomain',
-                'choices' => $choices,
-                'disabled' => $disabled
-            );
+            'expanded' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'required' => false,
+            'class' => 'AppBundle:SubDomain',
+            'choices' => $choices,
+            'disabled' => $disabled
+        );
 
         $querySubscription = $this->modelManager
-                ->getEntityManager('AppBundle:Subscription')
-                ->createQueryBuilder()
-                ->select('s')
-                ->from('AppBundle:Subscription', 's')
-                ->where('s.deleted = 0');
+          ->getEntityManager('AppBundle:Subscription')
+          ->createQueryBuilder()
+          ->select('s')
+          ->from('AppBundle:Subscription', 's')
+          ->where('s.deleted = 0');
 
         $subscriptionsOptions = array(
-                'query' => $querySubscription,
-                'expanded' => false,
-                'multiple' => true,
-                'by_reference' => false,
-                'required' => false,
-                'disabled' => $disabled
-            );
+            'query' => $querySubscription,
+            'expanded' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'required' => false,
+            'disabled' => $disabled
+        );
 
         if ($this->getSubject()->getDeleted()) {
             $subscriptionsOptions['btn_add'] = FALSE;
         }
 
         $form->add('name', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('baseline', null, array(
-                'required' => false,
-                'disabled' => $disabled
-            ))
-            ->add('description', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml',
-                'required' => false,
-                'disabled' => $disabled
-            ))
-            ->add('dedicated', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('subdomains', 'entity', $subdomainsOptions)
-            ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions);
+              'disabled' => $disabled
+          ))
+          ->add('baseline', null, array(
+              'required' => false,
+              'disabled' => $disabled
+          ))
+          ->add('description', 'sonata_simple_formatter_type', array(
+              'format' => 'richhtml',
+              'required' => false,
+              'disabled' => $disabled
+          ))
+          ->add('dedicated', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('subdomains', 'entity', $subdomainsOptions)
+          ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions);
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name')
-            ->add('subdomains')
-            ->add('subscriptions')
-            ->add('deleted', null, array(), null, array('choices_as_values' => true));
+          ->add('subdomains')
+          ->add('subscriptions')
+          ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     public function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name')
-            ->add('dedicated')
-            ->add('subdomains')
-            ->add('subscriptions')
-            ->add('deleted');
+          ->add('dedicated')
+          ->add('subdomains')
+          ->add('subscriptions')
+          ->add('deleted');
     }
 
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name')
-            ->add('baseline')
-            ->add('description', 'html')
-            ->add('dedicated')
-            ->add('subdomains')
-            ->add('subscriptions')
-            ->add('deleted')
-            ->add('deletedAt');
+          ->add('baseline')
+          ->add('description', 'html')
+          ->add('dedicated')
+          ->add('subdomains')
+          ->add('subscriptions')
+          ->add('deleted')
+          ->add('deletedAt');
     }
 
     public function prePersist($object)
     {
-        $object->setDeleted(false);
         $this->preUpdate($object);
     }
 
@@ -140,7 +139,7 @@ class DomainAdmin extends Admin
         $parameters = parent::getFilterParameters();
 
         if (!array_key_exists("deleted", $parameters)) {
-            $parameters['deleted'] = array (
+            $parameters['deleted'] = array(
                 'type' => EqualType::TYPE_IS_EQUAL,
                 'value' => BooleanType::TYPE_NO
             );
@@ -156,4 +155,5 @@ class DomainAdmin extends Admin
         }
         return parent::getTemplate($name);
     }
+
 }

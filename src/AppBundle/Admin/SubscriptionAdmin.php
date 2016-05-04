@@ -13,16 +13,17 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class SubscriptionAdmin extends Admin
 {
+
     public function configureFormFields(FormMapper $form)
     {
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         $queryDomain = $this->modelManager
-                ->getEntityManager('AppBundle:Domain')
-                ->createQueryBuilder()
-                ->select('d')
-                ->from('AppBundle:Domain', 'd')
-                ->where('d.deleted = 0');
+          ->getEntityManager('AppBundle:Domain')
+          ->createQueryBuilder()
+          ->select('d')
+          ->from('AppBundle:Domain', 'd')
+          ->where('d.deleted = 0');
 
         $domainOptions = array(
             'query' => $queryDomain,
@@ -38,63 +39,63 @@ class SubscriptionAdmin extends Admin
         }
 
         $form->add('name', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('intro', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml',
-                'required' => false,
-                'disabled' => $disabled
-            ))
-            ->add('description', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml',
-                'required' => false,
-                'disabled' => $disabled
-            ))
-            ->add('price', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('credit', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('valability', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('domainAmount', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('domains', 'sonata_type_model', $domainOptions);
+              'disabled' => $disabled
+          ))
+          ->add('intro', 'sonata_simple_formatter_type', array(
+              'format' => 'richhtml',
+              'required' => false,
+              'disabled' => $disabled
+          ))
+          ->add('description', 'sonata_simple_formatter_type', array(
+              'format' => 'richhtml',
+              'required' => false,
+              'disabled' => $disabled
+          ))
+          ->add('price', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('credit', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('valability', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('domainAmount', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('domains', 'sonata_type_model', $domainOptions);
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name')
-                ->add('domains')
-                ->add('deleted', null, array(), null, array('choices_as_values' => true));
+          ->add('domains')
+          ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     public function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name')
-            ->add('price')
-            ->add('credit')
-            ->add('valability')
-            ->add('domainAmount')
-            ->add('domains')
-            ->add('deleted');
+          ->add('price')
+          ->add('credit')
+          ->add('valability')
+          ->add('domainAmount')
+          ->add('domains')
+          ->add('deleted');
     }
 
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name')
-            ->add('intro', 'html')
-            ->add('description', 'html')
-            ->add('price')
-            ->add('credit')
-            ->add('valability')
-            ->add('domainAmount')
-            ->add('domains')
-            ->add('deleted')
-            ->add('deletedAt');
+          ->add('intro', 'html')
+          ->add('description', 'html')
+          ->add('price')
+          ->add('credit')
+          ->add('valability')
+          ->add('domainAmount')
+          ->add('domains')
+          ->add('deleted')
+          ->add('deletedAt');
     }
 
     public function getFilterParameters()
@@ -102,18 +103,13 @@ class SubscriptionAdmin extends Admin
         $parameters = parent::getFilterParameters();
 
         if (!array_key_exists("deleted", $parameters)) {
-            $parameters['deleted'] = array (
+            $parameters['deleted'] = array(
                 'type' => EqualType::TYPE_IS_EQUAL,
                 'value' => BooleanType::TYPE_NO
             );
         }
 
         return $parameters;
-    }
-
-    public function prePersist($object)
-    {
-        $object->setDeleted(false);
     }
 
     public function getTemplate($name)
@@ -123,4 +119,5 @@ class SubscriptionAdmin extends Admin
         }
         return parent::getTemplate($name);
     }
+
 }

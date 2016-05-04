@@ -322,11 +322,6 @@ class CreditsUsage
         $this->createdAt = new \DateTime();
     }
 
-    public function __toString()
-    {
-        return "Credit Usage" . " #" . $this->getId();
-    }
-
     /**
      * Set usageType
      *
@@ -348,6 +343,11 @@ class CreditsUsage
     public function getUsageType()
     {
         return $this->usageType;
+    }
+
+    public function __toString()
+    {
+        return ($this->getId() ? "Credit Usage" . " #" . $this->getId() : 'Create new');
     }
 
 }

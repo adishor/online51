@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SubscriptionController extends Controller
 {
+
     /**
      * @Route("/subscriptions", name="subscriptions")
      */
@@ -19,4 +20,5 @@ class SubscriptionController extends Controller
               'subscriptions' => $subscriptions
         ));
     }
+
 }

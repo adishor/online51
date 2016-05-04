@@ -240,7 +240,7 @@ class SubDomain
 
     public function __toString()
     {
-        return $this->name;
+        return ($this->getId() ? $this->getName() : 'Create new');
     }
 
 }

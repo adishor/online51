@@ -15,33 +15,33 @@ class MediaAdmin extends SonataMediaAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('title')
-            ->add('name')
-            ->add('creditValue')
-            ->add('valabilityDays')
-            ->add('subdomain')
-            ->add('deleted', null, array(), null, array('choices_as_values' => true));
+          ->add('title')
+          ->add('name')
+          ->add('creditValue')
+          ->add('valabilityDays')
+          ->add('subdomain')
+          ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     protected function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('title')
-            ->add('name')
-            ->add('creditValue')
-            ->add('valabilityDays')
-            ->add('subdomain')
-            ->add('deleted');
+          ->add('name')
+          ->add('creditValue')
+          ->add('valabilityDays')
+          ->add('subdomain')
+          ->add('deleted');
     }
 
     protected function configureShowFields(ShowMapper $show)
     {
         $show->add('title')
-            ->add('name')
-            ->add('creditValue')
-            ->add('valabilityDays')
-            ->add('subdomain')
-            ->add('deleted')
-            ->add('deletedAt');
+          ->add('name')
+          ->add('creditValue')
+          ->add('valabilityDays')
+          ->add('subdomain')
+          ->add('deleted')
+          ->add('deletedAt');
     }
 
     public function getFilterParameters()
@@ -49,18 +49,13 @@ class MediaAdmin extends SonataMediaAdmin
         $parameters = parent::getFilterParameters();
 
         if (!array_key_exists("deleted", $parameters)) {
-            $parameters['deleted'] = array (
+            $parameters['deleted'] = array(
                 'type' => EqualType::TYPE_IS_EQUAL,
                 'value' => BooleanType::TYPE_NO
             );
         }
 
         return $parameters;
-    }
-
-    public function prePersist($object)
-    {
-        $object->setDeleted(false);
     }
 
     public function getTemplate($name)
@@ -70,4 +65,5 @@ class MediaAdmin extends SonataMediaAdmin
         }
         return parent::getTemplate($name);
     }
+
 }
