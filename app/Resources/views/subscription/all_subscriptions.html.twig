@@ -16,7 +16,7 @@
                         <input type="hidden" value="{{ subscription.id }}" name="subscriptionId"/>
                     </div>
                     <div class="col-xs-3">
-                        {% if app.user %}
+                        {% if app.user and not isUserException %}
                             <input id="ssm{{ loop.index }}button" class="costum pull-right" type="button" value="{{ 'subscription.add-to-order'|trans }}" />
                         {% endif %}
                     </div>
@@ -59,6 +59,14 @@
                             <p>
                                 {{ 'subscription.not-logged-in'|trans }}<br />
                                 {{ 'please-login'|trans }}<br />
+                            </p>
+                        </div>
+                    </div>
+                {% elseif isUserException %}
+                    <div class="panel">
+                        <div class="panel-body">
+                            <p>
+                                {{ 'subscription.superadmin'|trans }}<br />
                             </p>
                         </div>
                     </div>

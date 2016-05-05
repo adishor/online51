@@ -126,6 +126,7 @@ subscription:
     bought: 'Abonament achizitionat de utilizator.'
     add-to-order: 'Adaugati la comanda'
     canceled: 'Anulata de utilizator'
+    superadmin: 'Sunteti logat cu un cont de superadministrator.'
 curency: ' RON'
 user:
     function:
@@ -253,7 +254,7 @@ order:
     remove-order: 'Anuleaza comanda!'
     total-expired-credits: 'Total credite expirate'
     credits-expired: 'expirate'
-    credits-bonus: 'suplimantare'
+    credits-bonus: 'suplimentare'
     removed-by-administrator: 'Comanda anulata de administrator.'
     modified-by-administrator: 'Comanda modificata de administrator.'
     approved-by-administrator: 'Comanda aprobata de administrator.'

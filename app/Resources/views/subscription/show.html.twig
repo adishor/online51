@@ -19,7 +19,7 @@
             {% for flash_message in app.session.flashbag.get('order-error') %}
                 <h5 class="color-red text-center first" >{{ flash_message|trans }}</h5>
             {% endfor %}
-            {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions } %}
+            {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions, 'isUserException' : isUserException } %}
             <script type="text/javascript">
                 jQuery(window).load(function () {
                     jQuery(".tab-pane-menu").first().parent().addClass("active");

@@ -39,7 +39,7 @@
                         {% endtranschoice %}
                     </td>
                     <td>{{ order.price }}</td>
-                    <td><a href="javascript:;" onclick="removeOrder('{{ path("remove_order", { "orderId" : order.id }) }}', '{{ 'order.remove-confirm'|trans }}');">{{ 'order.remove-order'|trans }}</a></td>
+                    <td><a href="javascript:;" onclick="removeOrder('{{ path("remove_order", { "orderId" : order.id }) }}');">{{ 'order.remove-order'|trans }}</a></td>
                 </tr>    
             {% endfor %}
         </table>
