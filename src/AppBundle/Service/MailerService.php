@@ -118,11 +118,8 @@ class MailerService
             'order' => $order,
             'billingData' => $billingData,
         ));
-//        echo $invoiceBody;
-//        die;
         $this->snappyPdf->generateFromHtml($invoiceBody, $invoicePath);
         $attachment = Swift_Attachment::fromPath($invoicePath)->setFilename($invoiceFilename);
-
 
         $orderBody = $this->templating->render('order/order_invoice_email_body.html.twig', array(
             'name' => $user->getName(),
