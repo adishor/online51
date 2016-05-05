@@ -34,7 +34,7 @@
                     <td>{{ order.creditValue }}</td>
                     <td>
                         {{ order.subscription.valability }}
-                        {% transchoice order.subscription.valability with {'%year%': 'subscription.year'|trans, '%years%': 'subscription.years'|trans } %}
+                        {% transchoice order.subscription.valability with {'%year%': 'year'|trans, '%years%': 'years'|trans } %}
                         {1} %year% |]1,Inf[ %years%
                         {% endtranschoice %}
                     </td>

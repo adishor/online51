@@ -25,3 +25,18 @@ parameters:
     email_title: null
     # link valid {reset_password_hours} hours
     reset_password_hours: 48
+    # path to store invoices
+    invoice_dir: "%kernel.root_dir%/web/invoice/"
+    invoice_name: proforma
+
+    billing_data:
+        name: 'Aldex S.R.L.'
+        registration_number: 'J26/1500/1991'
+        company_code: '2533824'
+        address: 'Targu Mures, Str. Tineretului nr. 2, jud. Mures'
+        iban: 'RO00 0000 0000 0000 0000 0000'
+        bank: 'Targu Mures Bank'
+        social_capital: '200 RON'
+        VAT_percent: '20%'
+        invoice_series: 'ALD'
+        VAT: 0.2

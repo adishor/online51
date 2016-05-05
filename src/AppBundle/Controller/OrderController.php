@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Swift_Attachment;
+
 
 class OrderController extends Controller
 {
@@ -55,18 +55,11 @@ class OrderController extends Controller
     {
         $post = $request->request;
         if ($post->has('subscriptionId')) {
-            $order = $this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $post->get('domains'));
-            if (!$order) {
+            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $post->get('domains'))) {
 
                 return $this->redirectToRoute('subscriptions');
             }
         }
-        $this->get('knp_snappy.pdf')->generateFromHtml(
-          $this->renderView('order/order_invoice_template.html.twig'), $this->getParameter('invoice_path')
-        );
-        $attachment = Swift_Attachment::fromPath($this->getParameter('invoice_path'))->setFilename('proforma.pdf');
-        $this->get('app.mailer')->sendOrderInvoice($order, $attachment);
-
 
         return $this->redirect($this->generateUrl('show_orders') . '#doc-pending');
     }

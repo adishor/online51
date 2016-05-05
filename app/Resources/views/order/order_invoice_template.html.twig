@@ -1,90 +1,97 @@
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="style.css" media="all" />
-    </head>
-    <body>
-        <header class="clearfix">
-            <div id="logo">
-                <img src="logo.png">
+<head>
+    <link href="{{ absolute_url(asset('assets/css/Invoice.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class='container'>
+        <div class='row'>
+            <div >
+                <img class="logo-image" src="{{ absolute_url(asset('assets/images/logo.png')) }}" alt="logo" />
             </div>
-            <h1>INVOICE 3-2-1</h1>
-            <div id="company" class="clearfix">
-                <div>Company Name</div>
-                <div>455 Foggy Heights,<br /> AZ 85004, US</div>
-                <div>(602) 519-0450</div>
-                <div><a href="mailto:company@example.com">company@example.com</a></div>
+        </div>
+        <div class='row'>
+            <div class="col-xs-4">
+                <div >{{ 'invoice.supplier'|trans }}: <span class="text-bold">{{ billingData['company_name'] }}</span></div>
+                <div >{{ 'invoice.company-code'|trans }}: <span class="text-bold">{{ billingData['company_code'] }}</span></div>
+                <div >{{ 'invoice.company-registration-number'|trans }}: <span class="text-bold">{{ billingData['registration_number'] }}</span></div>
+                <div >{{ 'invoice.headquarters'|trans }}: <span class="text-bold">{{ billingData['address'] }}</span></div>
+                <div >{{ 'invoice.iban'|trans }}: <span class="text-bold">{{ billingData['iban'] }}</span></div>
+                <div >{{ 'invoice.bank'|trans }}: <span class="text-bold">{{ billingData['bank'] }}</span></div>
+                <div >{{ 'invoice.social-capital'|trans }}: <span class="text-bold">{{ billingData['social_capital'] }}</span></div>
             </div>
-            <div id="project">
-                <div><span>PROJECT</span> Website development</div>
-                <div><span>CLIENT</span> John Doe</div>
-                <div><span>ADDRESS</span> 796 Silver Harbour, TX 79273, US</div>
-                <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div>
-                <div><span>DATE</span> August 17, 2015</div>
-                <div><span>DUE DATE</span> September 17, 2015</div>
+            <div class="col-xs-4 pull-right">
+                <div >{{ 'invoice.client'|trans }}: <span class="text-bold">{{ user.company }}</span></div>
+                <div >{{ 'invoice.company-code'|trans }}: <span class="text-bold">{{ user.cui }}</span></div>
+                <div >{{ 'invoice.company-registration-number'|trans }}: <span class="text-bold">{{ user.noRegistrationOrc }}</span></div>
+                <div >{{ 'invoice.headquarters'|trans }}: <span class="text-bold">{{ user.address }}, {{ user.city }}</span></div>
+                <div >{{ 'invoice.county'|trans }}: <span class="text-bold">{{ user.county }}</span></div>
+                <div >{{ 'invoice.iban'|trans }}: <span class="text-bold">{{ user.iban }}</span></div>
+                <div >{{ 'invoice.bank'|trans }}: <span class="text-bold">{{ user.bank }}</span></div>
             </div>
-        </header>
-        <main>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="service">SERVICE</th>
-                        <th class="desc">DESCRIPTION</th>
-                        <th>PRICE</th>
-                        <th>QTY</th>
-                        <th>TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="service">Design</td>
-                        <td class="desc">Creating a recognizable design solution based on the company's existing visual identity</td>
-                        <td class="unit">$40.00</td>
-                        <td class="qty">26</td>
-                        <td class="total">$1,040.00</td>
-                    </tr>
-                    <tr>
-                        <td class="service">Development</td>
-                        <td class="desc">Developing a Content Management System-based Website</td>
-                        <td class="unit">$40.00</td>
-                        <td class="qty">80</td>
-                        <td class="total">$3,200.00</td>
-                    </tr>
-                    <tr>
-                        <td class="service">SEO</td>
-                        <td class="desc">Optimize the site for search engines (SEO)</td>
-                        <td class="unit">$40.00</td>
-                        <td class="qty">20</td>
-                        <td class="total">$800.00</td>
-                    </tr>
-                    <tr>
-                        <td class="service">Training</td>
-                        <td class="desc">Initial training sessions for staff responsible for uploading web content</td>
-                        <td class="unit">$40.00</td>
-                        <td class="qty">4</td>
-                        <td class="total">$160.00</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4">SUBTOTAL</td>
-                        <td class="total">$5,200.00</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4">TAX 25%</td>
-                        <td class="total">$1,300.00</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="grand total">GRAND TOTAL</td>
-                        <td class="grand total">$6,500.00</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="notices">
-                <div>NOTICE:</div>
-                <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+        </div>
+        <div class='row'>
+            <div class="col-xs-6 col-xs-offset-3 text-center">
+                <div ><h3 class="text-bold">{{ 'invoice.title'|trans }}</h3></div>
+                <div >{{ 'invoice.series'|trans }}: <span class="text-bold">{{ billingData['invoice_series'] }}</span></div>
+                <div >{{ 'invoice.invoice-number'|trans }}: <span class="text-bold">{{ "%06d"|format(order.id) }}</span></div>
+                <div >{{ 'invoice.date'|trans }}: <span class="text-bold">{{ order.createdAt| localizeddate('medium', 'none', app.request.locale) }}</span></div>
             </div>
-        </main>
-        <footer>
-            Invoice was created on a computer and is valid without the signature and seal.
-        </footer>
-    </body>
-</html>
+        </div>
+        <div class='row'>
+            <div class="col-xs-12">
+                <div >{{ 'invoice.VAT'|trans }}: <span class="text-bold">{{ billingData['VAT_percent'] }}</span></div>
+                <table class="table table-bordered no-bottom-margin text-center">
+                    <th class="text-center">{{ 'invoice.number'|trans }}</th>
+                    <th class="text-center">{{ 'invoice.description'|trans }}</th>
+                    <th class="text-center">{{ 'invoice.measure'|trans }}</th>
+                    <th class="text-center">{{ 'invoice.quantity'|trans }}</th>
+                    <th class="text-center">{{ 'invoice.price'|trans }}</br>{{ 'invoice.currency'|trans }}</th>
+                    <th class="text-center">{{ 'invoice.value'|trans }}</br>{{ 'invoice.currency'|trans }}</th>
+                    <th class="text-center">{{ 'invoice.VAT-value'|trans }}</br>{{ 'invoice.currency'|trans }}</th>
+                    <tr>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>1</dt>
+                        <td>{{ 'order.subscription'|trans }}: {{ order.subscription.name }}</td>
+                        <td>{{ 'invoice.piece'|trans }}</td>
+                        <td>{{ 1|number_format(2, '.', ',') }}</td>
+                        <td>{{ order.price|number_format(2, '.', ',') }}</td>
+                        <td>{{ order.price|number_format(2, '.', ',') }}</td>
+                        <td>{{ (order.price * billingData['VAT']) |number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr class="high-row">
+                        <td colspan="7"></dt>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-12">
+                <table class="table table-bordered">
+                    <tr>
+                        <td rowspan='2' class="small-td">{{ 'invoice.signature-stamp'|trans }}</td>
+                        <td rowspan='2' class="large-td">
+                            {{ 'invoice.delegate'|trans }}</br>
+                            {{ 'invoice.delegate-ID'|trans }}</br>
+                            {{ 'invoice.signature'|trans }}</br>
+                        </td>
+                        <td>{{ 'invoice.total'|trans }}</td>
+                        <td class="text-center" >{{ order.price|number_format(2, '.', ',') }}{{ 'currency'|trans }}</td>
+                        <td class="text-center" >{{ (order.price * billingData['VAT']) |number_format(2, '.', ',') }}{{ 'currency'|trans }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'invoice.general-total'|trans }}</td>
+                        <td colspan='2' class="text-center">{{ (order.price * ( 1 + billingData['VAT'] ))|number_format(2, '.', ',') }}{{ 'currency'|trans }}</td>
+                    </tr>
+                </table>
+                <div class='pull-right'>{{ 'invoice.maturity'|trans }}: <span class="text-bold">{{ order.createdAt|date_modify("+1 month")| localizeddate('medium', 'none', app.request.locale) }}</span></div> 
+            </div>
+        </div>
+    </div>
+</body>
+

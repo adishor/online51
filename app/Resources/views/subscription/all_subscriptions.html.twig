@@ -39,14 +39,14 @@
                 </div>
                 <div class="row price">
                     <div class="col-xs-4">
-                        <p class="last">{{ 'subscription.price'|trans }}<span class="color-blue">{{ subscription.price }}</span>{{ 'curency'|trans }}</p>
+                        <p class="last">{{ 'subscription.price'|trans }}<span class="color-blue">{{ subscription.price }}</span>{{ 'currency'|trans }}</p>
                     </div>
                     <div class="col-xs-4">
                         <p class="last">{{ 'subscription.number-of-credits'|trans }}<span class="color-blue">{{ subscription.credit }}</span></p>
                     </div>
                     <div class="col-xs-4">
                         <p class="last">{{ 'subscription.valability'|trans }}<span class="color-blue">{{ subscription.valability }}</span>
-                            {% transchoice subscription.valability with {'%year%': 'subscription.year'|trans, '%years%': 'subscription.years'|trans } %}
+                            {% transchoice subscription.valability with {'%year%': 'year'|trans, '%years%': 'years'|trans } %}
                             {1} %year% |]1,Inf[ %years%
                             {% endtranschoice %}
                         </p>
