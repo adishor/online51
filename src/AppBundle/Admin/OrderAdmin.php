@@ -205,7 +205,7 @@ class OrderAdmin extends Admin
 
     public function preRemove($object)
     {
-        if ($object->getActive()) {
+        if ($object->getActive() && !$object->getDeleted()) {
             $creditTotal = $object->getUser()->getCreditsTotal() - $object->getCreditValue();
             $creditTotal = ($creditTotal < 0) ? 0 : $creditTotal;
 
@@ -226,6 +226,22 @@ class OrderAdmin extends Admin
 
         $em->persist($object);
         $em->flush();
+    }
+
+    public function preBatchAction($actionName, \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $query, array &$idx, $allElements)
+    {
+        if (empty($idx) && $allElements && $actionName === 'delete') {
+            $idx = array();
+            $query->select('DISTINCT ' . $query->getRootAlias());
+            foreach ($query->getQuery()->iterate() as $pos => $object) {
+                $idx[] = $object[0]->getId();
+            }
+        }
+        foreach ($idx as $id) {
+            $this->preRemove($this->getModelManager()->getEntityManager($this->getClass())->getRepository('AppBundle:Order')->find($id));
+        }
+
+        parent::preBatchAction($actionName, $query, $idx, $allElements);
     }
 
     public function getFilterParameters()

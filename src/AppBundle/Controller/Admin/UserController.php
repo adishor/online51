@@ -43,7 +43,7 @@ class UserController extends Controller
             return $this->redirectTo($object);
         }
 
-        return parrent::deleteAction($id);
+        return parent::deleteAction($id);
     }
 
     public function batchActionDelete(ProxyQueryInterface $query)
@@ -53,11 +53,10 @@ class UserController extends Controller
         $idx = $request->request->get('idx');
 
         if (empty($idx) && $request->request->has('all_elements') && $request->request->get('all_elements') == 'on') {
-            $users = $this->getDoctrine()->getManager()->getRepository('ApplicationSonataUserBundle:User')
-              ->findBy(array('deleted' => FALSE));
             $idx = array();
-            foreach ($users as $user) {
-                $idx[] = $user->getId();
+            $query->select('DISTINCT ' . $query->getRootAlias());
+            foreach ($query->getQuery()->iterate() as $pos => $object) {
+                $idx[] = $object[0]->getId();
             }
         }
 
