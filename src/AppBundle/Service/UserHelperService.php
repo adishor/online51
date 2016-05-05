@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class UserHelperService
@@ -150,18 +149,8 @@ class UserHelperService
         return false;
     }
 
-    public function unlockDocument($user, $documentId)
+    public function createUnlockDocumentCreditUsage($user, $document)
     {
-        if (true === $this->isValidUserDocument($user->getId(), $documentId)) {
-            throw new AccessDeniedHttpException($this->translator->trans('domain.document.already-unlocked'));
-        }
-        $document = $this->entityManager->getRepository('ApplicationSonataMediaBundle:Media')->find($documentId);
-
-        if (($user->getCreditsTotal() - $document->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
-            $response = new Response(json_encode(array('success' => false, 'message' => $this->translator->trans('domain.document.no-credits'))));
-
-            return $response;
-        }
 
         $creditsUsage = new CreditsUsage();
         $creditsUsage->setUser($user);

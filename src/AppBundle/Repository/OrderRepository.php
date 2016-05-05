@@ -169,4 +169,18 @@ class OrderRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
+    public function findPendingOrdersByDomain($domainId)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder('o');
+        $queryBuilder
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->join('o.domains', 'od')
+          ->where($queryBuilder->expr()->eq('od.id', $domainId))
+          ->andWhere('o.deleted = FALSE')
+          ->andWhere('o.firstActive = FALSE');
+
+        return $queryBuilder->getQuery()->getArrayResult();
+    }
+
 }

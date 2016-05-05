@@ -23,12 +23,23 @@ class CreditsUsageController extends Controller
         $userHelper = $this->get('app.user_helper');
         $userHelper->updateValidUserCredits();
         $documentId = $request->request->get('documentId');
-        $userHelper->unlockDocument($user, $documentId);
+        $document = $this->getDoctrine()->getManager()->getRepository('ApplicationSonataMediaBundle:Media')->find($documentId);
+
+        if (true === $userHelper->isValidUserDocument($user->getId(), $documentId)) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.document.already-unlocked'));
+        }
+        if (($user->getCreditsTotal() - $document->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
+            $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.document.no-credits'))));
+
+            return $response;
+        }
+
+        $userHelper->createUnlockDocumentCreditUsage($user, $document);
 
         $response = new Response(json_encode(array(
               'success' => true,
               'message' => $this->get('translator')->trans('domain.document.success'),
-              'credits' => $user->getCreditsTotal()
+              'credits' => $user->getCreditsTotal(),
         )));
 
         return $response;

@@ -1,11 +1,11 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Contact
 {
-
     /**
      * @var string
      * @Assert\NotBlank(message="assert.required.name")
@@ -152,4 +152,5 @@ class Contact
     {
         return $this->message;
     }
+
 }

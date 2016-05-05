@@ -14,8 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ROCounty
 {
-    use ORMBehaviors\Sluggable\Sluggable;
 
+    use ORMBehaviors\Sluggable\Sluggable;
     /**
      *
      * @var integer
@@ -118,7 +118,7 @@ class ROCounty
 
     public function getSluggableFields()
     {
-        return [ 'name' ];
+        return [ 'name'];
     }
 
     public function generateSlugValue($values)
@@ -130,4 +130,5 @@ class ROCounty
     {
         return $this->getName();
     }
+
 }

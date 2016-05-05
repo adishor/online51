@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ContactType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', 'text')
@@ -40,5 +41,5 @@ class ContactType extends AbstractType
     {
         return 'contact';
     }
-}
 
+}

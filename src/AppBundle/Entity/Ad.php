@@ -1,12 +1,10 @@
 <?php
 
-
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-
 
 /**
  * @ORM\Table()
@@ -15,7 +13,6 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class Ad
 {
-
     /**
      *
      * @var integer
@@ -102,7 +99,6 @@ class Ad
         return $this;
     }
 
-
     /**
      *
      * @param File $image
@@ -164,4 +160,5 @@ class Ad
     {
         return $this->getTitle();
     }
+
 }

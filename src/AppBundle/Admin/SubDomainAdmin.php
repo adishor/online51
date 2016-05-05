@@ -18,11 +18,11 @@ class SubDomainAdmin extends Admin
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         $queryDomain = $this->modelManager
-                ->getEntityManager('AppBundle:Domain')
-                ->createQueryBuilder()
-                ->select('d')
-                ->from('AppBundle:Domain', 'd')
-                ->where('d.deleted = 0');
+          ->getEntityManager('AppBundle:Domain')
+          ->createQueryBuilder()
+          ->select('d')
+          ->from('AppBundle:Domain', 'd')
+          ->where('d.deleted = 0');
 
         $domainOptions = array(
             'query' => $queryDomain,
@@ -37,14 +37,14 @@ class SubDomainAdmin extends Admin
         );
 
         $form->add('name', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('description', 'sonata_simple_formatter_type', array(
-                'format' => 'richhtml',
-                'required' => false,
-                'disabled' => $disabled
-            ))
-            ->add('domain', 'sonata_type_model', $domainOptions);
+              'disabled' => $disabled
+          ))
+          ->add('description', 'sonata_simple_formatter_type', array(
+              'format' => 'richhtml',
+              'required' => false,
+              'disabled' => $disabled
+          ))
+          ->add('domain', 'sonata_type_model', $domainOptions);
 
         $pDomainId = $this->request->query->get('pDomainId');
 
@@ -53,10 +53,10 @@ class SubDomainAdmin extends Admin
             if ($pDomainId > 0) {
                 $em = $this->modelManager->getEntityManager('AppBundle:Domain');
                 $query = $em->createQueryBuilder('d')
-                        ->select('d')
-                        ->from('AppBundle:Domain', 'd')
-                        ->where('d.id = :domainId')
-                        ->setParameter('domainId', $pDomainId);
+                  ->select('d')
+                  ->from('AppBundle:Domain', 'd')
+                  ->where('d.id = :domainId')
+                  ->setParameter('domainId', $pDomainId);
 
                 $domainOptions['query'] = $query;
                 $form->add('domain', 'sonata_type_model', $domainOptions);
@@ -67,27 +67,27 @@ class SubDomainAdmin extends Admin
     public function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name')
-                ->add('domain')
-                ->add('documents')
-                ->add('deleted', null, array(), null, array('choices_as_values' => true));
+          ->add('domain')
+          ->add('documents')
+          ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     public function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name')
-                ->add('domain')
-                ->add('documents')
-                ->add('deleted');
+          ->add('domain')
+          ->add('documents')
+          ->add('deleted');
     }
 
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name')
-                ->add('description', 'html')
-                ->add('domain')
-                ->add('documents')
-                ->add('deleted')
-                ->add('deletedAt');
+          ->add('description', 'html')
+          ->add('domain')
+          ->add('documents')
+          ->add('deleted')
+          ->add('deletedAt');
     }
 
     public function getFilterParameters()
@@ -95,18 +95,13 @@ class SubDomainAdmin extends Admin
         $parameters = parent::getFilterParameters();
 
         if (!array_key_exists("deleted", $parameters)) {
-            $parameters['deleted'] = array (
+            $parameters['deleted'] = array(
                 'type' => EqualType::TYPE_IS_EQUAL,
                 'value' => BooleanType::TYPE_NO
             );
         }
 
         return $parameters;
-    }
-
-    public function prePersist($object)
-    {
-        $object->setDeleted(false);
     }
 
     public function getTemplate($name)
@@ -116,4 +111,5 @@ class SubDomainAdmin extends Admin
         }
         return parent::getTemplate($name);
     }
+
 }

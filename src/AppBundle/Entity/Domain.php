@@ -370,7 +370,7 @@ class Domain
 
     public function __toString()
     {
-        return $this->name;
+        return ($this->getId() ? $this->getName() : 'Create new');
     }
 
     public function getSluggableFields()

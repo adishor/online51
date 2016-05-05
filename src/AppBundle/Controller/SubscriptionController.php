@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SubscriptionController extends Controller
 {
+
     /**
      * @Route("/subscriptions", name="subscriptions")
      */
@@ -14,9 +15,15 @@ class SubscriptionController extends Controller
     {
         $subscriptions = $this->getDoctrine()->getManager()
             ->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false));
+        $isUserException = false;
+        if ($this->getUser()) {
+            $isUserException = $this->get('app.user_helper')->getIsUserException($this->getUser()->getId());
+        }
 
         return $this->render('subscription/show.html.twig', array(
-              'subscriptions' => $subscriptions
+              'subscriptions' => $subscriptions,
+              'isUserException' => $isUserException,
         ));
     }
+
 }

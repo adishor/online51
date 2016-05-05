@@ -6,7 +6,9 @@ use Gedmo\SoftDeleteable\SoftDeleteableListener as GedmoSoftDeleteableListener;
 
 class SoftDeleteableListener extends GedmoSoftDeleteableListener
 {
-    public function onFlush(\Doctrine\Common\EventArgs $args) {
+
+    public function onFlush(\Doctrine\Common\EventArgs $args)
+    {
 
         $ea = $this->getEventAdapter($args);
         $om = $ea->getObjectManager();
@@ -23,9 +25,8 @@ class SoftDeleteableListener extends GedmoSoftDeleteableListener
                 $oldValue = $reflProp->getValue($object);
 
                 $evm->dispatchEvent(
-                    self::PRE_SOFT_DELETE,
-                    $ea->createLifecycleEventArgsInstance($object, $om)
-                 );
+                  self::PRE_SOFT_DELETE, $ea->createLifecycleEventArgsInstance($object, $om)
+                );
 
                 $date = new \DateTime();
                 $reflProp->setValue($object, $date);
@@ -45,11 +46,10 @@ class SoftDeleteableListener extends GedmoSoftDeleteableListener
                 }
 
                 $evm->dispatchEvent(
-                    self::POST_SOFT_DELETE,
-                    $ea->createLifecycleEventArgsInstance($object, $om)
+                  self::POST_SOFT_DELETE, $ea->createLifecycleEventArgsInstance($object, $om)
                 );
             }
         }
     }
-}
 
+}
