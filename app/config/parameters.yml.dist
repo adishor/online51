@@ -26,11 +26,11 @@ parameters:
     # link valid {reset_password_hours} hours
     reset_password_hours: 48
     # path to store invoices
-    invoice_dir: "%kernel.root_dir%/web/invoice/"
+    invoice_dir: "%kernel.root_dir%/../web/invoice/"
     invoice_name: proforma
 
     billing_data:
-        name: 'Aldex S.R.L.'
+        company_name: 'Aldex S.R.L.'
         registration_number: 'J26/1500/1991'
         company_code: '2533824'
         address: 'Targu Mures, Str. Tineretului nr. 2, jud. Mures'
