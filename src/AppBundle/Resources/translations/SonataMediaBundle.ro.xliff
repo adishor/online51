@@ -421,6 +421,10 @@
                 <source>filter.label_subdomain</source>
                 <target>Sub domeniu</target>
             </trans-unit>
+            <trans-unit id="filter.label_deleted">
+                <source>filter.label_deleted</source>
+                <target>Sters</target>
+            </trans-unit>
             <trans-unit id="list.label_credit_value">
                 <source>list.label_credit_value</source>
                 <target>Valoare credit</target>
@@ -436,6 +440,10 @@
             <trans-unit id="list.label_subdomain">
                 <source>list.label_subdomain</source>
                 <target>Sub domeniu</target>
+            </trans-unit>
+            <trans-unit id="list.label_deleted">
+                <source>list.label_deleted</source>
+                <target>Sters</target>
             </trans-unit>
             <trans-unit id="show.label_credit_value">
                 <source>show.label_credit_value</source>
@@ -456,6 +464,14 @@
             <trans-unit id="show.label_name">
                 <source>show.label_name</source>
                 <target>Nume Fisier</target>
+            </trans-unit>
+            <trans-unit id="show.label_deleted">
+                <source>show.label_deleted</source>
+                <target>Sters</target>
+            </trans-unit>
+            <trans-unit id="show.label_deleted_at">
+                <source>show.label_deleted_at</source>
+                <target>Sters la</target>
             </trans-unit>
         </body>
     </file>

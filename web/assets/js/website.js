@@ -174,6 +174,13 @@ function isCheckedx(cb, id, no) {
     }
 }
 
+function areAllChecked(id, max) {
+    var checked = $("#" + id + " input:checked").length;
+    if (checked === max) {
+        return true;
+    }
+}
+
 function popitup(url) {
     newwindow = window.open(url, 'name', 'height=1000,width=1000');
     if (window.focus) {
@@ -253,11 +260,11 @@ function SubmitResetPassword(url) {
 }
 
 function ValidateEmail(email) {
-    var re = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    var re = new RegExp(/.+@.+..+/);
     return re.test(email);
 }
 
-function GoLogin(url, home) {
+function GoLogin(url, home, admin) {
     $("#validUser").show();
     $("#validPass").show();
     $("#LoginUserName").valid();
@@ -267,9 +274,14 @@ function GoLogin(url, home) {
             type: "POST",
             url: url,
             data: {'_username': $("#LoginUserName").val(), '_password': $("#LoginPassword").val()},
+            dataType: 'json',
             success: function (response) {
                 if (response.success) {
-                    window.location.href = home;
+                    if (response.admin) {
+                        window.location.href = admin;
+                    } else {
+                        window.location.href = home;
+                    }
                 } else {
                     if (response.message === "User account is disabled.") {
                         $("#resendActivationEmailDiv").show();
@@ -356,22 +368,59 @@ function UserLogOut(link) {
 }
 
 function DocumentConfirmPopup(message, path, documentId, downloadPath) {
-    var answer = confirm(message);
-    if (answer)
-        $.ajax({
-            type: "POST",
-            url: path,
-            data: {documentId: documentId},
-            success: function (response) {
-                window.alert(response.message);
-                if (response.success) {
-                    window.location.href = downloadPath;
-                    $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
-                    $('#totalUserCredits').text(response.credits);
-                }
-            }
-        });
+
+    $('#documentConfirmModalBody').text(message);
+    $('#documentConfirmModal').modal();
+    $('#documentConfirmModalPath').val(path);
+    $('#documentConfirmModalId').val(documentId);
+    $('#documentConfirmModalDownload').val(downloadPath);
 }
+
+$('#documentConfirmModalYes').click(function () {
+    var path = $('#documentConfirmModalPath').val();
+    var documentId = $('#documentConfirmModalId').val();
+    var downloadPath = $('#documentConfirmModalDownload').val();
+    $.ajax({
+        type: "POST",
+        url: path,
+        data: {documentId: documentId},
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                window.location.href = downloadPath;
+                $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
+                $('#totalUserCredits').text(response.credits);
+                $('#errorOrSuccess' + documentId).addClass('color-green');
+            } else {
+                $('#errorOrSuccess' + documentId).addClass('color-red');
+            }
+            $('#errorOrSuccess' + documentId).text(response.message);
+            $('#errorOrSuccess' + documentId).show();
+            $('#documentConfirmModal').modal('toggle');
+        }
+    });
+});
+
+$('#subscriptionAddConfirmModalYes').click(function () {
+    var formId = $('#subscriptionAddConfirmModalId').val();
+    $(formId).submit();
+    $('#subscriptionAddConfirmModal').modal('toggle');
+});
+
+function alertNotLoggedIn(message) {
+    window.alert(message);
+}
+
+function removeOrder(path) {
+    $('#orderRemoveConfirmModal').modal();
+    $('#orderRemoveConfirmModalPath').val(path);
+}
+
+$('#orderRemoveConfirmModalYes').click(function () {
+    var path = $('#orderRemoveConfirmModalPath').val();
+    window.location.href = path;
+    $('#orderRemoveConfirmModal').modal('toggle');
+});
 
 // Js not currently used.
 //function GetProfile(currentUserId) {

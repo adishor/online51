@@ -12,6 +12,7 @@
 namespace Application\Sonata\UserBundle\Entity;
 
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
@@ -33,7 +34,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity()
  * @Vich\Uploadable
- * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration", "ChangeInfo", "AdminRegistration", "AdminProfile"})
+ * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration"})
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class User extends BaseUser
 {
@@ -234,10 +236,37 @@ class User extends BaseUser
     protected $approvedSubscriptions;
 
     /**
+     * @ORM\OneToMany(targetEntity="\AppBundle\Entity\Order", mappedBy="lastModifiedBy")
+     */
+    protected $modifiedSubscriptions;
+
+    /**
      *
      * @ORM\OneToMany(targetEntity="\AppBundle\Entity\CreditsUsage", mappedBy="user")
      */
     protected $userCreditsUsage;
+
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $deleted;
+
+    /**
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->deleted = FALSE;
+    }
 
     /**
      * Get id
@@ -694,7 +723,6 @@ class User extends BaseUser
         return $this->userCreditsUsage;
     }
 
-
     /**
      * Set lastCreditUpdate
      *
@@ -717,4 +745,84 @@ class User extends BaseUser
     {
         return $this->lastCreditUpdate;
     }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return SubDomain
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return SubDomain
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * Add modifiedSubscriptions
+     *
+     * @param \AppBundle\Entity\Order $modifiedSubscriptions
+     * @return User
+     */
+    public function addModifiedSubscription(\AppBundle\Entity\Order $modifiedSubscriptions)
+    {
+        $this->modifiedSubscriptions[] = $modifiedSubscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove modifiedSubscriptions
+     *
+     * @param \AppBundle\Entity\Order $modifiedSubscriptions
+     */
+    public function removeModifiedSubscription(\AppBundle\Entity\Order $modifiedSubscriptions)
+    {
+        $this->modifiedSubscriptions->removeElement($modifiedSubscriptions);
+    }
+
+    /**
+     * Get modifiedSubscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getModifiedSubscriptions()
+    {
+        return $this->modifiedSubscriptions;
+    }
+
 }

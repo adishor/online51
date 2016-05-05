@@ -6,12 +6,12 @@ parameters:
 services:
     admin.subscription:
         class: AppBundle\Admin\SubscriptionAdmin
-        arguments: [~, AppBundle\Entity\Subscription, ~]
+        arguments: [~, AppBundle\Entity\Subscription, AppBundle:Admin\Subscription]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.subscription, group: admin_group_data }
     admin.domain:
         class: AppBundle\Admin\DomainAdmin
-        arguments: [~, AppBundle\Entity\Domain, ~]
+        arguments: [~, AppBundle\Entity\Domain, AppBundle:Admin\Domain]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.domain, group: admin_group_data }
     admin.subdomain:
@@ -26,7 +26,7 @@ services:
             - { name: sonata.admin, manager_type: orm, label: admin_label.order, group: admin_group_credit }
     admin.creditsusage:
         class: AppBundle\Admin\CreditsUsageAdmin
-        arguments: [~, AppBundle\Entity\CreditsUsage, ~]
+        arguments: [~, AppBundle\Entity\CreditsUsage, AppBundle:Admin\CreditsUsage]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.credits_usage, group: admin_group_credit }
     admin.ad:
@@ -45,7 +45,10 @@ services:
         arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%]
     app.user_helper:
         class:     AppBundle\Service\UserHelperService
-        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session]
+        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session, @translator]
+    app.order_helper:
+        class:     AppBundle\Service\OrderHelperService
+        arguments: [@doctrine.orm.entity_manager, @translator,  @security.token_storage, @session]
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false
@@ -53,3 +56,8 @@ services:
     app.media.security.user_strategy:
         class:     AppBundle\Security\Sonata\UserDownloadStrategy
         arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user_helper]
+    app.validator.different_email:
+        class: AppBundle\Validator\Constraints\DifferentEmailValidator
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            - { name: validator.constraint_validator, alias: DifferentEmail }

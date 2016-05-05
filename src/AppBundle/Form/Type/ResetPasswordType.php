@@ -36,4 +36,5 @@ class ResetPasswordType extends AbstractType
     {
         return 'resetPassword';
     }
+
 }

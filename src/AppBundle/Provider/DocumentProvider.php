@@ -15,10 +15,18 @@ class DocumentProvider extends FileProvider
      */
     public function buildEditForm(FormMapper $formMapper)
     {
+        $disabled = ($formMapper->getAdmin()->getSubject()->getDeleted()) ? TRUE : FALSE;
+
         $formMapper
-          ->add('title')
-          ->add('creditValue')
-          ->add('valabilityDays')
+          ->add('title', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('creditValue', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('valabilityDays', null, array(
+              'disabled' => $disabled
+          ))
           ->add('subdomain', 'entity', array(
               'expanded' => false,
               'multiple' => false,
@@ -26,8 +34,12 @@ class DocumentProvider extends FileProvider
               'required' => false,
               'class' => 'AppBundle:SubDomain',
               'choices' => $this->getChoices($formMapper),
+              'disabled' => $disabled
           ))
-          ->add('binaryContent', 'file', array('required' => false));
+          ->add('binaryContent', 'file', array(
+              'required' => false,
+              'disabled' => $disabled
+        ));
     }
 
     /**
@@ -64,7 +76,9 @@ class DocumentProvider extends FileProvider
         foreach ($domains as $domain) {
             $subdomains = [];
             foreach ($domain->getSubdomains() as $subdomain) {
-                $subdomains[] = $subdomain;
+                if (!$subdomain->getDeleted()) {
+                    $subdomains[] = $subdomain;
+                }
             }
             $choices[$domain->getName()] = $subdomains;
         }
@@ -73,6 +87,7 @@ class DocumentProvider extends FileProvider
         $subdomainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:SubDomain');
         $noDomainSubdomains = $subdomainEm->getRepository('AppBundle:SubDomain')->createQueryBuilder('s')
           ->where('s.domain is NULL')
+          ->andWhere('s.deleted = 0')
           ->getQuery()
           ->getResult();
         $choices['No Domain'] = $noDomainSubdomains;

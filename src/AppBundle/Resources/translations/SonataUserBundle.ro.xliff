@@ -10,6 +10,14 @@
                 <source>user_block_profile</source>
                 <target>Profil</target>
             </trans-unit>
+            <trans-unit id="groups">
+                <source>groups</source>
+                <target>Grupuri</target>
+            </trans-unit>
+            <trans-unit id="field.label_roles_editable">
+                <source>field.label_roles_editable</source>
+                <target>Optiuni</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

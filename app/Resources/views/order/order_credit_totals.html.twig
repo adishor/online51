@@ -1,0 +1,5 @@
+<div class="row"><hr></div>
+<h5>{{ 'order.total-credits'|trans }}: {{ orderTotal }}</h5>
+<h5>{{ 'order.total-expired-credits'|trans }}: {{ expiredCreditsTotal }}</h5>
+<h5>{{ 'order.total-used-credits'|trans }}: {{ usedCreditsTotal }}</h5>
+<h5>{{ 'total-credits'|trans }} {{ orderTotal - expiredCreditsTotal - usedCreditsTotal }}</h5>

@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use AppBundle\Entity\CreditsUsage;
 
 /**
  * OrderRepository
@@ -17,18 +18,61 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('DISTINCT(d.id)')
+          ->select('DISTINCT(d.id) as id, d.title, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, sd.name as subDomain, dom.name as domain')
           ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
+          ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
-          ->andWhere('cu.documentExpireDate > :now')
-          ->setParameter('now', new \DateTime);
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('d.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('sd.deleted = FALSE')
+          ->andWhere('dom.deleted = FALSE');
         if (null !== $domainId) {
             $queryBuilder->andWhere('sd.domain = :domain')
               ->setParameter('domain', $domainId);
         }
+        $queryBuilder->orderBy('dom.id')
+          ->orderBy('sd.id')
+          ->orderBy('d.id', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    public function findAllUserDocuments($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('d.id, d.title, cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate')
+          ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
+          ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.deleted = FALSE')
+          ->orderBy('unlockDate', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    public function findAllUserExpiredCredit($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('cu.usageType = :expired')
+          ->setParameter('expired', CreditsUsage::TYPE_EXPIRED)
+          ->orderBy('unlockDate', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
@@ -44,14 +88,52 @@ class CreditsUsageRepository extends EntityRepository
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
-          ->andWhere('cu.documentExpireDate > :now')
+          ->andWhere('cu.expireDate > :now')
           ->setParameter('now', new \DateTime)
           ->andWhere('d.id = :document')
-          ->setParameter('document', $documentId);
+          ->setParameter('document', $documentId)
+          ->andWhere('d.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
 
         return $query->getArrayResult();
+    }
+
+    public function findTotalUsedCredits($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('sum(cu.credit)')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->where('cu.user = :user')
+          ->andWhere('cu.usageType != :expired')
+          ->andWhere('cu.deleted = FALSE')
+          ->setParameter('expired', CreditsUsage::TYPE_EXPIRED)
+          ->setParameter('user', $userId);
+
+        $query = $queryBuilder->getQuery();
+        $result = $query->getSingleScalarResult();
+
+        return ($result) ? $result : 0;
+    }
+
+    public function findTotalExpiredCredits($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('sum(cu.credit)')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->where('cu.user = :user')
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('cu.usageType = :expired')
+          ->setParameter('expired', CreditsUsage::TYPE_EXPIRED)
+          ->setParameter('user', $userId);
+
+        $query = $queryBuilder->getQuery();
+        $result = $query->getSingleScalarResult();
+
+        return ($result) ? $result : 0;
     }
 
 }

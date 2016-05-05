@@ -1,0 +1,17 @@
+<div class="modal fade bs-modal-sm" id="subscriptionAddConfirmModal" tabindex="-1" role="dialog" aria-labelledby="documentConfirmModalLabel">
+    <div class="modal-dialog  modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="documentConfirmModalLabel">{{ 'modal.subscription-add-confirm.title'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'modal.subscription-add-confirm.body'|trans }}</p>
+                <input type="hidden" id="subscriptionAddConfirmModalId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.button.no'|trans }}</button>
+                <button type="button" class="btn btn-primary" id="subscriptionAddConfirmModalYes">{{ 'modal.button.yes'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>

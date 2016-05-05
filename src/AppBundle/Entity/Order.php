@@ -2,15 +2,17 @@
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table("`order`")
+ * @ORM\Table("orders")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  * @HasLifecycleCallbacks
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Order
 {
@@ -70,6 +72,14 @@ class Order
 
     /**
      *
+     * @var integer
+     *
+     * @ORM\Column(name="first_active", type="boolean", nullable=false, options={"default":0})
+     */
+    private $firstActive;
+
+    /**
+     *
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -100,6 +110,14 @@ class Order
     private $mentions;
 
     /**
+     * @var \Application\Sonata\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", inversedBy="modifiedSubscriptions")
+     * @ORM\JoinColumn(name="last_modified_user_id", referencedColumnName="id")
+     */
+    private $lastModifiedBy;
+
+    /**
      *
      * @var \DateTime
      *
@@ -120,6 +138,7 @@ class Order
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     private $user;
 
@@ -137,17 +156,35 @@ class Order
     private $domains;
 
     /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $deleted;
+
+    /**
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
     }
+
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->deleted = FALSE;
         $this->domains = new ArrayCollection();
     }
 
@@ -274,6 +311,29 @@ class Order
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set firstActive
+     *
+     * @param boolean $firstActive
+     * @return Order
+     */
+    public function setFirstActive($firstActive)
+    {
+        $this->firstActive = $firstActive;
+
+        return $this;
+    }
+
+    /**
+     * Get firstActive
+     *
+     * @return boolean
+     */
+    public function getFirstActive()
+    {
+        return $this->firstActive;
     }
 
     /**
@@ -460,7 +520,6 @@ class Order
         return $this->subscription;
     }
 
-
     /**
      * Add domains
      *
@@ -494,8 +553,78 @@ class Order
         return $this->domains;
     }
 
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return SubDomain
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return SubDomain
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * Set lastModifiedBy
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $lastModifiedBy
+     * @return Order
+     */
+    public function setLastModifiedBy(\Application\Sonata\UserBundle\Entity\User $lastModifiedBy = null)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get lastModifiedBy
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
     public function __toString()
     {
-        return "Order" . " #".$this->getId();
+        return ($this->getId() ? "Order" . " #" . $this->getId() : 'Create new');
     }
+
 }

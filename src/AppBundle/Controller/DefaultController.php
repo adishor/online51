@@ -15,21 +15,27 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $domains = $this->getDoctrine()->getManager()
-            ->getRepository('AppBundle:Domain')->findAll();
+            ->getRepository('AppBundle:Domain')->findBy(array('deleted' => false));
 
         $subscriptions = $this->getDoctrine()->getManager()
-            ->getRepository('AppBundle:Subscription')->findAll();
+            ->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false));
+
+        $isUserException = false;
+        if ($this->getUser()) {
+            $isUserException = $this->get('app.user_helper')->getIsUserException($this->getUser()->getId());
+        }
 
         return $this->render('default/index.html.twig', array(
               'domains' => $domains,
-              'subscriptions' => $subscriptions
+              'subscriptions' => $subscriptions,
+              'isUserException' => $isUserException,
         ));
     }
 
     public function menuAction()
     {
         $domains = $this->getDoctrine()->getManager()
-            ->getRepository('AppBundle:Domain')->findAll();
+            ->getRepository('AppBundle:Domain')->findBy(array('deleted' => false));
 
         return $this->render('default/menu.html.twig', array(
               'domains' => $domains
@@ -84,7 +90,7 @@ class DefaultController extends Controller
     public function subscriptionsNavAction()
     {
         $subscriptions = $this->getDoctrine()->getManager()
-            ->getRepository('AppBundle:Subscription')->findAll();
+            ->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false));
 
         return $this->render('default/subscriptionsNav.html.twig', array(
               'subscriptions' => $subscriptions

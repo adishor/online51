@@ -14,174 +14,217 @@ class LoadSubDomainData extends AbstractFixture implements OrderedFixtureInterfa
         $subdomain = new SubDomain();
         $subdomain->setName('Legislatie SSM');
         $subdomain->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare: Plan de Prevenire si Protectie (PPP)  Instructiuni proprii Tematici de Instruire Program de instruire Decizii, convocatoare, modele de alte documente care se pot personaliza si edita online. Obligatii legate de medicina muncii. Explicatii / exemple / Indrumari despre Echipamente individuale de  protectie (EIP) Semnalizare SSM RSVTI PRAM Prim ajutor CSSM Rapoarte care se pot actualiza/vizualiza/edita/arhiva online; Instruire Introductiv-Generala. Prezentari si fisiere Powerpoint; Filme pentru instruiri online; Teste pentru verificarea cunostintelor; Modele dinamice cu instructiuni pentru completarea fiselor de instruire individula SSM; Modele statice pentru vizualizarea anumitor formulare/fise de instruire / raportari / etc; Link-uri utile spre site-urile autoritatilor care reglementeaza domeniul SSM; Link-uri utile spre site-urile furnizorilor de servicii/echipamente pentru domeniul SSM; Orice document se poate imprima in forma personalizata.');
+        $subdomain->setDeleted(FALSE);
 
         $subdomain1 = new SubDomain();
         $subdomain1->setName('Evaluare de risc');
         $subdomain1->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare: Plan de Prevenire si Protectie (PPP) Instructiuni proprii Tematici de Instruire Program de instruire Decizii, convocatoare, modele de alte documente care se pot personaliza si edita online. Obligatii legate de medicina muncii. Explicatii / exemple / Indrumari despre');
+        $subdomain1->setDeleted(FALSE);
 
         $subdomain2 = new SubDomain();
         $subdomain2->setName('Documentatie SSM');
         $subdomain2->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare:');
+        $subdomain2->setDeleted(FALSE);
 
         $subdomain3 = new SubDomain();
         $subdomain3->setName('Responsabil SSM');
         $subdomain3->setDescription('Lorem Ipsum');
+        $subdomain3->setDeleted(FALSE);
 
         $subdomain4 = new SubDomain();
         $subdomain4->setName('Instruiri');
         $subdomain4->setDescription('Lorem Ipsum');
+        $subdomain4->setDeleted(FALSE);
 
         $subdomain5 = new SubDomain();
         $subdomain5->setName('Medicina muncii');
         $subdomain5->setDescription('Lorem Ipsum');
+        $subdomain5->setDeleted(FALSE);
 
         $subdomain6 = new SubDomain();
         $subdomain6->setName('EIP');
         $subdomain6->setDescription('Lorem Ipsum');
+        $subdomain6->setDeleted(FALSE);
 
         $subdomain7 = new SubDomain();
         $subdomain7->setName('RSVTI');
         $subdomain7->setDescription('Lorem Ipsum');
+        $subdomain7->setDeleted(FALSE);
 
         $subdomain8 = new SubDomain();
         $subdomain8->setName('PRAM');
         $subdomain8->setDescription('Lorem Ipsum');
+        $subdomain8->setDeleted(FALSE);
 
         $subdomain9 = new SubDomain();
         $subdomain9->setName('Semnalizare');
         $subdomain9->setDescription('Lorem Ipsum');
+        $subdomain9->setDeleted(FALSE);
 
         $subdomain10 = new SubDomain();
         $subdomain10->setName('Testare SSM');
         $subdomain10->setDescription('Lorem Ipsum');
+        $subdomain10->setDeleted(FALSE);
 
         $subdomain11 = new SubDomain();
         $subdomain11->setName('CSSM');
         $subdomain11->setDescription('Lorem Ipsum');
+        $subdomain11->setDeleted(FALSE);
 
         $subdomain12 = new SubDomain();
         $subdomain12->setName('Prim Ajutor');
         $subdomain12->setDescription('Lorem Ipsum');
+        $subdomain12->setDeleted(FALSE);
 
         $subdomain13 = new SubDomain();
         $subdomain13->setName('Accidente de munca');
         $subdomain13->setDescription('Lorem Ipsum');
+        $subdomain13->setDeleted(FALSE);
 
         $subdomain14 = new SubDomain();
         $subdomain14->setName('Legislatie PSI');
         $subdomain14->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare: Plan de Prevenire si Protectie (PPP); Instructiuni proprii Tematici de Instruire Program de instruire Decizii, convocatoare, modele de alte documente care se pot personaliza si edita online. Obligatii legate de medicina muncii. Explicatii / exemple / Indrumari despre');
+        $subdomain14->setDeleted(FALSE);
 
         $subdomain15 = new SubDomain();
         $subdomain15->setName('Legislatie SU');
         $subdomain15->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare: Decizii, convocatoare, modele de alte documente care se pot personaliza si edita online. Obligatii legate de medicina muncii. Explicatii / exemple / Indrumari despre');
+        $subdomain15->setDeleted(FALSE);
 
         $subdomain16 = new SubDomain();
         $subdomain16->setName('Documentatie PSI');
         $subdomain16->setDescription('Lorem Ipsum');
+        $subdomain16->setDeleted(FALSE);
 
         $subdomain17 = new SubDomain();
         $subdomain17->setName('Documentatie SU');
         $subdomain17->setDescription('Lorem Ipsum');
+        $subdomain17->setDeleted(FALSE);
 
         $subdomain18 = new SubDomain();
         $subdomain18->setName('Responsabil PSI');
         $subdomain18->setDescription('Lorem Ipsum');
+        $subdomain18->setDeleted(FALSE);
 
         $subdomain19 = new SubDomain();
         $subdomain19->setName('Instruiri');
         $subdomain19->setDescription('Lorem Ipsum');
+        $subdomain19->setDeleted(FALSE);
 
         $subdomain20 = new SubDomain();
         $subdomain20->setName('Legislatie Mediu');
         $subdomain20->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare: Rapoarte care se pot actualiza/vizualiza/edita/arhiva online; Instruire Introductiv-Generala. Prezentari si fisiere Powerpoint; Filme pentru instruiri online; Teste pentru verificarea cunostintelor; Modele dinamice cu instructiuni pentru completarea fiselor de instruire individula SSM; Modele statice pentru vizualizarea anumitor formulare/fise de instruire / raportari / etc; Link-uri utile spre site-urile autoritatilor care reglementeaza domeniul SSM; Link-uri utile spre site-urile furnizorilor de servicii/echipamente pentru domeniul SSM; Orice document se poate imprima in forma personalizata.');
+        $subdomain20->setDeleted(FALSE);
 
         $subdomain21 = new SubDomain();
         $subdomain21->setName('Autorizatia de Mediu');
         $subdomain21->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare:');
+        $subdomain21->setDeleted(FALSE);
 
         $subdomain22 = new SubDomain();
         $subdomain22->setName('Deseuri');
         $subdomain22->setDescription('Lorem Ipsum');
+        $subdomain22->setDeleted(FALSE);
 
         $subdomain23 = new SubDomain();
         $subdomain23->setName('Fondul de Mediu');
         $subdomain23->setDescription('Lorem Ipsum');
+        $subdomain23->setDeleted(FALSE);
 
         $subdomain24 = new SubDomain();
         $subdomain24->setName('ISO 14001');
         $subdomain24->setDescription('Lorem Ipsum');
+        $subdomain24->setDeleted(FALSE);
 
         $subdomain25 = new SubDomain();
         $subdomain25->setName('Legislatie HR');
         $subdomain25->setDescription('Rapoarte care se pot actualiza/vizualiza/edita/arhiva online; Instruire Introductiv-Generala. Prezentari si fisiere Powerpoint; Filme pentru instruiri online; Teste pentru verificarea cunostintelor; Modele dinamice cu instructiuni pentru completarea fiselor de instruire individula SSM; Modele statice pentru vizualizarea anumitor formulare/fise de instruire / raportari / etc; Link-uri utile spre site-urile autoritatilor care reglementeaza domeniul SSM; Link-uri utile spre site-urile furnizorilor de servicii/echipamente pentru domeniul SSM; Orice document se poate imprima in forma personalizata.');
+        $subdomain25->setDeleted(FALSE);
 
         $subdomain26 = new SubDomain();
         $subdomain26->setName('Revisal');
         $subdomain26->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare: Decizii, convocatoare, modele de alte documente care se pot personaliza si edita online. Obligatii legate de medicina muncii. Explicatii / exemple / Indrumari despre');
+        $subdomain26->setDeleted(FALSE);
 
         $subdomain27 = new SubDomain();
         $subdomain27->setName('Contracte de munca');
         $subdomain27->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare:');
+        $subdomain27->setDeleted(FALSE);
 
         $subdomain28 = new SubDomain();
         $subdomain28->setName('Raporturi de munca');
         $subdomain28->setDescription('Lorem Ipsum');
+        $subdomain28->setDeleted(FALSE);
 
         $subdomain29 = new SubDomain();
         $subdomain29->setName('Fisa de post');
         $subdomain29->setDescription('Lorem Ipsum');
+        $subdomain29->setDeleted(FALSE);
 
         $subdomain30 = new SubDomain();
         $subdomain30->setName('Instruire personal');
         $subdomain30->setDescription('Lorem Ipsum');
+        $subdomain30->setDeleted(FALSE);
 
         $subdomain31 = new SubDomain();
         $subdomain31->setName('Motivare personal');
         $subdomain31->setDescription('Lorem Ipsum');
+        $subdomain31->setDeleted(FALSE);
 
         $subdomain32 = new SubDomain();
         $subdomain32->setName('Evaluare personal');
         $subdomain32->setDescription('Lorem Ipsum');
+        $subdomain32->setDeleted(FALSE);
 
         $subdomain33 = new SubDomain();
         $subdomain33->setName('Organigrama');
         $subdomain33->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare:');
+        $subdomain33->setDeleted(FALSE);
 
         $subdomain34 = new SubDomain();
         $subdomain34->setName('ROI');
         $subdomain34->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii');
+        $subdomain34->setDeleted(FALSE);
 
         $subdomain35 = new SubDomain();
         $subdomain35->setName('Sisteme de management');
         $subdomain35->setDescription('Obligatiile legale ale firmelor in domeniul SSM, in functie de activitate, numar de angajati. Legi, HG, Ordine, alte acte normative care reglementeaza activitatea SSM. Comentarii, interpretari, recomandari specifice activitatii SSM proprii Modele dinamice de Evaluari de risc pentru posturile de lucru clasice; puteti sa le actualizati cu datele specifice firmei Dv. Documente dinamice care se personalizeaza utilizand meniuri de actualizare:');
+        $subdomain35->setDeleted(FALSE);
 
         $subdomain36 = new SubDomain();
         $subdomain36->setName('Contracte');
         $subdomain36->setDescription('Lorem Ipsum');
+        $subdomain36->setDeleted(FALSE);
 
         $subdomain37 = new SubDomain();
         $subdomain37->setName('Plan de afaceri');
         $subdomain37->setDescription('Lorem Ipsum');
+        $subdomain37->setDeleted(FALSE);
 
         $subdomain38 = new SubDomain();
         $subdomain38->setName('Metode de finantare');
         $subdomain38->setDescription('Lorem Ipsum');
+        $subdomain38->setDeleted(FALSE);
 
         $subdomain39 = new SubDomain();
         $subdomain39->setName('Marketing');
         $subdomain39->setDescription('Lorem Ipsum');
+        $subdomain39->setDeleted(FALSE);
 
         $subdomain40 = new SubDomain();
         $subdomain40->setName('Publicitate');
         $subdomain40->setDescription('Lorem Ipsum');
+        $subdomain40->setDeleted(FALSE);
 
         $subdomain41 = new SubDomain();
         $subdomain41->setName('Evaluari SSM');
         $subdomain41->setDescription('Lorem Ipsum');
+        $subdomain41->setDeleted(FALSE);
 
         $subdomain42 = new SubDomain();
         $subdomain42->setName('PPP');
         $subdomain42->setDescription('Lorem Ipsum');
+        $subdomain42->setDeleted(FALSE);
 
         $manager->persist($subdomain);
         $manager->persist($subdomain1);

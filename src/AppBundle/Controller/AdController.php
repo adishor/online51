@@ -10,7 +10,7 @@ class AdController extends Controller
     public function showAdsAction()
     {
         $ads = $this->getDoctrine()->getManager()
-            ->getRepository('AppBundle:Ad')->findAll();
+            ->getRepository('AppBundle:Ad')->findAll(); //findBy(array('deleted' => false));
 
         return $this->render('default/ads.html.twig', array(
               'ads' => $ads,

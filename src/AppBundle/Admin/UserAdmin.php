@@ -5,8 +5,11 @@ namespace AppBundle\Admin;
 use Sonata\UserBundle\Admin\Model\UserAdmin as SonataUserAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Application\Sonata\UserBundle\Entity\User;
+use Sonata\CoreBundle\Form\Type\EqualType;
+use Sonata\CoreBundle\Form\Type\BooleanType;
 
 class UserAdmin extends SonataUserAdmin
 {
@@ -30,43 +33,76 @@ class UserAdmin extends SonataUserAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        parent::configureFormFields($formMapper);
+        // define group zoning
+        $formMapper
+          ->tab('User')
+          ->with('General', array('class' => 'col-md-6'))->end()
+          ->with('Company', array('class' => 'col-md-6'))->end()
+          ->end()
+          ->tab('Security')
+          ->with('Status', array('class' => 'col-md-4'))->end()
+          ->with('Groups', array('class' => 'col-md-4'))->end()
+          ->with('Keys', array('class' => 'col-md-4'))->end()
+          ->with('Roles', array('class' => 'col-md-12'))->end()
+          ->end()
+        ;
+
+        $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         $formMapper
-          ->removeGroup('Profile', 'User')
           ->tab('User')
-          ->with('General', array('class' => 'col-md-6'))
-          ->add('name')
+          ->with('General')
+          ->add('username', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('email', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('plainPassword', 'text', array(
+              'disabled' => $disabled
+          ))
+          ->add('name', null, array(
+              'disabled' => $disabled
+          ))
           ->add('phone', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('county', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('city', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('address', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('creditsTotal', null, array(
               'required' => false,
-              'read_only' => true
+              'read_only' => true,
+              'disabled' => $disabled
           ))
           ->end()
-          ->with('Company', array('class' => 'col-md-6'))
+          ->with('Company')
           ->add('function', 'choice', array(
               'choices' => array(
                   User::FUNCTION_EXTERN_JOB => 'user.function.extern_job',
                   User::FUNCTION_INTERN_JOB => 'user.function.intern_job',
                   User::FUNCTION_APPOINTED_WORKER => 'user.function.appointed_worker',
                   User::FUNCTION_ADMINISTRATOR => 'user.function.administrator'
-              )
+              ),
+              'disabled' => $disabled
           ))
-          ->add('company')
-          ->add('uploadImage', 'sonata_admin_image_file', array(
-              'required' => false
+          ->add('company', null, array(
+              'disabled' => $disabled
           ))
+//            ->add('uploadImage', 'sonata_admin_image_file', array(
+//                'required' => false,
+//                'disabled' => $disabled
+//            ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(
                   User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
@@ -74,26 +110,55 @@ class UserAdmin extends SonataUserAdmin
                   User::NO_EMPLOYEES_OVER_50 => 'user.employees.over_50'
               ),
               'empty_value' => 'user_employees_empty',
-              'required' => false
+              'required' => false,
+              'disabled' => $disabled
           ))
           ->add('cui', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('bank', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('iban', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('noRegistrationORC', null, array(
               'required' => false,
+              'disabled' => $disabled
           ))
           ->add('noCertifiedEmpowerment', null, array(
+              'required' => false,
+              'disabled' => $disabled
+          ))
+          ->end()
+          ->end()
+          ->tab('Security')
+          ->with('Status')
+          ->add('locked', null, array('required' => false))
+          ->add('expired', null, array('required' => false))
+          ->add('enabled', null, array('required' => false))
+          ->add('credentialsExpired', null, array('required' => false))
+          ->end()
+          ->with('Groups')
+          ->add('groups', 'sonata_type_model', array(
+              'required' => false,
+              'expanded' => true,
+              'multiple' => true,
+          ))
+          ->end()
+          ->with('Roles')
+          ->add('realRoles', 'sonata_security_roles', array(
+              'label' => 'form.label_roles',
+              'expanded' => true,
+              'multiple' => true,
               'required' => false,
           ))
           ->end()
           ->end()
-          ->removeGroup('Social', 'User');
+        ;
     }
 
     public function getTemplate($name)
@@ -138,6 +203,8 @@ class UserAdmin extends SonataUserAdmin
           ->add('county')
           ->add('city')
           ->add('address')
+          ->add('deleted')
+          ->add('deletedAt')
           ->end()
           ->with('Company')
           ->add('company')
@@ -158,6 +225,57 @@ class UserAdmin extends SonataUserAdmin
           ->end()
           ->end()
         ;
+    }
+
+    protected function configureDatagridFilters(DatagridMapper $filterMapper)
+    {
+        parent::configureDatagridFilters($filterMapper);
+
+        $filterMapper->add('deleted', null, array(), null, array('choices_as_values' => true))
+          ->remove('locked')
+          ->remove('id');
+    }
+
+    protected function configureListFields(\Sonata\AdminBundle\Datagrid\ListMapper $listMapper)
+    {
+        parent::configureListFields($listMapper);
+
+        $listMapper->add('deleted');
+    }
+
+    public function getFilterParameters()
+    {
+        $parameters = parent::getFilterParameters();
+
+        if (!array_key_exists("deleted", $parameters)) {
+            $parameters['deleted'] = array(
+                'type' => EqualType::TYPE_IS_EQUAL,
+                'value' => BooleanType::TYPE_NO
+            );
+        }
+
+        return $parameters;
+    }
+
+    public function postRemove($object)
+    {
+        $object->setLocked(true);
+        $object->setUsername($object->getUsername() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
+        $object->setEmail($object->getEmail() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
+        $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
+        $em->flush();
+    }
+
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+
+        if (!$this->getConfigurationPool()->getContainer()->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            $query->andWhere('NOT ' . $query->getRootAliases()[0] . '.roles LIKE :role')
+              ->setParameter('role', '%"ROLE_SUPER_ADMIN"%');
+        }
+
+        return $query;
     }
 
 }
