@@ -1770,4 +1770,21 @@ p.login-form input.costum {
 
 h5.first {
     padding-top:10px;
+}
+
+.text-big li {
+    font-size: 18px;
+}
+
+.bs-modal-sm {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.domain-description th, 
+.domain-description td,
+.field-validation-error
+{
+    padding: 10px;
+
 } 

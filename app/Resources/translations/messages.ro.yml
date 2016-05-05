@@ -98,31 +98,35 @@ faq:
     title: 'FAQ'
 advantages:
     title: 'Avantaje'
+please-login: 'Va rugam sa faceti login in formularul din dreapta.'
 domain:
     in-the-section: 'In sectiunea %domain% gasesti :'
     documents: 'Documente'
     not-logged-in: 'Documentele sunt accesibile dupa acces in sistem:'
-    please-login: 'Va rugam sa faceti login in formularul din dreapta.'
     no-subscription: 'Nu aveti acces la documentele din acest domeniu!'
     go-to-subscription: 'Daca doriti sa accesati documentele aferente acestui domeniu va rugam sa achizitionati un'
     go-to-contact: ', sau sa luati legatura cu noi prin'
     subscriptions: 'abonament'
     contact: 'formularul de contact.'
-    confirm-unlock: 'Pentru a debloca documentul %title% apasati Ok. Atentie veti consuma %credits% credite!'
     document:
         already-unlocked: 'Documetul este deja deblocat.'
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest document.'
         success: 'Document deblocat cu succes.'
+        available-until: 'Documentul este deblocat pana la data de %date%'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
     price: 'Pret : '
     number-of-credits: 'Numar Credite : '
     valability: 'Termen de valabilitate : '
-    year: ' an'
-    years: ' ani'
-    no_subscription: Fara abonament
-curency: ' RON'
+    
+    not-logged-in: 'Abonamentele se pot comanda dupa acces in sistem:'
+    no_subscription: 'Fara abonament'
+    bought: 'Abonament achizitionat de utilizator.'
+    add-to-order: 'Adaugati la comanda'
+    canceled: 'Anulata de utilizator'
+    superadmin: 'Sunteti logat cu un cont de superadministrator.'
+currency: ' RON'
 user:
     function:
         extern_job: Serviciu extern
@@ -135,7 +139,9 @@ user:
         over_50: peste 50
         select_no: Selectati Nr de angajati
 mail:
+    name: 'Buna, %name%'
     thank-you: 'Multumim!'
+    other-info: 'Alte informatii:'
     contact:
         subject: 'Formular de contact - '
         name: 'Mesaj nou de la %name%'
@@ -143,30 +149,38 @@ mail:
         phone: 'Telefon: %phone%'
         message: 'Mesaj:'
     confirm:
-        name: 'Buna, %name%'
         subject: 'Mesaj primit!'
         sent-subject: 'Ai trimis un mesaj cu subiectul: %subject% si urmatorul mesaj:'
         message: 'In cel mai scurt timp vei primi un raspuns!'
     reset-password:
-        name: 'Buna, %name%'
         message: 'Pentru a-ti reseta parola - acceseaza '
         reset: 'Resetare parola!'
         subject: 'Resetare parola.'
     activate-account:
-        name: 'Buna, %name%'
         message: 'Pentru a-ti activa contul - acceseaza '
         activate: 'Activare cont!'
         subject: 'Activare cont.'
     order-confirm:
-        name: 'Buna %name%,'
         message: 'Comanda cu numarul %number% a fost procesata.'
         subscription: 'Abonamentul %subscription% a fost alocat contului tau!'
         domain: 'Ai acces la urmatorul domeniu:'
         domains: 'Ai acces la urmatoarele domenii:'
-        credits: 'Ai %credits% credite.'
-        valability: 'Valabile pana in %date%'
-        other-info: 'Alte informatii:'
+        credits: 'Ai %credits% credite,'
+        valability: 'Valabile pana in %date%.'
         subject: 'Comanda procesata!'
+    pending-order-remove:
+        message: 'Comanda cu numarul %number% a fost anulata.'
+        subject: 'Comanda anulata!'
+    order-invoice:
+        message: 'Ai trimis comanda cu numarul %number%.'
+        subscription: 'Abonamentul ales este abonamentul: %subscription%.'
+        domain: 'Abonamentul permite accesul la urmatorul domeniu:'
+        domains: 'Abonamentul permite accesul la urmatoarele domenii:'
+        credits: 'Abonamentul contine %credits% credite,'
+        valability: 'Abonamentul este valabil '
+        price: 'Pretul abonamentului este de %price% RON.'
+        invoice-attached: 'In atasament gasiti factura proforma aferenta comenzii.'
+        subject: 'Comanda trimisa!'
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -175,14 +189,20 @@ success:
     change-info: Informatiile s-au actualizat cu succes!
     reset-password: 'Resetarea s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare.'
     resend-activation: 'Un nou email de activare a fost trimis.'
+    order: 'Comanda s-a efectuat cu succes.'
+    order-remove: 'Comanda s-a anulat cu succes.'
 login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
     free: 'Creare cont gratuit'
-    total-credits: 'Credite Totale:'
     user-information: 'Informatii'
     change-password: 'Schimbare parola'
     change-user-information: 'Editare informatii'
+    must-log-in: 'Nu sunteti logat! Pentru a continua trebuie sa va logati.'
+    failed: 'User sau parola invalida!'
+    close-password: 'Inchide resetare parola.'
+    credit-status: 'Situatie credite'
+    administration: 'Administrare'
     button:
         login: 'Login'
         register: 'Inregistrare'
@@ -190,8 +210,6 @@ login:
         resend: 'Retrimite'
         logout: 'Logout'
         close: 'Inchide'
-    failed: 'User sau parola invalida!'
-    close-password: 'Inchide resetare parola.'
 json-response:
     no-user: 'Acest email nu este alocat.'
     not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
@@ -210,13 +228,125 @@ change-info:
     back: Inapoi
 credit-usage:
     unlocked-by-user: 'Document deblocat de utilizator'
+    expired: 'Credite expirate.'
 register-success:
     title: 'Succes!'
     success: 'V-ati inregistrat cu succes!'
     email-sent: 'In cel mai scurt timp veti primi pe adresa de email furnizata un email cu instructiunile pentru activarea contului dumneavoastra.'
     thank-you: 'Va multumim!'
 resend-activation: 'Acest utilizator nu este inca activat. Va rugam sa urmati instructiunile din email-ul de activare. Daca doriti sa reprimiti email-ul de activare apasati pe butonul RETRIMITE de mai jos'
-
+order:
+    title: 'Informatii despre abonamente, comenzi si credite'
+    description: 'Folosind meniul din partea stanga aveti acces la informatii despre:'
+    active-subscriptions: 'Aveti urmatoarele abonamente active:'
+    active-subscription: 'Aveti urmatorul abonament activ:'
+    no-active-subscriptions: 'Nu aveti abonamente active.'
+    total-credits: 'Total credite primite'
+    total-active-credits: 'Total credite active'
+    pending-orders: 'Aveti urmatoarele comenzi in asteptare:'
+    pending-order: 'Aveti urmatoarea comanda in asteptare:'
+    no-pending-orders: 'Nu aveti comenzi in asteptare.'
+    bonus-orders: 'Aveti urmatoarele credite suplimentare:'
+    unlocked-documents: 'Aveti urmatoarele documente deblocate:'
+    no-unlocked-documents: 'Nu aveti documente deblocate.'
+    used-credits: 'Ati consumat urmatoarele credite:'
+    no-used-credits: 'Nu ati consumat credite.'
+    total-used-credits: 'Total credite consumate'
+    credit-history: 'Istoric credite:'
+    no-credit-history: 'Nu aveti activitate la credite.'
+    no-domains: 'Fara domenii'
+    remove-order: 'Anuleaza comanda!'
+    total-expired-credits: 'Total credite expirate'
+    credits-expired: 'expirate'
+    credits-bonus: 'suplimentare'
+    removed-by-administrator: 'Comanda anulata de administrator.'
+    modified-by-administrator: 'Comanda modificata de administrator.'
+    approved-by-administrator: 'Comanda aprobata de administrator.'
+    tab:
+        active-credits: 'Credite active'
+        unlocked-documents: 'Documente deblocate'
+        pending-orders: 'Comenzi in asteptare'
+        credit-usage: 'Credite folosite'
+        credit-history: 'Istoric credite'
+        credit-sumary: 'Sumar credite'
+    error:
+        select-one: 'Va rugam selectati 1 domeniu.'
+        select-all: 'Va rugam selectati %maxNumber% domenii.'
+        select-all-domains: 'Va rugam selectati toate domeniile.'
+        no-delete: 'Nu se poate sterge aceasta comanda.'
+    button:
+        subscriptions: 'Inapoi la abonamente'
+        cancel: 'Renunta'
+    valability-years: 'Valabilitate(Ani):'
+    nr: Numar
+    order-nr: Numar comanda
+    subscription: 'Abonament'
+    domains: 'Domenii accesibile'
+    credits: 'Credite'
+    valability: 'Valabilitate'
+    until: 'Valabil pana la'
+    price: 'Pret'
+    days: ' zile'
+    domain: 'Domeniu'
+    subdomain: 'Subdomeniu'
+    document: 'Document'
+    unlocked-at: 'Deblocat la data'
+    mentions: 'Mentiuni'
+    no-mentions: 'Fara mentiuni'
+    subject: 'Subiect'
+    status: 'Stare'
+    active: 'Activ'
+    expired: 'Expirat'
+document:
+    no-document: 'Nici o selectie'
+modal:
+    document-confirm:
+        title: 'Confirma deblocare'
+        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% credite!'
+    subscription-add-confirm:
+        title: 'Confirma comanda'
+        body: 'Sunteti sigur ca doriti sa comandati acest abonament?'
+    order-remove-confirm:
+        title: 'Anuleaza comanda'
+        body: 'Sunteti sigur ca doriti sa anulati comanda?'
+    button:
+        yes: 'Da'
+        no: 'Nu'
+total-credits: 'Credite Totale:'
+year: ' an'
+years: ' ani'
+invoice:
+    title: 'FACTURA PROFORMA'
+    supplier: 'Furnizor'
+    client: 'Client'
+    company-code: 'C.I.F.'
+    company-registration-number: 'Nr. ord. in reg. com.'
+    headquarters: 'Sediu'
+    county: 'Judet'
+    iban: 'Cont'
+    bank: 'Banca'
+    social-capital: 'Capital social'
+    series: 'SERIA'
+    invoice-number: 'NR. FACTURA'
+    date: 'DATA'
+    VAT: 'Cota TVA'
+    number: 'Nr. Crt.'
+    description: 'Denumirea produselor sau serviciilor'
+    measure: 'U.M.'
+    quantity: 'Cantitate'
+    price: 'Pret unitar (fara T.V.A.)'
+    value: 'Valoare'
+    VAT-value: 'Valoare T.V.A.'
+    piece: 'Buc.'
+    currency: '-RON-'
+    signature-stamp: 'Semnatura si stampila furnizorului'
+    delegate: 'Numele delegatului'
+    delegate-ID: 'Act de identitate delegat:'
+    signature: 'Semnatura'
+    total: 'TOTAL'
+    general-total: 'TOTAL GENERAL'
+    maturity: 'Data scadenta'
+        
 #admin
 admin_label:
     subscription: 'Abonament'
@@ -227,11 +357,19 @@ admin_label:
     ad: 'Reclame'
     document: 'Documente'
 Subscription List: Lista Abonamente
+Subscription Delete: Stergere Abonamente
 Domain List: Lista Domenii
+Domain Delete: Stergere Domenii
 Sub Domain List: Lista Subdomenii
+Sub Domain Delete: Stergere Subdomenii
 Order List: Lista de comenzi
+Order Delete: Stergere comenzi
+Credits Usage List: Lista de credite folosite(consumate)
+Credits Usage Delete: Stergere credite folosite
 Ad List: Lista reclame
+Ad Delete: Stergere reclame
 Document List: Lista documente
+Document Delete: Stergere documente
 Name: Nume
 Price: Pret
 Credit: Credit
@@ -262,11 +400,17 @@ Upload Image: Incarca Imagine
 Documents: Documente
 Document: Document
 User: Utilizator
-Document Expire Date: Data de expirare a documentului
+Expire Date: Data de expirare
 No Domain: Fara domeniu
+Deleted: Sters
+Deleted At: Sters la
+Create new: Creaza nou
+You cannot delete the subscription %name% because you have an order with this subscription waiting your approval: 'Nu poti sterge abonamentul %name% deoarece ai o comanda cu acest abonament care asteapta aprobarea ta'
+You cannot delete the domain %name% because you have an order with this domain waiting your approval: 'Nu poti sterge domeniul %name% deoarece ai o comanda cu acest domeniu care asteapta aprobarea ta'
+You cannot delete your own account: Nu poti sa iti stergi propriul cont
+
 #media
 sonata:
     media:
         provider:
             file: Fisier
-

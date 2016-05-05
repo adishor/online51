@@ -1,0 +1,14 @@
+<body>
+    <p>
+        {{ 'mail.name'|trans({"%name%" : name}) }}
+    </p>
+    <p>
+        {{ 'mail.pending-order-remove.message'|trans({"%number%" : "%06d"|format(number)}) }}
+    </p>
+    {% if mentions is defined %}
+        <p>
+            {{ 'mail.other-info'|trans }}</br>
+            {{ mentions }}
+        </p>
+    {% endif %}
+</body>

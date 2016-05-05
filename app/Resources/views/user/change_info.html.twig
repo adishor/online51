@@ -6,7 +6,7 @@
         {{ 'change-info.title'|trans }}
     </h1>
     {% for flash_message in app.session.flashbag.get('successful-change-info') %}
-        <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
+        <h3 class="color-blue text-center first" >{{ flash_message|trans }}</h3>
     {% endfor %}
     {{ form_start(form, { 'attr': {'id': 'ChangeInfoForm'} }) }}
     {% form_theme form 'user/form/error_template.html.twig' %}
@@ -231,7 +231,6 @@
                 </div>
                 <div class="register-form2">
                     <input type="button" value="{{ 'change-info.save'|trans }}" id="btnRegister" class="costum pull-right" onclick="SubmitRegister()" />
-                    <a href="{{ path('homepage') }}"><input type="button" value="{{ 'change-info.back'|trans }}" id="btnRegister" class="costum pull-left"/></a>
                 </div>
             </div>
         </div>

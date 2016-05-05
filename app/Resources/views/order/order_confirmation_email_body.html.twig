@@ -1,6 +1,6 @@
 <body>
     <p>
-        {{ 'mail.order-confirm.name'|trans({"%name%" : name}) }}
+        {{ 'mail.name'|trans({"%name%" : name}) }}
     </p>
     <p>
         {{ 'mail.order-confirm.message'|trans({"%number%" : "%06d"|format(number)}) }}
@@ -26,11 +26,11 @@
         {{ 'mail.order-confirm.credits'|trans({"%credits%" : credits}) }}
     </p>
     <p>
-        {{ 'mail.order-confirm.valability'|trans({"%date%" : endDate|date('d/m/Y H:m')}) }}
+        {{ 'mail.order-confirm.valability'|trans({"%date%" : endDate| localizeddate('medium', 'short', app.request.locale ) }) }}
     </p>
     {% if mentions is defined %}
         <p>
-            {{ 'mail.order-confirm.other-info'|trans }}</br>
+            {{ 'mail.other-info'|trans }}</br>
             {{ mentions }}
         </p>
     {% endif %}

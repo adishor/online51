@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+{% block modal %}
+    {% include 'order/order_remove_confirm_modal.html.twig' %} 
+{% endblock modal %}
+
+{% block ccontainer %}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            <li><a href="#active-credits" id="nav-active-credits" role="tab" data-toggle="tab">{{ 'order.tab.active-credits'|trans|upper }}</a><span></span></li>
+            <li><a href="#pending" id="nav-pending" role="tab" data-toggle="tab">{{ 'order.tab.pending-orders'|trans|upper }}</a><span></span></li>
+            <li><a href="#documents" id="nav-documents" role="tab" data-toggle="tab">{{ 'order.tab.unlocked-documents'|trans|upper }}</a><span></span></li>
+            <li><a href="#usage" id="nav-usage" role="tab" data-toggle="tab">{{ 'order.tab.credit-usage'|trans|upper }}</a><span></span></li>
+            <li><a href="#history" id="nav-history" role="tab" data-toggle="tab">{{ 'order.tab.credit-history'|trans|upper }}</a><span></span></li>
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <div class="tab-content domain-description">
+            <div class="tab-pane active" id="ssm">
+                <h1 class="title-top">{{ 'order.title'|trans }}</h1>
+                <p>{{ 'order.description'|trans }}</p>
+                <ul>
+                    <li>{{ 'order.tab.active-credits'|trans }}</li>
+                    <li>{{ 'order.tab.pending-orders'|trans }}</li>
+                    <li>{{ 'order.tab.unlocked-documents'|trans }}</li>
+                    <li>{{ 'order.tab.credit-usage'|trans }}</li>
+                    <li>{{ 'order.tab.credit-history'|trans }}</li>
+                </ul>
+            </div>
+            {# active-credits #}
+            {% include 'order/order_active_credits.html.twig' with { 'activeOrders': activeOrders, 'bonusOrders': bonusOrders } %} 
+            {#  pending orders  #}
+            {% include 'order/order_pending_orders.html.twig' with { 'pendingOrders': pendingOrders } %} 
+            {#  valid documents  #}
+            {% include 'order/order_valid_documents.html.twig' with { 'validDocuments': validDocuments } %} 
+            {#  credit usage  #}
+            {% include 'order/order_credit_usage.html.twig' with { 'unlockedDocuments': unlockedDocuments } %} 
+            {#  credit history  #}
+            {% include 'order/order_credit_history.html.twig' with { 'creditHistoryItems': creditHistoryItems } %} 
+        </div>
+    </div>
+    <script type="text/javascript">
+        jQuery(window).load(function () {
+            if (window.location.hash) {
+                extension = window.location.hash.replace('#doc-', '');
+                jQuery(".tab-pane-menu").first().parent().removeClass("active");
+                jQuery(".tab-pane").first().removeClass("active");
+                jQuery('#nav-' + extension).parent().addClass("active");
+                jQuery('#' + extension + ".tab-pane").addClass("active");
+            }
+        });
+    </script>
+{% endblock %}

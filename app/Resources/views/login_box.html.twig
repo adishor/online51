@@ -10,17 +10,21 @@
 {% if app.user %}
     <div class="login-form" id="loginDiv">
         <p class="first text-center text-small">{{ 'login.user-information'|trans }}</p>
-        <h4 class="text-center">{{ 'login.total-credits'|trans }}</h4>
+        <h4 class="text-center">{{ 'total-credits'|trans }}</h4>
         {% if app.user.creditsTotal %}
             <h4 id="totalUserCredits" class="text-center">{{ app.user.creditsTotal }}</h4>
-        {%else%}
+        {% else %}
             <h4 id="totalUserCredits" class="text-center">0</h4>    
         {% endif %}
         <input type="button" class="costum centered" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
+        {% if is_granted('ROLE_SUPER_ADMIN') %} 
+            <p class="last"><a href="{{ path('sonata_admin_dashboard') }}">{{ 'login.administration'|trans }}</a></p>
+        {% endif %}
         <p class="last"><a href="{{ path('change_password') }}">{{ 'login.change-password'|trans }}</a></p>
         <p class="last"><a href="{{ path('change_info') }}">{{ 'login.change-user-information'|trans }}</a></p>
+        <p class="last"><a href="{{ path('show_orders') }}">{{ 'login.credit-status'|trans }}</a></p>
     </div>    
-{% else %}
+{% elseif not app.user %}
     <form action="" method="post" onsubmit="return false">
         <input id="SubscriptionType" name="SubscriptionType" type="hidden" value="" />
         <div class="login-form" id="loginDiv">
@@ -30,7 +34,7 @@
             <span class="field-validation-valid text-center" data-valmsg-for="UserName" data-valmsg-replace="true" id="validUser" ></span>
             <input data-val="true" data-val-required="{{ 'form.required.password'|trans }}" id="LoginPassword" name="Password" placeholder="{{ 'form.label.password'|trans }}" type="password" />
             <span class="field-validation-valid text-center" data-valmsg-for="Password" data-valmsg-replace="true" id="validPass" ></span>
-            <input type="submit" class="costum" value="{{ 'login.button.login'|trans }}" onclick="GoLogin('{{ path('sonata_user_security_check') }}', '{{ path('homepage') }}')" />
+            <input type="submit" class="costum" value="{{ 'login.button.login'|trans }}" onclick="GoLogin('{{ path('sonata_user_security_check') }}', '{{ path('homepage') }}', '{{ path('sonata_admin_dashboard') }}')" />
             <br class="clear" />
             <p class="last"><a onclick="ResetPasswordShow()" href="#">{{ 'login.forgot'|trans }}</a></p>
             <p class="last"><a onclick="FreeAccountRegister()" href="#">{{ 'login.free'|trans }}</a></p>

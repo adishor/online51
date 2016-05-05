@@ -44,9 +44,9 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     {
         // if AJAX login
         if ($request->isXmlHttpRequest()) {
-            $array = array('success' => true); // data to return via JSON
+            $isAdmin = $this->userHelper->isUserAdmin();
+            $array = array('success' => true, 'admin' => $isAdmin); // data to return via JSON
             $response = new Response(json_encode($array));
-            $response->headers->set('Content-Type', 'application/json');
             $request->getSession()->getFlashBag()->add('successful-login', 'success.login');
             $this->userHelper->updateValidUserCredits();
 
@@ -82,7 +82,6 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
 
             $array = array('success' => false, 'message' => $exception->getMessage()); // data to return via JSON
             $response = new Response(json_encode($array));
-            $response->headers->set('Content-Type', 'application/json');
 
             return $response;
 

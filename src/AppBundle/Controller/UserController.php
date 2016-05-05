@@ -90,7 +90,7 @@ class UserController extends Controller
         $errors = [];
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($email);
 
-        if (null === $user) {
+        if ((null === $user) || ($user->getDeleted())) {
             $errors['Msg'] = $this->get('translator')->trans('json-response.no-user');
 
             return new Response(json_encode($errors), 200);
@@ -121,7 +121,7 @@ class UserController extends Controller
     {
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
-        if (null === $user) {
+        if ((null === $user) || ($user->getDeleted())) {
             throw new NotFoundHttpException($this->get('translator')->trans('json-response.link-invalid'));
         }
         if (!$user->isEnabled()) {
@@ -164,7 +164,7 @@ class UserController extends Controller
     {
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
-        if ((null === $user) || $user->isEnabled()) {
+        if ((null === $user) || $user->isEnabled() || ($user->getDeleted())) {
             throw new NotFoundHttpException($this->get('translator')->trans('activate-account.link-invalid'));
         }
         if (false === $user->isEnabled()) {
@@ -241,7 +241,7 @@ class UserController extends Controller
         $errors = [];
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($email);
 
-        if (null === $user) {
+        if ((null === $user) || ($user->getDeleted())) {
             $errors['Msg'] = $this->get('translator')->trans('json-response.no-user');
 
             return new Response(json_encode($errors), 200);

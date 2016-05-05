@@ -26,6 +26,8 @@ class OrderRepository extends EntityRepository
           ->andWhere('d.id = :domain')
           ->setParameter('domain', $domainId)
           ->andWhere('o.endingDate > :now')
+          ->andWhere('d.deleted = FALSE')
+          ->andWhere('o.deleted = FALSE')
           ->setParameter('now', new \DateTime);
 
         $query = $queryBuilder->getQuery();
@@ -46,7 +48,8 @@ class OrderRepository extends EntityRepository
           ->andWhere('o.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('o.endingDate > :endDate')
-          ->setParameter('endDate', $endDate);
+          ->setParameter('endDate', $endDate)
+          ->andWhere('o.deleted = FALSE');
         if (null !== $endDate) {
             $queryBuilder->andWhere('o.startDate <= :endDate')
               ->setParameter('endDate', $endDate);
@@ -55,6 +58,129 @@ class OrderRepository extends EntityRepository
         $query = $queryBuilder->getQuery();
 
         return $query->getSingleScalarResult();
+    }
+
+    public function findAllActiveUserOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :now')
+          ->andWhere('o.subscription is not NULL')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('o.deleted = FALSE')
+          ->orderBy('o.startDate', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllActiveBonusUserOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.endingDate > :now')
+          ->andWhere('o.subscription is NULL')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('o.deleted = FALSE')
+          ->orderBy('o.startDate', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllUserOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.subscription is not NULL')
+          ->andWhere('o.deleted = FALSE');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllBonusUserOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.subscription is NULL')
+          ->andWhere('o.deleted = FALSE');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllPendingOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->where('o.firstActive = FALSE')
+          ->andWhere('o.user = :user')
+          ->andWhere('o.subscription IS NOT NULL')
+          ->setParameter('user', $userId)
+          ->andWhere('o.deleted = FALSE')
+          ->orderBy('o.id', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findAllHistoryOrders($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('o.id, s.name as title, o.mentions, o.startDate as unlockDate, o.creditValue as credit, o.endingDate as expireDate')
+          ->from('AppBundle:Order', 'o')
+          ->leftjoin('o.subscription', 's')
+          ->where('o.active = TRUE')
+          ->andWhere('o.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('o.deleted = FALSE');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    public function findPendingOrdersByDomain($domainId)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder('o');
+        $queryBuilder
+          ->select('o')
+          ->from('AppBundle:Order', 'o')
+          ->join('o.domains', 'od')
+          ->where($queryBuilder->expr()->eq('od.id', $domainId))
+          ->andWhere('o.deleted = FALSE')
+          ->andWhere('o.firstActive = FALSE');
+
+        return $queryBuilder->getQuery()->getArrayResult();
     }
 
 }

@@ -2,8 +2,10 @@
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CreditsUsage
@@ -11,9 +13,13 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CreditsUsageRepository")
  * @HasLifecycleCallbacks
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class CreditsUsage
 {
+    const TYPE_DOCUMENT = 'document';
+    const TYPE_EXPIRED = 'expired';
+
     /**
      *
      * @var integer
@@ -25,6 +31,7 @@ class CreditsUsage
     private $id;
 
     /**
+     *
      * @var integer
      *
      * @ORM\Column(type="integer")
@@ -32,13 +39,15 @@ class CreditsUsage
     protected $credit;
 
     /**
+     *
      * @var string
      *
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     protected $mentions;
 
     /**
+     *
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -46,25 +55,68 @@ class CreditsUsage
     protected $createdAt;
 
     /**
+     *
      * @var \Application\Sonata\UserBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", inversedBy="userCreditsUsage")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $user;
 
     /**
+     *
      * @var \Application\Sonata\MediaBundle\Entity\Media
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="documentCreditsUsage")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
     protected $document;
 
     /**
+     *
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $documentExpireDate;
+    protected $expireDate;
+
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $deleted;
+
+    /**
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
+
+    /**
+     *
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     */
+    protected $usageType;
+
+    public function __construct()
+    {
+        $this->deleted = FALSE;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set credit
@@ -159,18 +211,6 @@ class CreditsUsage
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt = new \DateTime();
-        $this->documentExpireDate = new \DateTime();
-        $this->documentExpireDate->add(new \DateInterval('P' . $this->document->getValabilityDays() . 'D'));
-        $this->mentions = 'Document deblocat de utilizator.';
-        $this->credit = $this->document->getCreditValue();
-    }
-
-    /**
      * Set document
      *
      * @param \Application\Sonata\MediaBundle\Entity\Media $document
@@ -205,37 +245,109 @@ class CreditsUsage
         return FALSE;
     }
 
-
     /**
-     * Get id
+     * Set expireDate
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set documentExpireDate
-     *
-     * @param \DateTime $documentExpireDate
+     * @param \DateTime $expireDate
      * @return CreditsUsage
      */
-    public function setDocumentExpireDate($documentExpireDate)
+    public function setExpireDate($expireDate)
     {
-        $this->documentExpireDate = $documentExpireDate;
+        $this->expireDate = $expireDate;
 
         return $this;
     }
 
     /**
-     * Get documentExpireDate
+     * Get expireDate
      *
      * @return \DateTime
      */
-    public function getDocumentExpireDate()
+    public function getExpireDate()
     {
-        return $this->documentExpireDate;
+        return $this->expireDate;
     }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return SubDomain
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return SubDomain
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+     * Set usageType
+     *
+     * @param string $usageType
+     * @return CreditsUsage
+     */
+    public function setUsageType($usageType)
+    {
+        $this->usageType = $usageType;
+
+        return $this;
+    }
+
+    /**
+     * Get usageType
+     *
+     * @return string
+     */
+    public function getUsageType()
+    {
+        return $this->usageType;
+    }
+
+    public function __toString()
+    {
+        return ($this->getId() ? "Credit Usage" . " #" . $this->getId() : 'Create new');
+    }
+
 }

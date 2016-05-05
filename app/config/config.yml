@@ -7,13 +7,15 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: ro
+    sonata.user.admin.groupname: User
     sonata.user.admin.user.class: AppBundle\Admin\UserAdmin
     sonata.user.admin.user.controller: AppBundle:Admin\User
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
     sonata.media.provider.file.class: AppBundle\Provider\DocumentProvider
     sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
-    
-    
+    stof_doctrine_extensions.listener.softdeleteable.class: AppBundle\Listener\SoftDeleteableListener
+
+
 framework:
     #esi:             ~
     translator:      { fallbacks: ["%locale%"] }
@@ -46,6 +48,13 @@ twig:
     form:
         resources:
             - 'SonataFormatterBundle:Form:formatter.html.twig'
+services:
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
+
 
 # Assetic Configuration
 assetic:
@@ -88,6 +97,8 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
+    port:      "%mailer_port%"
+    encryption: "%mailer_encryption%"
     spool:     { type: memory }
 
 sonata_admin:
@@ -95,9 +106,10 @@ sonata_admin:
         handler: sonata.admin.security.handler.role
     title: Online51
     options:
-        html5_validate: false
+        html5_validate: true
     templates:
         layout: sonata/layout.html.twig
+        batch: sonata/batch.html.twig
 
 sonata_user:
     security_acl: false
@@ -109,6 +121,8 @@ sonata_block:
         # enable the SonataAdminBundle block
         sonata.admin.block.admin_list:
             contexts: [admin]
+        sonata.admin.block.search_result:
+            contexts:   [admin]
         sonata.user.block.menu:    # used to display the menu in profile pages
         sonata.user.block.account: # used to display menu option (login option)
         sonata.block.service.text: # used to if you plan to use Sonata user routes
@@ -173,7 +187,7 @@ sonata_media:
         local:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
-    
+
 vich_uploader:
     db_driver: orm
     mappings:
@@ -202,6 +216,10 @@ doctrine:
     orm:
         entity_managers:
             default:
+                filters:
+                    softdeleteable:
+                        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                        enabled: true
                 mappings:
                     ApplicationSonataUserBundle: ~
                     SonataUserBundle: ~
@@ -209,7 +227,18 @@ doctrine:
                     ApplicationSonataMediaBundle: ~
                     SonataMediaBundle: ~
 
+stof_doctrine_extensions:
+    orm:
+        default:
+            softdeleteable: true
+
 knp_doctrine_behaviors:
     sluggable:      true
 
 gregwar_captcha: ~
+
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:      %kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64
+        options:    []

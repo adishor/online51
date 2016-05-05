@@ -49,6 +49,7 @@ class Media extends BaseMedia
     protected $valabilityDays;
 
     /**
+     *
      */
     private $subdomain;
 
@@ -56,6 +57,30 @@ class Media extends BaseMedia
      * @var \Doctrine\Common\Collections\Collection
      */
     private $documentCreditsUsage;
+
+    /**
+     * @var boolean
+     */
+    private $deleted;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->deleted = FALSE;
+    }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
 
     /**
      * Get id
@@ -75,19 +100,6 @@ class Media extends BaseMedia
     function setTitle($title)
     {
         $this->title = $title;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    public function __toString()
-    {
-        return $this->title;
     }
 
     /**
@@ -215,4 +227,49 @@ class Media extends BaseMedia
         return $this->documentCreditsUsage;
     }
 
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return Media
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return Media
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
 }

@@ -154,6 +154,10 @@
                 <source>filter.label_lastname</source>
                 <target>Numele</target>
             </trans-unit>
+            <trans-unit id="filter.label_deleted">
+                <source>filter.label_deleted</source>
+                <target>Sters</target>
+            </trans-unit>
             <trans-unit id="list.label_username">
                 <source>list.label_username</source>
                 <target>Nume de utilizator</target>
@@ -201,6 +205,10 @@
             <trans-unit id="list.label_lastname">
                 <source>list.label_lastname</source>
                 <target>Numele</target>
+            </trans-unit>
+            <trans-unit id="list.label_deleted">
+                <source>list.label_deleted</source>
+                <target>Sters</target>
             </trans-unit>
             <trans-unit id="label_two_step_code">
                 <source>label_two_step_code</source>
@@ -389,6 +397,14 @@
             <trans-unit id="show.label_last_login">
                 <source>show.label_last_login</source>
                 <target>Ultimul login</target>
+            </trans-unit>
+            <trans-unit id="show.label_deleted">
+                <source>show.label_deleted</source>
+                <target>Sters</target>
+            </trans-unit>
+            <trans-unit id="show.label_deleted_at">
+                <source>show.label_deleted_at</source>
+                <target>Sters la</target>
             </trans-unit>
             <trans-unit id="breadcrumb.link_user_show">
                 <source>breadcrumb.link_user_show</source>

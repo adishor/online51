@@ -1,0 +1,10 @@
+{% extends admin.getTemplate('base_list_field') %}
+
+{% block field %}
+    {% set disabled = '' %}
+    {% if object.deleted is defined and object.deleted %}
+      {% set disabled = 'disabled' %}
+    {% endif %}
+    <input {{ disabled }} type="checkbox" name="idx[]" value="{{ admin.id(object) }}">
+{% endblock %}
+

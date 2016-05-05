@@ -2,20 +2,23 @@
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Domain
  *
  * @ORM\Table()
  * @ORM\Entity()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Domain
 {
-    use ORMBehaviors\Sluggable\Sluggable;
 
+    use ORMBehaviors\Sluggable\Sluggable;
     /**
      *
      * @var integer
@@ -31,6 +34,7 @@ class Domain
      * @var string
      *
      * @ORM\Column()
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -66,7 +70,7 @@ class Domain
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="SubDomain", mappedBy="domain", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="SubDomain", mappedBy="domain", cascade={"persist"})
      */
     private $subdomains;
 
@@ -76,12 +80,28 @@ class Domain
      */
     private $orders;
 
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $deleted;
 
-    public function __construct() {
+    /**
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
+
+    public function __construct()
+    {
         $this->subdomains = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
+        $this->deleted = FALSE;
     }
-
 
     /**
      * Get id
@@ -261,7 +281,7 @@ class Domain
     public function setSubdomains($subdomains)
     {
         if (count($subdomains) > 0) {
-        foreach ($subdomains as $i) {
+            foreach ($subdomains as $i) {
                 $this->addSubdomain($i);
             }
         }
@@ -302,18 +322,65 @@ class Domain
         return $this->orders;
     }
 
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return SubDomain
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return SubDomain
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
     public function __toString()
     {
-        return $this->name;
+        return ($this->getId() ? $this->getName() : 'Create new');
     }
 
     public function getSluggableFields()
     {
-        return [ 'name' ];
+        return [ 'name'];
     }
 
     public function generateSlugValue($values)
     {
         return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
+
 }
