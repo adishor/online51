@@ -21,6 +21,10 @@ body {
     height: 700px;
 }
 
+.medium-row{
+    height: 60px;
+}
+
 .small-td{
     width: 150px;
 }

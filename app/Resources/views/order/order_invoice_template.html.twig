@@ -73,7 +73,7 @@
             </div>
             <div class="col-xs-12">
                 <table class="table table-bordered">
-                    <tr>
+                    <tr class="medium-row">
                         <td rowspan='2' class="small-td">{{ 'invoice.signature-stamp'|trans }}</td>
                         <td rowspan='2' class="large-td">
                             {{ 'invoice.delegate'|trans }}</br>
@@ -84,7 +84,7 @@
                         <td class="text-center" >{{ order.price|number_format(2, '.', ',') }}{{ 'currency'|trans }}</td>
                         <td class="text-center" >{{ (order.price * billingData['VAT']) |number_format(2, '.', ',') }}{{ 'currency'|trans }}</td>
                     </tr>
-                    <tr>
+                    <tr class="medium-row">
                         <td>{{ 'invoice.general-total'|trans }}</td>
                         <td colspan='2' class="text-center">{{ (order.price * ( 1 + billingData['VAT'] ))|number_format(2, '.', ',') }}{{ 'currency'|trans }}</td>
                     </tr>
