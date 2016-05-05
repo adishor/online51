@@ -122,7 +122,6 @@ class UserHelperService
         $validBeforeCredits = $orderRepository->findValidUserCredits($userId, $user->getLastCreditUpdate());
         $validNowCredits = $orderRepository->findValidUserCredits($userId);
         if (null !== $userCredits) {
-
             $updatedCredits = min($userCredits, $validBeforeCredits) + ($validNowCredits - $validBeforeCredits);
             $user->setCreditsTotal($updatedCredits);
             $user->setLastCreditUpdate(new \DateTime());

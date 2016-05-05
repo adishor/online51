@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
+
 class OrderController extends Controller
 {
 
@@ -54,12 +55,11 @@ class OrderController extends Controller
     {
         $post = $request->request;
         if ($post->has('subscriptionId')) {
-            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $post->get('domains'))) {
+            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $post->get('domains'))) {
 
                 return $this->redirectToRoute('subscriptions');
             }
         }
-
 
         return $this->redirect($this->generateUrl('show_orders') . '#doc-pending');
     }

@@ -119,15 +119,14 @@ subscription:
     price: 'Pret : '
     number-of-credits: 'Numar Credite : '
     valability: 'Termen de valabilitate : '
-    year: ' an'
-    years: ' ani'
+    
     not-logged-in: 'Abonamentele se pot comanda dupa acces in sistem:'
     no_subscription: 'Fara abonament'
     bought: 'Abonament achizitionat de utilizator.'
     add-to-order: 'Adaugati la comanda'
     canceled: 'Anulata de utilizator'
     superadmin: 'Sunteti logat cu un cont de superadministrator.'
-curency: ' RON'
+currency: ' RON'
 user:
     function:
         extern_job: Serviciu extern
@@ -140,7 +139,9 @@ user:
         over_50: peste 50
         select_no: Selectati Nr de angajati
 mail:
+    name: 'Buna, %name%'
     thank-you: 'Multumim!'
+    other-info: 'Alte informatii:'
     contact:
         subject: 'Formular de contact - '
         name: 'Mesaj nou de la %name%'
@@ -148,35 +149,38 @@ mail:
         phone: 'Telefon: %phone%'
         message: 'Mesaj:'
     confirm:
-        name: 'Buna, %name%'
         subject: 'Mesaj primit!'
         sent-subject: 'Ai trimis un mesaj cu subiectul: %subject% si urmatorul mesaj:'
         message: 'In cel mai scurt timp vei primi un raspuns!'
     reset-password:
-        name: 'Buna, %name%'
         message: 'Pentru a-ti reseta parola - acceseaza '
         reset: 'Resetare parola!'
         subject: 'Resetare parola.'
     activate-account:
-        name: 'Buna, %name%'
         message: 'Pentru a-ti activa contul - acceseaza '
         activate: 'Activare cont!'
         subject: 'Activare cont.'
     order-confirm:
-        name: 'Buna %name%,'
         message: 'Comanda cu numarul %number% a fost procesata.'
         subscription: 'Abonamentul %subscription% a fost alocat contului tau!'
         domain: 'Ai acces la urmatorul domeniu:'
         domains: 'Ai acces la urmatoarele domenii:'
         credits: 'Ai %credits% credite,'
         valability: 'Valabile pana in %date%.'
-        other-info: 'Alte informatii:'
         subject: 'Comanda procesata!'
     pending-order-remove:
-        name: 'Buna %name%,'
         message: 'Comanda cu numarul %number% a fost anulata.'
-        other-info: 'Alte informatii:'
         subject: 'Comanda anulata!'
+    order-invoice:
+        message: 'Ai trimis comanda cu numarul %number%.'
+        subscription: 'Abonamentul ales este abonamentul: %subscription%.'
+        domain: 'Abonamentul permite accesul la urmatorul domeniu:'
+        domains: 'Abonamentul permite accesul la urmatoarele domenii:'
+        credits: 'Abonamentul contine %credits% credite,'
+        valability: 'Abonamentul este valabil '
+        price: 'Pretul abonamentului este de %price% RON.'
+        invoice-attached: 'In atasament gasiti factura proforma aferenta comenzii.'
+        subject: 'Comanda trimisa!'
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -309,8 +313,40 @@ modal:
         yes: 'Da'
         no: 'Nu'
 total-credits: 'Credite Totale:'
-
-
+year: ' an'
+years: ' ani'
+invoice:
+    title: 'FACTURA PROFORMA'
+    supplier: 'Furnizor'
+    client: 'Client'
+    company-code: 'C.I.F.'
+    company-registration-number: 'Nr. ord. in reg. com.'
+    headquarters: 'Sediu'
+    county: 'Judet'
+    iban: 'Cont'
+    bank: 'Banca'
+    social-capital: 'Capital social'
+    series: 'SERIA'
+    invoice-number: 'NR. FACTURA'
+    date: 'DATA'
+    VAT: 'Cota TVA'
+    number: 'Nr. Crt.'
+    description: 'Denumirea produselor sau serviciilor'
+    measure: 'U.M.'
+    quantity: 'Cantitate'
+    price: 'Pret unitar (fara T.V.A.)'
+    value: 'Valoare'
+    VAT-value: 'Valoare T.V.A.'
+    piece: 'Buc.'
+    currency: '-RON-'
+    signature-stamp: 'Semnatura si stampila furnizorului'
+    delegate: 'Numele delegatului'
+    delegate-ID: 'Act de identitate delegat:'
+    signature: 'Semnatura'
+    total: 'TOTAL'
+    general-total: 'TOTAL GENERAL'
+    maturity: 'Data scadenta'
+        
 #admin
 admin_label:
     subscription: 'Abonament'

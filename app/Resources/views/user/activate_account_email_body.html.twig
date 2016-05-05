@@ -1,6 +1,6 @@
 <body>
     <p>
-        {{ 'mail.activate-account.name'|trans({'%name%': name}) }}
+        {{ 'mail.name'|trans({'%name%': name}) }}
     </p>
     <p>
         {{ 'mail.activate-account.message'|trans }}<a href="{{ url('activate_account',{'token': token}) }}">{{ 'mail.activate-account.activate'|trans }}</a>

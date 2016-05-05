@@ -1,0 +1,42 @@
+<body>
+    <p>
+        {{ 'mail.name'|trans({"%name%" : name}) }}
+    </p>
+    <p>
+        {{ 'mail.order-invoice.message'|trans({"%number%" : "%06d"|format(number)}) }}
+    </p>
+    <p>
+        {{ 'mail.order-invoice.subscription'|trans({"%subscription%" : subscription}) }}
+    </p>
+    {% if domainAmount > 1 %}
+        <p>
+            {{ 'mail.order-invoice.domains'|trans }}
+        </p>
+    {% else %}
+        <p>
+            {{ 'mail.order-invoice.domain'|trans }}
+        </p>
+    {% endif %}
+    {% for domain in domains %}
+        <p>   * {{ domain.name }} </p>
+    {% endfor %}
+    <p>
+        {{ 'mail.order-invoice.credits'|trans({"%credits%" : credits}) }}
+    </p>
+
+    <p>
+        {{ 'mail.order-invoice.valability'|trans() }}
+        {{valabilityYears}}
+        {% transchoice valabilityYears with {'%year%': 'year'|trans, '%years%': 'years'|trans } %}
+        {1} %year% |]1,Inf[ %years%
+        {% endtranschoice %}
+    </p>
+    <p>
+        {{ 'mail.order-invoice.price'|trans({"%price%" : price}) }}
+    </p>
+    <p>
+        {{ 'mail.order-invoice.invoice-attached'|trans() }}
+    </p>
+
+
+</body>

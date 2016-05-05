@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use AppBundle\Entity\Order;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use AppBundle\Service\MailerService;
 
 class OrderHelperService
 {
@@ -16,16 +17,18 @@ class OrderHelperService
     protected $translator;
     protected $tokenStorage;
     protected $session;
+    protected $mailer;
 
-    public function __construct(EntityManager $entityManager, TranslatorInterface $translator, TokenStorage $tokenStorage, Session $session)
+    public function __construct(EntityManager $entityManager, TranslatorInterface $translator, TokenStorage $tokenStorage, Session $session, MailerService $mailer)
     {
         $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->session = $session;
         $this->tokenStorage = $tokenStorage;
+        $this->mailer = $mailer;
     }
 
-    public function addSubscription($subscriptionId, $domains = null)
+    public function addSubscription($subscriptionId, $billingData, $domains = null)
     {
         $user = $this->tokenStorage->getToken()->getUser();
         $order = new Order();
@@ -68,8 +71,8 @@ class OrderHelperService
         $this->entityManager->persist($order);
         $this->entityManager->flush();
         $this->session->getFlashBag()->add('order-success', 'success.order');
-
-        return true;
+        $this->mailer->sendOrderInvoice($order, $billingData);
+        return $order;
     }
 
     public function getActiveCreditTotal($userId)

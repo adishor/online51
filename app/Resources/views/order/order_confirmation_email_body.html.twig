@@ -1,6 +1,6 @@
 <body>
     <p>
-        {{ 'mail.order-confirm.name'|trans({"%name%" : name}) }}
+        {{ 'mail.name'|trans({"%name%" : name}) }}
     </p>
     <p>
         {{ 'mail.order-confirm.message'|trans({"%number%" : "%06d"|format(number)}) }}
@@ -30,7 +30,7 @@
     </p>
     {% if mentions is defined %}
         <p>
-            {{ 'mail.order-confirm.other-info'|trans }}</br>
+            {{ 'mail.other-info'|trans }}</br>
             {{ mentions }}
         </p>
     {% endif %}
