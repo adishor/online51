@@ -57,7 +57,7 @@ class Subscription
      *
      * @var integer
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
+     * @Assert\GreaterThan(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
     private $domainAmount;
@@ -412,7 +412,7 @@ class Subscription
 
     public function __toString()
     {
-        return $this->name;
+        return ($this->getId() ? $this->getName() : 'Create new');
     }
 
 }

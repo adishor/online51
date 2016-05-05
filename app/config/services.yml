@@ -6,12 +6,12 @@ parameters:
 services:
     admin.subscription:
         class: AppBundle\Admin\SubscriptionAdmin
-        arguments: [~, AppBundle\Entity\Subscription, ~]
+        arguments: [~, AppBundle\Entity\Subscription, AppBundle:Admin\Subscription]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.subscription, group: admin_group_data }
     admin.domain:
         class: AppBundle\Admin\DomainAdmin
-        arguments: [~, AppBundle\Entity\Domain, ~]
+        arguments: [~, AppBundle\Entity\Domain, AppBundle:Admin\Domain]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.domain, group: admin_group_data }
     admin.subdomain:
@@ -26,7 +26,7 @@ services:
             - { name: sonata.admin, manager_type: orm, label: admin_label.order, group: admin_group_credit }
     admin.creditsusage:
         class: AppBundle\Admin\CreditsUsageAdmin
-        arguments: [~, AppBundle\Entity\CreditsUsage, ~]
+        arguments: [~, AppBundle\Entity\CreditsUsage, AppBundle:Admin\CreditsUsage]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.credits_usage, group: admin_group_credit }
     admin.ad:

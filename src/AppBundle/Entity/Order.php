@@ -599,12 +599,6 @@ class Order
         return $this->deletedAt;
     }
 
-    public function __toString()
-    {
-        return "Order" . " #" . $this->getId();
-    }
-
-
     /**
      * Set lastModifiedBy
      *
@@ -621,10 +615,16 @@ class Order
     /**
      * Get lastModifiedBy
      *
-     * @return \Application\Sonata\UserBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
     }
+
+    public function __toString()
+    {
+        return ($this->getId() ? "Order" . " #" . $this->getId() : 'Create new');
+    }
+
 }

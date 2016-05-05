@@ -257,11 +257,6 @@ class UserAdmin extends SonataUserAdmin
         return $parameters;
     }
 
-    public function prePersist($object)
-    {
-        $object->setDeleted(false);
-    }
-
     public function postRemove($object)
     {
         $object->setLocked(true);
@@ -269,6 +264,18 @@ class UserAdmin extends SonataUserAdmin
         $object->setEmail($object->getEmail() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
         $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
         $em->flush();
+    }
+
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+
+        if (!$this->getConfigurationPool()->getContainer()->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            $query->andWhere('NOT ' . $query->getRootAliases()[0] . '.roles LIKE :role')
+              ->setParameter('role', '%"ROLE_SUPER_ADMIN"%');
+        }
+
+        return $query;
     }
 
 }

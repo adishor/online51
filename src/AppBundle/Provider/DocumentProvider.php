@@ -18,28 +18,28 @@ class DocumentProvider extends FileProvider
         $disabled = ($formMapper->getAdmin()->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         $formMapper
-            ->add('title', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('creditValue', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('valabilityDays', null, array(
-                'disabled' => $disabled
-            ))
-            ->add('subdomain', 'entity', array(
-                'expanded' => false,
-                'multiple' => false,
-                'by_reference' => true,
-                'required' => false,
-                'class' => 'AppBundle:SubDomain',
-                'choices' => $this->getChoices($formMapper),
-                'disabled' => $disabled
-            ))
-            ->add('binaryContent', 'file', array(
-                'required' => false,
-                'disabled' => $disabled
-            ));
+          ->add('title', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('creditValue', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('valabilityDays', null, array(
+              'disabled' => $disabled
+          ))
+          ->add('subdomain', 'entity', array(
+              'expanded' => false,
+              'multiple' => false,
+              'by_reference' => true,
+              'required' => false,
+              'class' => 'AppBundle:SubDomain',
+              'choices' => $this->getChoices($formMapper),
+              'disabled' => $disabled
+          ))
+          ->add('binaryContent', 'file', array(
+              'required' => false,
+              'disabled' => $disabled
+        ));
     }
 
     /**
@@ -86,10 +86,10 @@ class DocumentProvider extends FileProvider
         //get all subdomains that are not associated
         $subdomainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:SubDomain');
         $noDomainSubdomains = $subdomainEm->getRepository('AppBundle:SubDomain')->createQueryBuilder('s')
-            ->where('s.domain is NULL')
-            ->andWhere('s.deleted = 0')
-            ->getQuery()
-            ->getResult();
+          ->where('s.domain is NULL')
+          ->andWhere('s.deleted = 0')
+          ->getQuery()
+          ->getResult();
         $choices['No Domain'] = $noDomainSubdomains;
 
 

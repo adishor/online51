@@ -13,6 +13,7 @@ use Sonata\CoreBundle\Form\Type\BooleanType;
 
 class OrderAdmin extends Admin
 {
+    protected $isActivated;
 
     protected function configureFormFields(FormMapper $form)
     {
@@ -26,8 +27,8 @@ class OrderAdmin extends Admin
           ->createQueryBuilder()
           ->select('u')
           ->from('ApplicationSonataUserBundle:User', 'u')
-          ->where('NOT u.roles LIKE :role')
-          ->andWhere('u.deleted = 0')
+          ->where('u.deleted = 0')
+          ->andWhere('NOT u.roles LIKE :role')
           ->setParameter('role', '%"ROLE_SUPER_ADMIN"%');
 
         $querySubscription = $this->modelManager
@@ -96,13 +97,13 @@ class OrderAdmin extends Admin
     protected function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('id')
-          ->add('user')
           ->add('active')
           ->add('startDate')
           ->add('endingDate')
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('price')
+          ->add('user')
           ->add('domains')
           ->add('subscription')
           ->add('createdAt')
@@ -147,18 +148,21 @@ class OrderAdmin extends Admin
     public function prePersist($object)
     {
         $object->setFirstActive(false);
-        $object->setDeleted(false);
         $this->preUpdate($object);
-    }
-
-    public function preUpdate($object)
-    {
-        $object->setDomainAmount(count($object->getDomains()));
     }
 
     public function postPersist($object)
     {
         $this->postUpdate($object);
+    }
+
+    public function preUpdate($object)
+    {
+        $object->setDomainAmount(count($object->getDomains()));
+
+        $em = $this->getModelManager()->getEntityManager($this->getClass());
+        $original = $em->getUnitOfWork()->getOriginalEntityData($object);
+        $this->isActivated = (empty($original)) ? FALSE : $original['active'];
     }
 
     public function postUpdate($object)
@@ -174,10 +178,6 @@ class OrderAdmin extends Admin
             $object->setStartDate($startDate);
             $object->setEndingDate($endDate);
             $object->setFirstActive(TRUE);
-
-            $object->getUser()->setCreditsTotal($object->getUser()->getCreditsTotal() + $object->getCreditValue());
-            $object->getUser()->setLastCreditUpdate(new \DateTime());
-
             $object->setApprovedBy($user);
             $object->setApprovedDate(new \DateTime());
             $object->setMentions($this->configurationPool->getContainer()->get('translator')->trans('order.approved-by-administrator'));
@@ -185,19 +185,47 @@ class OrderAdmin extends Admin
             $object->setMentions($this->configurationPool->getContainer()->get('translator')->trans('order.modified-by-administrator'));
         }
         $object->setLastModifiedBy($user);
+
+        if ($object->getActive() && !$this->isActivated) {
+            $object->getUser()->setCreditsTotal($object->getUser()->getCreditsTotal() + $object->getCreditValue());
+            $object->getUser()->setLastCreditUpdate(new \DateTime());
+        }
+
+        if (!$object->getActive() && $this->isActivated) {
+            $creditTotal = $object->getUser()->getCreditsTotal() - $object->getCreditValue();
+            $creditTotal = ($creditTotal < 0) ? 0 : $creditTotal;
+
+            $object->getUser()->setCreditsTotal($creditTotal);
+            $object->getUser()->setLastCreditUpdate(new \DateTime());
+        }
+
         $em->persist($object);
         $em->flush();
     }
 
     public function preRemove($object)
     {
-        $creditTotal = $object->getUser()->getCreditsTotal() - $object->getCreditValue();
-        $creditTotal = ($creditTotal < 0) ? 0 : $creditTotal;
+        if ($object->getActive()) {
+            $creditTotal = $object->getUser()->getCreditsTotal() - $object->getCreditValue();
+            $creditTotal = ($creditTotal < 0) ? 0 : $creditTotal;
 
-        $object->getUser()->setCreditsTotal($creditTotal);
-        $object->getUser()->setLastCreditUpdate(new \DateTime());
+            $object->getUser()->setCreditsTotal($creditTotal);
+            $object->getUser()->setLastCreditUpdate(new \DateTime());
 
-        $object->setMentions($this->configurationPool->getContainer()->get('translator')->trans('order.removed-by-administrator'));
+            $object->setMentions($this->configurationPool->getContainer()->get('translator')->trans('order.removed-by-administrator'));
+        }
+    }
+
+    public function postRemove($object)
+    {
+        if (!$object->getFirstActive()) {
+            $this->configurationPool->getContainer()->get('app.mailer')->sendPendingOrderRemoveMessage($object);
+        }
+        $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
+        $object->setLastModifiedBy($this->configurationPool->getContainer()->get('security.context')->getToken()->getUser());
+
+        $em->persist($object);
+        $em->flush();
     }
 
     public function getFilterParameters()
@@ -212,18 +240,6 @@ class OrderAdmin extends Admin
         }
 
         return $parameters;
-    }
-
-    public function postRemove($object)
-    {
-        if (!$object->getFirstActive()) {
-            $this->configurationPool->getContainer()->get('app.mailer')->sendPendingOrderRemoveMessage($object);
-        }
-        $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
-        $object->setLastModifiedBy($this->configurationPool->getContainer()->get('security.context')->getToken()->getUser());
-
-        $em->persist($object);
-        $em->flush();
     }
 
 }

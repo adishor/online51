@@ -262,6 +262,12 @@ class User extends BaseUser
      */
     private $deletedAt;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->deleted = FALSE;
+    }
+
     /**
      * Get id
      *
@@ -717,7 +723,6 @@ class User extends BaseUser
         return $this->userCreditsUsage;
     }
 
-
     /**
      * Set lastCreditUpdate
      *
@@ -813,10 +818,11 @@ class User extends BaseUser
     /**
      * Get modifiedSubscriptions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getModifiedSubscriptions()
     {
         return $this->modifiedSubscriptions;
     }
+
 }

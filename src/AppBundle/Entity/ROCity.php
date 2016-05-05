@@ -13,8 +13,8 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  */
 class ROCity
 {
-    use ORMBehaviors\Sluggable\Sluggable;
 
+    use ORMBehaviors\Sluggable\Sluggable;
     /**
      *
      * @var integer
@@ -100,7 +100,7 @@ class ROCity
 
     public function getSluggableFields()
     {
-        return [ 'name' ];
+        return [ 'name'];
     }
 
     public function generateSlugValue($values)
@@ -112,4 +112,5 @@ class ROCity
     {
         return $this->getName();
     }
+
 }

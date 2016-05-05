@@ -75,4 +75,5 @@ class RegisterType extends AbstractType
     {
         return 'register';
     }
+
 }
