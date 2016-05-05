@@ -30,7 +30,7 @@ class Order
      *
      * @var integer
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "subscription.at-least-0")
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
     private $creditValue;
@@ -39,7 +39,7 @@ class Order
      *
      * @var integer
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "subscription.at-least-0")
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
     private $valabilityDays;
