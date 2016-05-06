@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -13,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Formular
 {
+
+    use ORMBehaviors\Sluggable\Sluggable;
     /**
      *
      * @var integer
@@ -68,11 +71,10 @@ class Formular
 
     /**
      *
-     * @var array
-     *
-     * @ORM\Column(type="array", nullable=true)
+     * @var \AppBundle\Entity\CreditsUsage
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="formular")
      */
-    private $field1;
+    private $formularCreditsUsage;
 
     /**
      *
@@ -80,75 +82,12 @@ class Formular
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
-    private $field2;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field3;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field4;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field5;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field6;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field7;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field8;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field9;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $field10;
+    private $configUniqueness;
 
     public function __construct()
     {
         $this->deleted = false;
+        $this->formularCreditsUsage = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -277,232 +216,74 @@ class Formular
     }
 
     /**
-     * Set field1
+     * Set configUniqueness
      *
-     * @param array $field1
+     * @param array $configUniqueness
      * @return Formular
      */
-    public function setField1($field1)
+    public function setConfigUniqueness($configUniqueness)
     {
-        $this->field1 = $field1;
+        $this->configUniqueness = $configUniqueness;
 
         return $this;
     }
 
     /**
-     * Get field1
+     * Get configUniqueness
      *
      * @return array
      */
-    public function getField1()
+    public function getConfigUniqueness()
     {
-        return $this->field1;
+        return $this->configUniqueness;
     }
 
     /**
-     * Set field2
+     * Add formularCreditsUsage
      *
-     * @param array $field2
+     * @param \AppBundle\Entity\Document $formularCreditsUsage
      * @return Formular
      */
-    public function setField2($field2)
+    public function addFormularCreditsUsage(\AppBundle\Entity\Document $formularCreditsUsage)
     {
-        $this->field2 = $field2;
+        $this->formularCreditsUsage[] = $formularCreditsUsage;
 
         return $this;
     }
 
     /**
-     * Get field2
+     * Remove formularCreditsUsage
      *
-     * @return array
+     * @param \AppBundle\Entity\Document $formularCreditsUsage
      */
-    public function getField2()
+    public function removeFormularCreditsUsage(\AppBundle\Entity\Document $formularCreditsUsage)
     {
-        return $this->field2;
+        $this->formularCreditsUsage->removeElement($formularCreditsUsage);
     }
 
     /**
-     * Set field3
+     * Get formularCreditsUsage
      *
-     * @param array $field3
-     * @return Formular
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setField3($field3)
+    public function getFormularCreditsUsage()
     {
-        $this->field3 = $field3;
-
-        return $this;
+        return $this->formularCreditsUsage;
     }
 
-    /**
-     * Get field3
-     *
-     * @return array
-     */
-    public function getField3()
+    public function __toString()
     {
-        return $this->field3;
+        return ($this->getId() ? $this->getName() : 'Create new');
     }
 
-    /**
-     * Set field4
-     *
-     * @param array $field4
-     * @return Formular
-     */
-    public function setField4($field4)
+    public function getSluggableFields()
     {
-        $this->field4 = $field4;
-
-        return $this;
+        return ['name'];
     }
 
-    /**
-     * Get field4
-     *
-     * @return array
-     */
-    public function getField4()
+    public function generateSlugValue($values)
     {
-        return $this->field4;
+        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
 
-    /**
-     * Set field5
-     *
-     * @param array $field5
-     * @return Formular
-     */
-    public function setField5($field5)
-    {
-        $this->field5 = $field5;
-
-        return $this;
-    }
-
-    /**
-     * Get field5
-     *
-     * @return array
-     */
-    public function getField5()
-    {
-        return $this->field5;
-    }
-
-    /**
-     * Set field6
-     *
-     * @param array $field6
-     * @return Formular
-     */
-    public function setField6($field6)
-    {
-        $this->field6 = $field6;
-
-        return $this;
-    }
-
-    /**
-     * Get field6
-     *
-     * @return array
-     */
-    public function getField6()
-    {
-        return $this->field6;
-    }
-
-    /**
-     * Set field7
-     *
-     * @param array $field7
-     * @return Formular
-     */
-    public function setField7($field7)
-    {
-        $this->field7 = $field7;
-
-        return $this;
-    }
-
-    /**
-     * Get field7
-     *
-     * @return array
-     */
-    public function getField7()
-    {
-        return $this->field7;
-    }
-
-    /**
-     * Set field8
-     *
-     * @param array $field8
-     * @return Formular
-     */
-    public function setField8($field8)
-    {
-        $this->field8 = $field8;
-
-        return $this;
-    }
-
-    /**
-     * Get field8
-     *
-     * @return array
-     */
-    public function getField8()
-    {
-        return $this->field8;
-    }
-
-    /**
-     * Set field9
-     *
-     * @param array $field9
-     * @return Formular
-     */
-    public function setField9($field9)
-    {
-        $this->field9 = $field9;
-
-        return $this;
-    }
-
-    /**
-     * Get field9
-     *
-     * @return array
-     */
-    public function getField9()
-    {
-        return $this->field9;
-    }
-
-    /**
-     * Set field10
-     *
-     * @param array $field10
-     * @return Formular
-     */
-    public function setField10($field10)
-    {
-        $this->field10 = $field10;
-
-        return $this;
-    }
-
-    /**
-     * Get field10
-     *
-     * @return array
-     */
-    public function getField10()
-    {
-        return $this->field10;
-    }
 }
