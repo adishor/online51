@@ -69,6 +69,7 @@ class Document
     /**
      *
      * @var \Application\Sonata\MediaBundle\Entity\Media
+     *
      * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      */
@@ -76,10 +77,21 @@ class Document
 
     /**
      *
-     * @var \AppBundle\Entity\CreditsUsage
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="document")
+     * @var \DateTime
+     *
+     * @ORM\OneToMany(targetEntity="CreditsUsage", mappedBy="document")
+     * @ORM\JoinColumn(name="creditsUsage_id", referencedColumnName="id")
      */
     private $documentCreditsUsage;
+
+    /**
+     *
+     * @var \DateTime
+     *
+     * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="document")
+     * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id")
+     */
+    private $subdomain;
 
     /**
      * Constructor
@@ -276,4 +288,50 @@ class Document
         return ($this->getId() ? $this->getName() : 'Create new');
     }
 
+
+    /**
+     * Add subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     * @return Document
+     */
+    public function addSubdomain(\AppBundle\Entity\SubDomain $subdomain)
+    {
+        $this->subdomain[] = $subdomain;
+
+        return $this;
+    }
+
+    /**
+     * Remove subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     */
+    public function removeSubdomain(\AppBundle\Entity\SubDomain $subdomain)
+    {
+        $this->subdomain->removeElement($subdomain);
+    }
+
+    /**
+     * Get subdomain
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubdomain()
+    {
+        return $this->subdomain;
+    }
+
+    /**
+     * Set subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     * @return Document
+     */
+    public function setSubdomain(\AppBundle\Entity\SubDomain $subdomain = null)
+    {
+        $this->subdomain = $subdomain;
+
+        return $this;
+    }
 }

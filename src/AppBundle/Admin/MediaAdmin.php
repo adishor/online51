@@ -14,34 +14,27 @@ class MediaAdmin extends SonataMediaAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+
         $datagridMapper
-          ->add('title')
           ->add('name')
-          ->add('creditValue')
-          ->add('valabilityDays')
-          ->add('subdomain')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     protected function configureListFields(ListMapper $list)
     {
-        $list->addIdentifier('title')
-          ->add('name')
-          ->add('creditValue')
-          ->add('valabilityDays')
-          ->add('subdomain')
+
+        $list->addIdentifier('name')
           ->add('deleted');
     }
 
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('title')
-          ->add('name')
-          ->add('creditValue')
-          ->add('valabilityDays')
-          ->add('subdomain')
+
+
+        $show->add('name')
           ->add('deleted')
-          ->add('deletedAt');
+          ->add('deletedAt')
+          ->add('binaryContent');
     }
 
     public function getFilterParameters()
@@ -56,14 +49,6 @@ class MediaAdmin extends SonataMediaAdmin
         }
 
         return $parameters;
-    }
-
-    public function getTemplate($name)
-    {
-        if ($name == "edit") {
-            return 'sonata/base_edit.html.twig';
-        }
-        return parent::getTemplate($name);
     }
 
 }

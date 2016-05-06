@@ -17,6 +17,16 @@ class DocumentAdmin extends Admin
     {
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
+        $subdomainsOptions = array(
+            'expanded' => false,
+            'multiple' => false,
+            'by_reference' => true,
+            'required' => false,
+            'class' => 'AppBundle:SubDomain',
+            'choices' => $this->getChoices($form),
+            'disabled' => $disabled
+        );
+
         $form->add('name', null, array(
               'disabled' => $disabled
           ))
@@ -26,6 +36,7 @@ class DocumentAdmin extends Admin
           ->add('valabilityDays', null, array(
               'disabled' => $disabled
           ))
+          ->add('subdomain', 'entity', $subdomainsOptions)
           ->add('media', 'sonata_type_model_list', array(
               'disabled' => $disabled
             ), array(
@@ -40,6 +51,8 @@ class DocumentAdmin extends Admin
         $filter->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
+          ->add('subdomain')
+          ->add('media')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -48,6 +61,8 @@ class DocumentAdmin extends Admin
         $list->addIdentifier('name')
           ->add('creditValue')
           ->add('valabilityDays')
+          ->add('subdomain')
+          ->add('media')
           ->add('deleted');
     }
 
@@ -56,6 +71,7 @@ class DocumentAdmin extends Admin
         $show->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
+          ->add('subdomain')
           ->add('media')
           ->add('deleted')
           ->add('deletedAt');
@@ -74,6 +90,33 @@ class DocumentAdmin extends Admin
 
         return $parameters;
     }
+
+    public function getChoices(FormMapper $formMapper)
+    {
+        //get all subdomains that are associated
+        $domainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:Domain');
+        $domains = $domainEm->getRepository('AppBundle:Domain')->findAll();
+        $choices = [];
+        foreach ($domains as $domain) {
+            $subdomains = [];
+            foreach ($domain->getSubdomains() as $subdomain) {
+                if (!$subdomain->getDeleted()) {
+                    $subdomains[] = $subdomain;
+                }
+            }
+            $choices[$domain->getName()] = $subdomains;
+        }
+        //get all subdomains that are not associated
+        $subdomainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:SubDomain');
+        $noDomainSubdomains = $subdomainEm->getRepository('AppBundle:SubDomain')->createQueryBuilder('s')
+          ->where('s.domain is NULL')
+          ->andWhere('s.deleted = 0')
+          ->getQuery()
+          ->getResult();
+        $choices['No Domain'] = $noDomainSubdomains;
+        return $choices;
+    }
+
 
     public function getTemplate($name)
     {

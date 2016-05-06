@@ -11,7 +11,7 @@ parameters:
     sonata.user.admin.user.class: AppBundle\Admin\UserAdmin
     sonata.user.admin.user.controller: AppBundle:Admin\User
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
-    sonata.media.provider.file.class: AppBundle\Provider\DocumentProvider
+    sonata.media.provider.file.class: AppBundle\Provider\CustomFileProvider
     sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
     stof_doctrine_extensions.listener.softdeleteable.class: AppBundle\Listener\SoftDeleteableListener
 

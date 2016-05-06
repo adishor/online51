@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="media">
                 <source>media</source>
-                <target>Document</target>
+                <target>Fisiere</target>
             </trans-unit>
             <trans-unit id="gallery">
                 <source>gallery</source>

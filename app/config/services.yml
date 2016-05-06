@@ -38,12 +38,12 @@ services:
         class: AppBundle\Admin\DocumentAdmin
         arguments: [~, AppBundle\Entity\Document, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: admin_group_document }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: sonata_media }
     admin.formular:
         class: AppBundle\Admin\FormularAdmin
         arguments: [~, AppBundle\Entity\Formular, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: admin_group_document }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: sonata_media }
     sonata_admin_image_file:
         class: AppBundle\Form\Type\AdminImageFileType
         tags:
