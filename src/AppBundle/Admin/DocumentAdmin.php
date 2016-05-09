@@ -37,8 +37,9 @@ class DocumentAdmin extends Admin
               'disabled' => $disabled
           ))
           ->add('subdomain', 'entity', $subdomainsOptions)
-          ->add('media', 'sonata_type_model_list', array(
-              'disabled' => $disabled
+          ->add('media', 'sonata_type_model', array(
+              'disabled' => $disabled,
+              'required' => true,
             ), array(
               'link_parameters' => array(
                   'context' => 'default'

@@ -24,6 +24,7 @@ class MediaAdmin extends SonataMediaAdmin
     {
 
         $list->addIdentifier('name')
+          ->add('document')
           ->add('deleted');
     }
 
@@ -32,9 +33,9 @@ class MediaAdmin extends SonataMediaAdmin
 
 
         $show->add('name')
+          ->add('document')
           ->add('deleted')
-          ->add('deletedAt')
-          ->add('binaryContent');
+          ->add('deletedAt');
     }
 
     public function getFilterParameters()
@@ -49,6 +50,16 @@ class MediaAdmin extends SonataMediaAdmin
         }
 
         return $parameters;
+    }
+
+    public function postUpdate($object)
+    {
+        $object->setName($object->getProviderMetadata()['filename']);
+        $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
+        $em->persist($object);
+        $em->flush();
+
+        parent::postUpdate($object);
     }
 
 }

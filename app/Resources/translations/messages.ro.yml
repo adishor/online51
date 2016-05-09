@@ -302,7 +302,9 @@ document:
 modal:
     document-confirm:
         title: 'Confirma deblocare'
-        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% credite!'
+        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% %plural%!'
+        credit:  'credit'
+        credits:  'credite'
     subscription-add-confirm:
         title: 'Confirma comanda'
         body: 'Sunteti sigur ca doriti sa comandati acest abonament?'

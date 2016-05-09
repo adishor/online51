@@ -301,6 +301,10 @@
                 <source>list.label_custom</source>
                 <target>Personalizat</target>
             </trans-unit>
+            <trans-unit id="list.label_document">
+                <source>list.label_document</source>
+                <target>Document</target>
+            </trans-unit>
             <trans-unit id="sidemenu.link_edit_media">
                 <source>sidemenu.link_edit_media</source>
                 <target>Editati</target>
@@ -424,6 +428,10 @@
             <trans-unit id="filter.label_deleted">
                 <source>filter.label_deleted</source>
                 <target>Sters</target>
+            </trans-unit>
+            <trans-unit id="filter.label_document">
+                <source>filter.label_document</source>
+                <target>Document</target>
             </trans-unit>
             <trans-unit id="list.label_credit_value">
                 <source>list.label_credit_value</source>

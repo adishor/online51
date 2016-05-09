@@ -920,17 +920,6 @@ ul.list-check i{
     list-style: none;
 }
 
-.domain-description li:before {
-    font-family: 'FontAwesome';
-    content: '\f00c';
-    margin:0 5px 0 -15px;
-    color: #aecb06;
-}
-
-.domain-description ul ul li:before {
-    content: '\f1b6';
-}
-
 input.costum {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     margin:15px 0px;
@@ -1787,4 +1776,27 @@ h5.first {
 {
     padding: 10px;
 
-} 
+}
+
+
+.document-info
+{
+    padding: 0 10px;
+
+}
+.credit-icon {
+    background-image: url('../images/icon-credit-empty.png');
+    background-size: 50px 39px;
+    background-repeat: no-repeat;
+    height: 39px;
+    width: 50px;
+    float: left;
+}
+
+.credit-icon-value{
+    margin: 4px 18px 0px 0px;
+    font-weight: bold;
+    text-align: right;
+    font-size: 18px;
+    
+}

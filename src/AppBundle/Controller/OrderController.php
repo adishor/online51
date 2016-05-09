@@ -28,7 +28,7 @@ class OrderController extends Controller
               'pendingOrders' => $orderRepository->findAllPendingOrders($userId),
               'validDocuments' => $creditUsageRepository->findAllValidUserDocuments($userId),
               'unlockedDocuments' => $unlockedDocuments,
-              'documentObjects' => $this->get('app.order_helper')->getDocumentObjects($unlockedDocuments),
+              'mediaObjects' => $this->get('app.order_helper')->getMediaObjects($unlockedDocuments),
               'creditHistoryItems' => $this->get('app.order_helper')->getCreditHistory($userId),
         ));
     }

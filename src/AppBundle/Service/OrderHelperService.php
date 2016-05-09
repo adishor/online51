@@ -146,26 +146,26 @@ class OrderHelperService
         return $unlockedDocuments;
     }
 
-    public function getDocumentObjects($unlockedDocuments)
+    public function getMediaObjects($unlockedDocuments)
     {
-        $documentObjects = [];
+        $mediaObjects = [];
         foreach ($unlockedDocuments as $document) {
-            $documentObjects[$document['id']] = $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['id']);
+            $mediaObjects[$document['id']] = $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['mediaId']);
         }
 
-        return $documentObjects;
+        return $mediaObjects;
     }
 
     public function addInfoToHistoryOrders($allHistoryOrders)
     {
         foreach ($allHistoryOrders as $key => $order) {
-            if ($order['title'] !== null) {
+            if ($order['name'] !== null) {
                 $allHistoryOrders[$key]['subject'] = 'order.subscription';
                 $allHistoryOrders[$key]['orderId'] = $order['id'];
             } else {
                 $allHistoryOrders[$key]['subject'] = 'order.credits';
                 $allHistoryOrders[$key]['orderId'] = '';
-                $allHistoryOrders[$key]['title'] = 'order.credits-bonus';
+                $allHistoryOrders[$key]['name'] = 'order.credits-bonus';
             }
             $allHistoryOrders[$key]['sign'] = '+';
         }
@@ -177,7 +177,7 @@ class OrderHelperService
     {
         foreach ($allExpiredCredits as $key => $credit) {
             $allExpiredCredits[$key]['subject'] = 'order.credits';
-            $allExpiredCredits[$key]['title'] = 'order.credits-expired';
+            $allExpiredCredits[$key]['name'] = 'order.credits-expired';
             $allExpiredCredits[$key]['sign'] = '-';
         }
 

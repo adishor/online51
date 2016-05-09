@@ -18,6 +18,7 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+        <one-to-one field="document" target-entity="AppBundle\Entity\Document" mapped-by="media" />
         <field name="deleted" column="deleted" type="boolean" options="{'default':0}" nullable="false"/>
         <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
         <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" />

@@ -41,6 +41,11 @@ class Media extends BaseMedia
     private $deletedAt;
 
     /**
+     * @var AppBundle\Entity\Document
+     */
+    private $document;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -127,5 +132,28 @@ class Media extends BaseMedia
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+    /**
+     * Set document
+     *
+     * @param \AppBundle\Entity\Document $document
+     * @return Media
+     */
+    public function setDocument(\AppBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return \AppBundle\Entity\Document 
+     */
+    public function getDocument()
+    {
+        return $this->document;
     }
 }

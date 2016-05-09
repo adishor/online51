@@ -18,8 +18,9 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('DISTINCT(d.id) as id, d.title, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, sd.name as subDomain, dom.name as domain')
-          ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
+          ->select('DISTINCT(d.id) as id, d.name, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, sd.name as subDomain, dom.name as domain')
+          ->from('AppBundle:Document', 'd')
+          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'd.media = m')
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
@@ -28,6 +29,7 @@ class CreditsUsageRepository extends EntityRepository
           ->andWhere('cu.expireDate > :now')
           ->setParameter('now', new \DateTime)
           ->andWhere('d.deleted = FALSE')
+          ->andWhere('m.deleted = FALSE')
           ->andWhere('cu.deleted = FALSE')
           ->andWhere('sd.deleted = FALSE')
           ->andWhere('dom.deleted = FALSE');
@@ -48,8 +50,9 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('d.id, d.title, cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate')
-          ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
+          ->select('d.id, m.id as mediaId, d.name, cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate')
+          ->from('AppBundle:Document', 'd')
+          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'd.media = m')
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
@@ -84,7 +87,8 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('d.id')
-          ->from('Application\Sonata\MediaBundle\Entity\Media', 'd')
+          ->from('AppBundle:Document', 'd')
+          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'd.media = m')
           ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
@@ -93,6 +97,7 @@ class CreditsUsageRepository extends EntityRepository
           ->andWhere('d.id = :document')
           ->setParameter('document', $documentId)
           ->andWhere('d.deleted = FALSE')
+          ->andWhere('m.deleted = FALSE')
           ->andWhere('cu.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
