@@ -23,9 +23,18 @@ class DocumentAdmin extends Admin
             'by_reference' => true,
             'required' => false,
             'class' => 'AppBundle:SubDomain',
-            'choices' => $this->getChoices($form),
+            'choices' => $this->getSubdomainChoices($form),
             'disabled' => $disabled
         );
+
+        $queryMedia = $this->modelManager
+          ->getEntityManager('ApplicationSonataMediaBundle:Media')
+          ->createQueryBuilder()
+          ->select('m')
+          ->from('ApplicationSonataMediaBundle:Media', 'm')
+          ->leftJoin('m.document', 'd')
+          ->where('m.deleted = 0')
+          ->andWhere('d.id is null');
 
         $form->add('name', null, array(
               'disabled' => $disabled
@@ -38,6 +47,7 @@ class DocumentAdmin extends Admin
           ))
           ->add('subdomain', 'entity', $subdomainsOptions)
           ->add('media', 'sonata_type_model', array(
+              'query' => $queryMedia,
               'disabled' => $disabled,
               'required' => true,
             ), array(
@@ -53,7 +63,6 @@ class DocumentAdmin extends Admin
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('subdomain')
-          ->add('media')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -92,7 +101,7 @@ class DocumentAdmin extends Admin
         return $parameters;
     }
 
-    public function getChoices(FormMapper $formMapper)
+    public function getSubdomainChoices(FormMapper $formMapper)
     {
         //get all subdomains that are associated
         $domainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:Domain');
@@ -117,7 +126,6 @@ class DocumentAdmin extends Admin
         $choices['No Domain'] = $noDomainSubdomains;
         return $choices;
     }
-
 
     public function getTemplate($name)
     {

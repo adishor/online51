@@ -920,6 +920,17 @@ ul.list-check i{
     list-style: none;
 }
 
+.domain-description li:before {
+    font-family: 'FontAwesome';
+    content: '\f00c';
+    margin:0 5px 0 -15px;
+    color: #aecb06;
+}
+
+.domain-description ul ul li:before {
+    content: '\f1b6';
+}
+
 input.costum {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     margin:15px 0px;

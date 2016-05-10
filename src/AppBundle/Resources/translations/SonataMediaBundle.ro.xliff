@@ -150,6 +150,10 @@
                 <source>form.label_binary_content</source>
                 <target>Fisier/Referinta(File/Reference)</target>
             </trans-unit>
+            <trans-unit id="form.label_media_type">
+                <source>form.label_media_type</source>
+                <target>Tip fisier</target>
+            </trans-unit>
             <trans-unit id="label.size">
                 <source>label.size</source>
                 <target>Marime</target>
@@ -285,6 +289,10 @@
                 <source>list.label_name</source>
                 <target>Nume Fisier</target>
             </trans-unit>
+            <trans-unit id="list.label_media_type">
+                <source>list.label_media_type</source>
+                <target>Tip fisier</target>
+            </trans-unit>
             <trans-unit id="list.label_context">
                 <source>list.label_context</source>
                 <target>Context</target>
@@ -412,6 +420,10 @@
             <trans-unit id="filter.label_credit_value">
                 <source>filter.label_credit_value</source>
                 <target>Valoare credit</target>
+            </trans-unit>
+            <trans-unit id="filter.label_media_type">
+                <source>filter.label_media_type</source>
+                <target>Tip fisier</target>
             </trans-unit>
             <trans-unit id="filter.label_title">
                 <source>filter.label_title</source>

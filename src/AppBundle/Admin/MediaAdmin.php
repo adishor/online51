@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class MediaAdmin extends SonataMediaAdmin
 {
@@ -17,6 +18,12 @@ class MediaAdmin extends SonataMediaAdmin
 
         $datagridMapper
           ->add('name')
+          ->add('mediaType', null, array(), 'choice', array(
+              'choices' => array(
+                  Media::DOCUMENT_TYPE => $this->getTranslator()->trans('media-type.document'),
+                  Media::INVOICE_TYPE => $this->getTranslator()->trans('media-type.invoice'),
+                  Media::FORM_GENERATED_TYPE => $this->getTranslator()->trans('media-type.form-generated')
+            )))
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -25,6 +32,7 @@ class MediaAdmin extends SonataMediaAdmin
 
         $list->addIdentifier('name')
           ->add('document')
+          ->add('mediaType')
           ->add('deleted');
     }
 

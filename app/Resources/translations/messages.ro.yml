@@ -317,6 +317,7 @@ modal:
 total-credits: 'Credite Totale:'
 year: ' an'
 years: ' ani'
+file-download: 'Descarca fisier'
 invoice:
     title: 'FACTURA PROFORMA'
     supplier: 'Furnizor'
@@ -348,7 +349,10 @@ invoice:
     total: 'TOTAL'
     general-total: 'TOTAL GENERAL'
     maturity: 'Data scadenta'
-        
+media-type:
+    document: 'Document'
+    invoice: 'Factura Proforma'
+    form-generated: 'Document generat'
 #admin
 admin_label:
     subscription: 'Abonament'

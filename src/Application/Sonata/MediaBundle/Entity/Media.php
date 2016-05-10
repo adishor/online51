@@ -25,6 +25,10 @@ use Sonata\MediaBundle\Entity\BaseMedia as BaseMedia;
  */
 class Media extends BaseMedia
 {
+    const DOCUMENT_TYPE = 'Document';
+    const INVOICE_TYPE = 'Factura proforma';
+    const FORM_GENERATED_TYPE = 'Document generat de formular';
+
     /**
      * @var int $id
      */
@@ -46,12 +50,18 @@ class Media extends BaseMedia
     private $document;
 
     /**
+     * @var string
+     */
+    private $mediaType;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
+        $this->mediaType = $this::DOCUMENT_TYPE;
     }
 
     /**
@@ -150,10 +160,33 @@ class Media extends BaseMedia
     /**
      * Get document
      *
-     * @return \AppBundle\Entity\Document 
+     * @return \AppBundle\Entity\Document
      */
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * Set mediaType
+     *
+     * @param string $mediaType
+     * @return Media
+     */
+    public function setMediaType($mediaType)
+    {
+        $this->mediaType = $mediaType;
+
+        return $this;
+    }
+
+    /**
+     * Get mediaType
+     *
+     * @return string
+     */
+    public function getMediaType()
+    {
+        return $this->mediaType;
     }
 }

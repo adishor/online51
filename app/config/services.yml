@@ -39,6 +39,8 @@ services:
         arguments: [~, AppBundle\Entity\Document, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: sonata_media }
+        calls:
+            - [setTemplates, [{ base_list_field: sonata/document_base_list_field.html.twig }]]
     admin.formular:
         class: AppBundle\Admin\FormularAdmin
         arguments: [~, AppBundle\Entity\Formular, ~]
