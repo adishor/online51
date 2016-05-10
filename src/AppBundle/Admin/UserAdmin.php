@@ -257,13 +257,14 @@ class UserAdmin extends SonataUserAdmin
         return $parameters;
     }
 
-    public function postRemove($object)
+    public function preRemove($object)
     {
-        $object->setLocked(true);
-        $object->setUsername($object->getUsername() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
-        $object->setEmail($object->getEmail() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
-        $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
-        $em->flush();
+        if (!$object->getDeleted()) {
+            $object->setLocked(true);
+            $object->setUsername($object->getUsername() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
+            $object->setEmail($object->getEmail() . '_deleted_' . $object->getCreatedAt()->format('Y-m-d H:i:s'));
+            $this->getModelManager()->getEntityManager($this->getClass())->flush();
+        }
     }
 
     public function createQuery($context = 'list')
@@ -276,6 +277,22 @@ class UserAdmin extends SonataUserAdmin
         }
 
         return $query;
+    }
+
+    public function preBatchAction($actionName, \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $query, array &$idx, $allElements)
+    {
+        if (empty($idx) && $allElements && $actionName === 'delete') {
+            $idx = array();
+            $query->select('DISTINCT ' . $query->getRootAlias());
+            foreach ($query->getQuery()->iterate() as $pos => $object) {
+                $idx[] = $object[0]->getId();
+            }
+        }
+        foreach ($idx as $id) {
+            $this->preRemove($this->getModelManager()->getEntityManager($this->getClass())->getRepository('ApplicationSonataUserBundle:User')->find($id));
+        }
+
+        parent::preBatchAction($actionName, $query, $idx, $allElements);
     }
 
 }

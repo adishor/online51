@@ -37,11 +37,10 @@ class DomainController extends CRUDController
         $idx = $request->request->get('idx');
 
         if (empty($idx) && $request->request->has('all_elements') && $request->request->get('all_elements') == 'on') {
-            $domains = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')
-              ->findBy(array('deleted' => FALSE));
             $idx = array();
-            foreach ($domains as $domain) {
-                $idx[] = $domain->getId();
+            $query->select('DISTINCT ' . $query->getRootAlias());
+            foreach ($query->getQuery()->iterate() as $pos => $object) {
+                $idx[] = $object[0]->getId();
             }
         }
 
