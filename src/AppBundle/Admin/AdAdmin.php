@@ -7,15 +7,34 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class AdAdmin extends Admin
 {
 
     protected function configureFormFields(FormMapper $form)
     {
+        $queryImage = $this->modelManager
+          ->getEntityManager('ApplicationSonataMediaBundle:Media')
+          ->createQueryBuilder()
+          ->select('m')
+          ->from('ApplicationSonataMediaBundle:Media', 'm')
+          ->leftJoin('m.ad', 'a')
+          ->where('m.deleted = 0')
+          ->andWhere('m.mediaType = :mediaType')
+          ->setParameter('mediaType', Media::IMAGE_TYPE)
+          ->andWhere('a.id is null or a.id = :adId')
+          ->setParameter('adId', $this->getSubject()->getId());
+
         $form->add('title')
-          ->add('uploadImage', 'sonata_admin_image_file', array(
-              'required' => false
+          ->add('image', 'sonata_type_model', array(
+              'query' => $queryImage,
+              'required' => true,
+            ), array(
+              'link_parameters' => array(
+                  'context' => 'default',
+                  'provider' => 'sonata.media.provider.image',
+              )
         ));
     }
 
@@ -26,22 +45,18 @@ class AdAdmin extends Admin
 
     protected function configureListFields(ListMapper $list)
     {
-        $list->addIdentifier('title');
+        $list->addIdentifier('title')
+          ->add('image');
     }
 
     protected function configureShowFields(ShowMapper $show)
     {
         $show->add('title')
-          ->add('uploadImage', null, array(
-              'template' => 'sonata/fieldType/show_admin_image_file_field.html.twig'
+          ->add('image', 'sonata_media_type', array(
+              'provider' => 'sonata.media.provider.image',
+              'context' => 'default'
         ));
-    }
 
-    public function getFormTheme()
-    {
-        return array_merge(
-          parent::getFormTheme(), array('sonata/fieldType/admin_image_file_field.html.twig')
-        );
     }
 
 }

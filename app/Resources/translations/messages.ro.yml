@@ -415,6 +415,7 @@ Create new: Creaza nou
 You cannot delete the subscription %name% because you have an order with this subscription waiting your approval: 'Nu poti sterge abonamentul %name% deoarece ai o comanda cu acest abonament care asteapta aprobarea ta'
 You cannot delete the domain %name% because you have an order with this domain waiting your approval: 'Nu poti sterge domeniul %name% deoarece ai o comanda cu acest domeniu care asteapta aprobarea ta'
 You cannot delete your own account: Nu poti sa iti stergi propriul cont
+Media: Fisier
 
 #media
 sonata:

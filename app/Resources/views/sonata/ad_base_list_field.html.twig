@@ -20,24 +20,9 @@ file that was distributed with this source code.
         and admin.hasRoute(route)
         and admin.isGranted(action, action in ['VIEW', 'EDIT'] ? object : null)
     %}
-        {# replace media name edit link with file download link #}
-        {% if field_description.name == 'name' %}
-            <a href="{{ path('sonata_media_download', {'id': object|sonata_urlsafeid }) }}"> 
-        {% else %}
             <a class="sonata-link-identifier" href="{{ admin.generateObjectUrl(route, object, field_description.options.route.parameters) }}">
-        {% endif %}
-        {% if object.providerName == 'sonata.media.provider.image' %}
-            {% thumbnail object, 'small' %}
-        {% endif %}
                 {%- block field %}{{ value }}{% endblock -%} 
             </a>
-        {#  add a download link next to media name  #}
-        {#<a class="sonata-link-identifier" href="{{ admin.generateObjectUrl(route, object, field_description.options.route.parameters) }}">
-            {%- block field %}{{ value }}{% endblock -%}
-        </a>
-        {% if field_description.name == 'name' %}
-            <a class="pull-right" href="{{ path('sonata_media_download', {'id': object|sonata_urlsafeid }) }}"> {{ 'file-download'|trans }} </a>
-        {% endif %}#}
         
     {% else %}
         {% set isEditable = field_description.options.editable is defined and field_description.options.editable and admin.isGranted('EDIT', object) %}
@@ -49,7 +34,15 @@ file that was distributed with this source code.
                 {{ block('field') }}
             </span>
         {% else %}
-            {{ block('field') }}
+            {# download link in document #}
+            {% if field_description.name == 'image' %}
+                <a href="{{ path('sonata_media_download', {'id': object.image|sonata_urlsafeid }) }}">
+                    {% thumbnail object.image, 'small' %}
+                    {{ object.image.name }}
+                </a>
+            {% else %}
+                {{ block('field') }}
+            {% endif %}
         {% endif %}
     {% endif %}
 </td>

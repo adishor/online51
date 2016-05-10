@@ -17,10 +17,12 @@ class MediaAdmin extends SonataMediaAdmin
     {
 
         $datagridMapper
+          ->add('providerName')
           ->add('name')
           ->add('mediaType', null, array(), 'choice', array(
               'choices' => array(
                   Media::DOCUMENT_TYPE => $this->getTranslator()->trans('media-type.document'),
+                  Media::IMAGE_TYPE => $this->getTranslator()->trans('media-type.image'),
                   Media::INVOICE_TYPE => $this->getTranslator()->trans('media-type.invoice'),
                   Media::FORM_GENERATED_TYPE => $this->getTranslator()->trans('media-type.form-generated')
             )))
@@ -31,8 +33,8 @@ class MediaAdmin extends SonataMediaAdmin
     {
 
         $list->addIdentifier('name')
-          ->add('document')
           ->add('mediaType')
+          ->add('createdAt')
           ->add('deleted');
     }
 
@@ -41,7 +43,6 @@ class MediaAdmin extends SonataMediaAdmin
 
 
         $show->add('name')
-          ->add('document')
           ->add('deleted')
           ->add('deletedAt');
     }
@@ -56,8 +57,21 @@ class MediaAdmin extends SonataMediaAdmin
                 'value' => BooleanType::TYPE_NO
             );
         }
+        $parameters['_sort_order'] = 'DESC';
+        $parameters['_sort_by'] = 'createdAt';
 
         return $parameters;
+    }
+
+    public function prePersist($media)
+    {
+        if ($media->getProviderName() === 'sonata.media.provider.file') {
+            $media->setMediaType(Media::DOCUMENT_TYPE);
+        }
+        if ($media->getProviderName() === 'sonata.media.provider.image') {
+            $media->setMediaType(Media::IMAGE_TYPE);
+        }
+        parent::prePersist($media);
     }
 
     public function postUpdate($object)

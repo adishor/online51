@@ -48,6 +48,8 @@ twig:
     form:
         resources:
             - 'SonataFormatterBundle:Form:formatter.html.twig'
+            - 'SonataMediaBundle:Form:media_widgets.html.twig'
+
 services:
     twig.extension.intl:
         class: Twig_Extensions_Extension_Intl
@@ -174,8 +176,9 @@ sonata_media:
         default:  # the default context is mandatory
             providers:
                 - sonata.media.provider.file
+                - sonata.media.provider.image
             formats:
-                small: { width: 100 , quality: 70}
+                small: { width: 50 , quality: 70}
                 big:   { width: 500 , quality: 70}
             download:
                 strategy: app.media.security.user_strategy
@@ -187,6 +190,9 @@ sonata_media:
         local:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
+    providers:
+        file:
+            allowed_mime_types: ['application/pdf', 'application/x-pdf', 'application/rtf', 'text/html', 'text/rtf', 'text/plain', application/vnd.openxmlformats-officedocument.wordprocessingml.document]
 
 vich_uploader:
     db_driver: orm

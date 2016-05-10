@@ -28,6 +28,7 @@ class Media extends BaseMedia
     const DOCUMENT_TYPE = 'Document';
     const INVOICE_TYPE = 'Factura proforma';
     const FORM_GENERATED_TYPE = 'Document generat de formular';
+    const IMAGE_TYPE = 'Imagine';
 
     /**
      * @var int $id
@@ -50,6 +51,16 @@ class Media extends BaseMedia
     private $document;
 
     /**
+     * @var AppBundle\Entity\Order
+     */
+    private $order;
+
+    /**
+     * @var AppBundle\Entity\Ad
+     */
+    private $ad;
+
+    /**
      * @var string
      */
     private $mediaType;
@@ -61,7 +72,7 @@ class Media extends BaseMedia
     {
         $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
-        $this->mediaType = $this::DOCUMENT_TYPE;
+        
     }
 
     /**
@@ -188,5 +199,51 @@ class Media extends BaseMedia
     public function getMediaType()
     {
         return $this->mediaType;
+    }
+
+    /**
+     * Set order
+     *
+     * @param \AppBundle\Entity\Order $order
+     * @return Media
+     */
+    public function setOrder(\AppBundle\Entity\Order $order = null)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return \AppBundle\Entity\Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set ad
+     *
+     * @param \AppBundle\Entity\Ad $ad
+     * @return Media
+     */
+    public function setAd(\AppBundle\Entity\Ad $ad = null)
+    {
+        $this->ad = $ad;
+
+        return $this;
+    }
+
+    /**
+     * Get ad
+     *
+     * @return \AppBundle\Entity\Ad
+     */
+    public function getAd()
+    {
+        return $this->ad;
     }
 }

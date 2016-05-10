@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class DocumentAdmin extends Admin
 {
@@ -34,7 +35,10 @@ class DocumentAdmin extends Admin
           ->from('ApplicationSonataMediaBundle:Media', 'm')
           ->leftJoin('m.document', 'd')
           ->where('m.deleted = 0')
-          ->andWhere('d.id is null');
+          ->andWhere('m.mediaType = :mediaType')
+          ->setParameter('mediaType', Media::DOCUMENT_TYPE)
+          ->andWhere('d.id is null or d.id = :documentId')
+          ->setParameter('documentId', $this->getSubject()->getId());
 
         $form->add('name', null, array(
               'disabled' => $disabled
@@ -52,7 +56,8 @@ class DocumentAdmin extends Admin
               'required' => true,
             ), array(
               'link_parameters' => array(
-                  'context' => 'default'
+                  'context' => 'default',
+                  'provider' => 'sonata.media.provider.file',
               )
         ));
     }

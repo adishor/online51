@@ -109,6 +109,7 @@ class OrderAdmin extends Admin
           ->add('createdAt')
           ->add('approvedBy')
           ->add('approvedDate')
+          ->add('invoice')
           ->add('deleted');
     }
 
