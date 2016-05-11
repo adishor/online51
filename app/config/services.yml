@@ -24,6 +24,8 @@ services:
         arguments: [~, AppBundle\Entity\Order, AppBundle:Admin\Order]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.order, group: admin_group_credit }
+        calls:
+            - [setTemplates, [{ base_list_field: sonata/order_base_list_field.html.twig }]]
     admin.creditsusage:
         class: AppBundle\Admin\CreditsUsageAdmin
         arguments: [~, AppBundle\Entity\CreditsUsage, AppBundle:Admin\CreditsUsage]
@@ -34,16 +36,20 @@ services:
         arguments: [~, AppBundle\Entity\Ad, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.ad, group: admin_group_website }
+        calls:
+            - [setTemplates, [{ base_list_field: sonata/ad_base_list_field.html.twig, show: sonata/ad_base_show_field.html.twig }]]
     admin.document:
         class: AppBundle\Admin\DocumentAdmin
         arguments: [~, AppBundle\Entity\Document, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: admin_group_document }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: sonata_media }
+        calls:
+            - [setTemplates, [{ base_list_field: sonata/document_base_list_field.html.twig }]]
     admin.formular:
         class: AppBundle\Admin\FormularAdmin
         arguments: [~, AppBundle\Entity\Formular, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: admin_group_document }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: sonata_media }
     sonata_admin_image_file:
         class: AppBundle\Form\Type\AdminImageFileType
         tags:
@@ -52,13 +58,13 @@ services:
         class: AppBundle\Util\FileNamer
     app.mailer:
         class:     AppBundle\Service\MailerService
-        arguments: ['@mailer', '@templating', '@translator', @knp_snappy.pdf, %email_from%, %contact_email%, %email_title%, %invoice_dir%, %invoice_name%]
+        arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%]
     app.user_helper:
         class:     AppBundle\Service\UserHelperService
         arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session, @translator]
     app.order_helper:
         class:     AppBundle\Service\OrderHelperService
-        arguments: [@doctrine.orm.entity_manager, @translator, @security.token_storage, @session, @app.mailer]
+        arguments: [@doctrine.orm.entity_manager, @translator, @security.token_storage, @session, @app.mailer, @knp_snappy.pdf, '@templating', %invoice_dir%, %invoice_name%]
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false

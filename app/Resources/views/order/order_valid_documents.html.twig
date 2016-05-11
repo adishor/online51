@@ -10,7 +10,7 @@
                 {% for document in validDocuments %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td><a href="{{ path('sonata_media_download', {'id': documentObjects[document.id]|sonata_urlsafeid }) }}">{{ document.title }}</a></td>
+                    <td><a href="{{ path('sonata_media_download', {'id':mediaObjects[document.id]|sonata_urlsafeid }) }}">{{ document.name }}</a></td>
                     <td>{{ document.domain }}</td>
                     <td>{{ document.subDomain }}</td>
                     <td>{{ document.date| localizeddate('medium', 'short', app.request.locale ) }}</td>

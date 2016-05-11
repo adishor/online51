@@ -478,6 +478,10 @@
                 <source>admin_group_website</source>
                 <target>Site</target>
             </trans-unit>
+            <trans-unit id="sonata_media">
+                <source>sonata_media</source>
+                <target>Documente</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

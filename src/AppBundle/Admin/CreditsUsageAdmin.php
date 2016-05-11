@@ -28,10 +28,10 @@ class CreditsUsageAdmin extends Admin
           ->setParameter('role', '%"ROLE_SUPER_ADMIN"%');
 
         $queryDocument = $this->modelManager
-          ->getEntityManager('ApplicationSonataMediaBundle:Media')
+          ->getEntityManager('AppBundle:Document')
           ->createQueryBuilder()
           ->select('d')
-          ->from('ApplicationSonataMediaBundle:Media', 'd')
+          ->from('AppBundle:Document', 'd')
           ->where('d.deleted = 0');
 
         $form->add('user', null, array(

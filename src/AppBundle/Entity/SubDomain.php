@@ -51,7 +51,7 @@ class SubDomain
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", mappedBy="subdomain", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="subdomain")
      */
     private $documents;
 

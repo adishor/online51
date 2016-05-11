@@ -43,7 +43,7 @@ class UserDownloadStrategy implements DownloadStrategyInterface
 
             return true;
         }
-        if (!$this->userHelper->isValidUserDocument($user->getId(), $media->getId())) {
+        if (!$this->userHelper->isValidUserDocument($user->getId(), $media->getDocument()->getId())) {
 
             throw new AccessDeniedHttpException();
         }

@@ -8,38 +8,41 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class MediaAdmin extends SonataMediaAdmin
 {
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+
         $datagridMapper
-          ->add('title')
+          ->add('providerName')
           ->add('name')
-          ->add('creditValue')
-          ->add('valabilityDays')
-          ->add('subdomain')
+          ->add('mediaType', null, array(), 'choice', array(
+              'choices' => array(
+                  Media::DOCUMENT_TYPE => $this->getTranslator()->trans('media-type.document'),
+                  Media::IMAGE_TYPE => $this->getTranslator()->trans('media-type.image'),
+                  Media::INVOICE_TYPE => $this->getTranslator()->trans('media-type.invoice'),
+                  Media::FORM_GENERATED_TYPE => $this->getTranslator()->trans('media-type.form-generated')
+            )))
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     protected function configureListFields(ListMapper $list)
     {
-        $list->addIdentifier('title')
-          ->add('name')
-          ->add('creditValue')
-          ->add('valabilityDays')
-          ->add('subdomain')
+
+        $list->addIdentifier('name')
+          ->add('mediaType')
+          ->add('createdAt')
           ->add('deleted');
     }
 
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('title')
-          ->add('name')
-          ->add('creditValue')
-          ->add('valabilityDays')
-          ->add('subdomain')
+
+
+        $show->add('name')
           ->add('deleted')
           ->add('deletedAt');
     }
@@ -54,16 +57,31 @@ class MediaAdmin extends SonataMediaAdmin
                 'value' => BooleanType::TYPE_NO
             );
         }
+        $parameters['_sort_order'] = 'DESC';
+        $parameters['_sort_by'] = 'createdAt';
 
         return $parameters;
     }
 
-    public function getTemplate($name)
+    public function prePersist($media)
     {
-        if ($name == "edit") {
-            return 'sonata/base_edit.html.twig';
+        if ($media->getProviderName() === 'sonata.media.provider.file') {
+            $media->setMediaType(Media::DOCUMENT_TYPE);
         }
-        return parent::getTemplate($name);
+        if ($media->getProviderName() === 'sonata.media.provider.image') {
+            $media->setMediaType(Media::IMAGE_TYPE);
+        }
+        parent::prePersist($media);
+    }
+
+    public function postUpdate($object)
+    {
+        $object->setName($object->getProviderMetadata()['filename']);
+        $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
+        $em->persist($object);
+        $em->flush();
+
+        parent::postUpdate($object);
     }
 
 }

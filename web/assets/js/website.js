@@ -391,6 +391,7 @@ $('#documentConfirmModalYes').click(function () {
                 $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
                 $('#totalUserCredits').text(response.credits);
                 $('#errorOrSuccess' + documentId).addClass('color-green');
+                $('#documentIcon' + documentId).removeClass('color-red').addClass('color-green').text('0');
             } else {
                 $('#errorOrSuccess' + documentId).addClass('color-red');
             }

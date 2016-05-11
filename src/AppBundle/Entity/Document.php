@@ -69,17 +69,29 @@ class Document
     /**
      *
      * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media")
-     * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
+     *
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="document",  orphanRemoval=true)
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=false)
      */
     private $media;
 
     /**
      *
      * @var \AppBundle\Entity\CreditsUsage
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="document")
+     *
+     * @ORM\OneToMany(targetEntity="CreditsUsage", mappedBy="document")
+     * @ORM\JoinColumn(name="creditsUsage_id", referencedColumnName="id")
      */
     private $documentCreditsUsage;
+
+    /**
+     *
+     * @var \AppBundle\Entity\SubDomain
+     *
+     * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="document")
+     * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id")
+     */
+    private $subdomain;
 
     /**
      * Constructor
@@ -269,6 +281,52 @@ class Document
     public function getDocumentCreditsUsage()
     {
         return $this->documentCreditsUsage;
+    }
+
+    /**
+     * Add subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     * @return Document
+     */
+    public function addSubdomain(\AppBundle\Entity\SubDomain $subdomain)
+    {
+        $this->subdomain[] = $subdomain;
+
+        return $this;
+    }
+
+    /**
+     * Remove subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     */
+    public function removeSubdomain(\AppBundle\Entity\SubDomain $subdomain)
+    {
+        $this->subdomain->removeElement($subdomain);
+    }
+
+    /**
+     * Get subdomain
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubdomain()
+    {
+        return $this->subdomain;
+    }
+
+    /**
+     * Set subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     * @return Document
+     */
+    public function setSubdomain(\AppBundle\Entity\SubDomain $subdomain = null)
+    {
+        $this->subdomain = $subdomain;
+
+        return $this;
     }
 
     public function __toString()

@@ -10,6 +10,11 @@ use AppBundle\Entity\Order;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Service\MailerService;
+use Swift_Attachment;
+use Knp\Bundle\SnappyBundle\Snappy\LoggableGenerator;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class OrderHelperService
 {
@@ -18,14 +23,22 @@ class OrderHelperService
     protected $tokenStorage;
     protected $session;
     protected $mailer;
+    protected $snappyPdf;
+    protected $templating;
+    protected $invoiceDir;
+    protected $invoiceName;
 
-    public function __construct(EntityManager $entityManager, TranslatorInterface $translator, TokenStorage $tokenStorage, Session $session, MailerService $mailer)
+    public function __construct(EntityManager $entityManager, TranslatorInterface $translator, TokenStorage $tokenStorage, Session $session, MailerService $mailer, LoggableGenerator $snappyPdf, EngineInterface $templating, $invoiceDir, $invoiceName)
     {
         $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->session = $session;
         $this->tokenStorage = $tokenStorage;
         $this->mailer = $mailer;
+        $this->snappyPdf = $snappyPdf;
+        $this->templating = $templating;
+        $this->invoiceDir = $invoiceDir;
+        $this->invoiceName = $invoiceName;
     }
 
     public function addSubscription($subscriptionId, $billingData, $domains = null)
@@ -71,8 +84,33 @@ class OrderHelperService
         $this->entityManager->persist($order);
         $this->entityManager->flush();
         $this->session->getFlashBag()->add('order-success', 'success.order');
-        $this->mailer->sendOrderInvoice($order, $billingData);
+        $this->mailer->sendOrderInvoice($order, $this->generatePdfInvoice($order, $billingData));
         return $order;
+    }
+
+    public function generatePdfInvoice($order, $billingData)
+    {
+        $invoiceFilename = $this->invoiceName . '_' . sprintf('%06d', $order->getId()) . '.pdf';
+        $invoicePath = $this->invoiceDir . $invoiceFilename;
+        $invoiceBody = $this->templating->render('order/order_invoice_template.html.twig', array(
+            'user' => $order->getUser(),
+            'order' => $order,
+            'billingData' => $billingData,
+        ));
+        $this->snappyPdf->generateFromHtml($invoiceBody, $invoicePath);
+
+        $file = new UploadedFile($invoicePath, $invoiceFilename);
+        $media = new Media();
+        $media->setBinaryContent($file);
+        $media->setName($invoiceFilename);
+        $media->setProviderName('sonata.media.provider.file');
+        $media->setContext('default');
+        $media->setMediaType($media::INVOICE_TYPE);
+        $order->setInvoice($media);
+        $this->entityManager->persist($media);
+        $this->entityManager->flush();
+
+        return Swift_Attachment::fromPath($invoicePath)->setFilename($invoiceFilename);
     }
 
     public function getActiveCreditTotal($userId)
@@ -146,26 +184,26 @@ class OrderHelperService
         return $unlockedDocuments;
     }
 
-    public function getDocumentObjects($unlockedDocuments)
+    public function getMediaObjects($unlockedDocuments)
     {
-        $documentObjects = [];
+        $mediaObjects = [];
         foreach ($unlockedDocuments as $document) {
-            $documentObjects[$document['id']] = $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['id']);
+            $mediaObjects[$document['id']] = $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['mediaId']);
         }
 
-        return $documentObjects;
+        return $mediaObjects;
     }
 
     public function addInfoToHistoryOrders($allHistoryOrders)
     {
         foreach ($allHistoryOrders as $key => $order) {
-            if ($order['title'] !== null) {
+            if ($order['name'] !== null) {
                 $allHistoryOrders[$key]['subject'] = 'order.subscription';
                 $allHistoryOrders[$key]['orderId'] = $order['id'];
             } else {
                 $allHistoryOrders[$key]['subject'] = 'order.credits';
                 $allHistoryOrders[$key]['orderId'] = '';
-                $allHistoryOrders[$key]['title'] = 'order.credits-bonus';
+                $allHistoryOrders[$key]['name'] = 'order.credits-bonus';
             }
             $allHistoryOrders[$key]['sign'] = '+';
         }
@@ -177,7 +215,7 @@ class OrderHelperService
     {
         foreach ($allExpiredCredits as $key => $credit) {
             $allExpiredCredits[$key]['subject'] = 'order.credits';
-            $allExpiredCredits[$key]['title'] = 'order.credits-expired';
+            $allExpiredCredits[$key]['name'] = 'order.credits-expired';
             $allExpiredCredits[$key]['sign'] = '-';
         }
 

@@ -1,6 +1,6 @@
 {% for ad in ads %}
     <p class="text-center">
-        <img class="responsiv" src="{{ asset('images/uploadFile/'~ad.imageName) }}" alt="" />
+        <img class="responsiv" src="{% path ad.image, 'big' %}" alt="" />
     </p>
 {% endfor %}
 

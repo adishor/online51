@@ -302,7 +302,9 @@ document:
 modal:
     document-confirm:
         title: 'Confirma deblocare'
-        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% credite!'
+        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% %plural%!'
+        credit:  'credit'
+        credits:  'credite'
     subscription-add-confirm:
         title: 'Confirma comanda'
         body: 'Sunteti sigur ca doriti sa comandati acest abonament?'
@@ -315,6 +317,7 @@ modal:
 total-credits: 'Credite Totale:'
 year: ' an'
 years: ' ani'
+file-download: 'Descarca fisier'
 invoice:
     title: 'FACTURA PROFORMA'
     supplier: 'Furnizor'
@@ -346,7 +349,10 @@ invoice:
     total: 'TOTAL'
     general-total: 'TOTAL GENERAL'
     maturity: 'Data scadenta'
-        
+media-type:
+    document: 'Document'
+    invoice: 'Factura Proforma'
+    form-generated: 'Document generat'
 #admin
 admin_label:
     subscription: 'Abonament'
@@ -409,6 +415,7 @@ Create new: Creaza nou
 You cannot delete the subscription %name% because you have an order with this subscription waiting your approval: 'Nu poti sterge abonamentul %name% deoarece ai o comanda cu acest abonament care asteapta aprobarea ta'
 You cannot delete the domain %name% because you have an order with this domain waiting your approval: 'Nu poti sterge domeniul %name% deoarece ai o comanda cu acest domeniu care asteapta aprobarea ta'
 You cannot delete your own account: Nu poti sa iti stergi propriul cont
+Media: Fisier
 
 #media
 sonata:

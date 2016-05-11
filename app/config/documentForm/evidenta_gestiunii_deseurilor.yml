@@ -1,0 +1,40 @@
+parameters:
+    tip_stocare:
+        RM: RM - recipient metalic
+        RP: RP - recipient de plastic
+        BZ: BZ - bazin decantor
+        CT: CT - container transportabil
+        CF: CF - container fix
+        S: S - saci
+        PD: PD - platforma de deshidratare
+        VN: VN - in vrac, neacoperit
+        VA: VA - in vrac, incinta acoperita
+        RL: RL - recipient din lemn
+        A: A - altele
+    mod_tratare:
+        TM: TM - tratare mecanica
+        TC: TC - tratare chimica
+        TMC: TMC - tratare mecano-chimica
+        TB: TB - tratare biochimica
+        D: D - deshidratare
+        TT: TT - tratare termica
+        A: A - altele
+    scop_tratare:
+        V: V - pentru valorificare
+        E: E - in vederea eliminarii
+    mijloc_transport:
+        AS: AS - autospeciale
+        AN: AN - auto nespecial
+        H: H - transport hidraulic
+        CF: CF - cale ferata
+        A: A - altele
+    destinatia:
+        DO: DO - depozitul de gunoi al orasului/comunei
+        HP: HP - halda proprie
+        HC: HC - halda industriala comuna
+        I: I - incinerare in scopul eliminarii
+        Vr: Vr - valorificare prin ageti economici autorizati
+        P: P - utilizare materiala sau energetica in propria intreprindere
+        Ve: Ve - valorificarea energetica prin ageti economici autorizati
+        A: A - altele
+

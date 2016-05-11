@@ -23,7 +23,7 @@ class CreditsUsageController extends Controller
         $userHelper = $this->get('app.user_helper');
         $userHelper->updateValidUserCredits();
         $documentId = $request->request->get('documentId');
-        $document = $this->getDoctrine()->getManager()->getRepository('ApplicationSonataMediaBundle:Media')->find($documentId);
+        $document = $this->getDoctrine()->getManager()->getRepository('AppBundle:Document')->find($documentId);
 
         if (true === $userHelper->isValidUserDocument($user->getId(), $documentId)) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.document.already-unlocked'));

@@ -1,0 +1,164 @@
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
+    <div class="col-xs-3">
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            <li class="active">
+                <a id="btnGeneralDetails" class="disabled" data-toogle="tab" role="tab">
+                    {{ 'Date Generale' | trans }}
+                </a>
+            </li>
+            <li>
+                <a id="btnCapitol1" class="disabled" data-toogle="tab" role="tab">
+                    {{ 'Generarea deseurilor' | trans }}
+                </a>
+            </li>
+            <li>
+                <a id="btnCapitol2" class="disabled" data-toogle="tab" role="tab">
+                    {{ 'Stocarea provizorie, tratarea si transportul seseurilor' | trans }}
+                </a>
+            </li>
+            <li>
+                <a id="btnCapitol3" class="disabled" data-toogle="tab" role="tab">
+                    {{ 'Valorificare deseurilor' | trans }}
+                </a>
+            </li>
+            <li>
+                <a id="btnCapitol4" class="disabled" data-toogle="tab" role="tab">
+                    {{ 'Eliminarea deseurilor' | trans }}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        {{ form_start(form) }}
+        <div for="btnGeneralDetails">
+            {{ form_row(form.agentEconomic) }}
+            {{ form_row(form.an) }}
+            <div class="col-xs-6">
+                {{ form_row(form.tipDeseu) }}
+            </div>
+            <div class="col-xs-6">
+                {{ form_row(form.tipDeseuCod) }}
+            </div>
+            {{ form_row(form.stareFizica) }}
+            {{ form_row(form.unitateMasura) }}
+        </div>
+        
+        <div for="btnCapitol1" class="formular">
+            <h3>{{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}</h3>
+            <table>
+                <tr>
+                    <th rowspan="3">{{ 'Nr.' | trans }}</th>
+                    <th rowspan="3">{{ 'Luna' | trans }}</th>
+                    <th colspan="4">{{ 'Cantitatea de deseuri' | trans }}</th>
+                </tr>
+                <tr>
+                    <th rowspan="2">{{ 'Generate' | trans }}</th>
+                    <th colspan="3">{{ 'din care:' | trans }}</th>
+                </tr>
+                <tr>
+                    <th>{{ 'valorificata:' | trans }}</th>
+                    <th>{{ 'eliminata final:' | trans }}</th>
+                    <th>{{ 'ramasa in stoc:' | trans }}</th>
+                </tr>
+                {% for item in form.EGD1GenerareDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ form_widget(item.luna) }}</td>
+                        <td>{{ form_widget(item.cantitateDeseuGenerate) }}</td>
+                        <td>{{ form_widget(item.cantitateDeseuValorificata) }}</td>
+                        <td>{{ form_widget(item.cantitateDeseuEliminata) }}</td>
+                        <td>{{ form_widget(item.cantitateDeseuInStoc) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+            
+        <div for="btnCapitol2" class="formular">
+            <h3>{{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}</h3>
+            <table>
+                <tr>
+                    <th rowspan="2">{{ 'Nr crt.' | trans }}</th>
+                    <th rowspan="2">{{ 'Luna' | trans }}</th>
+                    <th rowspan="2">{{ 'Sectia' | trans }}</th>
+                    <th colspan="2">{{ 'Stocare' | trans }}</th>
+                    <th colspan="3">{{ 'Tratare' | trans }}</th>
+                    <th colspan="2">{{ 'Transport' | trans }}</th>
+                </tr>
+                <tr>
+                    <th>{{ 'Cantitatea' | trans }}</th>
+                    <th>{{ 'Tipul' | trans }}</th>
+                    <th>{{ 'Cantitatea' | trans }}</th>
+                    <th>{{ 'Modul' | trans }}</th>
+                    <th>{{ 'Scopul' | trans }}</th>
+                    <th>{{ 'Mijlocul' | trans }}</th>
+                    <th>{{ 'Destinatia' | trans }}</th>
+                </tr>
+                {% for item in form.EGD2StocareTratareTransportDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ form_widget(item.luna) }}</td>
+                        <td>{{ form_widget(item.sectia) }}</td>
+                        <td>{{ form_widget(item.stocareCantitate) }}</td>
+                        <td>{{ form_widget(item.stocareTip) }}</td>
+                        <td>{{ form_widget(item.tratareCantitate) }}</td>
+                        <td>{{ form_widget(item.tratareMod) }}</td>
+                        <td>{{ form_widget(item.tratareScop) }}</td>
+                        <td>{{ form_widget(item.transportMijloc) }}</td>
+                        <td>{{ form_widget(item.transportDestinatie) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div for="btnCapitol3" class="formular">
+            <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
+            <table>
+                <tr>
+                    <th>{{ 'Nr.' | trans }}</th>
+                    <th>{{ 'Luna' | trans }}</th>
+                    <th>{{ 'Cantitatea de deseu valorificata' | trans }}</th>
+                    <th>{{ 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' | trans }}</th>
+                    <th>{{ 'Agentul economic care efectueaza operatia de valorificare' | trans }}</th>
+                </tr>
+                {% for item in form.EGD3ValorificareDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ form_widget(item.luna) }}</td>
+                        <td>{{ form_widget(item.cantitateDeseuValorificata) }}</td>
+                        <td>{{ form_widget(item.operatiaDeValorificare) }}</td>
+                        <td>{{ form_widget(item.agentEconomicValorificare) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+            
+        <div for="btnCapitol4" class="formular">
+            <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
+            <table>
+                <tr>
+                    <th>{{ 'Nr.' | trans }}</th>
+                    <th>{{ 'Luna' | trans }}</th>
+                    <th>{{ 'Cantitatea de deseu eliminata' | trans }}</th>
+                    <th>{{ 'Operatia de eliminare, conform Anexei IIA din legea 426/2001' | trans }}</th>
+                    <th>{{ 'Agentul economic care efectueaza operatia de eliminare' | trans }}</th>
+                </tr>
+                {% for item in form.EGD4EliminareDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ form_widget(item.luna) }}</td>
+                        <td>{{ form_widget(item.cantitateDeseuEliminata) }}</td>
+                        <td>{{ form_widget(item.operatiaDeEliminare) }}</td>
+                        <td>{{ form_widget(item.agentEconomicEliminare) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <br/>
+        {{ form_widget(form.save) }}
+        
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
