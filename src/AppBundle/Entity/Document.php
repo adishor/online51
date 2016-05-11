@@ -77,7 +77,7 @@ class Document
 
     /**
      *
-     * @var \DateTime
+     * @var \AppBundle\Entity\CreditsUsage
      *
      * @ORM\OneToMany(targetEntity="CreditsUsage", mappedBy="document")
      * @ORM\JoinColumn(name="creditsUsage_id", referencedColumnName="id")
@@ -86,7 +86,7 @@ class Document
 
     /**
      *
-     * @var \DateTime
+     * @var \AppBundle\Entity\SubDomain
      *
      * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="document")
      * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id")
@@ -283,12 +283,6 @@ class Document
         return $this->documentCreditsUsage;
     }
 
-    public function __toString()
-    {
-        return ($this->getId() ? $this->getName() : 'Create new');
-    }
-
-
     /**
      * Add subdomain
      *
@@ -334,4 +328,10 @@ class Document
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return ($this->getId() ? $this->getName() : 'Create new');
+    }
+
 }

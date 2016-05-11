@@ -435,6 +435,25 @@ table.users.documents td:nth-child(6), table.users.documents th:nth-child(6) {
     width:20%;
 }
 
+.formular {
+    display: none;
+}
+
+.formular th {
+    text-align: center;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+.formular td {
+    padding: 0px;
+}
+
+.formular h3 {
+    text-align: center;
+}
+
 .odd {
     background-color:#f2f2f2;
 }
