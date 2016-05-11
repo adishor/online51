@@ -241,13 +241,12 @@
                 </div>
                 {#          logo#}
                 <div class="editor-label">
-                    {{ form_label(form.uploadImage, 'form.label.logo'|trans) }}
+                    {{ form_label(form.image, 'form.label.logo'|trans) }}
                 </div>
                 <div class="editor-field">
-                    {{ form_widget(form.uploadImage, {'attr':
-              { 'style': '260px'} , 'required' : false })
+                    {{ form_widget(form.image, {'required' : false })
                     }}
-                    {{ form_errors(form.uploadImage) }}
+                    {{ form_errors(form.image) }}
                 </div>
                 {#          captcha#}
                 <div class="editor-label">

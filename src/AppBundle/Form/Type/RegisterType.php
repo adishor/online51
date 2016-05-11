@@ -49,7 +49,11 @@ class RegisterType extends AbstractType
           ))
           ->add('city')
           ->add('address')
-          ->add('uploadImage', 'file')
+          ->add('image', 'sonata_media_type', array(
+              'provider' => 'sonata.media.provider.image',
+              'context' => 'default',
+              'required' => false,
+          ))
           ->add('captcha', 'captcha', array(
               'width' => 200,
               'height' => 40,

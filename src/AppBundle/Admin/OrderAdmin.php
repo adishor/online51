@@ -129,6 +129,9 @@ class OrderAdmin extends Admin
           ->add('mentions')
           ->add('approvedBy')
           ->add('approvedDate')
+          ->add('invoice', null, array(
+              'template' => 'sonata/order_base_show_field.html.twig',
+          ))
           ->add('deleted')
           ->add('deletedAt');
     }

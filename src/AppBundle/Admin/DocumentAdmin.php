@@ -87,7 +87,9 @@ class DocumentAdmin extends Admin
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('subdomain')
-          ->add('media')
+          ->add('media', null, array(
+              'template' => 'sonata/document_base_show_field.html.twig',
+          ))
           ->add('deleted')
           ->add('deletedAt');
     }

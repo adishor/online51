@@ -61,6 +61,11 @@ class Media extends BaseMedia
     private $ad;
 
     /**
+     * @var Application/Sonata/UserBundle/Entity/User
+     */
+    private $user;
+
+    /**
      * @var string
      */
     private $mediaType;
@@ -72,7 +77,7 @@ class Media extends BaseMedia
     {
         $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
-        
+
     }
 
     /**
@@ -245,5 +250,28 @@ class Media extends BaseMedia
     public function getAd()
     {
         return $this->ad;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $user
+     * @return Media
+     */
+    public function setUser(\Application\Sonata\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

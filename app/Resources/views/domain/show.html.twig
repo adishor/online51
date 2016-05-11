@@ -39,7 +39,7 @@
                                     <h4>{{ 'domain.documents' | trans }}</h4>
                                     <ul>
                                         {% for document in subdomain.documents %}
-                                            {% if not document.deleted or not document.media.deleted %}
+                                            {% if (not document.deleted) and (not document.media.deleted) %}
                                                 <div class="row new-evaluation">
                                                     {% if validDocuments[document.id] is defined or isUserException %}
                                                         <a href="{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}">

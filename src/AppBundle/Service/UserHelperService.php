@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class UserHelperService
 {
@@ -52,7 +53,9 @@ class UserHelperService
         $user->setCounty($data->getCounty());
         $user->setCity($data->getCity());
         $user->setAddress($data->getAddress());
-        $user->setUploadImage($data->getUploadImage());
+        $media = $data->getImage();
+        $media->setMediaType(Media::IMAGE_TYPE);
+        $user->setImage($media);
         $user->setFunction($data->getFunction());
         $user->setConfirmationToken($data->getConfirmationToken());
         $user->addRole(User::ROLE_DEFAULT);
@@ -61,6 +64,7 @@ class UserHelperService
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
+
 
     public function checkCUI($data)
     {

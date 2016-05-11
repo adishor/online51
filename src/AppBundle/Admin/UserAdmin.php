@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Application\Sonata\UserBundle\Entity\User;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class UserAdmin extends SonataUserAdmin
 {
@@ -33,6 +34,20 @@ class UserAdmin extends SonataUserAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $queryImage = $this->modelManager
+          ->getEntityManager('ApplicationSonataMediaBundle:Media')
+          ->createQueryBuilder()
+          ->select('m')
+          ->from('ApplicationSonataMediaBundle:Media', 'm')
+          ->leftJoin('m.ad', 'a')
+          ->leftJoin('m.user', 'u')
+          ->where('m.deleted = 0')
+          ->andWhere('m.mediaType = :mediaType')
+          ->setParameter('mediaType', Media::IMAGE_TYPE)
+          ->andWhere('a.id is null')
+          ->andWhere('u.id is null or u.id = :userId')
+          ->setParameter('userId', $this->getSubject()->getId());
+
         // define group zoning
         $formMapper
           ->tab('User')
@@ -59,6 +74,7 @@ class UserAdmin extends SonataUserAdmin
               'disabled' => $disabled
           ))
           ->add('plainPassword', 'text', array(
+              'required' => false,
               'disabled' => $disabled
           ))
           ->add('name', null, array(
@@ -99,10 +115,16 @@ class UserAdmin extends SonataUserAdmin
           ->add('company', null, array(
               'disabled' => $disabled
           ))
-//            ->add('uploadImage', 'sonata_admin_image_file', array(
-//                'required' => false,
-//                'disabled' => $disabled
-//            ))
+          ->add('image', 'sonata_type_model', array(
+              'query' => $queryImage,
+              'required' => false,
+              'empty_value' => 'No Image',
+            ), array(
+              'link_parameters' => array(
+                  'context' => 'default',
+                  'provider' => 'sonata.media.provider.image',
+              )
+          ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(
                   User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
@@ -174,13 +196,6 @@ class UserAdmin extends SonataUserAdmin
         $collection->add('getCities', 'getCities');
     }
 
-    public function getFormTheme()
-    {
-        return array_merge(
-          parent::getFormTheme(), array('sonata/fieldType/admin_image_file_field.html.twig')
-        );
-    }
-
     protected function configureShowFields(ShowMapper $show)
     {
         $show
@@ -208,8 +223,10 @@ class UserAdmin extends SonataUserAdmin
           ->end()
           ->with('Company')
           ->add('company')
-          ->add('uploadImage', 'sonata_admin_image_file', array(
-              'template' => 'sonata/fieldType/show_admin_image_file_field.html.twig'
+          ->add('image', 'sonata_media_type', array(
+              'provider' => 'sonata.media.provider.image',
+              'context' => 'default',
+              'template' => 'sonata/ad_and_user_base_show_field.html.twig',
           ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(

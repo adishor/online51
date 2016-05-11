@@ -1830,3 +1830,8 @@ h5.first {
     font-size: 18px;
     
 }
+
+#register_image label,
+#register_image_unlink {
+    display: none;
+}

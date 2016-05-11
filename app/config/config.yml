@@ -45,11 +45,12 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
+
     #sonata
     form:
         resources:
             - 'SonataFormatterBundle:Form:formatter.html.twig'
-            - 'SonataMediaBundle:Form:media_widgets.html.twig'
+            - 'sonata/media_widgets.html.twig'
 
 services:
     twig.extension.intl:
@@ -179,7 +180,7 @@ sonata_media:
                 - sonata.media.provider.file
                 - sonata.media.provider.image
             formats:
-                small: { width: 50 , quality: 70}
+                small: { width: 75 , quality: 70}
                 big:   { width: 500 , quality: 70}
             download:
                 strategy: app.media.security.user_strategy

@@ -37,7 +37,7 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.ad, group: admin_group_website }
         calls:
-            - [setTemplates, [{ base_list_field: sonata/ad_base_list_field.html.twig, show: sonata/ad_base_show_field.html.twig }]]
+            - [setTemplates, [{ base_list_field: sonata/ad_base_list_field.html.twig }]]
     admin.document:
         class: AppBundle\Admin\DocumentAdmin
         arguments: [~, AppBundle\Entity\Document, ~]
@@ -54,8 +54,6 @@ services:
         class: AppBundle\Form\Type\AdminImageFileType
         tags:
             - { name: form.type }
-    uploadFile.namer:
-        class: AppBundle\Util\FileNamer
     app.mailer:
         class:     AppBundle\Service\MailerService
         arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%]

@@ -20,10 +20,12 @@ class AdAdmin extends Admin
           ->select('m')
           ->from('ApplicationSonataMediaBundle:Media', 'm')
           ->leftJoin('m.ad', 'a')
+          ->leftJoin('m.user', 'u')
           ->where('m.deleted = 0')
           ->andWhere('m.mediaType = :mediaType')
           ->setParameter('mediaType', Media::IMAGE_TYPE)
           ->andWhere('a.id is null or a.id = :adId')
+          ->andWhere('u.id is null')
           ->setParameter('adId', $this->getSubject()->getId());
 
         $form->add('title')
@@ -54,7 +56,8 @@ class AdAdmin extends Admin
         $show->add('title')
           ->add('image', 'sonata_media_type', array(
               'provider' => 'sonata.media.provider.image',
-              'context' => 'default'
+              'context' => 'default',
+              'template' => 'sonata/ad_and_user_base_show_field.html.twig',
         ));
 
     }
