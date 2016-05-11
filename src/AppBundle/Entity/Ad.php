@@ -33,7 +33,7 @@ class Ad
      * @var \Application\Sonata\MediaBundle\Entity\Media
      *
      * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="ad", orphanRemoval=true, cascade={"persist"})
-     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $image;
 

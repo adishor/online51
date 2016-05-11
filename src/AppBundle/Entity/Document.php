@@ -88,7 +88,7 @@ class Document
      *
      * @var \AppBundle\Entity\SubDomain
      *
-     * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="document")
+     * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="documents")
      * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id")
      */
     private $subdomain;

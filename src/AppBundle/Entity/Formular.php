@@ -72,7 +72,8 @@ class Formular
     /**
      *
      * @var \AppBundle\Entity\CreditsUsage
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="formular")
+     *
+     * @ORM\OneToMany(targetEntity="CreditsUsage", mappedBy="formular")
      */
     private $formularCreditsUsage;
 
