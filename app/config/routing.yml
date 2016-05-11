@@ -28,3 +28,7 @@ sonata_user_admin_security:
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
+    
+fp_js_form_validator:
+    resource: "@FpJsFormValidatorBundle/Resources/config/routing.xml"
+    prefix: /fp_js_form_validator

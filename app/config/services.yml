@@ -72,3 +72,9 @@ services:
     app.media.security.user_strategy:
         class:     AppBundle\Security\Sonata\UserDownloadStrategy
         arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user_helper]
+    app.container_aware_type:
+        class: AppBundle\Form\Type\ContainerAwareType
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: form.type, alias: 'container_aware' }

@@ -283,7 +283,7 @@ class Formular
 
     public function generateSlugValue($values)
     {
-        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
+        return str_replace(array("/", " ", "-"), "_", implode('-', $values));
     }
 
 }
