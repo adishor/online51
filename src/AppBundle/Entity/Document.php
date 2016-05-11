@@ -70,8 +70,8 @@ class Document
      *
      * @var \Application\Sonata\MediaBundle\Entity\Media
      *
-     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="document",  orphanRemoval=true)
-     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=false)
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="document", orphanRemoval=true)
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     private $media;
 

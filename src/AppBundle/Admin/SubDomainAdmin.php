@@ -68,6 +68,7 @@ class SubDomainAdmin extends Admin
     {
         $filter->add('name')
           ->add('domain')
+          ->add('documents')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -75,6 +76,7 @@ class SubDomainAdmin extends Admin
     {
         $list->addIdentifier('name')
           ->add('domain')
+          ->add('documents')
           ->add('deleted');
     }
 
