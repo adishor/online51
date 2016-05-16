@@ -482,6 +482,10 @@
                 <source>sonata_media</source>
                 <target>Documente</target>
             </trans-unit>
+            <trans-unit id="Dashboard">
+                <source>Dashboard</source>
+                <target>Panou Principal</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

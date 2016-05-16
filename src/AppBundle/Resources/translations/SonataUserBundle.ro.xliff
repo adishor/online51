@@ -18,6 +18,10 @@
                 <source>field.label_roles_editable</source>
                 <target>Optiuni</target>
             </trans-unit>
+            <trans-unit id="User">
+                <source>User</source>
+                <target>Utilizator</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

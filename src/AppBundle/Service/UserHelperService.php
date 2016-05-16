@@ -54,8 +54,10 @@ class UserHelperService
         $user->setCity($data->getCity());
         $user->setAddress($data->getAddress());
         $media = $data->getImage();
-        $media->setMediaType(Media::IMAGE_TYPE);
-        $user->setImage($media);
+        if ($media) {
+            $media->setMediaType(Media::IMAGE_TYPE);
+            $user->setImage($media);
+        }
         $user->setFunction($data->getFunction());
         $user->setConfirmationToken($data->getConfirmationToken());
         $user->addRole(User::ROLE_DEFAULT);
@@ -64,7 +66,6 @@ class UserHelperService
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
-
 
     public function checkCUI($data)
     {

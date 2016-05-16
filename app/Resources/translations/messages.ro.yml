@@ -353,6 +353,7 @@ media-type:
     document: 'Document'
     invoice: 'Factura Proforma'
     form-generated: 'Document generat'
+    image: 'Imagine'
 #admin
 admin_label:
     subscription: 'Abonament'
@@ -377,6 +378,8 @@ Ad List: Lista reclame
 Ad Delete: Stergere reclame
 Document List: Lista documente
 Document Delete: Stergere documente
+Formular List: Lista formulare
+Formular Delete: Stergere formulare
 Name: Nume
 Price: Pret
 Credit: Credit
@@ -416,6 +419,9 @@ You cannot delete the subscription %name% because you have an order with this su
 You cannot delete the domain %name% because you have an order with this domain waiting your approval: 'Nu poti sterge domeniul %name% deoarece ai o comanda cu acest domeniu care asteapta aprobarea ta'
 You cannot delete your own account: Nu poti sa iti stergi propriul cont
 Media: Fisier
+Id: Numar
+Invoice: Factura Proforma
+Image: Imagine
 
 #media
 sonata:

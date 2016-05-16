@@ -28,7 +28,7 @@ class AdAdmin extends Admin
           ->andWhere('u.id is null')
           ->setParameter('adId', $this->getSubject()->getId());
 
-        $form->add('title')
+        $form->add('name')
           ->add('image', 'sonata_type_model', array(
               'query' => $queryImage,
               'required' => true,
@@ -42,18 +42,18 @@ class AdAdmin extends Admin
 
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $filter->add('title');
+        $filter->add('name');
     }
 
     protected function configureListFields(ListMapper $list)
     {
-        $list->addIdentifier('title')
+        $list->addIdentifier('name')
           ->add('image');
     }
 
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('title')
+        $show->add('name')
           ->add('image', 'sonata_media_type', array(
               'provider' => 'sonata.media.provider.image',
               'context' => 'default',

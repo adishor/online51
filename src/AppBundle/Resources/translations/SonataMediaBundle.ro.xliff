@@ -32,7 +32,7 @@
             </trans-unit>
             <trans-unit id="breadcrumb.link_media_list">
                 <source>breadcrumb.link_media_list</source>
-                <target>Document</target>
+                <target>Fisiere</target>
             </trans-unit>
             <trans-unit id="breadcrumb.link_media_edit">
                 <source>breadcrumb.link_media_edit</source>
@@ -100,7 +100,7 @@
             </trans-unit>
             <trans-unit id="filter.label_provider_name">
                 <source>filter.label_provider_name</source>
-                <target>Nume provider</target>
+                <target>Tip</target>
             </trans-unit>
             <trans-unit id="form.label_enabled">
                 <source>form.label_enabled</source>
@@ -284,6 +284,10 @@
             <trans-unit id="list.label_enabled">
                 <source>list.label_enabled</source>
                 <target>Activ</target>
+            </trans-unit>
+            <trans-unit id="list.label_created_at">
+                <source>list.label_created_at</source>
+                <target>Creat La</target>
             </trans-unit>
             <trans-unit id="list.label_name">
                 <source>list.label_name</source>

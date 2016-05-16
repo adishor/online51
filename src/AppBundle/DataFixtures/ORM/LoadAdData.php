@@ -18,7 +18,7 @@ class LoadAdData extends AbstractFixture implements OrderedFixtureInterface
     {
 
         $ad = new Ad();
-        $ad->setTitle('Ad 1');
+        $ad->setName('Ad 1');
         $file = new UploadedFile($this::PATH, $this::FILENAME);
         $media = new Media();
         $media->setBinaryContent($file);
@@ -30,7 +30,7 @@ class LoadAdData extends AbstractFixture implements OrderedFixtureInterface
 
 
         $ad1 = new Ad();
-        $ad1->setTitle('Ad 2');
+        $ad1->setName('Ad 2');
         $media1 = new Media();
         $media1->setBinaryContent($file);
         $media1->setName($this::FILENAME);
@@ -41,7 +41,7 @@ class LoadAdData extends AbstractFixture implements OrderedFixtureInterface
 
 
         $ad2 = new Ad();
-        $ad2->setTitle('Ad 3');
+        $ad2->setName('Ad 3');
         $media2 = new Media();
         $media2->setBinaryContent($file);
         $media2->setName($this::FILENAME);
