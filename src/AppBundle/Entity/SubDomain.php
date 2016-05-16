@@ -57,6 +57,12 @@ class SubDomain
 
     /**
      *
+     * @ORM\OneToMany(targetEntity="Formular", mappedBy="subdomain")
+     */
+    private $formulars;
+
+    /**
+     *
      * @var integer
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
@@ -77,6 +83,7 @@ class SubDomain
     public function __construct()
     {
         $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulars = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
     }
 
@@ -190,6 +197,39 @@ class SubDomain
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    /**
+     * Add formulars
+     *
+     * @param \AppBundle\Entity\Formular $formulars
+     * @return SubDomain
+     */
+    public function addFormular(\AppBundle\Entity\Formular $formulars)
+    {
+        $this->formulars[] = $formulars;
+
+        return $this;
+    }
+
+    /**
+     * Remove formulars
+     *
+     * @param \AppBundle\Entity\Formular $formulars
+     */
+    public function removeFormular(\AppBundle\Entity\Formular $formulars)
+    {
+        $this->formulars->removeElement($formulars);
+    }
+
+    /**
+     * Get formulars
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormulars()
+    {
+        return $this->formulars;
     }
 
     /**

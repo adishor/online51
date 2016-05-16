@@ -1,0 +1,73 @@
+<div class="form-config"><div class="panel"><div class="panel-body">
+    {{ 'domain.formular.config' | trans }}
+
+    {% for key, items in uniqueValues %}
+        <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
+
+        {% set singleSelect = true %}
+        {% for itemUnique in items %}
+            {% if itemUnique is iterable %}
+                {% set singleSelect = false %}
+            {% endif %}
+        {% endfor %}
+
+{#        singleSelect means that we have a configurationOption with a 1 level value#}
+{#        example: Year - by selecting one value we have the final configuration#}
+        {% if singleSelect and items|length > 0 %}
+            <select class="selectmenu">
+                {% if items|length > 1 %}
+                    <option></option>
+                {% endif %}
+                {% for keyItem, item in items %}
+                    <option value="{{ keyItem }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        
+{#        for cases when after selecting first value, another select is being loaded#}
+{#        final configuration for this cases is done by selecting multiple level values#}
+{#        example select value 01, after that another select is being loaded , select value 03 and final configiuration is 01 03#}
+        {% if not singleSelect and items|length > 0 %}
+            <select class="selectmenu" id='{{ key }}' 
+                    onChange="loadSubItem('{{ key }}', jQuery(this).find('option:selected').val());">
+                {% if items|length > 1 %}
+                    <option></option>
+                {% endif %} 
+                {% for keyItem, item in items %}
+                    <option value="{{ keyItem }}">{{ item.name }}</option>
+                {% endfor %}
+            </select>
+            
+            <div class="multipleSelect">
+                <select class="selectmenu" style="display:none" id="{{ key }}_level2"></select>
+                <select class="selectmenu" style="display:none" id="{{ key }}_level3"></select>
+            </div>
+
+        {% endif %}    
+    {% endfor %}
+</div></div></div>
+
+<script type="text/javascript">   
+    var items = [];
+    items = {{ uniqueValues|json_encode|raw }};
+    function loadSubItem(key, subKey) {
+        if ('values' in items[key][subKey]) {
+            var objLength = Object.keys(items[key][subKey]['values']).length;
+            if (objLength > 0) {
+                var html = '<select class="selectmenu" id="' + key + '-' + subKey + '">';
+                if (objLength > 1) {
+                    html = html + '<option></option>';
+                }
+                $.each(items[key][subKey]['values'], function(index, value) {
+                    html = html + '<option value="' + subKey + ' ' + index + '">' + value['name'] + '</option>';
+                    console.log(index);
+                    console.log(value);
+                });
+                html =  html + '</select>';
+                console.log($('#' + key));
+                console.log(html);
+                $('#' + key).parent().append(html);
+            }
+        }        
+    }
+</script>

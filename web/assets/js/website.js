@@ -423,6 +423,17 @@ $('#orderRemoveConfirmModalYes').click(function () {
     $('#orderRemoveConfirmModal').modal('toggle');
 });
 
+$('.show-form-config').click(function() {
+   $(this).siblings('.form-config').toggle(); 
+});
+
+$(function(){
+    $('select.selectmenu').selectmenu({
+        width: 550,
+        menuWidth: 550
+    });
+});
+
 // Js not currently used.
 //function GetProfile(currentUserId) {
 //    var link = '/Aldex/User/UserDetails/1';

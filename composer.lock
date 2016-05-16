@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7a38ecb2d8e769ceae4fad903ccf0d7d",
-    "content-hash": "d8b0a6f29dcb17d0a3a5b2a7b2d9cc53",
+    "hash": "03a9dc3c4294ae043d8d42a9225f068b",
+    "content-hash": "9cef8f7f710886948fc90e4ca514565c",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1092,35 +1092,33 @@
         },
         {
             "name": "fp/jsformvalidator-bundle",
-            "version": "1.3.0",
+            "version": "v1.2.1",
             "target-dir": "Fp/JsFormValidatorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/formapro/JsFormValidatorBundle.git",
-                "reference": "53b8da1cdbe775eb4a4a73d2d8cf0583207f05ef"
+                "reference": "4fb5752961b4a95c1bea46311b63ec35cd84f2d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/formapro/JsFormValidatorBundle/zipball/53b8da1cdbe775eb4a4a73d2d8cf0583207f05ef",
-                "reference": "53b8da1cdbe775eb4a4a73d2d8cf0583207f05ef",
+                "url": "https://api.github.com/repos/formapro/JsFormValidatorBundle/zipball/4fb5752961b4a95c1bea46311b63ec35cd84f2d9",
+                "reference": "4fb5752961b4a95c1bea46311b63ec35cd84f2d9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "symfony/form": "^2.7",
-                "symfony/validator": "^2.7"
+                "symfony/form": ">=2.3",
+                "symfony/validator": ">=2.3"
             },
             "require-dev": {
                 "behat/mink-bundle": "dev-master",
                 "behat/mink-selenium2-driver": "1.1.0",
-                "doctrine/doctrine-bundle": "~1.4",
+                "doctrine/doctrine-bundle": "~1.2",
                 "doctrine/orm": ">=2.2.3",
                 "phpunit/phpunit": "3.7.*",
-                "ptcong/php-image-uploader": "^6.0",
-                "satooshi/php-coveralls": "1.0.*",
-                "se/selenium-server-standalone": "2.*",
-                "symfony/assetic-bundle": ">=2.5",
-                "symfony/symfony": "^2.7"
+                "satooshi/php-coveralls": "dev-master",
+                "symfony/assetic-bundle": ">=2.3",
+                "symfony/symfony": ">=2.3"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "For the UniqueEntity validation",
@@ -1131,7 +1129,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -1161,7 +1159,7 @@
                 "symfony",
                 "validation"
             ],
-            "time": "2016-03-29 13:51:55"
+            "time": "2014-08-16 19:55:56"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -2015,7 +2013,7 @@
             ],
             "authors": [
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 }
             ],
@@ -2288,7 +2286,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 },
                 {

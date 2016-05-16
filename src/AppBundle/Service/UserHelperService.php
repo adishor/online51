@@ -138,7 +138,7 @@ class UserHelperService
 
     public function getIsUserException()
     {
-        return $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
+        return (($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) || ($this->authorizationChecker->isGranted('ROLE_ADMIN')));
     }
 
     public function checkOldPassword($password, $user)

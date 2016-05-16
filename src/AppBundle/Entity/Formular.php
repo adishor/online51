@@ -6,16 +6,32 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraints as CustomAssert;
 
 /**
  * @ORM\Table()
  * @ORM\Entity()
+ * @CustomAssert\ValabilityFormular
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Formular
 {
 
     use ORMBehaviors\Sluggable\Sluggable;
+
+    const MONTH_JANUARY = 1;
+    const MONTH_FEBRUARY = 2;
+    const MONTH_MARCH = 3;
+    const MONTH_APRIL = 4;
+    const MONTH_MAY = 5;
+    const MONTH_JUNE = 6;
+    const MONTH_JULY = 7;
+    const MONTH_AUGUST = 8;
+    const MONTH_SEPTEMBER = 9;
+    const MONTH_OCTOMBER = 10;
+    const MONTH_NOVEMBER = 11;
+    const MONTH_DECEMBER = 12;
+
     /**
      *
      * @var integer
@@ -49,9 +65,17 @@ class Formular
      * @var integer
      *
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $valabilityDays;
+
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $valabilityMonth;
 
     /**
      *
@@ -79,11 +103,12 @@ class Formular
 
     /**
      *
-     * @var string JSON
+     * @var \AppBundle\Entity\SubDomain
      *
-     * @ORM\Column(type="json_array", nullable=true)
+     * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="formulars")
+     * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id")
      */
-    private $configUniqueness;
+    private $subdomain;
 
     public function __construct()
     {
@@ -171,6 +196,29 @@ class Formular
     }
 
     /**
+     * Set valabilityMonth
+     *
+     * @param integer $valabilityMonth
+     * @return Formular
+     */
+    public function setValabilityMonth($valabilityMonth)
+    {
+        $this->valabilityMonth = $valabilityMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get valabilityMonth
+     *
+     * @return integer
+     */
+    public function getValabilityMonth()
+    {
+        return $this->valabilityMonth;
+    }
+
+    /**
      * Set deleted
      *
      * @param boolean $deleted
@@ -217,29 +265,6 @@ class Formular
     }
 
     /**
-     * Set configUniqueness
-     *
-     * @param array $configUniqueness
-     * @return Formular
-     */
-    public function setConfigUniqueness($configUniqueness)
-    {
-        $this->configUniqueness = $configUniqueness;
-
-        return $this;
-    }
-
-    /**
-     * Get configUniqueness
-     *
-     * @return array
-     */
-    public function getConfigUniqueness()
-    {
-        return $this->configUniqueness;
-    }
-
-    /**
      * Add formularCreditsUsage
      *
      * @param \AppBundle\Entity\Document $formularCreditsUsage
@@ -270,6 +295,29 @@ class Formular
     public function getFormularCreditsUsage()
     {
         return $this->formularCreditsUsage;
+    }
+
+    /**
+     * Set subdomain
+     *
+     * @param \AppBundle\Entity\SubDomain $subdomain
+     * @return Formular
+     */
+    public function setSubdomain(\AppBundle\Entity\SubDomain $subdomain = null)
+    {
+        $this->subdomain = $subdomain;
+
+        return $this;
+    }
+
+    /**
+     * Get subdomain
+     *
+     * @return \AppBundle\Entity\SubDomain
+     */
+    public function getSubdomain()
+    {
+        return $this->subdomain;
     }
 
     public function __toString()

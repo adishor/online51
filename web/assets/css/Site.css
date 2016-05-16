@@ -1835,3 +1835,29 @@ h5.first {
 #register_image_unlink {
     display: none;
 }
+
+.ui-selectmenu-menu li a, .ui-selectmenu-status {
+    font-size: 0.8em;
+    padding: .400em 1em .400em 1em !important;
+}
+
+.ui-selectmenu-menu li a:hover, .ui-selectmenu-status:hover {
+    text-decoration: none !important
+}
+
+.ui-selectmenu {
+   height: 1.75em !important; 
+}
+
+.config-unique-title {
+    margin:15px 0 3px 0;
+}
+
+.form-config {
+    display: none;
+    margin: 5px 0 15px 0;
+}
+
+.multipleSelect span {
+    display:none;
+}

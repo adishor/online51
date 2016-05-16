@@ -15,6 +15,7 @@ parameters:
     sonata.media.provider.file.class: AppBundle\Provider\CustomFileProvider
     sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
     stof_doctrine_extensions.listener.softdeleteable.class: AppBundle\Listener\SoftDeleteableListener
+    formular.startYear: 2015
 
 
 framework:
@@ -50,6 +51,7 @@ twig:
     form:
         resources:
             - 'SonataFormatterBundle:Form:formatter.html.twig'
+            - 'SonataCoreBundle:Form:datepicker.html.twig'
             - 'sonata/media_widgets.html.twig'
 
 services:

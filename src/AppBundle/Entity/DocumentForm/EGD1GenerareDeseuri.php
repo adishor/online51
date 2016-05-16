@@ -2,19 +2,46 @@
 
 namespace AppBundle\Entity\DocumentForm;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class EGD1GenerareDeseuri
 {
+    /**
+     *
+     * @var type
+     * @Assert\NotBlank()
+     */
     protected $luna;
 
+    /**
+     *
+     * @var type
+     * @Assert\NotBlank()
+     */
     protected $cantitateDeseuGenerate;
 
+    /**
+     *
+     * @var type
+     * @Assert\NotBlank()
+     */
     protected $cantitateDeseuValorificata;
 
+    /**
+     *
+     * @var type
+     * @Assert\NotBlank()
+     */
     protected $cantitateDeseuEliminata;
 
+    /**
+     *
+     * @var type
+     * @Assert\NotBlank()
+     */
     protected $cantitateDeseuInStoc;
 
-    
+
     function getLuna()
     {
         return $this->luna;

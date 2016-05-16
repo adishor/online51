@@ -38,7 +38,7 @@
         "gedmo/doctrine-extensions": "2.4.13",
         "knplabs/knp-snappy-bundle": "1.4",
         "h4cc/wkhtmltopdf-amd64": "0.12.3",
-        "fp/jsformvalidator-bundle": "v1.3.*"
+        "fp/jsformvalidator-bundle": "v1.2.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

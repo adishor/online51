@@ -29,13 +29,19 @@
                         {{ subdomain.description | raw }}
                         {% if app.user %}
                             {% if isValid or isUserException %}
-                                {% set subdomainEmpty = TRUE %}
+                                {% set subdomainEmptyDocuments = TRUE %}
                                 {% for document in subdomain.documents %}
                                     {% if not document.deleted or not document.media.deleted %}
-                                        {% set subdomainEmpty = FALSE %}
+                                        {% set subdomainEmptyDocuments = FALSE %}
                                     {% endif %}
                                 {% endfor %}
-                                {% if not subdomainEmpty %}
+                                {% set subdomainEmptyFormulars = TRUE %}
+                                {% for formular in subdomain.formulars %}
+                                    {% if not formular.deleted %}
+                                        {% set subdomainEmptyFormulars = FALSE %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if not subdomainEmptyDocuments %}
                                     <h4>{{ 'domain.documents' | trans }}</h4>
                                     <ul>
                                         {% for document in subdomain.documents %}
@@ -80,7 +86,24 @@
                                                 </div>
                                             {% endif %}
                                         {% endfor %}
-                                    </ul>    
+                                    </ul>                                                                        
+                                {% endif %}
+                                {% if not subdomainEmptyFormulars %}
+                                    <h4>{{ 'domain.formulars' | trans }}</h4>
+                                    <ul>
+                                        {% for formular in subdomain.formulars %}
+                                            {% if not formular.deleted %}
+                                                <div class="row new-evaluation">
+{#                                                    <a>#}
+                                                        <div class="col-xs-12">
+                                                            <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
+                                                            {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug })) }}
+                                                        </div>        
+{#                                                    </a>#}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>                                                                        
                                 {% endif %}
                             {% else %}
                                 <br/>
