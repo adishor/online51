@@ -17,7 +17,8 @@ class MediaAdmin extends SonataMediaAdmin
     {
 
         $datagridMapper
-          ->add('providerName')
+          ->add('context', null, array('label' => false), 'hidden')
+          ->add('providerName', null, array('label' => false), 'hidden')
           ->add('name')
           ->add('mediaType', null, array(), 'choice', array(
               'choices' => array(

@@ -114,6 +114,10 @@
                 <source>form.label_name</source>
                 <target>Nume</target>
             </trans-unit>
+            <trans-unit id="form.label_image">
+                <source>form.label_image</source>
+                <target>Imagine</target>
+            </trans-unit>
             <trans-unit id="filter.label_username">
                 <source>filter.label_username</source>
                 <target>Nume de utilizator</target>
@@ -157,6 +161,10 @@
             <trans-unit id="filter.label_deleted">
                 <source>filter.label_deleted</source>
                 <target>Sters</target>
+            </trans-unit>
+            <trans-unit id="filter.label_image">
+                <source>filter.label_image</source>
+                <target>Imagine</target>
             </trans-unit>
             <trans-unit id="list.label_username">
                 <source>list.label_username</source>
@@ -209,6 +217,10 @@
             <trans-unit id="list.label_deleted">
                 <source>list.label_deleted</source>
                 <target>Sters</target>
+            </trans-unit>
+            <trans-unit id="list.label_image">
+                <source>list.label_image</source>
+                <target>Imagine</target>
             </trans-unit>
             <trans-unit id="label_two_step_code">
                 <source>label_two_step_code</source>
@@ -405,6 +417,10 @@
             <trans-unit id="show.label_deleted_at">
                 <source>show.label_deleted_at</source>
                 <target>Sters la</target>
+            </trans-unit>
+            <trans-unit id="show.label_image">
+                <source>show.label_image</source>
+                <target>Imagine</target>
             </trans-unit>
             <trans-unit id="breadcrumb.link_user_show">
                 <source>breadcrumb.link_user_show</source>
@@ -685,6 +701,26 @@
             <trans-unit id="Company">
                 <source>Company</source>
                 <target>Companie</target>
+            </trans-unit>
+            <trans-unit id="Security">
+                <source>Security</source>
+                <target>Securitate</target>
+            </trans-unit>
+            <trans-unit id="No Image">
+                <source>No Image</source>
+                <target>Fara Imagine</target>
+            </trans-unit>
+            <trans-unit id="Status">
+                <source>Status</source>
+                <target>Stare</target>
+            </trans-unit>
+            <trans-unit id="Keys">
+                <source>Keys</source>
+                <target>Chei</target>
+            </trans-unit>
+            <trans-unit id="Roles">
+                <source>Rolea</source>
+                <target>Roluri</target>
             </trans-unit>
         </body>
     </file>

@@ -26,7 +26,7 @@ class Ad
      *
      * @ORM\Column()
      */
-    protected $title;
+    protected $name;
 
     /**
      *
@@ -47,29 +47,7 @@ class Ad
         return $this->id;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Ad
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
+  
 
     /**
      * Set image
@@ -92,5 +70,28 @@ class Ad
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Ad
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

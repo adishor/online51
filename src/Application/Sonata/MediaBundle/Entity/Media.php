@@ -77,7 +77,6 @@ class Media extends BaseMedia
     {
         $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
-
     }
 
     /**
@@ -89,7 +88,6 @@ class Media extends BaseMedia
     {
         return $this->id;
     }
-
 
     /**
      * Add galleryHasMedias
@@ -268,10 +266,23 @@ class Media extends BaseMedia
     /**
      * Get user
      *
-     * @return \Application\Sonata\UserBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getUser()
     {
         return $this->user;
     }
+
+    public function setBinaryContent($binaryContent)
+    {
+        if ($this->providerReference) {
+            $this->previousProviderReference = $this->providerReference;
+        }
+        $this->providerReference = null;
+        $this->binaryContent = $binaryContent;
+        if (!$this->providerReference && $this->previousProviderReference) {
+            $this->providerReference = $this->previousProviderReference;
+        }
+    }
+
 }

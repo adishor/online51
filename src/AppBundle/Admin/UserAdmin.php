@@ -257,7 +257,8 @@ class UserAdmin extends SonataUserAdmin
     {
         parent::configureListFields($listMapper);
 
-        $listMapper->add('deleted');
+        $listMapper->add('deleted')
+          ->remove('impersonating');
     }
 
     public function getFilterParameters()
