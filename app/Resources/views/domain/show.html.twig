@@ -10,9 +10,9 @@
         <ul class="nav nav-tabs clearfix" role="tablist">
             {% for subdomain in domain.subdomains %}
                 {% if not subdomain.deleted %}
-                    <li><a href="#ssm{{ loop.index0 }}" role="tab" data-toggle="tab">{{ subdomain.name | upper }}</a><span></span></li>
-                        {% endif %}
-                    {% endfor %}
+                    <li><a href="#ssm{{ loop.index0 }}" role="tab" data-toggle="tab">{{ subdomain.name | upper }}</a></li>
+                    {% endif %}
+                {% endfor %}
         </ul>
     </div>
     <div class="col-xs-9">
@@ -94,12 +94,12 @@
                                         {% for formular in subdomain.formulars %}
                                             {% if not formular.deleted %}
                                                 <div class="row new-evaluation">
-{#                                                    <a>#}
-                                                        <div class="col-xs-12">
-                                                            <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
-                                                            {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug })) }}
-                                                        </div>        
-{#                                                    </a>#}
+                                                    {#                                                    <a>#}
+                                                    <div class="col-xs-12">
+                                                        <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
+                                                                {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug })) }}
+                                                    </div>        
+                                                    {#                                                    </a>#}
                                                 </div>
                                             {% endif %}
                                         {% endfor %}

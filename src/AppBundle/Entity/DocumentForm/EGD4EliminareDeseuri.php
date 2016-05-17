@@ -2,16 +2,42 @@
 
 namespace AppBundle\Entity\DocumentForm;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\Type;
+
 class EGD4EliminareDeseuri
 {
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $luna;
 
+    /**
+     *
+     * @var type
+     * @Type("double")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $cantitateDeseuEliminata;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $operatiaDeEliminare;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $agentEconomicEliminare;
-
 
     function getLuna()
     {

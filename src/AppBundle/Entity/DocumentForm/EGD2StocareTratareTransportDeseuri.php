@@ -2,27 +2,84 @@
 
 namespace AppBundle\Entity\DocumentForm;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\Type;
+
 class EGD2StocareTratareTransportDeseuri
 {
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $luna;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $sectia;
 
+    /**
+     *
+     * @var type
+     * @Type("double")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $stocareCantitate;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $stocareTip;
 
+    /**
+     *
+     * @var type
+     * @Type("double")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $tratareCantitate;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $tratareMod;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $tratareScop;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $transportMijloc;
 
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
+     */
     protected $transportDestinatie;
 
-    
+
     function getLuna()
     {
         return $this->luna;

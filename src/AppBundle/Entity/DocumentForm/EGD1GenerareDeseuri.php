@@ -3,44 +3,50 @@
 namespace AppBundle\Entity\DocumentForm;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\Type;
 
 class EGD1GenerareDeseuri
 {
     /**
      *
      * @var type
-     * @Assert\NotBlank()
+     *
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $luna;
 
     /**
      *
      * @var type
-     * @Assert\NotBlank()
+     * @Type("double")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $cantitateDeseuGenerate;
 
     /**
      *
      * @var type
-     * @Assert\NotBlank()
+     * @Type("double")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $cantitateDeseuValorificata;
 
     /**
      *
      * @var type
-     * @Assert\NotBlank()
+     * @Type("double")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $cantitateDeseuEliminata;
 
     /**
      *
      * @var type
-     * @Assert\NotBlank()
+     * @Type("double")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $cantitateDeseuInStoc;
-
 
     function getLuna()
     {

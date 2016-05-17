@@ -1828,7 +1828,7 @@ h5.first {
     font-weight: bold;
     text-align: right;
     font-size: 18px;
-    
+
 }
 
 #register_image label,
@@ -1846,7 +1846,7 @@ h5.first {
 }
 
 .ui-selectmenu {
-   height: 1.75em !important; 
+    height: 1.75em !important; 
 }
 
 .config-unique-title {
@@ -1860,4 +1860,8 @@ h5.first {
 
 .multipleSelect span {
     display:none;
+}
+
+.form-table th, td{
+    padding: 0px;   
 }

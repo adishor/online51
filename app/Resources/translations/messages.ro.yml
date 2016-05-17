@@ -376,6 +376,13 @@ document-form:
         an: Selecteaza an
         tip_deseu: Selecteaza tipul de deseu
         operatia: Selecteaza operatia
+pdf-doc-egd:
+    agent: 'Agent economic'
+    year : 'An'
+    waste-type: 'Tip deseu'
+    waste-code: 'Tip deseu cod'
+    physical-state: 'Stare fizica'
+    unit-of-measure: 'Unitate de masura'
     
 #admin
 admin_label:

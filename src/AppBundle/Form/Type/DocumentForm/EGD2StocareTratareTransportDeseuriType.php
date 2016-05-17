@@ -6,7 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 USE Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class EGD2StocareTratareTransportDeseuriType extends AbstractType
 {
@@ -22,23 +23,24 @@ class EGD2StocareTratareTransportDeseuriType extends AbstractType
         $transportDestinatie = $container->getParameter('destinatia');
 
         $builder->add('luna', TextType::class, array(
-              'read_only' => TRUE
+              'read_only' => TRUE, 'disabled' => TRUE,
           ))
-          ->add('sectia', IntegerType::class)
-          ->add('stocareCantitate', IntegerType::class)
-          ->add('stocareTip', IntegerType::class)
-          ->add('tratareCantitate', IntegerType::class)
-          ->add('tratareMod', IntegerType::class)
-          ->add('tratareScop', IntegerType::class)
-          ->add('transportMijloc', IntegerType::class)
-          ->add('transportDestinatie', IntegerType::class)
+          ->add('sectia', NumberType::class)
+          ->add('stocareCantitate', NumberType::class)
+          ->add('stocareTip', ChoiceType::class, array('choices' => $stocareTip))
+          ->add('tratareCantitate', NumberType::class)
+          ->add('tratareMod', ChoiceType::class, array('choices' => $tratareMod))
+          ->add('tratareScop', ChoiceType::class, array('choices' => $tratareScop))
+          ->add('transportMijloc', ChoiceType::class, array('choices' => $transportMijloc))
+          ->add('transportDestinatie', ChoiceType::class, array('choices' => $transportDestinatie))
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\DocumentForm\EGD2StocareTratareTransportDeseuri'
+            'data_class' => 'AppBundle\Entity\DocumentForm\EGD2StocareTratareTransportDeseuri',
+            'cascade_validation' => true,
         ));
     }
 

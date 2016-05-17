@@ -4,6 +4,7 @@ namespace AppBundle\Entity\DocumentForm;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation\Type;
 
 class EvidentaGestiuniiDeseurilor
 {
@@ -32,66 +33,72 @@ class EvidentaGestiuniiDeseurilor
     /**
      *
      * @var type
-     * @Assert\NotBlank()
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $agentEconomic;
 
     /**
      *
      * @var type
-     * @Assert\NotBlank()
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $an;
 
     /**
      *
-     * @var type
-     * @Assert\NotBlank()
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $tipDeseu;
 
     /**
      *
-     * @var type
-     * @Assert\NotBlank()
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $tipDeseuCod;
 
     /**
      *
-     * @var type
-     * @Assert\NotBlank()
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $stareFizica;
 
     /**
      *
-     * @var type
-     * @Assert\NotBlank()
+     * @Type("string")
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $unitateMasura;
 
     /**
      *
      * @var type
+     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD1GenerareDeseuri>")
      */
     protected $EGD1GenerareDeseuri;
 
     /**
      *
      * @var type
+     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD2StocareTratareTransportDeseuri>")
      */
     protected $EGD2StocareTratareTransportDeseuri;
 
     /**
      *
      * @var type
+     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD3ValorificareDeseuri>")
      */
     protected $EGD3ValorificareDeseuri;
 
     /**
      *
      * @var type
+     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD4EliminareDeseuri>")
      */
     protected $EGD4EliminareDeseuri;
 

@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 USE Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class EGD1GenerareDeseuriType extends AbstractType
 {
@@ -14,19 +14,20 @@ class EGD1GenerareDeseuriType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('luna', TextType::class, array(
-            'read_only' => TRUE
+            'read_only' => TRUE, 'disabled' => TRUE,
           ))
-          ->add('cantitateDeseuGenerate', IntegerType::class)
-          ->add('cantitateDeseuValorificata', IntegerType::class)
-          ->add('cantitateDeseuEliminata', IntegerType::class)
-          ->add('cantitateDeseuInStoc', IntegerType::class)
+          ->add('cantitateDeseuGenerate', NumberType::class)
+          ->add('cantitateDeseuValorificata', NumberType::class)
+          ->add('cantitateDeseuEliminata', NumberType::class)
+          ->add('cantitateDeseuInStoc', NumberType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\DocumentForm\EGD1GenerareDeseuri'
+            'data_class' => 'AppBundle\Entity\DocumentForm\EGD1GenerareDeseuri',
+            'cascade_validation' => true,
         ));
     }
 
