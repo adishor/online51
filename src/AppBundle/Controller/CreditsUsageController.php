@@ -61,10 +61,21 @@ class CreditsUsageController extends Controller
 
         $formularConfig = $request->request->get('data');
 
-        if (!$userHelper->getIsUserException()) {
-            if (true === $userHelper->isValidUserFormular($user->getId(), $formularId, $formularConfig)) {
-                throw new AccessDeniedHttpException($this->get('translator')->trans('domain.document.already-unlocked'));
+
+        if (true === $userHelper->isValidUserFormular($user->getId(), $formularId, $formularConfig)) {
+            if (!$userHelper->getIsUserException()) {
+                $this->get('session')->getFlashBag()->add('formular-info', 'domain.formular.already-unlocked');
             }
+            $response = new Response(json_encode(array(
+                  'success' => true,
+                  'message' => $this->get('translator')->trans('domain.formular.success'),
+                  'credits' => $user->getCreditsTotal(),
+                  'formHash' => md5(json_encode($user->getId()) . json_encode($formularConfig))
+            )));
+
+            return $response;
+        }
+        if (!$userHelper->getIsUserException()) {
             if (($user->getCreditsTotal() - $formular->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
                 $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.formular.no-credits'))));
 

@@ -120,8 +120,11 @@ class UserHelperService
 
     public function isValidUserFormular($userId, $formularId, $formularConfig)
     {
-        //to do verify
-        return false;
+        if (empty($this->entityManager->getRepository('AppBundle:CreditsUsage')
+              ->findValidUserFormular($userId, $formularId, $formularConfig))) {
+            return false;
+        }
+        return true;
     }
 
     public function updateValidUserCredits()

@@ -117,6 +117,7 @@ domain:
         available-until: 'Documentul este deblocat pana la data de %date%'
     formular:
         config: 'Va rugam completati toate campurile de mai jos.'
+        already-unlocked: 'Formularul este deja deblocat. Nu s-au consumat credite.'
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest formular.'
         success: 'Formular deblocat cu succes.'
 subscription:

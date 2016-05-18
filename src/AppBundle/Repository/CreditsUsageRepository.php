@@ -105,6 +105,32 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
+    public function findValidUserFormular($userId, $formularId, $formularConfig)
+    {
+        $formHash = md5(json_encode($userId) . json_encode($formularConfig));
+
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('cu.id')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->join('cu.formular', 'f')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('cu.formHash = :formHash')
+          ->setParameter('formHash', $formHash)
+          ->andWhere('f.id = :formular')
+          ->setParameter('formular', $formularId)
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('f.deleted = FALSE')
+        ;
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
     public function findTotalUsedCredits($userId)
     {
         $queryBuilder = $this->getEntityManager()

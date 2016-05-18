@@ -4,6 +4,10 @@
 
     <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
 
+    {% for flash_message in app.session.flashbag.get('formular-info') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+    
     <div class="col-xs-2">
         <ul class="nav nav-tabs clearfix" role="tablist">
             <li class="active"><a href="#formtab" role="tab" data-toggle="tab">{{ 'Date Generale' | trans }}</a></li>
