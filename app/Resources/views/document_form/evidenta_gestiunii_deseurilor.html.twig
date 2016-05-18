@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block ccontainer %}
+
     <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
 
     <div class="col-xs-2">
@@ -8,8 +9,12 @@
             <li class="active"><a href="#formtab" role="tab" data-toggle="tab">{{ 'Date Generale' | trans }}</a></li>
             <li><a href="#formtab1" role="tab" data-toggle="tab">{{ 'Generarea deseurilor' | trans }}</a></li>
             <li><a href="#formtab2" role="tab" data-toggle="tab">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
-            <li><a href="#formtab3" role="tab" data-toggle="tab">{{ 'Valorificare deseurilor' | trans }}</a></li>
-            <li><a href="#formtab4" role="tab" data-toggle="tab">{{ 'Eliminarea deseurilor' | trans }}</a></li>
+                {% if form.EGD3ValorificareDeseuri is defined %}
+                <li><a href="#formtab3" role="tab" data-toggle="tab">{{ 'Valorificare deseurilor' | trans }}</a></li>
+                {% endif %}
+                {% if form.EGD4EliminareDeseuri is defined %}
+                <li><a href="#formtab4" role="tab" data-toggle="tab">{{ 'Eliminarea deseurilor' | trans }}</a></li>
+                {% endif %}
         </ul>
     </div>
     <div class="col-xs-10">
@@ -17,13 +22,13 @@
         <div class="tab-content">
             <div id="formtab" class="tab-pane active">
                 {{ form_row(form.agentEconomic) }}
-                {{ form_row(form.an) }}
                 <div class="col-xs-6">
-                    {{ form_row(form.tipDeseu) }}
+                    {{ form_row(form.an) }}
                 </div>
                 <div class="col-xs-6">
                     {{ form_row(form.tipDeseuCod) }}
                 </div>
+                {{ form_row(form.tipDeseu, {'attr': {'class': 'width-100-percent'} }) }}
                 {{ form_row(form.stareFizica) }}
                 {{ form_row(form.unitateMasura) }}
                 {{ form_widget(form.save1) }}
@@ -31,10 +36,10 @@
 
             <div id="formtab1" class="tab-pane formular">
                 <h3>{{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}</h3>
-                <table class="table table-bordered text-center form-table">
+                <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
-                        <th class="text-center" rowspan="3">{{ 'Nr.' | trans }}</th>
-                        <th class="text-center" rowspan="3">{{ 'Luna' | trans }}</th>
+                        <th class="text-center width-35-px" rowspan="3">{{ 'Nr.' | trans }}</th>
+                        <th class="text-center width-105-px" rowspan="3">{{ 'Luna' | trans }}</th>
                         <th class="text-center" colspan="4">{{ 'Cantitatea de deseuri' | trans }}</th>
                     </tr>
                     <tr>
@@ -48,8 +53,8 @@
                     </tr>
                     {% for item in form.EGD1GenerareDeseuri %}
                         <tr>
-                            <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                            <td>{{ form_widget(item.luna) }}</td>
+                            <td class="width-35-px">{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                            <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuGenerate) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuValorificata) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuEliminata) }}</td>
@@ -62,10 +67,10 @@
 
             <div id="formtab2" class="tab-pane formular">
                 <h3>{{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}</h3>
-                <table class="table table-bordered text-center form-table">
+                <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
-                        <th class="text-center" rowspan="2">{{ 'Nr crt.' | trans }}</th>
-                        <th class="text-center" rowspan="2">{{ 'Luna' | trans }}</th>
+                        <th class="text-center width-35-px" rowspan="2">{{ 'Nr.' | trans }}</th>
+                        <th class="text-center width-105-px" rowspan="2">{{ 'Luna' | trans }}</th>
                         <th class="text-center" rowspan="2">{{ 'Sectia' | trans }}</th>
                         <th class="text-center" colspan="2">{{ 'Stocare' | trans }}</th>
                         <th class="text-center" colspan="3">{{ 'Tratare' | trans }}</th>
@@ -82,127 +87,73 @@
                     </tr>
                     {% for item in form.EGD2StocareTratareTransportDeseuri %}
                         <tr>
-                            <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                            <td>{{ form_widget(item.luna) }}</td>
+                            <td class="width-35-px">{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                            <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
                             <td>{{ form_widget(item.sectia) }}</td>
                             <td>{{ form_widget(item.stocareCantitate) }}</td>
-                            <td>{{ form_widget(item.stocareTip) }}</td>
+                            <td>{{ form_widget(item.stocareTip, {'attr': {'class': 'max-width-48'} }) }}</td>
                             <td>{{ form_widget(item.tratareCantitate) }}</td>
-                            <td>{{ form_widget(item.tratareMod) }}</td>
-                            <td>{{ form_widget(item.tratareScop) }}</td>
-                            <td>{{ form_widget(item.transportMijloc) }}</td>
-                            <td>{{ form_widget(item.transportDestinatie) }}</td>
+                            <td>{{ form_widget(item.tratareMod, {'attr': {'class': 'max-width-60'} }) }}</td>
+                            <td>{{ form_widget(item.tratareScop, {'attr': {'class': 'max-width-40'} }) }}</td>
+                            <td>{{ form_widget(item.transportMijloc, {'attr': {'class': 'max-width-48'} }) }}</td>
+                            <td>{{ form_widget(item.transportDestinatie, {'attr': {'class': 'max-width-50'} }) }}</td>
                         </tr>
                     {% endfor %}
                 </table>
                 {{ form_widget(form.save3) }}
             </div>
-
-            <div id="formtab3" class="tab-pane formular">
-                <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
-                <table class="table table-bordered text-center form-table">
-                    <tr>
-                        <th class="text-center">{{ 'Nr.' | trans }}</th>
-                        <th class="text-center">{{ 'Luna' | trans }}</th>
-                        <th class="text-center">{{ 'Cantitatea de deseu valorificata' | trans }}</th>
-                        <th class="text-center">{{ 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' | trans }}</th>
-                        <th class="text-center">{{ 'Agentul economic care efectueaza operatia de valorificare' | trans }}</th>
-                    </tr>
-                    {% for item in form.EGD3ValorificareDeseuri %}
+            {% if form.EGD3ValorificareDeseuri is defined %}
+                <div id="formtab3" class="tab-pane formular">
+                    <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
+                    <table class="table-bordered text-center form-table form-table-layout-fixed">
                         <tr>
-                            <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                            <td>{{ form_widget(item.luna) }}</td>
-                            <td>{{ form_widget(item.cantitateDeseuValorificata) }}</td>
-                            <td>{{ form_widget(item.operatiaDeValorificare) }}</td>
-                            <td>{{ form_widget(item.agentEconomicValorificare) }}</td>
+                            <th class="text-center width-35-px">{{ 'Nr.' | trans }}</th>
+                            <th class="text-center width-105-px">{{ 'Luna' | trans }}</th>
+                            <th class="text-center">{{ 'Cantitatea de deseu valorificata' | trans }}</th>
+                            <th class="text-center">{{ 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' | trans }}</th>
+                            <th class="text-center">{{ 'Agentul economic care efectueaza operatia de valorificare' | trans }}</th>
                         </tr>
-                    {% endfor %}
-                </table>
-                {{ form_widget(form.save4) }}
-            </div>
-
-            <div id="formtab4" class="tab-pane formular">
-                <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
-                <table class="table table-bordered text-center form-table">
-                    <tr>
-                        <th class="text-center">{{ 'Nr.' | trans }}</th>
-                        <th class="text-center">{{ 'Luna' | trans }}</th>
-                        <th class="text-center">{{ 'Cantitatea de deseu eliminata' | trans }}</th>
-                        <th class="text-center">{{ 'Operatia de eliminare, conform Anexei IIA din legea 426/2001' | trans }}</th>
-                        <th class="text-center">{{ 'Agentul economic care efectueaza operatia de eliminare' | trans }}</th>
-                    </tr>
-                    {% for item in form.EGD4EliminareDeseuri %}
+                        {% for item in form.EGD3ValorificareDeseuri %}
+                            <tr>
+                                <td class="width-35-px">{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                                <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
+                                <td>{{ form_widget(item.cantitateDeseuValorificata) }}</td>
+                                <td>{{ form_widget(item.operatiaDeValorificare, {'attr': {'class': 'max-width-350'} }) }}</td>
+                                <td>{{ form_widget(item.agentEconomicValorificare) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {{ form_widget(form.save4) }}
+                </div>
+            {% endif %}
+            {% if form.EGD4EliminareDeseuri is defined %}
+                <div id="formtab4" class="tab-pane formular">
+                    <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
+                    <table class="table-bordered text-center form-table form-table-layout-fixed">
                         <tr>
-                            <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                            <td>{{ form_widget(item.luna) }}</td>
-                            <td>{{ form_widget(item.cantitateDeseuEliminata) }}</td>
-                            <td>{{ form_widget(item.operatiaDeEliminare) }}</td>
-                            <td>{{ form_widget(item.agentEconomicEliminare) }}</td>
+                            <th class="text-center width-35-px">{{ 'Nr.' | trans }}</th>
+                            <th class="text-center width-105-px">{{ 'Luna' | trans }}</th>
+                            <th class="text-center">{{ 'Cantitatea de deseu eliminata' | trans }}</th>
+                            <th class="text-center">{{ 'Operatia de eliminare, conform Anexei IIA din legea 426/2001' | trans }}</th>
+                            <th class="text-center">{{ 'Agentul economic care efectueaza operatia de eliminare' | trans }}</th>
                         </tr>
-                    {% endfor %}
-                </table>
-                {{ form_widget(form.save5) }}
-                {{ form_widget(form.generateDocument) }}
-            </div>
-            <br/>
+                        {% for item in form.EGD4EliminareDeseuri %}
+                            <tr>
+                                <td class="width-35-px">{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                                <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
+                                <td>{{ form_widget(item.cantitateDeseuEliminata) }}</td>
+                                <td>{{ form_widget(item.operatiaDeEliminare, {'attr': {'class': 'max-width-350'} }) }}</td>
+                                <td>{{ form_widget(item.agentEconomicEliminare) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {{ form_widget(form.save5) }}
 
-
+                </div>
+                <br/>
+            {% endif %}
+            {{ form_widget(form.generateDocument) }}
             {{ form_end(form) }}
         </div>
     </div>
-    <script>
-        $('#evidenta_gestiunii_deseurilor_save1').click(function (event) {
-            $('#evidenta_gestiunii_deseurilor_save1Clicked').val('true');
-            var form = document.getElementsByName('evidenta_gestiunii_deseurilor');
-            FpJsFormValidator.customize(form, {groups: ['button1']});
-            FpJsFormValidator.customize(form, 'submitForm', event);
-        });
-        jQuery('#evidenta_gestiunii_deseurilor_save2').click(function () {
-            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('true');
-            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-            FpJsFormValidator.customize(field, {groups: ['button1', 'button2']});
-            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-        });
-        jQuery('#evidenta_gestiunii_deseurilor_save3').click(function () {
-            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('true');
-            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3']});
-            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-        });
-        jQuery('#evidenta_gestiunii_deseurilor_save4').click(function () {
-            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('true');
-            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3', 'button4']});
-            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-        });
-        jQuery('#evidenta_gestiunii_deseurilor_save5').click(function () {
-            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save5Clicked').val('true');
-            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3', 'button4', 'button5']});
-            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-        });
-        jQuery('#evidenta_gestiunii_deseurilor_generateDocument').click(function () {
-            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_save5Clicked').val('false');
-            jQuery('#evidenta_gestiunii_deseurilor_generateDocumentClicked').val('true');
-            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-            FpJsFormValidator.customize(field, {groups: ['generateDocument']});
-            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-        });
-
-
-    </script>
 {% endblock %}

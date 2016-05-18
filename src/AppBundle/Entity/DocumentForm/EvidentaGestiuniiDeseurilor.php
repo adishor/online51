@@ -71,7 +71,7 @@ class EvidentaGestiuniiDeseurilor
     /**
      *
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank(groups={"generateDocument", "button1"})
      */
     protected $stareFizica;
 

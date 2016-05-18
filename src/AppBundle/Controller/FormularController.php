@@ -31,11 +31,13 @@ class FormularController extends Controller
         $type = "AppBundle\\Form\\Type\\DocumentForm\\" . $name . "Type";
         $handleMethod = 'handle' . $name;
         $applyUniqueConfigurationMethod = 'applyUniqueConfiguration' . $name;
+        $applyFormCustomizationMethod = 'applyFormCustomization' . $name;
         $generateDocumentTemplate = 'document_pdf_template/' . strtolower($formular->getSlug()) . ".html.twig";
         $generateDocumentDirectory = $this->getParameter('generated_documents_dir') . strtolower($formular->getSlug()) . '/';
         $entityManager = $this->getDoctrine()->getManager();
         $creditsUsage = $entityManager->getRepository('AppBundle:CreditsUsage')->findOneByFormHash($hash);
         $serializer = $this->get('jms_serializer');
+
         if (empty($creditsUsage->getFormData())) {
             $formData = new $entity();
             $this->$applyUniqueConfigurationMethod($serializer, $entityManager, $creditsUsage, $formData, $user->getCompany());
@@ -43,6 +45,7 @@ class FormularController extends Controller
             $formData = $serializer->deserialize($creditsUsage->getFormData(), $entity, 'json');
         }
         $form = $this->createForm(new $type(), $formData);
+        $this->$applyFormCustomizationMethod($form, $creditsUsage);
 
         $this->$handleMethod($serializer, $entityManager, $creditsUsage, $name, $form, $request, $formData, $generateDocumentDirectory, $generateDocumentTemplate);
 
@@ -114,13 +117,26 @@ class FormularController extends Controller
         $entityManager->flush();
     }
 
+    public function applyFormCustomizationEvidentaGestiuniiDeseurilor($form, $creditsUsage)
+    {
+        $formConfig = json_decode($creditsUsage->getFormConfig());
+        if ($formConfig->operatia === '3') {
+            $form->remove('EGD3ValorificareDeseuri');
+            $form->remove('save4');
+        }
+        if ($formConfig->operatia === '4') {
+            $form->remove('EGD4EliminareDeseuri');
+            $form->remove('save5');
+        }
+    }
+
     public function handleEvidentaGestiuniiDeseurilor($serializer, $entityManager, $creditsUsage, $name, $form, $request, $formData, $generateDocumentDirectory, $generateDocumentTemplate)
     {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('generateDocumentClicked')->getData() === 'true') {
-                $media = $this->generateDocument($name . $creditsUsage->getId(), $generateDocumentDirectory, $generateDocumentTemplate, $formData);
+            if ($form->get('generateDocument')->isClicked()) {
+                $media = $this->generateDocument($name . $creditsUsage->getId() . '.pdf', $generateDocumentDirectory, $generateDocumentTemplate, $formData);
                 $creditsUsage->setMedia($media);
                 //lock document generation
             }

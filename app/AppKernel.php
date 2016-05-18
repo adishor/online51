@@ -40,7 +40,6 @@ class AppKernel extends Kernel
             new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
             new Application\Sonata\AdminBundle\ApplicationSonataAdminBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new Fp\JsFormValidatorBundle\FpJsFormValidatorBundle(),
             new AppBundle\AppBundle()
         );
 
