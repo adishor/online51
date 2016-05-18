@@ -118,6 +118,12 @@ class UserHelperService
         return true;
     }
 
+    public function isValidUserFormular($userId, $formularId, $formularConfig)
+    {
+        //to do verify
+        return false;
+    }
+
     public function updateValidUserCredits()
     {
         $userId = $this->tokenStorage->getToken()->getUser()->getId();
@@ -156,18 +162,45 @@ class UserHelperService
 
     public function createUnlockDocumentCreditUsage($user, $document)
     {
-
         $creditsUsage = new CreditsUsage();
         $creditsUsage->setUser($user);
         $creditsUsage->setDocument($document);
         $user->setCreditsTotal($user->getCreditsTotal() - $document->getCreditValue());
         $user->setLastCreditUpdate(new \DateTime());
-        $creditsUsage->setMentions($this->translator->trans('credit-usage.unlocked-by-user'));
+        $creditsUsage->setMentions($this->translator->trans('credit-usage.document-unlocked-by-user'));
         $expireDate = new \DateTime();
         $expireDate->add(new \DateInterval('P' . $creditsUsage->getDocument()->getValabilityDays() . 'D'));
         $creditsUsage->setExpireDate($expireDate);
         $creditsUsage->setCredit($document->getCreditValue());
         $creditsUsage->setUsageType(CreditsUsage::TYPE_DOCUMENT);
+        $this->entityManager->persist($creditsUsage);
+        $this->entityManager->flush();
+    }
+
+    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig)
+    {
+        $creditsUsage = new CreditsUsage();
+        $creditsUsage->setUser($user);
+        $creditsUsage->setFormular($formular);
+        if (!$this->getIsUserException()) {
+            $user->setCreditsTotal($user->getCreditsTotal() - $formular->getCreditValue());
+            $user->setLastCreditUpdate(new \DateTime());
+        }
+        $creditsUsage->setMentions($this->translator->trans('credit-usage.formular-unlocked-by-user'));
+        if (null !== $formular->getValabilityDays()) {
+            $expireDate = new \DateTime();
+            $expireDate->add(new \DateInterval('P' . $formular->getValabilityDays() . 'D'));
+        }
+        if (null !== $formular->getValabilityMonth()) {
+            $an = ((isset($formularConfig['an'])) ? $formularConfig['an'] : date('Y')) + 1;
+            $timestamp = strtotime($an . '-' . $formular->getValabilityMonth() . '-01 23:59:59');
+            $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
+        }
+        $creditsUsage->setExpireDate($expireDate);
+        $creditsUsage->setCredit((!$this->getIsUserException()) ? $formular->getCreditValue() : 0);
+        $creditsUsage->setUsageType(CreditsUsage::TYPE_FORMULAR);
+        $creditsUsage->setFormConfig(json_encode($formularConfig));
+        $creditsUsage->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
     }

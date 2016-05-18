@@ -47,7 +47,7 @@ class Ad
         return $this->id;
     }
 
-  
+
 
     /**
      * Set image
@@ -88,10 +88,16 @@ class Ad
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
     }
+
+    public function __toString()
+    {
+        return ($this->getId() ? $this->getName() : 'Create new');
+    }
+
 }

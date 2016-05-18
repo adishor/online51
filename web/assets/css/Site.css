@@ -1858,7 +1858,7 @@ h5.first {
     margin: 5px 0 15px 0;
 }
 
-.multipleSelect span {
+.multipleSelectLevel2, .multipleSelectLevel3 {
     display:none;
 }
 

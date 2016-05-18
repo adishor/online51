@@ -47,6 +47,7 @@ form:
         captcha: 'Va rugam completati textul din imagine'
         subject: 'Va rugam completati *Subiectul'
         message: 'Va rugam completati *Mesajul'
+        field: 'Campul este obligatoriu.'
     placeholder:
         username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
@@ -116,6 +117,8 @@ domain:
         available-until: 'Documentul este deblocat pana la data de %date%'
     formular:
         config: 'Va rugam completati toate campurile de mai jos.'
+        no-credits: 'Nu aveti suficiente credite pentru a debloca acest formular.'
+        success: 'Formular deblocat cu succes.'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -230,7 +233,8 @@ change-info:
     save: Salveaza
     back: Inapoi
 credit-usage:
-    unlocked-by-user: 'Document deblocat de utilizator'
+    document-unlocked-by-user: 'Document deblocat de utilizator'
+    formular-unlocked-by-user: 'Formular deblocat de utilizator'
     expired: 'Credite expirate.'
 register-success:
     title: 'Succes!'
@@ -317,6 +321,11 @@ modal:
     button:
         yes: 'Da'
         no: 'Nu'
+    config-form-add-confirm:
+        title: 'Confirma deblocare formular'
+        body: 'Sunteti sigur ca doriti sa deblocati %title% pentru configuratia aleasa? Atentie veti consuma %credits% %plural%!'
+        credit:  'credit'
+        credits:  'credite'
 total-credits: 'Credite Totale:'
 year: ' an'
 years: ' ani'

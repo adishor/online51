@@ -13,8 +13,16 @@ class EvidentaGestiuniiDeseurilor
     // Pentru valorile declarate se vor declara optiunile disponibile din select in fisierul yml generat corespunzator entitatii
     // exemplu pentru entitatea EvidentaGestiuniiDeseurilor avem fisierul yml evidenta_gestiunii_deseurilor.yml
     // locatia fisierului yml este config/documentForm/evidenta_gestiunii_deseurilor.yml
+    /**
+     * @var array
+     * @Type("array")
+     */
     static public $uniqueness = [self::UNIQUE_AN, 'tip_deseu', 'operatia'];
 
+    /**
+     * @var array
+     * @Type("array")
+     */
     private $luni = ['Ianuarie',
         'Februarie',
         'Martie',
@@ -77,28 +85,28 @@ class EvidentaGestiuniiDeseurilor
     /**
      *
      * @var type
-     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD1GenerareDeseuri>")
+     * @Type("array<AppBundle\Entity\DocumentForm\EGD1GenerareDeseuri>")
      */
     protected $EGD1GenerareDeseuri;
 
     /**
      *
      * @var type
-     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD2StocareTratareTransportDeseuri>")
+     * @Type("array<AppBundle\Entity\DocumentForm\EGD2StocareTratareTransportDeseuri>")
      */
     protected $EGD2StocareTratareTransportDeseuri;
 
     /**
      *
      * @var type
-     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD3ValorificareDeseuri>")
+     * @Type("array<AppBundle\Entity\DocumentForm\EGD3ValorificareDeseuri>")
      */
     protected $EGD3ValorificareDeseuri;
 
     /**
      *
      * @var type
-     * @Type("ArrayCollection<AppBundle\Entity\DocumentForm\EGD4EliminareDeseuri>")
+     * @Type("array<AppBundle\Entity\DocumentForm\EGD4EliminareDeseuri>")
      */
     protected $EGD4EliminareDeseuri;
 

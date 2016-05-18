@@ -96,8 +96,7 @@ parameters:
                         '10': 02 01 10 deşeuri metalice
                         '99': 02 01 99 alte deşeuri nespecificate
                 '02':
-                    name:
-                        '02': 02 02 deşeuri de la prepararea şi procesarea carnii, peştelui şi altor alimente de origine animala
+                    name: 02 02 deşeuri de la prepararea şi procesarea carnii, peştelui şi altor alimente de origine animala
                     values:
                         '01': 02 02 01 namoluri de la spalare şi curatare
                         '02': 02 02 02 deşeuri de tesuturi animale

@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CreditsUsage
 {
     const TYPE_DOCUMENT = 'document';
+    const TYPE_FORMULAR = 'formular';
     const TYPE_EXPIRED = 'expired';
 
     /**
@@ -102,6 +103,14 @@ class CreditsUsage
      * @ORM\Column(type="json_array", nullable=true)
      */
     private $formData;
+
+    /**
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=32)
+     */
+    private $formHash;
 
     /**
      *
@@ -390,6 +399,29 @@ class CreditsUsage
     public function getFormData()
     {
         return $this->formData;
+    }
+
+    /**
+     * Set formHash
+     *
+     * @param string $formHash
+     * @return CreditsUsage
+     */
+    public function setFormHash($formHash)
+    {
+        $this->formHash = $formHash;
+
+        return $this;
+    }
+
+    /**
+     * Get formHash
+     *
+     * @return string
+     */
+    public function getFormHash()
+    {
+        return $this->formHash;
     }
 
     /**

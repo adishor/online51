@@ -1,7 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block modal %}
-    {% include 'domain/domain_document_confirm_modal.html.twig' %} 
+    {% include 'domain/domain_document_confirm_modal.html.twig' %}
+    {% include 'document_form/config_form_add_confirm_modal.html.twig' %}
 {% endblock modal %}
 
 {% block ccontainer %}
@@ -94,12 +95,17 @@
                                         {% for formular in subdomain.formulars %}
                                             {% if not formular.deleted %}
                                                 <div class="row new-evaluation">
-                                                    {#                                                    <a>#}
-                                                    <div class="col-xs-12">
+                                                    <div class="col-xs-2">
+                                                            <div class="credit-icon">
+                                                                <div class="credit-icon-value color-red">
+                                                                    {{ formular.creditValue }}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-xs-10">
                                                         <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
-                                                                {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug })) }}
-                                                    </div>        
-                                                    {#                                                    </a>#}
+                                                    </div>
+                                                    {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug, 'request' : app.request })) }}
                                                 </div>
                                             {% endif %}
                                         {% endfor %}

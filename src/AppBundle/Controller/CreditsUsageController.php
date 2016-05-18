@@ -45,4 +45,43 @@ class CreditsUsageController extends Controller
         return $response;
     }
 
+    /**
+     * @Route("/unlock-formular", name="unlock_formular")
+     */
+    public function unlockFormularAction(Request $request)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+        $userHelper = $this->get('app.user_helper');
+        $userHelper->updateValidUserCredits();
+        $formularId = $request->request->get('formularId');
+        $formular = $this->getDoctrine()->getManager()->getRepository('AppBundle:Formular')->find($formularId);
+
+        $formularConfig = $request->request->get('data');
+
+        if (!$userHelper->getIsUserException()) {
+            if (true === $userHelper->isValidUserFormular($user->getId(), $formularId, $formularConfig)) {
+                throw new AccessDeniedHttpException($this->get('translator')->trans('domain.document.already-unlocked'));
+            }
+            if (($user->getCreditsTotal() - $formular->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
+                $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.formular.no-credits'))));
+
+                return $response;
+            }
+        }
+
+        $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig);
+
+        $response = new Response(json_encode(array(
+              'success' => true,
+              'message' => $this->get('translator')->trans('domain.formular.success'),
+              'credits' => $user->getCreditsTotal(),
+              'formHash' => md5(json_encode($user->getId()) . json_encode($formularConfig))
+        )));
+
+        return $response;
+    }
+
 }

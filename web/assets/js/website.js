@@ -424,7 +424,7 @@ $('#orderRemoveConfirmModalYes').click(function () {
 });
 
 $('.show-form-config').click(function() {
-   $(this).siblings('.form-config').toggle(); 
+   $(this).parent().siblings('.form-config').toggle(); 
 });
 
 $(function(){

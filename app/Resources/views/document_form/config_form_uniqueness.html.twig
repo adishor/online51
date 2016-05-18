@@ -1,0 +1,174 @@
+<div class="form-config col-xs-12"><div class="panel"><div class="panel-body">
+    {{ 'domain.formular.config' | trans }}
+
+    <form id="form_Config_{{ formular.slug }}" method="post" onsubmit="return false;">
+    {% for key, items in uniqueValues %}
+        <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
+
+        {% set singleSelect = true %}
+        {% for itemUnique in items %}
+            {% if itemUnique is iterable %}
+                {% set singleSelect = false %}
+            {% endif %}
+        {% endfor %}
+
+{#        singleSelect means that we have a configurationOption with a 1 level value#}
+{#        example: Year - by selecting one value we have the final configuration#}
+        {% if singleSelect and items|length > 0 %}
+            <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" id="{{ key }}">
+                {% if items|length > 1 %}
+                    <option></option>
+                {% endif %}
+                {% for keyItem, item in items %}
+                    <option value="{{ keyItem }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+            <span class="field-validation-valid" data-valmsg-for="select_{{ key }}" data-valmsg-replace="true" ></span>
+        {% endif %}
+        
+{#        for cases when after selecting first value, another select is being loaded#}
+{#        final configuration for this cases is done by selecting multiple level values#}
+{#        example select value 01, after that another select is being loaded , select value 03 and final configiuration is 01 03#}
+        {% if not singleSelect and items|length > 0 %}
+            <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" id='{{ key }}' onChange="loadSubItem('{{ key }}', jQuery(this).find('option:selected').val());">
+                {% if items|length > 1 %}
+                    <option></option>
+                {% endif %} 
+                {% for keyItem, item in items %}
+                    <option value="{{ keyItem }}">{{ item.name }}</option>
+                {% endfor %}
+            </select>
+            <span class="field-validation-valid" data-valmsg-for="select_{{ key }}" data-valmsg-replace="true" ></span>
+            
+            <div class="multipleSelectLevel2">
+                <select name="select_{{ key }}_level2" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level2" onChange="loadSub2Item('{{ key }}', jQuery(this).find('option:selected').val());"></select>
+                <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level2" data-valmsg-replace="true" ></span>
+            </div>
+            <div class="multipleSelectLevel3">
+                <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3"></select>
+                <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level3" data-valmsg-replace="true" ></span>
+            </div>
+
+        {% endif %}    
+    {% endfor %}
+    <p class="register-form2 pull-right">
+        <input type="button" value="{{ 'form.label.save'|trans }}" id="btnRegister" class="costum" onclick="SubmitFormConfig_{{ formular.slug }}();" />
+    </p>
+    </form>
+    <br/><div id="formularError{{ formular.id }}"></div>
+</div></div></div>
+
+<script type="text/javascript">   
+    var items = [];
+    items = {{ uniqueValues|json_encode|raw }};
+    function loadSubItem(key, subKey) {
+        if (subKey !== '') {
+            if ('values' in items[key][subKey]) {
+                var objLength = Object.keys(items[key][subKey]['values']).length;
+                if (objLength > 0) {               
+                    var options = '';
+                    if (objLength > 1) {
+                        options = options + '<option></option>';
+                        $('#' + key + '_level3').html(options);
+                        $('#' + key + '_level3').selectmenu();
+                    }
+                    $.each(items[key][subKey]['values'], function(index, value) {
+                        options = options + '<option value="' + subKey + ' ' + index + '">' + value['name'] + '</option>';            
+                    });
+                    $('#' + key + '_level2').html(options);
+                    $('#' + key + '_level2').selectmenu();
+                    $('#' + key).next().next().css('display', 'none');
+                    $('.multipleSelectLevel2').css('display', 'block');
+                }
+            }    
+        }
+    }
+    
+    function loadSub2Item(key, sub2Key) {
+        if (sub2Key !== '') {
+            var keys = sub2Key.split(" "); 
+            var objLength = Object.keys(items[key][keys[0]]['values'][keys[1]]['values']).length;
+            if (objLength > 0) {               
+                var options = '';
+                if (objLength > 1) {
+                    options = options + '<option></option>';            
+                }
+                $.each(items[key][keys[0]]['values'][keys[1]]['values'], function(index, value) {
+                    options = options + '<option value="' + sub2Key + ' ' + index + '">' + value + '</option>';            
+                });
+                $('#' + key + '_level3').html(options);
+                $('#' + key + '_level3').selectmenu();
+                $('#' + key + '_level2').next().next().css('display', 'none');
+                $('.multipleSelectLevel3').css('display', 'block');
+            }
+        }
+    }
+    
+    var data = {};
+    function SubmitFormConfig_{{ formular.slug }}()
+    {
+        $.each(items, function(index, value) {
+            $("#" + index).valid();
+            data[index] = $("#" + index).val();
+            if (typeof value === 'object') {
+                for (var firstSubitem in value) break;
+                if (typeof value[firstSubitem] === 'object') {
+                    if (value[firstSubitem].hasOwnProperty('values')) {
+                        $("#" + index + "_level2").valid();
+                        data[index] = $("#" + index+ "_level2").val();
+                        if (typeof value[firstSubitem]['values'] === 'object') {
+                            for (var firstSub2item in value[firstSubitem]['values']) break;
+                            if (typeof value[firstSubitem]['values'][firstSub2item] === 'object') {
+                                if (value[firstSubitem]['values'][firstSub2item].hasOwnProperty('values')) {
+                                    $("#" + index + "_level3").valid();
+                                    data[index] = $("#" + index+ "_level3").val();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        var errorNo = 0;
+        $('.field-validation-error').each(function(){
+            if ($(this).html() !== '') {
+                errorNo = errorNo + 1;
+            }
+        });
+        if (errorNo === 0) {
+            {% if isUserException %}
+                AjaxCheckSubmitFormConfig(); 
+            {% else %}
+                $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
+                $('#configFormAddConfirmModal').modal();
+            {% endif %}
+        }
+    }
+    
+    $('#configFormAddConfirmModalYes').click(function () {
+        $('#configFormAddConfirmModal').modal('toggle');
+        AjaxCheckSubmitFormConfig();
+    });
+    
+    function AjaxCheckSubmitFormConfig()
+    {
+        $.ajax({
+            type: "POST",
+            url: '{{ path('unlock_formular') }}',
+            data: { 'data': data, 'formularId': {{ formular.id }} },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    $('#totalUserCredits').text(response.credits);
+                    var url = '{{ path('formular_show' , {'slug': formular.slug, 'hash': 'hash' }) }}';
+                    window.location.href = url.replace("hash", response.formHash); 
+                } else {
+                    $('#formularError' + {{ formular.id }}).addClass('color-red');
+                    $('#formularError' + {{ formular.id }}).text(response.message);
+                }
+            }
+        });
+    }
+    
+</script>
