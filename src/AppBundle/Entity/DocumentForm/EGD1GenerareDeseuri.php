@@ -44,7 +44,7 @@ class EGD1GenerareDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument", "button1"})
+     * @Assert\NotBlank(groups={"generateDocument"})
      */
     protected $cantitateDeseuInStoc;
 

@@ -23,7 +23,7 @@ class EvidentaGestiuniiDeseurilor
      * @var array
      * @Type("array")
      */
-    private $luni = ['Ianuarie',
+    public $luni = ['Ianuarie',
         'Februarie',
         'Martie',
         'Aprilie',
@@ -35,7 +35,6 @@ class EvidentaGestiuniiDeseurilor
         'Octombrie',
         'Noiembrie',
         'Decembrie',
-        'TOTAL'
     ];
 
     /**
@@ -117,6 +116,10 @@ class EvidentaGestiuniiDeseurilor
         foreach ($this->luni as $luna) {
             $x = new EGD1GenerareDeseuri();
             $x->setLuna($luna);
+            $x->setCantitateDeseuGenerate(0);
+            $x->setCantitateDeseuValorificata(0);
+            $x->setCantitateDeseuEliminata(0);
+            $x->setCantitateDeseuInStoc(0);
             $EGD1[] = $x;
         }
         $this->EGD1GenerareDeseuri = $EGD1;
@@ -127,6 +130,8 @@ class EvidentaGestiuniiDeseurilor
         foreach ($this->luni as $luna) {
             $x = new EGD2StocareTratareTransportDeseuri();
             $x->setLuna($luna);
+            $x->setStocareCantitate(0);
+            $x->setTratareCantitate(0);
             $EGD2[] = $x;
         }
         $this->EGD2StocareTratareTransportDeseuri = $EGD2;
@@ -136,6 +141,7 @@ class EvidentaGestiuniiDeseurilor
         foreach ($this->luni as $luna) {
             $x = new EGD3ValorificareDeseuri();
             $x->setLuna($luna);
+            $x->setCantitateDeseuValorificata(0);
             $EGD3[] = $x;
         }
         $this->EGD3ValorificareDeseuri = $EGD3;
@@ -145,6 +151,7 @@ class EvidentaGestiuniiDeseurilor
         foreach ($this->luni as $luna) {
             $x = new EGD4EliminareDeseuri();
             $x->setLuna($luna);
+            $x->setCantitateDeseuEliminata(0);
             $EGD4[] = $x;
         }
         $this->EGD4EliminareDeseuri = $EGD4;

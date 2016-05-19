@@ -60,6 +60,8 @@ services:
     app.order_helper:
         class:     AppBundle\Service\OrderHelperService
         arguments: [@doctrine.orm.entity_manager, @translator, @security.token_storage, @session, @app.mailer, @knp_snappy.pdf, '@templating', %invoice_dir%, %invoice_name%]
+    app.formular_helper:
+        class:     AppBundle\Service\FormularHelperService
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false

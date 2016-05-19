@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class FormularController extends Controller
 {
@@ -29,28 +30,31 @@ class FormularController extends Controller
         $name = str_replace("_", "", $formular->getSlug());
         $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
         $type = "AppBundle\\Form\\Type\\DocumentForm\\" . $name . "Type";
-        $handleMethod = 'handle' . $name;
+        $handleFormMethod = 'handleForm' . $name;
         $applyUniqueConfigurationMethod = 'applyUniqueConfiguration' . $name;
         $applyFormCustomizationMethod = 'applyFormCustomization' . $name;
-        $generateDocumentTemplate = 'document_pdf_template/' . strtolower($formular->getSlug()) . ".html.twig";
-        $generateDocumentDirectory = $this->getParameter('generated_documents_dir') . strtolower($formular->getSlug()) . '/';
-        $entityManager = $this->getDoctrine()->getManager();
-        $creditsUsage = $entityManager->getRepository('AppBundle:CreditsUsage')->findOneByFormHash($hash);
-        $serializer = $this->get('jms_serializer');
+        $calculateExtraTemplateDataMethod = 'calculateExtraTemplateData' . $name;
+
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findOneByFormHash($hash);
 
         if (empty($creditsUsage->getFormData())) {
             $formData = new $entity();
-            $this->$applyUniqueConfigurationMethod($serializer, $entityManager, $creditsUsage, $formData, $user->getCompany());
+            $this->$applyUniqueConfigurationMethod($creditsUsage, $formData, $user->getCompany());
         } else {
-            $formData = $serializer->deserialize($creditsUsage->getFormData(), $entity, 'json');
+            $formData = $this->get('jms_serializer')->deserialize($creditsUsage->getFormData(), $entity, 'json');
         }
         $form = $this->createForm(new $type(), $formData);
+
         $this->$applyFormCustomizationMethod($form, $creditsUsage);
 
-        $this->$handleMethod($serializer, $entityManager, $creditsUsage, $name, $form, $request, $formData, $generateDocumentDirectory, $generateDocumentTemplate);
+        $this->$handleFormMethod($creditsUsage, $name, $form, $request, $formData, $formular->getSlug());
+
+        $formTemplateData = $this->$calculateExtraTemplateDataMethod($formData);
+
 
         return $this->render('document_form/' . strtolower($formular->getSlug()) . ".html.twig", array(
-              'form' => $form->createView()
+              'form' => $form->createView(),
+              'formTemplateData' => $formTemplateData,
             )
         );
     }
@@ -98,7 +102,7 @@ class FormularController extends Controller
         ));
     }
 
-    public function applyUniqueConfigurationEvidentaGestiuniiDeseurilor($serializer, $entityManager, $creditsUsage, $formData, $userCompany)
+    public function applyUniqueConfigurationEvidentaGestiuniiDeseurilor($creditsUsage, $formData, $userCompany)
     {
         $formConfig = json_decode($creditsUsage->getFormConfig());
 
@@ -113,12 +117,13 @@ class FormularController extends Controller
         $formData->setAn($formConfig->an);
         $formData->setTipDeseu($tipDeseu);
         $formData->setTipDeseuCod($formConfig->tip_deseu);
-        $creditsUsage->setFormData($serializer->serialize($formData, 'json'));
-        $entityManager->flush();
+        $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
+        $this->getDoctrine()->getManager()->flush();
     }
 
     public function applyFormCustomizationEvidentaGestiuniiDeseurilor($form, $creditsUsage)
     {
+
         $formConfig = json_decode($creditsUsage->getFormConfig());
         if ($formConfig->operatia === '3') {
             $form->remove('EGD3ValorificareDeseuri');
@@ -130,25 +135,43 @@ class FormularController extends Controller
         }
     }
 
-    public function handleEvidentaGestiuniiDeseurilor($serializer, $entityManager, $creditsUsage, $name, $form, $request, $formData, $generateDocumentDirectory, $generateDocumentTemplate)
+    public function handleFormEvidentaGestiuniiDeseurilor($creditsUsage, $name, $form, $request, $formData, $slug)
     {
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('generateDocument')->isClicked()) {
-                $media = $this->generateDocument($name . $creditsUsage->getId() . '.pdf', $generateDocumentDirectory, $generateDocumentTemplate, $formData);
+                $calculateExtraTemplateDataMethod = 'calculateExtraTemplateData' . $name;
+                $formTemplateData = $this->$calculateExtraTemplateDataMethod($formData);
+                $generateDocumentTemplate = 'document_pdf_template/' . strtolower($slug) . ".html.twig";
+                $generateDocumentDirectory = $this->getParameter('generated_documents_dir') . strtolower($slug) . '/';
+                $media = $this->generateDocument($name, $creditsUsage, $generateDocumentDirectory, $generateDocumentTemplate, $formData, $formTemplateData);
                 $creditsUsage->setMedia($media);
                 //lock document generation
             }
-            $creditsUsage->setFormData($serializer->serialize($formData, 'json'));
-            $entityManager->flush();
+            $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('formular_show', array('hash' => $creditsUsage->getFormHash(), 'slug' => $slug));
         }
     }
 
-    public function generateDocument($filename, $fileDirectory, $template, $templateData)
+    public function calculateExtraTemplateDataEvidentaGestiuniiDeseurilor($formData)
     {
+        $formTemplateData = array();
+
+        $EGDTotals = $this->get('app.formular_helper')->CalculateEvidentaGestiuniiDeseurilorTotals($formData);
+        $formTemplateData['EGDTotals'] = $EGDTotals;
+
+        return $formTemplateData;
+    }
+
+    public function generateDocument($name, $creditsUsage, $fileDirectory, $template, $formData, $formTemplateData)
+    {
+        $filename = $name . $creditsUsage->getId() . '.pdf';
         $filePath = $fileDirectory . $filename;
-        $fileBody = $this->render($template, array('data' => $templateData));
+        $fileBody = $this->render($template, array('data' => $formData, 'formTemplateData' => $formTemplateData));
         $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
 
         $file = new UploadedFile($filePath, $filename);
@@ -158,6 +181,10 @@ class FormularController extends Controller
         $media->setProviderName('sonata.media.provider.file');
         $media->setContext('default');
         $media->setMediaType($media::FORM_GENERATED_TYPE);
+        $this->getDoctrine()->getManager()->persist($media);
+        $this->getDoctrine()->getManager()->flush();
+        $fs = new Filesystem();
+        $fs->remove($filePath);
 
         return $media;
     }

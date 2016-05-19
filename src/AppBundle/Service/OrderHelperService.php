@@ -15,6 +15,7 @@ use Knp\Bundle\SnappyBundle\Snappy\LoggableGenerator;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
+use Symfony\Component\Filesystem\Filesystem;
 
 class OrderHelperService
 {
@@ -41,7 +42,7 @@ class OrderHelperService
         $this->invoiceName = $invoiceName;
     }
 
-    public function addSubscription($subscriptionId, $billingData, $domains = null)
+    public function addSubscription($subscriptionId, $billingData, $fileProvider, $domains = null)
     {
         $user = $this->tokenStorage->getToken()->getUser();
         $order = new Order();
@@ -84,11 +85,12 @@ class OrderHelperService
         $this->entityManager->persist($order);
         $this->entityManager->flush();
         $this->session->getFlashBag()->add('order-success', 'success.order');
-        $this->mailer->sendOrderInvoice($order, $this->generatePdfInvoice($order, $billingData));
+        $this->mailer->sendOrderInvoice($order, $this->generatePdfInvoice($order, $billingData, $fileProvider));
+
         return $order;
     }
 
-    public function generatePdfInvoice($order, $billingData)
+    public function generatePdfInvoice($order, $billingData, $fileProvider)
     {
         $invoiceFilename = $this->invoiceName . '_' . sprintf('%06d', $order->getId()) . '.pdf';
         $invoicePath = $this->invoiceDir . $invoiceFilename;
@@ -109,8 +111,12 @@ class OrderHelperService
         $order->setInvoice($media);
         $this->entityManager->persist($media);
         $this->entityManager->flush();
+        $mediaPath = $this->invoiceDir . ".." . $fileProvider->generatePublicUrl($media, 'reference');
+    
+        $fs = new Filesystem();
+        $fs->remove($invoicePath);
 
-        return Swift_Attachment::fromPath($invoicePath)->setFilename($invoiceFilename);
+        return Swift_Attachment::fromPath($mediaPath)->setFilename($invoiceFilename);
     }
 
     public function getActiveCreditTotal($userId)

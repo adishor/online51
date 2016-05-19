@@ -55,7 +55,7 @@ class OrderController extends Controller
     {
         $post = $request->request;
         if ($post->has('subscriptionId')) {
-            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $post->get('domains'))) {
+            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), $post->get('domains'))) {
 
                 return $this->redirectToRoute('subscriptions');
             }
