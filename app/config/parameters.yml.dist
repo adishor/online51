@@ -28,6 +28,7 @@ parameters:
     # path to store invoices
     invoice_dir: "%kernel.root_dir%/../web/invoice/"
     invoice_name: proforma
+    generated_documents_dir: '%kernel.root_dir%/../web/generated_docs/'
 
     billing_data:
         company_name: 'Aldex S.R.L.'

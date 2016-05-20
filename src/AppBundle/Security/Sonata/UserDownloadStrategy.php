@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use AppBundle\Service\UserHelperService;
+use AppBundle\Entity\CreditsUsage;
 
 class UserDownloadStrategy implements DownloadStrategyInterface
 {
@@ -34,7 +35,8 @@ class UserDownloadStrategy implements DownloadStrategyInterface
      */
     public function isGranted(MediaInterface $media, Request $request)
     {
-        if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') && !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') &&
+          !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 
             throw new AccessDeniedHttpException();
         }
@@ -43,9 +45,15 @@ class UserDownloadStrategy implements DownloadStrategyInterface
 
             return true;
         }
-        if (!$this->userHelper->isValidUserDocument($user->getId(), $media->getId())) {
-
-            throw new AccessDeniedHttpException();
+        if (null !== $media->getCreditsUsage()->getDocument()) {
+            if (!$this->userHelper->isValidUserDocument($user->getId(), $media->getCreditsUsage()->getDocument()->getId())) {
+                throw new AccessDeniedHttpException();
+            }
+        }
+        if (null !== $media->getCreditsUsage()->getFormular()) {
+            if (!$this->userHelper->isValidUserFormularDocument($user->getId(), $media->getCreditsUsage()->getFormular()->getId())) {
+                throw new AccessDeniedHttpException();
+            }
         }
 
         return true;

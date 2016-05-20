@@ -14,7 +14,6 @@ namespace Application\Sonata\UserBundle\Entity;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -33,7 +32,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity()
- * @Vich\Uploadable
  * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -72,25 +70,6 @@ class User extends BaseUser
      * @ORM\Column()
      */
     protected $company;
-
-    /**
-     *
-     * @var string
-     *
-     * @ORM\Column(nullable=true)
-     */
-    protected $logo;
-
-    /**
-     * @Assert\File(
-     *     mimeTypes = {"image/jpeg", "image/png"},
-     *     mimeTypesMessage = "assert.valid.image",
-     *     groups={"CustomRegistration", "Registration", "AdminRegistration", "AdminProfile", "ChangeInfo"},
-     * )
-     * @Vich\UploadableField(mapping="upload_image", fileNameProperty="logo")
-     * @var File
-     */
-    protected $uploadImage;
 
     /**
      *
@@ -248,6 +227,15 @@ class User extends BaseUser
 
     /**
      *
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     *
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
+     */
+    protected $image;
+
+    /**
+     *
      * @var integer
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
@@ -264,8 +252,8 @@ class User extends BaseUser
 
     public function __construct()
     {
-        parent::__construct();
         $this->deleted = FALSE;
+        parent::__construct();
     }
 
     /**
@@ -322,53 +310,6 @@ class User extends BaseUser
     public function getCompany()
     {
         return $this->company;
-    }
-
-    /**
-     * Set logo
-     *
-     * @param string $logo
-     * @return User
-     */
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
-
-        return $this;
-    }
-
-    /**
-     * Get logo
-     *
-     * @return string
-     */
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
-    /**
-     *
-     * @param File $logo
-     * @return \Application\Sonata\UserBundle\Entity\User
-     */
-    public function setUploadImage(File $logo = null)
-    {
-        $this->uploadImage = $logo;
-
-        if ($logo) {
-            $this->updatedAt = new \DateTime('now');
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return File
-     */
-    public function getUploadImage()
-    {
-        return $this->uploadImage;
     }
 
     /**
@@ -825,4 +766,27 @@ class User extends BaseUser
         return $this->modifiedSubscriptions;
     }
 
+
+    /**
+     * Set image
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
+     * @return User
+     */
+    public function setImage(\Application\Sonata\MediaBundle\Entity\Media $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
 }

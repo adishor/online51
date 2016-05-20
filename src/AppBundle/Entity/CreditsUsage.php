@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CreditsUsage
 {
     const TYPE_DOCUMENT = 'document';
+    const TYPE_FORMULAR = 'formular';
     const TYPE_EXPIRED = 'expired';
 
     /**
@@ -65,11 +66,51 @@ class CreditsUsage
 
     /**
      *
-     * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="documentCreditsUsage")
+     * @var \AppBundle\Entity\Document
+     * @ORM\ManyToOne(targetEntity="Document", inversedBy="documentCreditsUsage")
      * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
     protected $document;
+
+    /**
+     *
+     * @var \AppBundle\Entity\Formular
+     * @ORM\ManyToOne(targetEntity="Formular", inversedBy="formularCreditsUsage")
+     * @ORM\JoinColumn(name="formular_id", referencedColumnName="id", nullable=true)
+     */
+    protected $formular;
+
+    /**
+     *
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="creditsUsage", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
+     */
+    private $media;
+
+    /**
+     *
+     * @var string JSON
+     *
+     * @ORM\Column(type="json_array", nullable=true)
+     */
+    private $formConfig;
+
+    /**
+     *
+     * @var string JSON
+     *
+     * @ORM\Column(type="json_array", nullable=true)
+     */
+    private $formData;
+
+    /**
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $formHash;
 
     /**
      *
@@ -210,29 +251,6 @@ class CreditsUsage
         return $this->user;
     }
 
-    /**
-     * Set document
-     *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $document
-     * @return CreditsUsage
-     */
-    public function setDocument(\Application\Sonata\MediaBundle\Entity\Media $document)
-    {
-        $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * Get document
-     *
-     * @return \Application\Sonata\MediaBundle\Entity\Media
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
-
     public function isDocmumentValid()
     {
 
@@ -315,14 +333,6 @@ class CreditsUsage
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt = new \DateTime();
-    }
-
-    /**
      * Set usageType
      *
      * @param string $usageType
@@ -343,6 +353,152 @@ class CreditsUsage
     public function getUsageType()
     {
         return $this->usageType;
+    }
+
+    /**
+     * Set formConfig
+     *
+     * @param array $formConfig
+     * @return CreditsUsage
+     */
+    public function setFormConfig($formConfig)
+    {
+        $this->formConfig = $formConfig;
+
+        return $this;
+    }
+
+    /**
+     * Get formConfig
+     *
+     * @return array
+     */
+    public function getFormConfig()
+    {
+        return $this->formConfig;
+    }
+
+    /**
+     * Set formData
+     *
+     * @param array $formData
+     * @return CreditsUsage
+     */
+    public function setFormData($formData)
+    {
+        $this->formData = $formData;
+
+        return $this;
+    }
+
+    /**
+     * Get formData
+     *
+     * @return array
+     */
+    public function getFormData()
+    {
+        return $this->formData;
+    }
+
+    /**
+     * Set formHash
+     *
+     * @param string $formHash
+     * @return CreditsUsage
+     */
+    public function setFormHash($formHash)
+    {
+        $this->formHash = $formHash;
+
+        return $this;
+    }
+
+    /**
+     * Get formHash
+     *
+     * @return string
+     */
+    public function getFormHash()
+    {
+        return $this->formHash;
+    }
+
+    /**
+     * Set document
+     *
+     * @param \AppBundle\Entity\Document $document
+     * @return CreditsUsage
+     */
+    public function setDocument(\AppBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return \AppBundle\Entity\Document
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set formular
+     *
+     * @param \AppBundle\Entity\Formular $formular
+     * @return CreditsUsage
+     */
+    public function setFormular(\AppBundle\Entity\Formular $formular = null)
+    {
+        $this->formular = $formular;
+
+        return $this;
+    }
+
+    /**
+     * Get formular
+     *
+     * @return \AppBundle\Entity\Formular
+     */
+    public function getFormular()
+    {
+        return $this->formular;
+    }
+
+    /**
+     * Set media
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $media
+     * @return CreditsUsage
+     */
+    public function setMedia(\Application\Sonata\MediaBundle\Entity\Media $media = null)
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * Get media
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
     }
 
     public function __toString()

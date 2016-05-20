@@ -1,0 +1,232 @@
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    
+    <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
+
+    {% for flash_message in app.session.flashbag.get('form-success') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+    
+    {% for flash_message in app.session.flashbag.get('form-error') %}
+        <h4 class="color-red text-center first" >{{ flash_message|trans|raw }}</h4>
+    {% endfor %}
+    
+    {% for flash_message in app.session.flashbag.get('formular-info') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+
+    <div class="col-xs-2">
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            <li class="active"><a href="#formtab" role="tab" data-toggle="tab" id="nav-formtab">{{ 'Date Generale' | trans }}</a></li>
+            <li><a href="#formtab1" role="tab" data-toggle="tab" id="nav-formtab1">{{ 'Generarea deseurilor' | trans }}</a></li>
+            <li><a href="#formtab2" role="tab" data-toggle="tab"id="nav-formtab2">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
+                {% if form.EGD3ValorificareDeseuri is defined %}
+                <li><a href="#formtab3" role="tab" data-toggle="tab"id="nav-formtab3">{{ 'Valorificare deseurilor' | trans }}</a></li>
+                {% endif %}
+                {% if form.EGD4EliminareDeseuri is defined %}
+                <li><a href="#formtab4" role="tab" data-toggle="tab"id="nav-formtab4">{{ 'Eliminarea deseurilor' | trans }}</a></li>
+                {% endif %}
+        </ul>
+    </div>
+    <div class="col-xs-10">
+        {{ form_start(form) }}
+        <div class="tab-content">
+            <div id="formtab" class="tab-pane active">
+                {{ form_row(form.agentEconomic) }}
+                <div class="col-xs-6">
+                    {{ form_row(form.an) }}
+                </div>
+                <div class="col-xs-6">
+                    {{ form_row(form.tipDeseuCod) }}
+                </div>
+                {{ form_row(form.tipDeseu, {'attr': {'class': 'width-100-percent height-100-px text-justify'} }) }}
+                {{ form_row(form.stareFizica) }}
+                {{ form_row(form.unitateMasura) }}
+                </br>
+                {{ form_widget(form.save1, {'label' : 'form.label.save-and-continue'|trans, 'attr': {'class': 'costum'} } ) }}
+            </div>
+
+            <div id="formtab1" class="tab-pane formular">
+                <h3>{{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}</h3>
+                <table class="table-bordered text-center form-table form-table-layout-fixed">
+                    <tr>
+                        <th class="text-center width-35-px" rowspan="3">{{ 'Nr.' | trans }}</th>
+                        <th class="text-center width-105-px" rowspan="3">{{ 'Luna' | trans }}</th>
+                        <th class="text-center" colspan="4">{{ 'Cantitatea de deseuri' | trans }}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center" rowspan="2">{{ 'Generate' | trans }}</th>
+                        <th class="text-center" colspan="3">{{ 'din care:' | trans }}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">{{ 'valorificata:' | trans }}</th>
+                        <th class="text-center">{{ 'eliminata final:' | trans }}</th>
+                        <th class="text-center">{{ 'ramasa in stoc:' | trans }}</th>
+                    </tr>
+                    {% for item in form.EGD1GenerareDeseuri %}
+                        <tr>
+                            <td class="width-35-px">{{ loop.index }}</td>
+                            <td class="width-105-px">{{ form_widget(item.luna) }}</td>
+                            <td>{{ form_widget(item.cantitateDeseuGenerate, {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate', 'type': 'number'} }) }}</td>
+                            <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata'} }) }}</td>
+                            <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata'} }) }}</td>
+                            <td>{{ form_widget(item.cantitateDeseuInStoc, {'attr': {'class': 'text-right EGD1CantitateDeseuInStoc'} }) }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td class="width-35-px"></td>
+                        <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
+                        <td id="EGD1CantitateDeseuGenerateTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuGenerateTotal }}</td>
+                        <td id="EGD1CantitateDeseuValorificataTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuValorificataTotal }}</td>
+                        <td id="EGD1CantitateDeseuEliminataTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuEliminataTotal }}</td>
+                        <td id="EGD1CantitateDeseuInStocTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocTotal }}</td>
+                    </tr>
+                </table>
+                </br>
+                {{ form_widget(form.save2, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum'} } ) }}
+            </div>
+            <div id="formtab2" class="tab-pane formular">
+                <h3>{{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}</h3>
+                <table class="table-bordered text-center form-table form-table-layout-fixed">
+                    <tr>
+                        <th class="text-center width-35-px" rowspan="2">{{ 'Nr.' | trans }}</th>
+                        <th class="text-center width-105-px" rowspan="2">{{ 'Luna' | trans }}</th>
+                        <th class="text-center" rowspan="2">{{ 'Sectia' | trans }}</th>
+                        <th class="text-center" colspan="2">{{ 'Stocare' | trans }}</th>
+                        <th class="text-center" colspan="3">{{ 'Tratare' | trans }}</th>
+                        <th class="text-center" colspan="2">{{ 'Transport' | trans }}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">{{ 'Cantitatea' | trans }}</th>
+                        <th class="text-center">{{ 'Tipul' | trans }}</th>
+                        <th class="text-center">{{ 'Cantitatea' | trans }}</th>
+                        <th class="text-center">{{ 'Modul' | trans }}</th>
+                        <th class="text-center">{{ 'Scopul' | trans }}</th>
+                        <th class="text-center">{{ 'Mijlocul' | trans }}</th>
+                        <th class="text-center">{{ 'Destinatia' | trans }}</th>
+                    </tr>
+                    {% for item in form.EGD2StocareTratareTransportDeseuri %}
+                        <tr>
+                            <td class="width-35-px">{{ loop.index }}</td>
+                            <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
+                            <td>{{ form_widget(item.sectia) }}</td>
+                            <td>{{ form_widget(item.stocareCantitate, {'attr': {'class': 'text-right EGD2StocareCantitate'} }) }}</td>
+                            <td>{{ form_widget(item.stocareTip, {'attr': {'class': 'max-width-48'  } }) }}</td>
+                            <td>{{ form_widget(item.tratareCantitate, {'attr': {'class': 'text-right EGD2TratareCantitate'} }) }}</td>
+                            <td>{{ form_widget(item.tratareMod, {'attr': {'class': 'max-width-60'} }) }}</td>
+                            <td>{{ form_widget(item.tratareScop, {'attr': {'class': 'max-width-40'} }) }}</td>
+                            <td>{{ form_widget(item.transportMijloc, {'attr': {'class': 'max-width-48'} }) }}</td>
+                            <td>{{ form_widget(item.transportDestinatie, {'attr': {'class': 'max-width-50'} }) }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td class="width-35-px"></td>
+                        <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
+                        <td></td>
+                        <td id="EGD2StocareCantitateTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD2StocareCantitateTotal }}</td>
+                        <td></td>
+                        <td id="EGD2TratareCantitateTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD2TratareCantitateTotal }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                </br>
+                {{ form_widget(form.save3, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum'} } ) }}
+            </div>
+            {% if form.EGD3ValorificareDeseuri is defined %}
+                <div id="formtab3" class="tab-pane formular">
+                    <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
+                    <table class="table-bordered text-center form-table form-table-layout-fixed">
+                        <tr>
+                            <th class="text-center width-35-px">{{ 'Nr.' | trans }}</th>
+                            <th class="text-center width-105-px">{{ 'Luna' | trans }}</th>
+                            <th class="text-center">{{ 'Cantitatea de deseu valorificata' | trans }}</th>
+                            <th class="text-center">{{ 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' | trans }}</th>
+                            <th class="text-center">{{ 'Agentul economic care efectueaza operatia de valorificare' | trans }}</th>
+                        </tr>
+                        {% for item in form.EGD3ValorificareDeseuri %}
+                            <tr>
+                                <td class="width-35-px">{{ loop.index }}</td>
+                                <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
+                                <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD3CantitateDeseuValorificata'} }) }}</td>
+                                <td>{{ form_widget(item.operatiaDeValorificare, {'attr': {'class': 'max-width-350'} }) }}</td>
+                                <td>{{ form_widget(item.agentEconomicValorificare) }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td class="width-35-px"></td>
+                            <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
+                            <td id="EGD3CantitateDeseuValorificataTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD3CantitateDeseuValorificataTotal }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    </br>
+                    {{ form_widget(form.save4, {'label' : 'form.label.save-info'|trans , 'attr': {'class': 'costum'} } ) }}
+                    {{ form_widget(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum'} }  )}}
+                </div>
+            {% endif %}
+            {% if form.EGD4EliminareDeseuri is defined %}
+                <div id="formtab4" class="tab-pane formular">
+                    <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
+                    <table class="table-bordered text-center form-table form-table-layout-fixed">
+                        <tr>
+                            <th class="text-center width-35-px">{{ 'Nr.' | trans }}</th>
+                            <th class="text-center width-105-px ">{{ 'Luna' | trans }}</th>
+                            <th class="text-center">{{ 'Cantitatea de deseu eliminata' | trans }}</th>
+                            <th class="text-center">{{ 'Operatia de eliminare, conform Anexei IIA din legea 426/2001' | trans }}</th>
+                            <th class="text-center">{{ 'Agentul economic care efectueaza operatia de eliminare' | trans }}</th>
+                        </tr>
+                        {% for item in form.EGD4EliminareDeseuri %}
+                            <tr>
+                                <td class="width-35-px">{{ loop.index }}</td>
+                                <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
+                                <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD4CantitateDeseuEliminata'} }) }}</td>
+                                <td>{{ form_widget(item.operatiaDeEliminare, {'attr': {'class': 'max-width-350'} }) }}</td>
+                                <td>{{ form_widget(item.agentEconomicEliminare) }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td class="width-35-px"></td>
+                            <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
+                            <td id="EGD4CantitateDeseuEliminataTotal" class="text-right" >{{ formTemplateData.EGDTotals.EGD4CantitateDeseuEliminataTotal }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    </br>
+                    {{ form_widget(form.save5, {'label' : 'form.label.save-info'|trans, 'attr': {'class': 'costum'} } )}}
+                    {{ form_widget(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum'} }  )}}
+                </div>
+            {% endif %}
+
+            {{ form_end(form) }}
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+            {% for key in formTemplateData.EGDTotals|keys %}
+                    var totalClass{{ key }} = '{{ key }}'.replace('Total', '');
+                    jQuery('.' + totalClass{{ key }}).change(function () {
+                        var sum{{ key }} = 0;
+                        jQuery('.' + totalClass{{ key }}).each(function () {
+                            sum{{ key }} += parseFloat(jQuery(this).val());
+                        });
+                        jQuery('#{{ key }}').text(sum{{ key }});
+                    });
+            {% endfor %}
+                    jQuery(window).load(function () {
+                        if ('{{ location }}' !== '') {
+                            jQuery("#nav-formtab").parent().removeClass("active");
+                            jQuery("#formtab").removeClass("active");
+                            jQuery('#nav-{{ location }}').parent().addClass("active");
+                            jQuery('#{{ location }}').addClass("active");
+                        }
+                    });
+                });
+
+        </script>
+    </div>
+{% endblock %}

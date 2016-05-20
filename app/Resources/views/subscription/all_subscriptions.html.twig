@@ -85,19 +85,18 @@
                 $("#" + "ssm" +     {{ loop.index }} + "button").click(function () {
                 if (!areAllChecked(id, {{ subscription.domainAmount }})){
             {% if subscription.domainAmount == 1 %}
-                            $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
+                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
             {% else %}
-                            $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
+                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
             {% endif %}
-                            $("#" + "ssm" + "{{ loop.index }}" + "error").show();
-                            }
-                            if (areAllChecked(id, {{ subscription.domainAmount }})) {
-                            $('#subscriptionAddConfirmModal').modal();
-                            $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
-                            }
-                        });
-                        });
-        </script>
+                    $("#" + "ssm" + "{{ loop.index }}" + "error").show();
+                    }
+                    if (areAllChecked(id, {{ subscription.domainAmount }})) {
+                    $('#subscriptionAddConfirmModal').modal();
+                    $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
+                    }
+                });
+                });        </script>
     {% endif %}
     {% if ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
         <script type="text/javascript">

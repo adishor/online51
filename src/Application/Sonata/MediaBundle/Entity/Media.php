@@ -25,38 +25,15 @@ use Sonata\MediaBundle\Entity\BaseMedia as BaseMedia;
  */
 class Media extends BaseMedia
 {
+    const DOCUMENT_TYPE = 'Document';
+    const INVOICE_TYPE = 'Factura proforma';
+    const FORM_GENERATED_TYPE = 'Document generat de formular';
+    const IMAGE_TYPE = 'Imagine';
+
     /**
      * @var int $id
      */
     protected $id;
-
-    /**
-     *
-     * @var string
-     */
-    protected $title;
-
-    /**
-     *
-     * @var int
-     */
-    protected $creditValue;
-
-    /**
-     *
-     * @var int
-     */
-    protected $valabilityDays;
-
-    /**
-     *
-     */
-    private $subdomain;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $documentCreditsUsage;
 
     /**
      * @var boolean
@@ -69,17 +46,37 @@ class Media extends BaseMedia
     private $deletedAt;
 
     /**
+     * @var AppBundle\Entity\Document
+     */
+    private $document;
+
+    /**
+     * @var AppBundle\Entity\Order
+     */
+    private $order;
+
+    /**
+     * @var AppBundle\Entity\Ad
+     */
+    private $ad;
+
+    /**
+     * @var Application/Sonata/UserBundle/Entity/User
+     */
+    private $user;
+
+    /**
+     * @var string
+     */
+    private $mediaType;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
-    }
-
-    public function __toString()
-    {
-        return $this->title;
     }
 
     /**
@@ -90,85 +87,6 @@ class Media extends BaseMedia
     public function getId()
     {
         return $this->id;
-    }
-
-    function getTitle()
-    {
-        return $this->title;
-    }
-
-    function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * Set creditValue
-     *
-     * @param integer $creditValue
-     * @return Media
-     */
-    public function setCreditValue($creditValue)
-    {
-        $this->creditValue = $creditValue;
-
-        return $this;
-    }
-
-    /**
-     * Get creditValue
-     *
-     * @return integer
-     */
-    public function getCreditValue()
-    {
-        return $this->creditValue;
-    }
-
-    /**
-     * Set valabilityDays
-     *
-     * @param integer $valabilityDays
-     * @return Media
-     */
-    public function setValabilityDays($valabilityDays)
-    {
-        $this->valabilityDays = $valabilityDays;
-
-        return $this;
-    }
-
-    /**
-     * Get valabilityDays
-     *
-     * @return integer
-     */
-    public function getValabilityDays()
-    {
-        return $this->valabilityDays;
-    }
-
-    /**
-     * Set subdomain
-     *
-     * @param \AppBundle\Entity\SubDomain $subdomain
-     * @return Media
-     */
-    public function setSubdomain(\AppBundle\Entity\SubDomain $subdomain = null)
-    {
-        $this->subdomain = $subdomain;
-
-        return $this;
-    }
-
-    /**
-     * Get subdomain
-     *
-     * @return \AppBundle\Entity\SubDomain
-     */
-    public function getSubdomain()
-    {
-        return $this->subdomain;
     }
 
     /**
@@ -192,39 +110,6 @@ class Media extends BaseMedia
     public function removeGalleryHasMedia(\Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias)
     {
         $this->galleryHasMedias->removeElement($galleryHasMedias);
-    }
-
-    /**
-     * Add documentCreditsUsage
-     *
-     * @param \AppBundle\Entity\CreditsUsage $documentCreditsUsage
-     * @return Media
-     */
-    public function addDocumentCreditsUsage(\AppBundle\Entity\CreditsUsage $documentCreditsUsage)
-    {
-        $this->documentCreditsUsage[] = $documentCreditsUsage;
-
-        return $this;
-    }
-
-    /**
-     * Remove documentCreditsUsage
-     *
-     * @param \AppBundle\Entity\CreditsUsage $documentCreditsUsage
-     */
-    public function removeDocumentCreditsUsage(\AppBundle\Entity\CreditsUsage $documentCreditsUsage)
-    {
-        $this->documentCreditsUsage->removeElement($documentCreditsUsage);
-    }
-
-    /**
-     * Get documentCreditsUsage
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDocumentCreditsUsage()
-    {
-        return $this->documentCreditsUsage;
     }
 
     /**
@@ -272,4 +157,160 @@ class Media extends BaseMedia
     {
         return $this->deletedAt;
     }
+
+    /**
+     * Set document
+     *
+     * @param \AppBundle\Entity\Document $document
+     * @return Media
+     */
+    public function setDocument(\AppBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return \AppBundle\Entity\Document
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set mediaType
+     *
+     * @param string $mediaType
+     * @return Media
+     */
+    public function setMediaType($mediaType)
+    {
+        $this->mediaType = $mediaType;
+
+        return $this;
+    }
+
+    /**
+     * Get mediaType
+     *
+     * @return string
+     */
+    public function getMediaType()
+    {
+        return $this->mediaType;
+    }
+
+    /**
+     * Set order
+     *
+     * @param \AppBundle\Entity\Order $order
+     * @return Media
+     */
+    public function setOrder(\AppBundle\Entity\Order $order = null)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return \AppBundle\Entity\Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set ad
+     *
+     * @param \AppBundle\Entity\Ad $ad
+     * @return Media
+     */
+    public function setAd(\AppBundle\Entity\Ad $ad = null)
+    {
+        $this->ad = $ad;
+
+        return $this;
+    }
+
+    /**
+     * Get ad
+     *
+     * @return \AppBundle\Entity\Ad
+     */
+    public function getAd()
+    {
+        return $this->ad;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $user
+     * @return Media
+     */
+    public function setUser(\Application\Sonata\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @var \AppBundle\Entity\CreditsUsage
+     */
+    private $creditsUsage;
+
+    /**
+     * Set creditsUsage
+     *
+     * @param \AppBundle\Entity\CreditsUsage $creditsUsage
+     * @return Media
+     */
+    public function setCreditsUsage(\AppBundle\Entity\CreditsUsage $creditsUsage = null)
+    {
+        $this->creditsUsage = $creditsUsage;
+
+        return $this;
+    }
+
+    /**
+     * Get creditsUsage
+     *
+     * @return \AppBundle\Entity\CreditsUsage
+     */
+    public function getCreditsUsage()
+    {
+        return $this->creditsUsage;
+    }
+
+    public function setBinaryContent($binaryContent)
+    {
+        if ($this->providerReference) {
+            $this->previousProviderReference = $this->providerReference;
+        }
+        $this->providerReference = null;
+        $this->binaryContent = $binaryContent;
+        if (!$this->providerReference && $this->previousProviderReference) {
+            $this->providerReference = $this->previousProviderReference;
+        }
+    }
+
 }

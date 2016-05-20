@@ -14,7 +14,7 @@ class CreditsUsageController extends Controller
         $creditValue = '';
 
         $documentId = $request->request->get('documentId');
-        $document = $this->getDoctrine()->getRepository('ApplicationSonataMediaBundle:Media')->find($documentId);
+        $document = $this->getDoctrine()->getRepository('AppBundle:Document')->find($documentId);
         if ($document) {
             $creditValue = $document->getCreditValue();
         }

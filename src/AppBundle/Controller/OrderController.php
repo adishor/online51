@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-
 class OrderController extends Controller
 {
 
@@ -21,14 +20,15 @@ class OrderController extends Controller
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
         $this->get('app.user_helper')->updateValidUserCredits();
         $unlockedDocuments = $creditUsageRepository->findAllUserDocuments($userId);
+        $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserFormularDocuments($userId));
 
         return $this->render('order/order_page.html.twig', array(
               'activeOrders' => $orderRepository->findAllActiveUserOrders($userId),
               'bonusOrders' => $orderRepository->findAllActiveBonusUserOrders($userId),
               'pendingOrders' => $orderRepository->findAllPendingOrders($userId),
-              'validDocuments' => $creditUsageRepository->findAllValidUserDocuments($userId),
+              'validDocuments' => $validDocuments,
               'unlockedDocuments' => $unlockedDocuments,
-              'documentObjects' => $this->get('app.order_helper')->getDocumentObjects($unlockedDocuments),
+              'mediaObjects' => $this->get('app.order_helper')->getMediaObjects($unlockedDocuments),
               'creditHistoryItems' => $this->get('app.order_helper')->getCreditHistory($userId),
         ));
     }
@@ -55,7 +55,7 @@ class OrderController extends Controller
     {
         $post = $request->request;
         if ($post->has('subscriptionId')) {
-            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $post->get('domains'))) {
+            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), $post->get('domains'))) {
 
                 return $this->redirectToRoute('subscriptions');
             }

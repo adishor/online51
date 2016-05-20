@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="media">
                 <source>media</source>
-                <target>Document</target>
+                <target>Fisiere</target>
             </trans-unit>
             <trans-unit id="gallery">
                 <source>gallery</source>
@@ -32,7 +32,7 @@
             </trans-unit>
             <trans-unit id="breadcrumb.link_media_list">
                 <source>breadcrumb.link_media_list</source>
-                <target>Document</target>
+                <target>Fisiere</target>
             </trans-unit>
             <trans-unit id="breadcrumb.link_media_edit">
                 <source>breadcrumb.link_media_edit</source>
@@ -100,7 +100,7 @@
             </trans-unit>
             <trans-unit id="filter.label_provider_name">
                 <source>filter.label_provider_name</source>
-                <target>Nume provider</target>
+                <target>Tip</target>
             </trans-unit>
             <trans-unit id="form.label_enabled">
                 <source>form.label_enabled</source>
@@ -149,6 +149,10 @@
             <trans-unit id="form.label_binary_content">
                 <source>form.label_binary_content</source>
                 <target>Fisier/Referinta(File/Reference)</target>
+            </trans-unit>
+            <trans-unit id="form.label_media_type">
+                <source>form.label_media_type</source>
+                <target>Tip fisier</target>
             </trans-unit>
             <trans-unit id="label.size">
                 <source>label.size</source>
@@ -281,9 +285,17 @@
                 <source>list.label_enabled</source>
                 <target>Activ</target>
             </trans-unit>
+            <trans-unit id="list.label_created_at">
+                <source>list.label_created_at</source>
+                <target>Creat La</target>
+            </trans-unit>
             <trans-unit id="list.label_name">
                 <source>list.label_name</source>
                 <target>Nume Fisier</target>
+            </trans-unit>
+            <trans-unit id="list.label_media_type">
+                <source>list.label_media_type</source>
+                <target>Tip fisier</target>
             </trans-unit>
             <trans-unit id="list.label_context">
                 <source>list.label_context</source>
@@ -300,6 +312,10 @@
             <trans-unit id="list.label_custom">
                 <source>list.label_custom</source>
                 <target>Personalizat</target>
+            </trans-unit>
+            <trans-unit id="list.label_document">
+                <source>list.label_document</source>
+                <target>Document</target>
             </trans-unit>
             <trans-unit id="sidemenu.link_edit_media">
                 <source>sidemenu.link_edit_media</source>
@@ -409,6 +425,10 @@
                 <source>filter.label_credit_value</source>
                 <target>Valoare credit</target>
             </trans-unit>
+            <trans-unit id="filter.label_media_type">
+                <source>filter.label_media_type</source>
+                <target>Tip fisier</target>
+            </trans-unit>
             <trans-unit id="filter.label_title">
                 <source>filter.label_title</source>
                 <target>Titlu</target>
@@ -424,6 +444,10 @@
             <trans-unit id="filter.label_deleted">
                 <source>filter.label_deleted</source>
                 <target>Sters</target>
+            </trans-unit>
+            <trans-unit id="filter.label_document">
+                <source>filter.label_document</source>
+                <target>Document</target>
             </trans-unit>
             <trans-unit id="list.label_credit_value">
                 <source>list.label_credit_value</source>

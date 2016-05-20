@@ -214,20 +214,12 @@
                 </div>
                 {#          logo#}
                 <div class="editor-label">
-                    {{ form_label(form.uploadImage, 'form.label.logo'|trans) }}
+                    {{ form_label(form.image, 'form.label.logo'|trans) }}
                 </div>
-                {% set imagePath = vich_uploader_asset(app.user, 'uploadImage') %}
-                {% if imagePath %}
-                    <a href="{{ asset(imagePath) }}" target="_blank">
-                        <img src="{{ asset(imagePath) }}" width="200" />
-                    </a>
-                    <br/>
-                {% endif %}
                 <div class="editor-field">
-                    {{ form_widget(form.uploadImage, {'attr':
-              { 'style': '260px'} , 'required' : false })
+                    {{ form_widget(form.image, { 'required' : false })
                     }}
-                    {{ form_errors(form.uploadImage) }}
+                    {{ form_errors(form.image) }}
                 </div>
                 <div class="register-form2">
                     <input type="button" value="{{ 'change-info.save'|trans }}" id="btnRegister" class="costum pull-right" onclick="SubmitRegister()" />

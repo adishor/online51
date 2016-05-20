@@ -9,6 +9,58 @@ $(document).ready(function () {
     if ($("#EmployeesNr").val() != "") {
         $("#register_noEmployees option:selected").text($("#EmployeesNr").val());
     }
+    
+//    $('#evidenta_gestiunii_deseurilor_save1').click(function (event) {
+//            $('#evidenta_gestiunii_deseurilor_save1Clicked').val('true');
+//            var form = document.getElementsByName('evidenta_gestiunii_deseurilor');
+//            FpJsFormValidator.customize(form, {groups: ['button1']});
+//            FpJsFormValidator.customize(form, 'submitForm', event);
+//        });
+//        jQuery('#evidenta_gestiunii_deseurilor_save2').click(function () {
+//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('true');
+//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
+//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2']});
+//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
+//        });
+//        jQuery('#evidenta_gestiunii_deseurilor_save3').click(function () {
+//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('true');
+//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
+//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3']});
+//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
+//        });
+//        jQuery('#evidenta_gestiunii_deseurilor_save4').click(function () {
+//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('true');
+//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
+//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3', 'button4']});
+//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
+//        });
+//        jQuery('#evidenta_gestiunii_deseurilor_save5').click(function () {
+//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save5Clicked').val('true');
+//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
+//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3', 'button4', 'button5']});
+//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
+//        });
+//        jQuery('#evidenta_gestiunii_deseurilor_generateDocument').click(function () {
+//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_save5Clicked').val('false');
+//            jQuery('#evidenta_gestiunii_deseurilor_generateDocumentClicked').val('true');
+//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
+//            FpJsFormValidator.customize(field, {groups: ['generateDocument']});
+//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
+//        });
 });
 
 function popitup(url) {
@@ -391,6 +443,7 @@ $('#documentConfirmModalYes').click(function () {
                 $('#downloadLink' + documentId).attr("href", downloadPath).attr("onclick", "");
                 $('#totalUserCredits').text(response.credits);
                 $('#errorOrSuccess' + documentId).addClass('color-green');
+                $('#documentIcon' + documentId).removeClass('color-red').addClass('color-green').text('0');
             } else {
                 $('#errorOrSuccess' + documentId).addClass('color-red');
             }
@@ -420,6 +473,17 @@ $('#orderRemoveConfirmModalYes').click(function () {
     var path = $('#orderRemoveConfirmModalPath').val();
     window.location.href = path;
     $('#orderRemoveConfirmModal').modal('toggle');
+});
+
+$('.show-form-config').click(function() {
+   $(this).parent().siblings('.form-config').toggle(); 
+});
+
+$(function(){
+    $('select.selectmenu').selectmenu({
+        width: 550,
+        menuWidth: 550
+    });
 });
 
 // Js not currently used.

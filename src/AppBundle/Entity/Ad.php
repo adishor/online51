@@ -3,13 +3,10 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Table()
  * @ORM\Entity()
- * @Vich\Uploadable
  */
 class Ad
 {
@@ -29,29 +26,16 @@ class Ad
      *
      * @ORM\Column()
      */
-    protected $title;
+    protected $name;
 
     /**
      *
-     * @var string
+     * @var \Application\Sonata\MediaBundle\Entity\Media
      *
-     * @ORM\Column(nullable=true)
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="ad", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
-    protected $imageName;
-
-    /**
-     *
-     * @Vich\UploadableField(mapping="upload_image", fileNameProperty="imageName")
-     * @var File
-     */
-    protected $uploadImage;
-
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var \DateTime
-     */
-    private $updatedAt;
+    protected $image;
 
     /**
      * Get id
@@ -63,102 +47,57 @@ class Ad
         return $this->id;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Ad
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
 
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
 
     /**
      * Set image
      *
-     * @param string $imageName
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
      * @return Ad
      */
-    public function setImageName($imageName)
+    public function setImage(\Application\Sonata\MediaBundle\Entity\Media $image)
     {
-        $this->imageName = $imageName;
+        $this->image = $image;
 
         return $this;
     }
 
     /**
+     * Get image
      *
-     * @param File $image
-     * @return AppBundle\Entity\Ad
+     * @return \Application\Sonata\MediaBundle\Entity\Media
      */
-    public function setUploadImage(File $image = null)
+    public function getImage()
     {
-        $this->uploadImage = $image;
+        return $this->image;
+    }
 
-        if ($image) {
-            $this->updatedAt = new \DateTime('now');
-        }
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Ad
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * @return File
-     */
-    public function getUploadImage()
-    {
-        return $this->uploadImage;
-    }
-
-    /**
-     * Get imageName
+     * Get name
      *
      * @return string
      */
-    public function getImageName()
+    public function getName()
     {
-        return $this->imageName;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Ad
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
+        return $this->name;
     }
 
     public function __toString()
     {
-        return $this->getTitle();
+        return ($this->getId() ? $this->getName() : 'Create new');
     }
 
 }
