@@ -66,12 +66,10 @@
             if ('values' in items[key][subKey]) {
                 var objLength = Object.keys(items[key][subKey]['values']).length;
                 if (objLength > 0) {               
-                    var options = '';
-                    if (objLength > 1) {
-                        options = options + '<option></option>';
-                        $('#' + key + '_level3').html(options);
-                        $('#' + key + '_level3').selectmenu();
-                    }
+                    var options = '<option></option>';
+                    $('#' + key + '_level3').html(options);
+                    $('#' + key + '_level3').selectmenu();
+
                     $.each(items[key][subKey]['values'], function(index, value) {
                         options = options + '<option value="' + subKey + ' ' + index + '">' + value['name'] + '</option>';            
                     });

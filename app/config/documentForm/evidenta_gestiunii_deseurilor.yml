@@ -114,10 +114,11 @@ parameters:
                         '99': 02 03 99 alte deşeuri nespecificate
                 '04':
                     name: 02 04 deşeuri de la procesarea zahărului
-                    '01': 02 04 01 namoluri de la curatarea şi spalarea sfeclei de zahăr
-                    '02': 02 04 02 deşeuri de carbonat de calciu
-                    '03': 02 04 03 namoluri de la epurarea efluentilor proprii
-                    '99': 02 04 99 alte deşeuri nespecificate
+                    values:
+                        '01': 02 04 01 namoluri de la curatarea şi spalarea sfeclei de zahăr
+                        '02': 02 04 02 deşeuri de carbonat de calciu
+                        '03': 02 04 03 namoluri de la epurarea efluentilor proprii
+                        '99': 02 04 99 alte deşeuri nespecificate
                 '05': 
                     name: 02 05 deşeuri din industria produselor lactate
                     values:
@@ -329,17 +330,17 @@ parameters:
             values:
                 '01':
                     name: 07 01 deşeuri de la producerea, prepararea, furnizarea şi utilizarea (PPFU) produsilor chimici organici de baza
-                values:
-                    '01*': 07 01 01* soluţii apoase de spalare şi soluţii muma
-                    '03*': 07 01 03* solventi organici halogenati, lichide de spalare şi soluţii muma
-                    '04*': 07 01 04* alţi solventi organici, lichide de spalare şi soluţii muma
-                    '07*': 07 01 07* reziduuri halogenate din blazul coloanelor de distilare şi reactie
-                    '08*': 07 01 08* alte reziduuri din blazul coloanelor de distilare şi reactie
-                    '09*': 07 01 09* turte de filtrare halogenate şi absorbanti epuizati
-                    '10*': 07 01 10* alte turte de filtrare şi absorbanti epuizati
-                    '11*': 07 01 11* namoluri de la epurarea efluentilor în incinta, cu conţinut de substanţe periculoase
-                    '12': 07 01 12 namoluri de la epurarea efluentilor în incinta, altele decât cele specificate la 07 01 11
-                    '99': 07 01 99 alte deşeuri nespecificate
+                    values:
+                        '01*': 07 01 01* soluţii apoase de spalare şi soluţii muma
+                        '03*': 07 01 03* solventi organici halogenati, lichide de spalare şi soluţii muma
+                        '04*': 07 01 04* alţi solventi organici, lichide de spalare şi soluţii muma
+                        '07*': 07 01 07* reziduuri halogenate din blazul coloanelor de distilare şi reactie
+                        '08*': 07 01 08* alte reziduuri din blazul coloanelor de distilare şi reactie
+                        '09*': 07 01 09* turte de filtrare halogenate şi absorbanti epuizati
+                        '10*': 07 01 10* alte turte de filtrare şi absorbanti epuizati
+                        '11*': 07 01 11* namoluri de la epurarea efluentilor în incinta, cu conţinut de substanţe periculoase
+                        '12': 07 01 12 namoluri de la epurarea efluentilor în incinta, altele decât cele specificate la 07 01 11
+                        '99': 07 01 99 alte deşeuri nespecificate
                 '02':
                     name: 07 02 deşeuri de la PPFU materialelor plastice, cauciucului sintetic şi fibrelor artificiale
                     values: 
