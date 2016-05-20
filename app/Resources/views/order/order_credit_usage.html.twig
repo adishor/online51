@@ -12,7 +12,12 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ document.mentions }}</td>
-                    <td>{{ document.name }}</td>
+                    {% if document.documentId is not null %}
+                        <td>{{ document.documentName }}</td>
+                    {% endif %}
+                    {% if document.formularId is not null %}
+                        <td>{{ document.formularName }}</td>
+                    {% endif %}
                     <td>{{ document.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                     <td>{{ document.credit }}</td>
                     <td>{{ document.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>

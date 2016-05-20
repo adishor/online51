@@ -118,6 +118,14 @@ class UserHelperService
         return true;
     }
 
+    public function isValidUserFormularDocument($userId, $documentId)
+    {
+        if (empty($this->entityManager->getRepository('AppBundle:CreditsUsage')->findValidUserFormularDocument($userId, $documentId))) {
+            return false;
+        }
+        return true;
+    }
+
     public function isValidUserFormular($userId, $formularId, $formularConfig)
     {
         if (empty($this->entityManager->getRepository('AppBundle:CreditsUsage')
@@ -176,6 +184,7 @@ class UserHelperService
         $creditsUsage->setExpireDate($expireDate);
         $creditsUsage->setCredit($document->getCreditValue());
         $creditsUsage->setUsageType(CreditsUsage::TYPE_DOCUMENT);
+        $creditsUsage->setMedia($document->getMedia());
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
     }

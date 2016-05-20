@@ -12,7 +12,15 @@
                     {% for item in creditHistoryItems %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ item.subject|trans }}: {{ item.name|trans }}</td>
+                        {% if item.documentId is defined and item.documentId is not null %}
+                            <td>{{ item.subject|trans }}:<br/> {{ item.documentName|trans }}</td>
+                        {% endif %}
+                        {% if item.formularId is defined and item.formularId is not null %}
+                            <td>{{ item.subject|trans }}:<br/> {{ item.formularName|trans }}</td>
+                        {% endif %}
+                        {% if item.id is defined and item.id is not null %}
+                            <td>{{ item.subject|trans }}:<br/> {{ item.name|trans }}</td>
+                        {% endif %}
                         <td>{{ item.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                         <td>{{ item.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                         <td>{{ item.sign ~ item.credit }}</td>

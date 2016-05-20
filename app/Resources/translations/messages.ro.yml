@@ -123,6 +123,23 @@ domain:
         already-unlocked: 'Formularul este deja deblocat. Nu s-au consumat credite.'
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest formular.'
         success: 'Formular deblocat cu succes.'
+formular-documents:
+    title: Vizualizare/Creare documente
+    navigation: Documentele mele
+    company: Firma
+    type: Tip document
+    configuration: Configuratia
+    generated: Generat
+    generated-yes: DA
+    generated-no: NU
+    actions: Actiuni
+    new: Creare document nou
+    date-expired: Data expirare
+    expired: Expirat
+    edit: Continuare editare document
+    download: Descarca document
+    no-documents: Nu aveti documente pentru vizualizat
+    access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -301,6 +318,7 @@ order:
     domain: 'Domeniu'
     subdomain: 'Subdomeniu'
     document: 'Document'
+    formular: 'Formular'
     unlocked-at: 'Deblocat la data'
     mentions: 'Mentiuni'
     no-mentions: 'Fara mentiuni'

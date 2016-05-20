@@ -12,8 +12,9 @@
             {% for subdomain in domain.subdomains %}
                 {% if not subdomain.deleted %}
                     <li><a href="#ssm{{ loop.index0 }}" role="tab" data-toggle="tab">{{ subdomain.name | upper }}</a></li>
-                    {% endif %}
-                {% endfor %}
+                {% endif %}
+            {% endfor %}
+            <li><a href="{{ path('formular_documents_show') }}">{{ 'formular-documents.navigation' | trans }}</a></li>
         </ul>
     </div>
     <div class="col-xs-9">

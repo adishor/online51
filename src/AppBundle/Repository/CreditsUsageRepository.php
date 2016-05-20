@@ -18,10 +18,12 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('DISTINCT(d.id) as id, d.name, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, sd.name as subDomain, dom.name as domain')
-          ->from('AppBundle:Document', 'd')
-          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'd.media = m')
-          ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
+          ->select('d.id as id, d.name, m.id as mid, '
+            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+            . 'sd.name as subDomain, dom.name as domain')
+          ->from('AppBundle:CreditsUsage ', 'cu')
+          ->join('AppBundle:Document', 'd', 'WITH', 'cu.document = d')
+          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->where('cu.user = :user')
@@ -46,18 +48,69 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
+    public function findAllValidUserFormularDocuments($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('f.id as id, f.name, m.id as mid, '
+            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+            . 'sd.name as subDomain, dom.name as domain')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->join('AppBundle:Formular', 'f', 'WITH', 'cu.formular = f')
+          ->leftJoin('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
+          ->join('AppBundle:SubDomain', 'sd', 'WITH', 'f.subdomain = sd')
+          ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('f.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('sd.deleted = FALSE')
+          ->andWhere('dom.deleted = FALSE');
+        $queryBuilder->orderBy('dom.id')
+          ->orderBy('sd.id')
+          ->orderBy('f.id', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
     public function findAllUserDocuments($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('d.id, m.id as mediaId, d.name, cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate')
-          ->from('AppBundle:Document', 'd')
-          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'd.media = m')
-          ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
+          ->select('d.id as documentId, f.id as formularId, m.id as mediaId, '
+            . 'd.name as documentName, f.name as formularName, '
+            . 'cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate, cu.usageType')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->leftJoin('cu.document', 'd')
+          ->leftJoin('cu.formular', 'f')
+          ->leftJoin('cu.media', 'm')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.deleted = FALSE')
           ->orderBy('unlockDate', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    public function findAllUserFormularDocuments($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('u.company, f.name as fname, f.slug as fslug, cu.formConfig, cu.formHash, m.id as mid, cu.expireDate')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->join('cu.formular', 'f')
+          ->join('cu.user', 'u')
+          ->leftJoin('cu.media', 'm')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.deleted = FALSE')
+          ->orderBy('cu.expireDate', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
@@ -87,18 +140,42 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('d.id')
-          ->from('AppBundle:Document', 'd')
-          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'd.media = m')
-          ->join('AppBundle:CreditsUsage', 'cu', 'WITH', 'cu.document = d')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->join('cu.media', 'm')
+          ->join('cu.document', 'd')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
           ->setParameter('now', new \DateTime)
           ->andWhere('d.id = :document')
           ->setParameter('document', $documentId)
-          ->andWhere('d.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE')
           ->andWhere('m.deleted = FALSE')
-          ->andWhere('cu.deleted = FALSE');
+          ->andWhere('d.deleted = FALSE')
+        ;
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    public function findValidUserFormularDocument($userId, $documentId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('f.id')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->join('cu.media', 'm')
+          ->join('cu.formular', 'f')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('f.id = :document')
+          ->setParameter('document', $documentId)
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('m.deleted = FALSE')
+        ;
 
         $query = $queryBuilder->getQuery();
 
@@ -165,6 +242,22 @@ class CreditsUsageRepository extends EntityRepository
         $result = $query->getSingleScalarResult();
 
         return ($result) ? $result : 0;
+    }
+
+    public function findOneByFormHashNotExpired($hash)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('cu')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->where('cu.formHash = :hash')
+          ->setParameter('hash', $hash)
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime());
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
     }
 
 }

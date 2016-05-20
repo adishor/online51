@@ -273,6 +273,34 @@ class Media extends BaseMedia
         return $this->user;
     }
 
+    /**
+     * @var \AppBundle\Entity\CreditsUsage
+     */
+    private $creditsUsage;
+
+    /**
+     * Set creditsUsage
+     *
+     * @param \AppBundle\Entity\CreditsUsage $creditsUsage
+     * @return Media
+     */
+    public function setCreditsUsage(\AppBundle\Entity\CreditsUsage $creditsUsage = null)
+    {
+        $this->creditsUsage = $creditsUsage;
+
+        return $this;
+    }
+
+    /**
+     * Get creditsUsage
+     *
+     * @return \AppBundle\Entity\CreditsUsage
+     */
+    public function getCreditsUsage()
+    {
+        return $this->creditsUsage;
+    }
+
     public function setBinaryContent($binaryContent)
     {
         if ($this->providerReference) {

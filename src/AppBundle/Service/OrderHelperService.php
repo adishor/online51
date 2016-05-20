@@ -182,7 +182,7 @@ class OrderHelperService
     public function addInfoToUnlockedDocuments($unlockedDocuments)
     {
         foreach ($unlockedDocuments as $key => $document) {
-            $unlockedDocuments[$key]['subject'] = 'order.document';
+            $unlockedDocuments[$key]['subject'] = 'order.' . $document['usageType'];
             $unlockedDocuments[$key]['orderId'] = '';
             $unlockedDocuments[$key]['sign'] = '-';
         }
@@ -194,7 +194,7 @@ class OrderHelperService
     {
         $mediaObjects = [];
         foreach ($unlockedDocuments as $document) {
-            $mediaObjects[$document['id']] = $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['mediaId']);
+            $mediaObjects[$document[$document['usageType'] . 'Id']] = ($document['mediaId']) ? $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['mediaId']) : null;
         }
 
         return $mediaObjects;

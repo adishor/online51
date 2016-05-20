@@ -19,7 +19,7 @@ class FormularController extends Controller
      * @Route("/showFormular/{slug}/{hash}/{location}", name="formular_show")
      * @ParamConverter("formular")
      */
-    public function showFormularAction(Formular $formular, $hash, $location, Request $request)
+    public function showFormularAction(Request $request, Formular $formular, $hash, $location = null)
     {
         //check if document is already unlocked or valid for user
         $user = $this->getUser();
@@ -27,15 +27,21 @@ class FormularController extends Controller
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
 
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')
+          ->findOneByFormHashNotExpired($hash);
+        if (empty($creditsUsage)) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied-expired'));
+        }
+
+        $creditsUsage = reset($creditsUsage);
         $name = str_replace("_", "", $formular->getSlug());
         $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
         $type = "AppBundle\\Form\\Type\\DocumentForm\\" . $name . "Type";
         $handleFormMethod = 'handleForm' . $name;
         $applyUniqueConfigurationMethod = 'applyUniqueConfiguration' . $name;
         $applyFormCustomizationMethod = 'applyFormCustomization' . $name;
-        $calculateExtraTemplateDataMethod = 'calculateExtraTemplateData' . $name;
 
-        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findOneByFormHash($hash);
+        $calculateExtraTemplateDataMethod = 'calculateExtraTemplateData' . $name;
 
         if (empty($creditsUsage->getFormData())) {
             $formData = new $entity();
@@ -103,21 +109,59 @@ class FormularController extends Controller
         ));
     }
 
+    /**
+     * @Route("/myFormularDocuments", name="formular_documents_show")
+     */
+    public function showFormularDocumentsAction()
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+        $formularDocuments = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')
+          ->findAllUserFormularDocuments($user->getId());
+
+        foreach ($formularDocuments as $index => $doc) {
+            $name = str_replace("_", "", $doc['fslug']);
+            $getValuesForFormConfigOptions = 'getValuesForFormConfigOptions' . $name;
+            $formularDocuments[$index]['formConfig'] = $this->$getValuesForFormConfigOptions($doc['formConfig']);
+        }
+
+        return $this->render('document_form/show_formular_documents.html.twig', array(
+              'formularDocuments' => $formularDocuments
+        ));
+    }
+
+    public function generateDocument($name, $creditsUsage, $fileDirectory, $template, $formData, $formTemplateData)
+    {
+        $filename = $name . $creditsUsage->getId() . '.pdf';
+        $filePath = $fileDirectory . $filename;
+        $fileBody = $this->render($template, array('data' => $formData, 'formTemplateData' => $formTemplateData));
+        $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
+
+        $file = new UploadedFile($filePath, $filename);
+        $media = new Media();
+        $media->setBinaryContent($file);
+        $media->setName($filename);
+        $media->setProviderName('sonata.media.provider.file');
+        $media->setContext('default');
+        $media->setMediaType($media::FORM_GENERATED_TYPE);
+        $this->getDoctrine()->getManager()->persist($media);
+        $this->getDoctrine()->getManager()->flush();
+        $fs = new Filesystem();
+        $fs->remove($filePath);
+
+        return $media;
+    }
+
     public function applyUniqueConfigurationEvidentaGestiuniiDeseurilor($creditsUsage, $formData, $userCompany)
     {
-        $formConfig = json_decode($creditsUsage->getFormConfig());
-
-        $deseuCodes = explode(" ", $formConfig->tip_deseu);
-
-        $tipDeseuArray = $this->getParameter('tip_deseu');
-        $tipDeseu = $tipDeseuArray[$deseuCodes[0]]['name'] . "; " .
-          $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "; " .
-          $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['values'][$deseuCodes[2]];
+        $formConfigValue = $this->getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($creditsUsage->getFormConfig());
 
         $formData->setAgentEconomic($userCompany);
-        $formData->setAn($formConfig->an);
-        $formData->setTipDeseu($tipDeseu);
-        $formData->setTipDeseuCod($formConfig->tip_deseu);
+        $formData->setAn($formConfigValue['an']);
+        $formData->setTipDeseu($formConfigValue['tip_deseu']);
+        $formData->setTipDeseuCod($formConfigValue['tip_deseu_cod']);
         $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
         $this->getDoctrine()->getManager()->flush();
     }
@@ -165,7 +209,7 @@ class FormularController extends Controller
                 $formConfig = json_decode($creditsUsage->getFormConfig());
                 $location = $formConfig->operatia === '3' ? '#formtab4' : '#formtab3';
             }
-            var_dump(($this->generateUrl('formular_show', array('hash' => $creditsUsage->getFormHash(), 'slug' => $slug)) . $location));
+
             return $this->redirect($this->generateUrl('formular_show', array('hash' => $creditsUsage->getFormHash(), 'slug' => $slug)) . $location);
         }
     }
@@ -180,26 +224,32 @@ class FormularController extends Controller
         return $formTemplateData;
     }
 
-    public function generateDocument($name, $creditsUsage, $fileDirectory, $template, $formData, $formTemplateData)
+    public function getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($formConfig)
     {
-        $filename = $name . $creditsUsage->getId() . '.pdf';
-        $filePath = $fileDirectory . $filename;
-        $fileBody = $this->render($template, array('data' => $formData, 'formTemplateData' => $formTemplateData));
-        $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
+        $formConfigValue = [];
 
-        $file = new UploadedFile($filePath, $filename);
-        $media = new Media();
-        $media->setBinaryContent($file);
-        $media->setName($filename);
-        $media->setProviderName('sonata.media.provider.file');
-        $media->setContext('default');
-        $media->setMediaType($media::FORM_GENERATED_TYPE);
-        $this->getDoctrine()->getManager()->persist($media);
-        $this->getDoctrine()->getManager()->flush();
-        $fs = new Filesystem();
-        $fs->remove($filePath);
+        $formConfig = json_decode($formConfig);
+        foreach ($formConfig as $key => $config) {
+            switch ($key) {
+                case 'an':
+                    $formConfigValue[$key] = $config;
+                    break;
+                case 'tip_deseu':
+                    $deseuCodes = explode(" ", $config);
 
-        return $media;
+                    $tipDeseuArray = $this->getParameter('tip_deseu');
+                    $formConfigValue[$key] = $tipDeseuArray[$deseuCodes[0]]['name'] . "; " .
+                      $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "; " .
+                      $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['values'][$deseuCodes[2]];
+                    $formConfigValue[$key . "_cod"] = $config;
+                    break;
+                case 'operatia':
+                    $formConfigValue[$key] = $this->getParameter('operatia')[$config];
+                    break;
+            }
+        }
+
+        return $formConfigValue;
     }
 
 }

@@ -83,7 +83,7 @@ class CreditsUsage
     /**
      *
      * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="creditsUsage", cascade={"persist"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     private $media;
@@ -108,7 +108,7 @@ class CreditsUsage
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=32, nullable=true)
      */
     private $formHash;
 
