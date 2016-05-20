@@ -20,6 +20,8 @@ class EGD4EliminareDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button5"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button5"})
      */
     protected $cantitateDeseuEliminata;
 

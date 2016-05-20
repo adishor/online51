@@ -41,7 +41,7 @@ class EvidentaGestiuniiDeseurilor
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank(groups={"generateDocument", "button1"})
      */
     protected $agentEconomic;
 
@@ -49,21 +49,21 @@ class EvidentaGestiuniiDeseurilor
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank(groups={"generateDocument", "button1"})
      */
     protected $an;
 
     /**
      *
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank(groups={"generateDocument", "button1"})
      */
     protected $tipDeseu;
 
     /**
      *
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank(groups={"generateDocument", "button1"})
      */
     protected $tipDeseuCod;
 
@@ -77,7 +77,7 @@ class EvidentaGestiuniiDeseurilor
     /**
      *
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank(groups={"generateDocument", "button1"})
      */
     protected $unitateMasura;
 

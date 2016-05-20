@@ -21,6 +21,8 @@ class EGD1GenerareDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
      */
     protected $cantitateDeseuGenerate;
 
@@ -29,6 +31,8 @@ class EGD1GenerareDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
      */
     protected $cantitateDeseuValorificata;
 
@@ -37,6 +41,8 @@ class EGD1GenerareDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
      */
     protected $cantitateDeseuEliminata;
 
@@ -45,6 +51,8 @@ class EGD1GenerareDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
      */
     protected $cantitateDeseuInStoc;
 

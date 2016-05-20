@@ -27,6 +27,9 @@ form:
         subject: '*Subiect'
         message: '*Mesaj'
         save: 'Trimite'
+        save-and-continue: 'Salvati si continuati'
+        save-info: 'Salvati informatiile'
+        generate-document: 'Generati document'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
         function: 'Va rugam completati *Functia.'

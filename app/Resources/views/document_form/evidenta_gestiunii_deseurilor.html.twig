@@ -10,14 +10,14 @@
 
     <div class="col-xs-2">
         <ul class="nav nav-tabs clearfix" role="tablist">
-            <li class="active"><a href="#formtab" role="tab" data-toggle="tab">{{ 'Date Generale' | trans }}</a></li>
-            <li><a href="#formtab1" role="tab" data-toggle="tab">{{ 'Generarea deseurilor' | trans }}</a></li>
-            <li><a href="#formtab2" role="tab" data-toggle="tab">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
+            <li class="active"><a href="#formtab" role="tab" data-toggle="tab" id="nav-formtab">{{ 'Date Generale' | trans }}</a></li>
+            <li><a href="#formtab1" role="tab" data-toggle="tab" id="nav-formtab1">{{ 'Generarea deseurilor' | trans }}</a></li>
+            <li><a href="#formtab2" role="tab" data-toggle="tab"id="nav-formtab2">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
                 {% if form.EGD3ValorificareDeseuri is defined %}
-                <li><a href="#formtab3" role="tab" data-toggle="tab">{{ 'Valorificare deseurilor' | trans }}</a></li>
+                <li><a href="#formtab3" role="tab" data-toggle="tab"id="nav-formtab3">{{ 'Valorificare deseurilor' | trans }}</a></li>
                 {% endif %}
                 {% if form.EGD4EliminareDeseuri is defined %}
-                <li><a href="#formtab4" role="tab" data-toggle="tab">{{ 'Eliminarea deseurilor' | trans }}</a></li>
+                <li><a href="#formtab4" role="tab" data-toggle="tab"id="nav-formtab4">{{ 'Eliminarea deseurilor' | trans }}</a></li>
                 {% endif %}
         </ul>
     </div>
@@ -35,7 +35,8 @@
                 {{ form_row(form.tipDeseu, {'attr': {'class': 'width-100-percent height-100-px text-justify'} }) }}
                 {{ form_row(form.stareFizica) }}
                 {{ form_row(form.unitateMasura) }}
-                {{ form_widget(form.save1) }}
+                </br>
+                {{ form_widget(form.save1, {'label' : 'form.label.save-and-continue'|trans, 'attr': {'class': 'costum'} } ) }}
             </div>
 
             <div id="formtab1" class="tab-pane formular">
@@ -59,7 +60,7 @@
                         <tr>
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ form_widget(item.luna) }}</td>
-                            <td>{{ form_widget(item.cantitateDeseuGenerate, {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate'} }) }}</td>
+                            <td>{{ form_widget(item.cantitateDeseuGenerate, {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate', 'type': 'number'} }) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata'} }) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata'} }) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuInStoc, {'attr': {'class': 'text-right EGD1CantitateDeseuInStoc'} }) }}</td>
@@ -74,7 +75,8 @@
                         <td id="EGD1CantitateDeseuInStocTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocTotal }}</td>
                     </tr>
                 </table>
-                {{ form_widget(form.save2) }}
+                </br>
+                {{ form_widget(form.save2, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum'} } ) }}
             </div>
             <div id="formtab2" class="tab-pane formular">
                 <h3>{{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}</h3>
@@ -123,7 +125,8 @@
                         <td></td>
                     </tr>
                 </table>
-                {{ form_widget(form.save3) }}
+                </br>
+                {{ form_widget(form.save3, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum'} } ) }}
             </div>
             {% if form.EGD3ValorificareDeseuri is defined %}
                 <div id="formtab3" class="tab-pane formular">
@@ -153,7 +156,9 @@
                             <td></td>
                         </tr>
                     </table>
-                    {{ form_widget(form.save4) }}
+                    </br>
+                    {{ form_widget(form.save4, {'label' : 'form.label.save-info'|trans , 'attr': {'class': 'costum'} } ) }}
+                    {{ form_widget(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum'} }  )}}
                 </div>
             {% endif %}
             {% if form.EGD4EliminareDeseuri is defined %}
@@ -184,26 +189,39 @@
                             <td></td>
                         </tr>
                     </table>
-                    {{ form_widget(form.save5) }}
+                    </br>
+                    {{ form_widget(form.save5, {'label' : 'form.label.save-info'|trans, 'attr': {'class': 'costum'} } )}}
+                    {{ form_widget(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum'} }  )}}
                 </div>
-                <br/>
             {% endif %}
-            {{ form_widget(form.generateDocument) }}
+
             {{ form_end(form) }}
         </div>
-        <script>
+        <script type="text/javascript">
             jQuery(document).ready(function () {
             {% for key in formTemplateData.EGDTotals|keys %}
                     var totalClass{{ key }} = '{{ key }}'.replace('Total', '');
                     jQuery('.' + totalClass{{ key }}).change(function () {
                         var sum{{ key }} = 0;
                         jQuery('.' + totalClass{{ key }}).each(function () {
-                            sum{{ key }} += Number(jQuery(this).val());
+                            sum{{ key }} += parseFloat(jQuery(this).val());
                         });
                         jQuery('#{{ key }}').text(sum{{ key }});
                     });
             {% endfor %}
+                    jQuery(window).load(function () {
+                        console.log(window.location);
+                        if (window.location.hash) {
+                            extension = window.location.hash.replace('#doc-', '');
+                            console.log(extension);
+                            jQuery(".tab-pane-menu").first().parent().removeClass("active");
+                            jQuery(".tab-pane").first().removeClass("active");
+                            jQuery('#nav-' + extension).parent().addClass("active");
+                            jQuery('#' + extension + ".tab-pane").addClass("active");
+                        }
+                    });
                 });
+
         </script>
     </div>
 {% endblock %}

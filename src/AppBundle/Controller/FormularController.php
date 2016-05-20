@@ -16,10 +16,10 @@ class FormularController extends Controller
 {
 
     /**
-     * @Route("/showFormular/{slug}/{hash}", name="formular_show")
+     * @Route("/showFormular/{slug}/{hash}/{location}", name="formular_show")
      * @ParamConverter("formular")
      */
-    public function showFormularAction(Formular $formular, $hash, Request $request)
+    public function showFormularAction(Formular $formular, $hash, $location, Request $request)
     {
         //check if document is already unlocked or valid for user
         $user = $this->getUser();
@@ -55,6 +55,7 @@ class FormularController extends Controller
         return $this->render('document_form/' . strtolower($formular->getSlug()) . ".html.twig", array(
               'form' => $form->createView(),
               'formTemplateData' => $formTemplateData,
+              'location' => $location,
             )
         );
     }
@@ -153,7 +154,19 @@ class FormularController extends Controller
             $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('formular_show', array('hash' => $creditsUsage->getFormHash(), 'slug' => $slug));
+            $location = '#formtab';
+            if ($form->get('save1')->isClicked()) {
+                $location = '#formtab1';
+            }
+            if ($form->get('save2')->isClicked()) {
+                $location = '#formtab2';
+            }
+            if ($form->get('save3')->isClicked()) {
+                $formConfig = json_decode($creditsUsage->getFormConfig());
+                $location = $formConfig->operatia === '3' ? '#formtab4' : '#formtab3';
+            }
+            var_dump(($this->generateUrl('formular_show', array('hash' => $creditsUsage->getFormHash(), 'slug' => $slug)) . $location));
+            return $this->redirect($this->generateUrl('formular_show', array('hash' => $creditsUsage->getFormHash(), 'slug' => $slug)) . $location);
         }
     }
 

@@ -28,6 +28,8 @@ class EGD2StocareTratareTransportDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button3"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button3"})
      */
     protected $stocareCantitate;
 
@@ -44,6 +46,8 @@ class EGD2StocareTratareTransportDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button3"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button3"})
      */
     protected $tratareCantitate;
 

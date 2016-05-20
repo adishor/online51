@@ -20,6 +20,8 @@ class EGD3ValorificareDeseuri
      * @var type
      * @Type("double")
      * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\Type(type="double", groups={"generateDocument", "button4"})
+     * @Assert\Range(min = 0, groups={"generateDocument", "button4"})
      */
     protected $cantitateDeseuValorificata;
 
