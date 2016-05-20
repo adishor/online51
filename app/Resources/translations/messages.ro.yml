@@ -140,6 +140,7 @@ formular-documents:
     download: Descarca document
     no-documents: Nu aveti documente pentru vizualizat
     access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
+    reset-filter: 'Resetati filtrul'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -218,6 +219,8 @@ success:
     resend-activation: 'Un nou email de activare a fost trimis.'
     order: 'Comanda s-a efectuat cu succes.'
     order-remove: 'Comanda s-a anulat cu succes.'
+    document-generated: 'Documentul a fost generat cu succes!'
+    form-saved: 'Datele din formular s-au salvat cu succes!'
 login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
@@ -407,6 +410,9 @@ document-form:
         an: Selecteaza an
         tip_deseu: Selecteaza tipul de deseu
         operatia: Selecteaza operatia
+    error:
+        egd:
+            form-general-error: 'Eroare generala la creare document! </br> Reguli generale de validare la creare document: </br> 1. Asigurati-va ca toate campurile sunt completate </br> 2. Asigurati-va ca toate campurile numerice nu sunt negative, sunt compuse doar din cifre si au punctul (.) ca si separator de zecimale.'
 pdf-doc-egd:
     agent: 'Agent economic'
     year : 'An'

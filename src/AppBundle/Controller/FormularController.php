@@ -16,12 +16,12 @@ class FormularController extends Controller
 {
 
     /**
-     * @Route("/showFormular/{slug}/{hash}/{location}", name="formular_show")
+     * @Route("/showFormular/{slug}/{hash}", name="formular_show")
      * @ParamConverter("formular")
      */
-    public function showFormularAction(Request $request, Formular $formular, $hash, $location = null)
+    public function showFormularAction(Request $request, Formular $formular, $hash)
     {
-        //check if document is already unlocked or valid for user
+
         $user = $this->getUser();
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
@@ -53,10 +53,14 @@ class FormularController extends Controller
 
         $this->$applyFormCustomizationMethod($form, $creditsUsage);
 
-        $this->$handleFormMethod($creditsUsage, $name, $form, $request, $formData, $formular->getSlug());
+        $location = $this->$handleFormMethod($creditsUsage, $name, $form, $request, $formData, $formular->getSlug());
+
+        if (is_array($location)) {
+
+            return $this->redirect($this->generateUrl('formular_documents_show') . '?mediaId=' . $location['mediaId']);
+        }
 
         $formTemplateData = $this->$calculateExtraTemplateDataMethod($formData);
-
 
         return $this->render('document_form/' . strtolower($formular->getSlug()) . ".html.twig", array(
               'form' => $form->createView(),
@@ -112,14 +116,15 @@ class FormularController extends Controller
     /**
      * @Route("/myFormularDocuments", name="formular_documents_show")
      */
-    public function showFormularDocumentsAction()
+    public function showFormularDocumentsAction(Request $request)
     {
         $user = $this->getUser();
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
+
         $formularDocuments = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')
-          ->findAllUserFormularDocuments($user->getId());
+          ->findAllUserFormularDocuments($user->getId(), ($request->query->has('mediaId')) ? $request->query->get('mediaId') : null );
 
         foreach ($formularDocuments as $index => $doc) {
             $name = str_replace("_", "", $doc['fslug']);
@@ -193,24 +198,38 @@ class FormularController extends Controller
                 $generateDocumentDirectory = $this->getParameter('generated_documents_dir') . strtolower($slug) . '/';
                 $media = $this->generateDocument($name, $creditsUsage, $generateDocumentDirectory, $generateDocumentTemplate, $formData, $formTemplateData);
                 $creditsUsage->setMedia($media);
-                //lock document generation
+                $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
+                $this->getDoctrine()->getManager()->flush();
+
+                $this->get('session')->getFlashBag()->set('document-generated-success', 'success.document-generated');
+
+                return array('mediaId' => $media->getId());
             }
             $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
-            $location = '#formtab';
+            $location = 'formtab';
             if ($form->get('save1')->isClicked()) {
-                $location = '#formtab1';
+                $location = 'formtab1';
             }
             if ($form->get('save2')->isClicked()) {
-                $location = '#formtab2';
+                $location = 'formtab2';
             }
             if ($form->get('save3')->isClicked()) {
                 $formConfig = json_decode($creditsUsage->getFormConfig());
-                $location = $formConfig->operatia === '3' ? '#formtab4' : '#formtab3';
+                $location = $formConfig->operatia === '3' ? 'formtab4' : 'formtab3';
             }
 
-            return $this->redirect($this->generateUrl('formular_show', array('hash' => $creditsUsage->getFormHash(), 'slug' => $slug)) . $location);
+            $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
+
+            return $location;
+        }
+
+        if ($form->get('generateDocument')->isClicked()) {
+
+            $this->get('session')->getFlashBag()->set('form-error', 'document-form.error.egd.form-general-error');
+
+            return 'formtab';
         }
     }
 

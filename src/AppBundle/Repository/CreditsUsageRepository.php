@@ -91,6 +91,8 @@ class CreditsUsageRepository extends EntityRepository
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.deleted = FALSE')
+          ->andWhere('cu.usageType != :usage')
+          ->setParameter('usage', CreditsUsage::TYPE_EXPIRED)
           ->orderBy('unlockDate', 'DESC');
 
         $query = $queryBuilder->getQuery();
@@ -98,7 +100,7 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
-    public function findAllUserFormularDocuments($userId)
+    public function findAllUserFormularDocuments($userId, $mediaId = null)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -111,6 +113,12 @@ class CreditsUsageRepository extends EntityRepository
           ->setParameter('user', $userId)
           ->andWhere('cu.deleted = FALSE')
           ->orderBy('cu.expireDate', 'DESC');
+
+        if ($mediaId !== null) {
+            $queryBuilder
+              ->andWhere('m.id = :mediaId')
+              ->setParameter('mediaId', $mediaId);
+        }
 
         $query = $queryBuilder->getQuery();
 

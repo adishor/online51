@@ -1,9 +1,17 @@
 {% extends "base.html.twig" %}
 
 {% block ccontainer %}
-
+    
     <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
 
+    {% for flash_message in app.session.flashbag.get('form-success') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+    
+    {% for flash_message in app.session.flashbag.get('form-error') %}
+        <h4 class="color-red text-center first" >{{ flash_message|trans|raw }}</h4>
+    {% endfor %}
+    
     {% for flash_message in app.session.flashbag.get('formular-info') %}
         <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
     {% endfor %}
@@ -210,14 +218,11 @@
                     });
             {% endfor %}
                     jQuery(window).load(function () {
-                        console.log(window.location);
-                        if (window.location.hash) {
-                            extension = window.location.hash.replace('#doc-', '');
-                            console.log(extension);
-                            jQuery(".tab-pane-menu").first().parent().removeClass("active");
-                            jQuery(".tab-pane").first().removeClass("active");
-                            jQuery('#nav-' + extension).parent().addClass("active");
-                            jQuery('#' + extension + ".tab-pane").addClass("active");
+                        if ('{{ location }}' !== '') {
+                            jQuery("#nav-formtab").parent().removeClass("active");
+                            jQuery("#formtab").removeClass("active");
+                            jQuery('#nav-{{ location }}').parent().addClass("active");
+                            jQuery('#{{ location }}').addClass("active");
                         }
                     });
                 });

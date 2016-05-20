@@ -1,8 +1,13 @@
 {% extends "::base.html.twig" %}
 
 {% block ccontainer %}
+    {% for flash_message in app.session.flashbag.get('document-generated-success') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+    
     <div class="row">
         <div class="col-xs-12">
+            <a href="{{ path('formular_documents_show') }}"><button class="custom pull-right">{{ 'formular-documents.reset-filter'|trans }}</button></a>
             <h1 class="title-top">{{ 'formular-documents.title' | trans }}</h1>
         </div>
         {% if formularDocuments is not empty %}

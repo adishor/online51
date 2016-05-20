@@ -25,7 +25,7 @@ class EGD2StocareTratareTransportDeseuriType extends AbstractType
         $builder->add('luna', TextType::class, array(
               'read_only' => TRUE, 'disabled' => TRUE,
           ))
-          ->add('sectia', NumberType::class)
+          ->add('sectia', TextType::class)
           ->add('stocareCantitate', NumberType::class)
           ->add('stocareTip', ChoiceType::class, array('choices' => $stocareTip))
           ->add('tratareCantitate', NumberType::class)

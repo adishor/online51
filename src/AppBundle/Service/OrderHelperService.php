@@ -16,6 +16,7 @@ use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Symfony\Component\Filesystem\Filesystem;
+use AppBundle\Entity\CreditsUsage;
 
 class OrderHelperService
 {
@@ -112,7 +113,7 @@ class OrderHelperService
         $this->entityManager->persist($media);
         $this->entityManager->flush();
         $mediaPath = $this->invoiceDir . ".." . $fileProvider->generatePublicUrl($media, 'reference');
-    
+
         $fs = new Filesystem();
         $fs->remove($invoicePath);
 
@@ -194,7 +195,9 @@ class OrderHelperService
     {
         $mediaObjects = [];
         foreach ($unlockedDocuments as $document) {
-            $mediaObjects[$document[$document['usageType'] . 'Id']] = ($document['mediaId']) ? $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['mediaId']) : null;
+            if ($document['usageType'] !== CreditsUsage::TYPE_EXPIRED) {
+                $mediaObjects[$document[$document['usageType'] . 'Id']] = ($document['mediaId']) ? $this->entityManager->getRepository('Application\Sonata\MediaBundle\Entity\Media')->find($document['mediaId']) : null;
+            }
         }
 
         return $mediaObjects;
