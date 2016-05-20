@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: documentForm/evidenta_gestiunii_deseurilor.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -11,9 +12,10 @@ parameters:
     sonata.user.admin.user.class: AppBundle\Admin\UserAdmin
     sonata.user.admin.user.controller: AppBundle:Admin\User
     sonata.user.admin.user.translation_domain: SonataAdminUserBundle
-    sonata.media.provider.file.class: AppBundle\Provider\DocumentProvider
+    sonata.media.provider.file.class: AppBundle\Provider\CustomFileProvider
     sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
     stof_doctrine_extensions.listener.softdeleteable.class: AppBundle\Listener\SoftDeleteableListener
+    formular.startYear: 2015
 
 
 framework:
@@ -26,7 +28,7 @@ framework:
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
-    #serializer:      { enable_annotations: true }
+    serializer:      { enable_annotations: true }
     templating:
         engines: ['twig']
     default_locale:  "%locale%"
@@ -44,10 +46,14 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
+
     #sonata
     form:
         resources:
             - 'SonataFormatterBundle:Form:formatter.html.twig'
+            - 'SonataCoreBundle:Form:datepicker.html.twig'
+            - 'sonata/media_widgets.html.twig'
+
 services:
     twig.extension.intl:
         class: Twig_Extensions_Extension_Intl
@@ -174,8 +180,9 @@ sonata_media:
         default:  # the default context is mandatory
             providers:
                 - sonata.media.provider.file
+                - sonata.media.provider.image
             formats:
-                small: { width: 100 , quality: 70}
+                small: { width: 75 , quality: 70}
                 big:   { width: 500 , quality: 70}
             download:
                 strategy: app.media.security.user_strategy
@@ -187,6 +194,9 @@ sonata_media:
         local:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
+    providers:
+        file:
+            allowed_mime_types: ['application/pdf', 'application/x-pdf', 'application/rtf', 'text/html', 'text/rtf', 'text/plain', application/vnd.openxmlformats-officedocument.wordprocessingml.document]
 
 vich_uploader:
     db_driver: orm
@@ -242,3 +252,9 @@ knp_snappy:
         enabled:    true
         binary:      %kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64
         options:    []
+
+boekkooi_jquery_validation:
+    form:
+        enabled: true 
+    twig:
+        enabled: true 

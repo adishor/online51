@@ -6,36 +6,57 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\Ad;
+use Application\Sonata\MediaBundle\Entity\Media;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class LoadAdData extends AbstractFixture implements OrderedFixtureInterface
 {
-    const PATH = 'web/assets/images/publicitate';
+    const PATH = 'web/assets/images/publicitate.png';
+    const FILENAME = 'publicitate.png';
 
     public function load(ObjectManager $manager)
     {
 
         $ad = new Ad();
-        $ad->setTitle('Ad 1');
-        copy(self::PATH . '.png', self::PATH . '01.png');
-        $file = new UploadedFile(self::PATH . '01.png', 'publicitate01.png', null, null, null, true);
-        $ad->setUploadImage($file);
+        $ad->setName('Ad 1');
+        $file = new UploadedFile($this::PATH, $this::FILENAME);
+        $media = new Media();
+        $media->setBinaryContent($file);
+        $media->setName($this::FILENAME);
+        $media->setProviderName('sonata.media.provider.image');
+        $media->setContext('default');
+        $media->setMediaType($media::IMAGE_TYPE);
+        $ad->setImage($media);
+
 
         $ad1 = new Ad();
-        $ad1->setTitle('Ad 2');
-        copy(self::PATH . '.png', self::PATH . '02.png');
-        $file1 = new UploadedFile(self::PATH . '02.png', 'publicitate02.png', null, null, null, true);
-        $ad1->setUploadImage($file1);
+        $ad1->setName('Ad 2');
+        $media1 = new Media();
+        $media1->setBinaryContent($file);
+        $media1->setName($this::FILENAME);
+        $media1->setProviderName('sonata.media.provider.image');
+        $media1->setContext('default');
+        $media1->setMediaType($media1::IMAGE_TYPE);
+        $ad1->setImage($media1);
+
 
         $ad2 = new Ad();
-        $ad2->setTitle('Ad 3');
-        copy(self::PATH . '.png', self::PATH . '03.png');
-        $file2 = new UploadedFile(self::PATH . '03.png', 'publicitate03.png', null, null, null, true);
-        $ad2->setUploadImage($file2);
+        $ad2->setName('Ad 3');
+        $media2 = new Media();
+        $media2->setBinaryContent($file);
+        $media2->setName($this::FILENAME);
+        $media2->setProviderName('sonata.media.provider.image');
+        $media2->setContext('default');
+        $media2->setMediaType($media2::IMAGE_TYPE);
+        $ad2->setImage($media2);
 
         $manager->persist($ad);
         $manager->persist($ad1);
         $manager->persist($ad2);
+        $manager->persist($media);
+        $manager->persist($media1);
+        $manager->persist($media2);
+
         $manager->flush();
     }
 

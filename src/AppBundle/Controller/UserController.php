@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 class UserController extends Controller
 {
@@ -220,6 +221,11 @@ class UserController extends Controller
         }
         if ($form->isSubmitted() && $form->isValid() && !in_array(false, $changeInfoErrors)) {
 
+            if ($user->getImage()->getProviderName() === 'sonata.media.provider.image') {
+                $media = $user->getImage();
+                $media->setMediaType(Media::IMAGE_TYPE);
+                $user->setImage($media);
+            }
             $this->container->get('fos_user.user_manager')->updateUser($user);
             $this->addFlash('successful-change-info', 'success.change-info');
 

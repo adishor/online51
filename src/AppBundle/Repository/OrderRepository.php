@@ -156,7 +156,7 @@ class OrderRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('o.id, s.name as title, o.mentions, o.startDate as unlockDate, o.creditValue as credit, o.endingDate as expireDate')
+          ->select('o.id, s.name, o.mentions, o.startDate as unlockDate, o.creditValue as credit, o.endingDate as expireDate')
           ->from('AppBundle:Order', 'o')
           ->leftjoin('o.subscription', 's')
           ->where('o.active = TRUE')

@@ -1,0 +1,62 @@
+{% extends "::base.html.twig" %}
+
+{% block ccontainer %}
+    {% for flash_message in app.session.flashbag.get('document-generated-success') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="{{ path('formular_documents_show') }}"><button class="custom pull-right">{{ 'formular-documents.reset-filter'|trans }}</button></a>
+            <h1 class="title-top">{{ 'formular-documents.title' | trans }}</h1>
+        </div>
+        {% if formularDocuments is not empty %}
+            <table cellspacing="0" cellpadding="0" border="0" id="overview" class="display users documents clearfix dataTable" aria-describedby="overview_info">
+                <thead>
+                    <tr role="row">
+                        <th>{{ 'formular-documents.company' | trans }}</th>
+                        <th>{{ 'formular-documents.type' | trans }}</th>
+                        <th>{{ 'formular-documents.generated' | trans }}</th>
+                        <th>{{ 'formular-documents.date-expired' | trans }}</th>
+                        <th>{{ 'formular-documents.actions' | trans }}</th>
+                        <th>{{ 'formular-documents.new' | trans }}</th>
+                    </tr>
+                </thead>           
+                <tbody>
+                    {% for doc in formularDocuments %}
+                        <tr class="{{ (loop.index % 2) ? "odd" : "even" }}">
+                            <td class="">{{ doc.company }}</td>
+                            <td class="">{{ doc.fname }}</td>
+                            <td class="">{{ ((doc.mid is not null) ? 'formular-documents.generated-yes' : 'formular-documents.generated-no') | trans }}</td>
+                            <td class="">{{ doc.expireDate|date('d-m-Y') }}</td>
+                            <td class="">
+                                {% if date(doc.expireDate) > date() %}
+                                    <a href="{{ path('formular_show' , {'slug': doc.fslug, 'hash': doc.formHash }) }}">
+                                        <img alt="EditDocImg" src="{{ asset("assets/images/EditDoc.png") }}" id="EditDocImg" title="{{ 'formular-documents.edit' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                    </a>
+                                {% endif %}
+                                {% if doc.mid is not null %}
+                                    <a href="{{ path('sonata_media_download', {'id': doc.mid }) }}">
+                                        <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td class=""></td>
+                        </tr>
+                        <tr class="{{ (loop.index % 2) ? "odd" : "even" }}"><td colspan="6">
+                            <b>{{ 'formular-documents.configuration' | trans }}</b>:
+                            <span>
+                                {% for configName, configValue in doc.formConfig %}
+                                    <b>{{ configName | capitalize | replace({"_":" "}) }}: </b>{{ configValue }};
+                                {% endfor %}
+                            </span>
+                        </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>{{ 'formular-documents.no-documents' | trans }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+

@@ -39,14 +39,12 @@ class SubscriptionController extends CRUDController
         $idx = $request->request->get('idx');
 
         if (empty($idx) && $request->request->has('all_elements') && $request->request->get('all_elements') == 'on') {
-            $subs = $this->getDoctrine()->getManager()->getRepository('AppBundle:Subscription')
-              ->findBy(array('deleted' => FALSE));
             $idx = array();
-            foreach ($subs as $subscription) {
-                $idx[] = $subscription->getId();
+            $query->select('DISTINCT ' . $query->getRootAlias());
+            foreach ($query->getQuery()->iterate() as $pos => $object) {
+                $idx[] = $object[0]->getId();
             }
         }
-
         foreach ($idx as $id) {
             $order = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order')
               ->findOneBy(array(

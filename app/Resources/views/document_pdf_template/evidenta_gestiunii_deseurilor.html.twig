@@ -1,0 +1,135 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class='container'>
+        <div class='row'>
+            <h4>{{ 'pdf-doc-egd.agent' }}{{ data.agentEconomic }}</h4>
+            <h4>{{ 'pdf-doc-egd.year' }}{{ data.an }}</h4>
+            <h4>{{ 'pdf-doc-egd.waste-type' }}{{ data.tipDeseu }}</h4>
+            <h4>{{ 'pdf-doc-egd.waste-code' }}{{ data.tipDeseuCod }}</h4>
+            <h4>{{ 'pdf-doc-egd.physical-state' }}{{ data.stareFizica }}</h4>
+            <h4>{{ 'pdf-doc-egd.unit-of-measure' }}{{ data.unitateMasura }}</h4>
+        </div>
+        <div class='row'>
+            <h3>
+                {{ 'CAPITOLUL 1' | trans}}
+                <br/>
+                {{'Generare deseuri' | trans}}
+            </h3>
+            <table class="table table-bordered text-center form-table">
+                <tr>
+                    <th class="text-center" rowspan="3">{{ 'Nr.' | trans }}</th>
+                    <th class="text-center" rowspan="3">{{ 'Luna' | trans }}</th>
+                    <th class="text-center" colspan="4">{{ 'Cantitatea de deseuri' | trans }}</th>
+                </tr>
+                <tr>
+                    <th class="text-center" rowspan="2">{{ 'Generate' | trans }}</th>
+                    <th class="text-center" colspan="3">{{ 'din care:' | trans }}</th>
+                </tr>
+                <tr>
+                    <th class="text-center">{{ 'valorificata:' | trans }}</th>
+                    <th class="text-center">{{ 'eliminata final:' | trans }}</th>
+                    <th class="text-center">{{ 'ramasa in stoc:' | trans }}</th>
+                </tr>
+                {% for item in data.EGD1GenerareDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ item.luna }}</td>
+                        <td>{{ item.cantitateDeseuGenerate }}</td>
+                        <td>{{ item.cantitateDeseuValorificata }}</td>
+                        <td>{{ item.cantitateDeseuEliminata }}</td>
+                        <td>{{ item.cantitateDeseuInStoc }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class='row'>
+            <h3>
+                {{ 'CAPITOLUL 2' | trans}}
+                <br/>
+                {{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}
+            </h3>
+            <table class="table table-bordered text-center form-table">
+                <tr>
+                    <th class="text-center" rowspan="2">{{ 'Nr crt.' | trans }}</th>
+                    <th class="text-center" rowspan="2">{{ 'Luna' | trans }}</th>
+                    <th class="text-center" rowspan="2">{{ 'Sectia' | trans }}</th>
+                    <th class="text-center" colspan="2">{{ 'Stocare' | trans }}</th>
+                    <th class="text-center" colspan="3">{{ 'Tratare' | trans }}</th>
+                    <th class="text-center" colspan="2">{{ 'Transport' | trans }}</th>
+                </tr>
+                <tr>
+                    <th class="text-center">{{ 'Cantitatea' | trans }}</th>
+                    <th class="text-center">{{ 'Tipul' | trans }}</th>
+                    <th class="text-center">{{ 'Cantitatea' | trans }}</th>
+                    <th class="text-center">{{ 'Modul' | trans }}</th>
+                    <th class="text-center">{{ 'Scopul' | trans }}</th>
+                    <th class="text-center">{{ 'Mijlocul' | trans }}</th>
+                    <th class="text-center">{{ 'Destinatia' | trans }}</th>
+                </tr>
+                {% for item in data.EGD2StocareTratareTransportDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ item.luna }}</td>
+                        <td>{{ item.sectia }}</td>
+                        <td>{{ item.stocareCantitate }}</td>
+                        <td>{{ item.stocareTip }}</td>
+                        <td>{{ item.tratareCantitate }}</td>
+                        <td>{{ item.tratareMod }}</td>
+                        <td>{{ item.tratareScop }}</td>
+                        <td>{{ item.transportMijloc }}</td>
+                        <td>{{ item.transportDestinatie }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class='row'>
+            <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
+            <table class="table table-bordered text-center form-table">
+                <tr>
+                    <th class="text-center">{{ 'Nr.' | trans }}</th>
+                    <th class="text-center">{{ 'Luna' | trans }}</th>
+                    <th class="text-center">{{ 'Cantitatea de deseu valorificata' | trans }}</th>
+                    <th class="text-center">{{ 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' | trans }}</th>
+                    <th class="text-center">{{ 'Agentul economic care efectueaza operatia de valorificare' | trans }}</th>
+                </tr>
+                {% for item in data.EGD3ValorificareDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ item.luna }}</td>
+                        <td>{{ item.cantitateDeseuValorificata }}</td>
+                        <td>{{ item.operatiaDeValorificare }}</td>
+                        <td>{{ item.agentEconomicValorificare }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class='row'>
+            <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
+            <table class="table table-bordered text-center form-table">
+                <tr>
+                    <th class="text-center">{{ 'Nr.' | trans }}</th>
+                    <th class="text-center">{{ 'Luna' | trans }}</th>
+                    <th class="text-center">{{ 'Cantitatea de deseu eliminata' | trans }}</th>
+                    <th class="text-center">{{ 'Operatia de eliminare, conform Anexei IIA din legea 426/2001' | trans }}</th>
+                    <th class="text-center">{{ 'Agentul economic care efectueaza operatia de eliminare' | trans }}</th>
+                </tr>
+                {% for item in data.EGD4EliminareDeseuri %}
+                    <tr>
+                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
+                        <td>{{ item.luna }}</td>
+                        <td>{{ item.cantitateDeseuEliminata }}</td>
+                        <td>{{ item.operatiaDeEliminare }}</td>
+                        <td>{{ item.agentEconomicEliminare }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+
+        </div>
+
+    </div>
+</body>
+

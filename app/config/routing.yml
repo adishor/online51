@@ -17,6 +17,11 @@ _sonata_admin:
 sonata_user_security:
     resource: "@ApplicationSonataUserBundle/Resources/config/routing/sonata_security_1.xml"
 
+# added for admin login
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
 sonata_user_register:
     resource: "@SonataUserBundle/Resources/config/routing/sonata_registration_1.xml"
     prefix: /register
@@ -28,3 +33,4 @@ sonata_user_admin_security:
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
+    

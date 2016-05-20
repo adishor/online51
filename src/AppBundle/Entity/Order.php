@@ -30,7 +30,7 @@ class Order
      *
      * @var integer
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "subscription.at-least-0")
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
     private $creditValue;
@@ -39,7 +39,7 @@ class Order
      *
      * @var integer
      *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "subscription.at-least-0")
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
     private $valabilityDays;
@@ -170,6 +170,15 @@ class Order
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     *
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     *
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="order",  orphanRemoval=true)
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
+     */
+    private $invoice;
 
     /**
      * @ORM\PrePersist
@@ -627,4 +636,27 @@ class Order
         return ($this->getId() ? "Order" . " #" . $this->getId() : 'Create new');
     }
 
+
+    /**
+     * Set invoice
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $invoice
+     * @return Order
+     */
+    public function setInvoice(\Application\Sonata\MediaBundle\Entity\Media $invoice)
+    {
+        $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Get invoice
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
 }

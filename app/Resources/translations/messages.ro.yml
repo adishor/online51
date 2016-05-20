@@ -27,6 +27,9 @@ form:
         subject: '*Subiect'
         message: '*Mesaj'
         save: 'Trimite'
+        save-and-continue: 'Salvati si continuati'
+        save-info: 'Salvati informatiile'
+        generate-document: 'Generati document'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
         function: 'Va rugam completati *Functia.'
@@ -47,6 +50,7 @@ form:
         captcha: 'Va rugam completati textul din imagine'
         subject: 'Va rugam completati *Subiectul'
         message: 'Va rugam completati *Mesajul'
+        field: 'Campul este obligatoriu.'
     placeholder:
         username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
@@ -102,9 +106,10 @@ please-login: 'Va rugam sa faceti login in formularul din dreapta.'
 domain:
     in-the-section: 'In sectiunea %domain% gasesti :'
     documents: 'Documente'
-    not-logged-in: 'Documentele sunt accesibile dupa acces in sistem:'
-    no-subscription: 'Nu aveti acces la documentele din acest domeniu!'
-    go-to-subscription: 'Daca doriti sa accesati documentele aferente acestui domeniu va rugam sa achizitionati un'
+    formulars: 'Formulare'
+    not-logged-in: 'Documentele si Formularele sunt accesibile dupa acces in sistem:'
+    no-subscription: 'Nu aveti acces la documentele si formularele din acest domeniu!'
+    go-to-subscription: 'Daca doriti sa accesati documentele/formularele aferente acestui domeniu va rugam sa achizitionati un'
     go-to-contact: ', sau sa luati legatura cu noi prin'
     subscriptions: 'abonament'
     contact: 'formularul de contact.'
@@ -113,6 +118,29 @@ domain:
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest document.'
         success: 'Document deblocat cu succes.'
         available-until: 'Documentul este deblocat pana la data de %date%'
+    formular:
+        config: 'Va rugam completati toate campurile de mai jos.'
+        already-unlocked: 'Formularul este deja deblocat. Nu s-au consumat credite.'
+        no-credits: 'Nu aveti suficiente credite pentru a debloca acest formular.'
+        success: 'Formular deblocat cu succes.'
+formular-documents:
+    title: Vizualizare/Creare documente
+    navigation: Documentele mele
+    company: Firma
+    type: Tip document
+    configuration: Configuratia
+    generated: Generat
+    generated-yes: DA
+    generated-no: NU
+    actions: Actiuni
+    new: Creare document nou
+    date-expired: Data expirare
+    expired: Expirat
+    edit: Continuare editare document
+    download: Descarca document
+    no-documents: Nu aveti documente pentru vizualizat
+    access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
+    reset-filter: 'Resetati filtrul'
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -191,6 +219,8 @@ success:
     resend-activation: 'Un nou email de activare a fost trimis.'
     order: 'Comanda s-a efectuat cu succes.'
     order-remove: 'Comanda s-a anulat cu succes.'
+    document-generated: 'Documentul a fost generat cu succes!'
+    form-saved: 'Datele din formular s-au salvat cu succes!'
 login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
@@ -227,7 +257,8 @@ change-info:
     save: Salveaza
     back: Inapoi
 credit-usage:
-    unlocked-by-user: 'Document deblocat de utilizator'
+    document-unlocked-by-user: 'Document deblocat de utilizator'
+    formular-unlocked-by-user: 'Formular deblocat de utilizator'
     expired: 'Credite expirate.'
 register-success:
     title: 'Succes!'
@@ -290,6 +321,7 @@ order:
     domain: 'Domeniu'
     subdomain: 'Subdomeniu'
     document: 'Document'
+    formular: 'Formular'
     unlocked-at: 'Deblocat la data'
     mentions: 'Mentiuni'
     no-mentions: 'Fara mentiuni'
@@ -302,7 +334,9 @@ document:
 modal:
     document-confirm:
         title: 'Confirma deblocare'
-        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% credite!'
+        body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% %plural%!'
+        credit:  'credit'
+        credits:  'credite'
     subscription-add-confirm:
         title: 'Confirma comanda'
         body: 'Sunteti sigur ca doriti sa comandati acest abonament?'
@@ -312,9 +346,15 @@ modal:
     button:
         yes: 'Da'
         no: 'Nu'
+    config-form-add-confirm:
+        title: 'Confirma deblocare formular'
+        body: 'Sunteti sigur ca doriti sa deblocati %title% pentru configuratia aleasa? Atentie veti consuma %credits% %plural%!'
+        credit:  'credit'
+        credits:  'credite'
 total-credits: 'Credite Totale:'
 year: ' an'
 years: ' ani'
+file-download: 'Descarca fisier'
 invoice:
     title: 'FACTURA PROFORMA'
     supplier: 'Furnizor'
@@ -346,7 +386,41 @@ invoice:
     total: 'TOTAL'
     general-total: 'TOTAL GENERAL'
     maturity: 'Data scadenta'
-        
+media-type:
+    document: 'Document'
+    invoice: 'Factura Proforma'
+    form-generated: 'Document generat'
+    image: 'Imagine'
+month:
+    january: Ianuarie
+    february: Februarie
+    march: Martie
+    april: Aprilie
+    may: Mai
+    june: Iulie
+    july: Iulie
+    august: August
+    september: Septembrie
+    octomber: Octombrie
+    november: Noiembrie
+    december: Decembrie
+    no_select: Neselectat
+document-form:
+    select:
+        an: Selecteaza an
+        tip_deseu: Selecteaza tipul de deseu
+        operatia: Selecteaza operatia
+    error:
+        egd:
+            form-general-error: 'Eroare generala la creare document! </br> Reguli generale de validare la creare document: </br> 1. Asigurati-va ca toate campurile sunt completate </br> 2. Asigurati-va ca toate campurile numerice nu sunt negative, sunt compuse doar din cifre si au punctul (.) ca si separator de zecimale.'
+pdf-doc-egd:
+    agent: 'Agent economic'
+    year : 'An'
+    waste-type: 'Tip deseu'
+    waste-code: 'Tip deseu cod'
+    physical-state: 'Stare fizica'
+    unit-of-measure: 'Unitate de masura'
+    
 #admin
 admin_label:
     subscription: 'Abonament'
@@ -356,6 +430,7 @@ admin_label:
     credits_usage: 'Credite folosite'
     ad: 'Reclame'
     document: 'Documente'
+    formular: 'Formulare'
 Subscription List: Lista Abonamente
 Subscription Delete: Stergere Abonamente
 Domain List: Lista Domenii
@@ -370,6 +445,8 @@ Ad List: Lista reclame
 Ad Delete: Stergere reclame
 Document List: Lista documente
 Document Delete: Stergere documente
+Formular List: Lista formulare
+Formular Delete: Stergere formulare
 Name: Nume
 Price: Pret
 Credit: Credit
@@ -389,6 +466,7 @@ Start Date: Data Inceput
 Ending Date: Data Sfarsit
 Credit Value: Valoare Credit
 Valability Days: Nr de zile valide
+Valability Month: Valabil pana la luna (inclusiv)
 Subscription: Abonament
 Created At: Creat la
 Approved By: Aprobat de
@@ -402,12 +480,17 @@ Document: Document
 User: Utilizator
 Expire Date: Data de expirare
 No Domain: Fara domeniu
+No Subdomain: Fara subdomeniu
 Deleted: Sters
 Deleted At: Sters la
 Create new: Creaza nou
 You cannot delete the subscription %name% because you have an order with this subscription waiting your approval: 'Nu poti sterge abonamentul %name% deoarece ai o comanda cu acest abonament care asteapta aprobarea ta'
 You cannot delete the domain %name% because you have an order with this domain waiting your approval: 'Nu poti sterge domeniul %name% deoarece ai o comanda cu acest domeniu care asteapta aprobarea ta'
 You cannot delete your own account: Nu poti sa iti stergi propriul cont
+Media: Fisier
+Id: Numar
+Invoice: Factura Proforma
+Image: Imagine
 
 #media
 sonata:
