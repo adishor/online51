@@ -412,6 +412,7 @@ document-form:
         egd:
             form-general-error: 'Eroare generala la creare document! </br> Reguli generale de validare la creare document: </br> 1. Asigurati-va ca toate campurile sunt completate </br> 2. Asigurati-va ca toate campurile numerice nu sunt negative, sunt compuse doar din cifre si au punctul (.) ca si separator de zecimale.'
 pdf-doc-egd:
+    waste-management-title: 'Evidenta Gestiunii Deseurilor'
     agent: 'Agent economic'
     year : 'Anul'
     waste-type: 'Tip deseu'
@@ -421,6 +422,8 @@ pdf-doc-egd:
     chapter: 'CAPITOLUL'
     waste-generation: 'Generare deseuri'
     waste-management: 'Stocarea provizorie, tratarea si transportul deseurilor'
+    waste-reclamation: 'Valorificarea deseurilor'
+    waste-elimination: 'Eliminarea deseurilor'
     number: 'Nr.'
     month: 'Luna'
     waste-quantity: 'Cantitatea de deseuri'
@@ -438,7 +441,16 @@ pdf-doc-egd:
     mode: 'Modul'
     scope: 'Scopul'
     means: 'Mijlocul'
-    destination: 'Destination'
+    destination: 'Destinatia'
+    storage-type: 'Tipul de stocare:'
+    treatment-mode: 'Modul tratarii'
+    treatment-scope: 'Scopul tratarii'
+    transportation-means: 'Mijlocul de transport'
+    reclamation-operation: 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' 
+    reclamation-agent: 'Agentul economic care efectueaza operatia de valorificare'
+    elimination-operation: 'Operatia de eliminare, conform Anexei IIA din legea 426/2001'
+    elimination-agent: 'Agentul economic care efectueaza operatia de eliminare'
+    waste-quantity-eliminated: 'Cantitatea de deseuri eliminata'
     
 #admin
 admin_label:

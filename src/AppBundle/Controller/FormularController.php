@@ -141,7 +141,7 @@ class FormularController extends Controller
     {
         $filename = $name . $creditsUsage->getId() . '.pdf';
         $filePath = $fileDirectory . $filename;
-        $fileBody = $this->renderView($template, array('data' => $formData, 'templateData' => $formTemplateData));
+        $fileBody = $this->renderView($template, array('data' => $formData, 'templateData' => $formTemplateData, 'formConfig' => json_decode($creditsUsage->getFormConfig())));
         $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
 
         $file = new UploadedFile($filePath, $filename);
