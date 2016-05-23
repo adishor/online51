@@ -282,8 +282,9 @@ parameters:
                         '03': 06 05 03 namoluri de la epurarea efluentilor în incinta, altele decât cele specificate la 06 05 02
                         '06': 06 06 deşeuri de la PPFU produselor chimice cu sulf, proceselor chimice de sulfurare şi desulfurare
                 '06': 
-                    name: 06 06 02* deşeuri cu conţinut de sulfuri periculoase
+                    name: 06 06 deşeuri de la PPFU produselor chimice cu sulf, proceselor chimice de sulfurare şi desulfurare
                     values:
+                        '02*': 06 06 02* deşeuri cu conţinut de sulfuri periculoase
                         '03': 06 06 03 deşeuri cu conţinut de sulfuri, altele decât cele specificate la 06 06 02
                         '99': 06 06 99 alte deşeuri nespecificate
                 '07':
