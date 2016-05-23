@@ -19,7 +19,7 @@
             <generator strategy="AUTO"/>
         </id>
         <one-to-one field="document" target-entity="AppBundle\Entity\Document" mapped-by="media" />
-        <one-to-one field="creditsUsage" target-entity="AppBundle\Entity\CreditsUsage" mapped-by="media" />
+        <one-to-many field="creditsUsage" target-entity="AppBundle\Entity\CreditsUsage" mapped-by="media" />
         <one-to-one field="order" target-entity="AppBundle\Entity\Order" mapped-by="invoice"/>
         <one-to-one field="ad" target-entity="AppBundle\Entity\Ad" mapped-by="image"/>
         <one-to-one field="user" target-entity="Application\Sonata\UserBundle\Entity\User" mapped-by="image"/>

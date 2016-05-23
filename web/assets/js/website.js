@@ -486,6 +486,27 @@ $(function(){
     });
 });
 
+$(function(){
+    $('select.EDG2StocareTip, select.EDG2TratareMod, select.EDG2TransportMijloc, select.EDG2TransportDestinatia').selectmenu({
+        width: 48,
+        menuWidth: 200
+    });
+});
+
+$(function(){
+    $('select.EDG2TratareScop').selectmenu({
+        width: 40,
+        menuWidth: 180
+    });
+});
+
+$(function(){
+    $('select.EGD3OperatiaValorificare, select.EGD4OperatiaEliminare').selectmenu({
+        width: 300,
+        menuWidth: 300
+    });
+});
+
 // Js not currently used.
 //function GetProfile(currentUserId) {
 //    var link = '/Aldex/User/UserDetails/1';

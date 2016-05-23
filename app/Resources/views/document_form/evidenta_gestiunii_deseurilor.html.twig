@@ -112,12 +112,12 @@
                             <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
                             <td>{{ form_widget(item.sectia) }}</td>
                             <td>{{ form_widget(item.stocareCantitate, {'attr': {'class': 'text-right EGD2StocareCantitate'} }) }}</td>
-                            <td>{{ form_widget(item.stocareTip, {'attr': {'class': 'max-width-48'  } }) }}</td>
+                            <td>{{ form_widget(item.stocareTip, {'attr': {'class': 'EDG2StocareTip'  } }) }}</td>
                             <td>{{ form_widget(item.tratareCantitate, {'attr': {'class': 'text-right EGD2TratareCantitate'} }) }}</td>
-                            <td>{{ form_widget(item.tratareMod, {'attr': {'class': 'max-width-60'} }) }}</td>
-                            <td>{{ form_widget(item.tratareScop, {'attr': {'class': 'max-width-40'} }) }}</td>
-                            <td>{{ form_widget(item.transportMijloc, {'attr': {'class': 'max-width-48'} }) }}</td>
-                            <td>{{ form_widget(item.transportDestinatie, {'attr': {'class': 'max-width-50'} }) }}</td>
+                            <td>{{ form_widget(item.tratareMod, {'attr': {'class': 'EDG2TratareMod'} }) }}</td>
+                            <td>{{ form_widget(item.tratareScop, {'attr': {'class': 'EDG2TratareScop'} }) }}</td>
+                            <td>{{ form_widget(item.transportMijloc, {'attr': {'class': 'EDG2TransportMijloc'} }) }}</td>
+                            <td>{{ form_widget(item.transportDestinatie, {'attr': {'class': 'EDG2TransportDestinatia'} }) }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
@@ -152,7 +152,7 @@
                                 <td class="width-35-px">{{ loop.index }}</td>
                                 <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
                                 <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD3CantitateDeseuValorificata'} }) }}</td>
-                                <td>{{ form_widget(item.operatiaDeValorificare, {'attr': {'class': 'max-width-350'} }) }}</td>
+                                <td>{{ form_widget(item.operatiaDeValorificare, {'attr': {'class': 'EGD3OperatiaValorificare'} }) }}</td>
                                 <td>{{ form_widget(item.agentEconomicValorificare) }}</td>
                             </tr>
                         {% endfor %}
@@ -185,7 +185,7 @@
                                 <td class="width-35-px">{{ loop.index }}</td>
                                 <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
                                 <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD4CantitateDeseuEliminata'} }) }}</td>
-                                <td>{{ form_widget(item.operatiaDeEliminare, {'attr': {'class': 'max-width-350'} }) }}</td>
+                                <td>{{ form_widget(item.operatiaDeEliminare, {'attr': {'class': 'EGD4OperatiaEliminare'} }) }}</td>
                                 <td>{{ form_widget(item.agentEconomicEliminare) }}</td>
                             </tr>
                         {% endfor %}

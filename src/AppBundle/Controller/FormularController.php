@@ -176,12 +176,12 @@ class FormularController extends Controller
 
         $formConfig = json_decode($creditsUsage->getFormConfig());
         if ($formConfig->operatia === '3') {
-            $form->remove('EGD3ValorificareDeseuri');
-            $form->remove('save4');
-        }
-        if ($formConfig->operatia === '4') {
             $form->remove('EGD4EliminareDeseuri');
             $form->remove('save5');
+        }
+        if ($formConfig->operatia === '4') {
+            $form->remove('EGD3ValorificareDeseuri');
+            $form->remove('save4');
         }
     }
 

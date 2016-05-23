@@ -1832,7 +1832,11 @@ h5.first {
 
 .ui-selectmenu-menu li a, .ui-selectmenu-status {
     font-size: 0.8em;
-    padding: .400em 1em .400em 1em !important;
+    padding: .400em 0.2em .400em 0.2em !important;
+}
+
+.ui-selectmenu-status {
+    margin-right: 20px !important;
 }
 
 .ui-selectmenu-menu li a:hover, .ui-selectmenu-status:hover {
