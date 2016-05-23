@@ -97,9 +97,6 @@
                 for (var key2Subitem in keysSub2ItemArray) {
                     options = options + '<option value="' + sub2Key + ' ' + keysSub2ItemArray[key2Subitem] + '">' + items[key][keys[0]]['values'][keys[1]]['values'][keysSub2ItemArray[key2Subitem]] + '</option>';
                 }
-{#                $.each(items[key][keys[0]]['values'][keys[1]]['values'], function(index, value) {
-                    options = options + '<option value="' + sub2Key + ' ' + index + '">' + value + '</option>';            
-                });#}
                 $('#' + key + '_level3').html(options);
                 $('#' + key + '_level3').selectmenu();
                 $('#' + key + '_level2').next().next().css('display', 'none');
