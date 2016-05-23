@@ -237,4 +237,10 @@ class UserHelperService
         return $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
     }
 
+    public function getValidCreditsUsageForMedia($mediaId)
+    {
+        return $this->entityManager->getRepository('AppBundle:CreditsUsage')
+            ->findValidCreditsUsageForMedia($mediaId);
+    }
+
 }

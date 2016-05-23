@@ -141,7 +141,7 @@ class FormularController extends Controller
     {
         $filename = $name . $creditsUsage->getId() . '.pdf';
         $filePath = $fileDirectory . $filename;
-        $fileBody = $this->render($template, array('data' => $formData, 'formTemplateData' => $formTemplateData));
+        $fileBody = $this->renderView($template, array('data' => $formData, 'templateData' => $formTemplateData));
         $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
 
         $file = new UploadedFile($filePath, $filename);
@@ -217,7 +217,7 @@ class FormularController extends Controller
             }
             if ($form->get('save3')->isClicked()) {
                 $formConfig = json_decode($creditsUsage->getFormConfig());
-                $location = $formConfig->operatia === '3' ? 'formtab4' : 'formtab3';
+                $location = $formConfig->operatia === '3' ? 'formtab3' : 'formtab4';
             }
 
             $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
