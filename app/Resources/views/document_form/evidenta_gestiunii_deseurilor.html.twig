@@ -5,29 +5,29 @@
     <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
 
     {% for flash_message in app.session.flashbag.get('form-success') %}
-        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
     {% endfor %}
 
     {% for flash_message in app.session.flashbag.get('form-error') %}
-        <h4 class="color-red text-center first" >{{ flash_message|trans|raw }}</h4>
+        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
     {% endfor %}
 
     {% for flash_message in app.session.flashbag.get('formular-info') %}
-        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
     {% endfor %}
 
     <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori. Verificati si celelalte capitole!' | trans }}</h4>
 
     <div class="col-xs-2">
         <ul class="nav nav-tabs clearfix" role="tablist">
-            <li class="{{ location == 'formtab' ? 'active': '' }}"><a href="#formtab" role="tab" data-toggle="tab" id="nav-formtab">{{ 'Date Generale' | trans }}</a></li>
-            <li class="{{ location == 'formtab1' ? 'active': '' }}"><a href="#formtab1" role="tab" data-toggle="tab" id="nav-formtab1">{{ 'Generarea deseurilor' | trans }}</a></li>
-            <li class="{{ location == 'formtab2' ? 'active': '' }}"><a href="#formtab2" role="tab" data-toggle="tab"id="nav-formtab2">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
+            <li class="{{ location == 'formtab' ? 'active': '' }}"><a href="#formtab" class="navtab" role="tab" data-toggle="tab" id="nav-formtab">{{ 'Date Generale' | trans }}</a></li>
+            <li class="{{ location == 'formtab1' ? 'active': '' }}"><a href="#formtab1" class="navtab" role="tab" data-toggle="tab" id="nav-formtab1">{{ 'Generarea deseurilor' | trans }}</a></li>
+            <li class="{{ location == 'formtab2' ? 'active': '' }}"><a href="#formtab2" class="navtab" role="tab" data-toggle="tab"id="nav-formtab2">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
                 {% if form.EGD3ValorificareDeseuri is defined %}
-                <li class="{{ location == 'formtab3' ? 'active': '' }}"><a href="#formtab3" role="tab" data-toggle="tab"id="nav-formtab3">{{ 'Valorificare deseurilor' | trans }}</a></li>
+                <li class="{{ location == 'formtab3' ? 'active': '' }}"><a href="#formtab3" class="navtab" role="tab" data-toggle="tab"id="nav-formtab3">{{ 'Valorificare deseurilor' | trans }}</a></li>
                 {% endif %}
                 {% if form.EGD4EliminareDeseuri is defined %}
-                <li class="{{ location == 'formtab4' ? 'active': '' }}"><a href="#formtab4" role="tab" data-toggle="tab"id="nav-formtab4">{{ 'Eliminarea deseurilor' | trans }}</a></li>
+                <li class="{{ location == 'formtab4' ? 'active': '' }}"><a href="#formtab4" class="navtab" role="tab" data-toggle="tab"id="nav-formtab4">{{ 'Eliminarea deseurilor' | trans }}</a></li>
                 {% endif %}
         </ul>
     </div>
@@ -299,9 +299,13 @@
                             return false;
                         } else {
                             jQuery('#globalErrors').hide();
+                            jQuery('.flash-message').hide();
                         }
+
                     });
-                    
+                    jQuery('.navtab').click(function () {
+                        jQuery('.flash-message').hide();
+                    });
                 });
         </script>
     </div>

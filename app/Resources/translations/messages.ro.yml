@@ -410,7 +410,7 @@ document-form:
         operatia: Selecteaza operatia
     error:
         egd:
-            form-general-error: 'Eroare generala la creare document! </br> Reguli generale de validare la creare document: </br> 1. Asigurati-va ca toate campurile sunt completate </br> 2. Asigurati-va ca toate campurile numerice nu sunt negative, sunt compuse doar din cifre si au punctul (.) ca si separator de zecimale.'
+            form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
 pdf-doc-egd:
     waste-management-title: 'Evidenta Gestiunii Deseurilor'
     agent: 'Agent economic'
