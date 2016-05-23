@@ -9,58 +9,26 @@ $(document).ready(function () {
     if ($("#EmployeesNr").val() != "") {
         $("#register_noEmployees option:selected").text($("#EmployeesNr").val());
     }
-    
-//    $('#evidenta_gestiunii_deseurilor_save1').click(function (event) {
-//            $('#evidenta_gestiunii_deseurilor_save1Clicked').val('true');
-//            var form = document.getElementsByName('evidenta_gestiunii_deseurilor');
-//            FpJsFormValidator.customize(form, {groups: ['button1']});
-//            FpJsFormValidator.customize(form, 'submitForm', event);
-//        });
-//        jQuery('#evidenta_gestiunii_deseurilor_save2').click(function () {
-//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('true');
-//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2']});
-//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-//        });
-//        jQuery('#evidenta_gestiunii_deseurilor_save3').click(function () {
-//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('true');
-//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3']});
-//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-//        });
-//        jQuery('#evidenta_gestiunii_deseurilor_save4').click(function () {
-//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('true');
-//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3', 'button4']});
-//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-//        });
-//        jQuery('#evidenta_gestiunii_deseurilor_save5').click(function () {
-//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save5Clicked').val('true');
-//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-//            FpJsFormValidator.customize(field, {groups: ['button1', 'button2', 'button3', 'button4', 'button5']});
-//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-//        });
-//        jQuery('#evidenta_gestiunii_deseurilor_generateDocument').click(function () {
-//            jQuery('#evidenta_gestiunii_deseurilor_save1Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save2Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save3Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save4Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_save5Clicked').val('false');
-//            jQuery('#evidenta_gestiunii_deseurilor_generateDocumentClicked').val('true');
-//            var field = jQuery('form#evidenta_gestiunii_deseurilor');
-//            FpJsFormValidator.customize(field, {groups: ['generateDocument']});
-//            jQuery('form#evidenta_gestiunii_deseurilor').submit();
-//        });
+    $(function () {
+        $('select.EDG2StocareTip, select.EDG2TratareMod, select.EDG2TransportMijloc, select.EDG2TransportDestinatia').selectmenu({
+            width: 48,
+            menuWidth: 200
+        });
+    });
+
+    $(function () {
+        $('select.EDG2TratareScop').selectmenu({
+            width: 40,
+            menuWidth: 180
+        });
+    });
+
+    $(function () {
+        $('select.EGD3OperatiaValorificare, select.EGD4OperatiaEliminare').selectmenu({
+            width: 300,
+            menuWidth: 300
+        });
+    });
 });
 
 function popitup(url) {
@@ -475,37 +443,18 @@ $('#orderRemoveConfirmModalYes').click(function () {
     $('#orderRemoveConfirmModal').modal('toggle');
 });
 
-$('.show-form-config').click(function() {
-   $(this).parent().siblings('.form-config').toggle(); 
+$('.show-form-config').click(function () {
+    $(this).parent().siblings('.form-config').toggle();
 });
 
-$(function(){
+$(function () {
     $('select.selectmenu').selectmenu({
         width: 550,
         menuWidth: 550
     });
 });
 
-$(function(){
-    $('select.EDG2StocareTip, select.EDG2TratareMod, select.EDG2TransportMijloc, select.EDG2TransportDestinatia').selectmenu({
-        width: 48,
-        menuWidth: 200
-    });
-});
 
-$(function(){
-    $('select.EDG2TratareScop').selectmenu({
-        width: 40,
-        menuWidth: 180
-    });
-});
-
-$(function(){
-    $('select.EGD3OperatiaValorificare, select.EGD4OperatiaEliminare').selectmenu({
-        width: 300,
-        menuWidth: 300
-    });
-});
 
 // Js not currently used.
 //function GetProfile(currentUserId) {

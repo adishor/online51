@@ -1,38 +1,40 @@
 {% extends "base.html.twig" %}
 
 {% block ccontainer %}
-    
+
     <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
 
     {% for flash_message in app.session.flashbag.get('form-success') %}
         <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
     {% endfor %}
-    
+
     {% for flash_message in app.session.flashbag.get('form-error') %}
         <h4 class="color-red text-center first" >{{ flash_message|trans|raw }}</h4>
     {% endfor %}
-    
+
     {% for flash_message in app.session.flashbag.get('formular-info') %}
         <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
     {% endfor %}
 
+    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori. Verificati si celelalte capitole!' | trans }}</h4>
+
     <div class="col-xs-2">
         <ul class="nav nav-tabs clearfix" role="tablist">
-            <li class="active"><a href="#formtab" role="tab" data-toggle="tab" id="nav-formtab">{{ 'Date Generale' | trans }}</a></li>
-            <li><a href="#formtab1" role="tab" data-toggle="tab" id="nav-formtab1">{{ 'Generarea deseurilor' | trans }}</a></li>
-            <li><a href="#formtab2" role="tab" data-toggle="tab"id="nav-formtab2">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
+            <li class="{{ location == 'formtab' ? 'active': '' }}"><a href="#formtab" role="tab" data-toggle="tab" id="nav-formtab">{{ 'Date Generale' | trans }}</a></li>
+            <li class="{{ location == 'formtab1' ? 'active': '' }}"><a href="#formtab1" role="tab" data-toggle="tab" id="nav-formtab1">{{ 'Generarea deseurilor' | trans }}</a></li>
+            <li class="{{ location == 'formtab2' ? 'active': '' }}"><a href="#formtab2" role="tab" data-toggle="tab"id="nav-formtab2">{{ 'Stocarea provizorie, tratarea si transportul deseurilor' | trans }}</a></li>
                 {% if form.EGD3ValorificareDeseuri is defined %}
-                <li><a href="#formtab3" role="tab" data-toggle="tab"id="nav-formtab3">{{ 'Valorificare deseurilor' | trans }}</a></li>
+                <li class="{{ location == 'formtab3' ? 'active': '' }}"><a href="#formtab3" role="tab" data-toggle="tab"id="nav-formtab3">{{ 'Valorificare deseurilor' | trans }}</a></li>
                 {% endif %}
                 {% if form.EGD4EliminareDeseuri is defined %}
-                <li><a href="#formtab4" role="tab" data-toggle="tab"id="nav-formtab4">{{ 'Eliminarea deseurilor' | trans }}</a></li>
+                <li class="{{ location == 'formtab4' ? 'active': '' }}"><a href="#formtab4" role="tab" data-toggle="tab"id="nav-formtab4">{{ 'Eliminarea deseurilor' | trans }}</a></li>
                 {% endif %}
         </ul>
     </div>
     <div class="col-xs-10">
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr' : {'id' : 'evidenta_gestiunii_deseurilor' } }) }}
         <div class="tab-content">
-            <div id="formtab" class="tab-pane active">
+            <div id="formtab" class="tab-pane {{ location == 'formtab' ? 'active': '' }}">
                 {{ form_row(form.agentEconomic) }}
                 <div class="col-xs-6">
                     {{ form_row(form.an) }}
@@ -41,13 +43,21 @@
                     {{ form_row(form.tipDeseuCod) }}
                 </div>
                 {{ form_row(form.tipDeseu, {'attr': {'class': 'width-100-percent height-100-px text-justify'} }) }}
-                {{ form_row(form.stareFizica) }}
-                {{ form_row(form.unitateMasura) }}
+                {{ form_row(form.stareFizica, 
+                    {'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+                <span class="field-validation-valid" data-valmsg-for="{{ form.stareFizica.vars.full_name }}" data-valmsg-replace="true" ></span>
+                {{ form_row(form.unitateMasura, 
+                    {'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+                <span class="field-validation-valid" data-valmsg-for="{{ form.unitateMasura.vars.full_name }}" data-valmsg-replace="true" ></span>
                 </br>
-                {{ form_widget(form.save1, {'label' : 'form.label.save-and-continue'|trans, 'attr': {'class': 'costum'} } ) }}
+                {{ form_row(form.save1, {'label' : 'form.label.save-and-continue'|trans, 'attr': {'class': 'costum save-button'} } ) }}
             </div>
 
-            <div id="formtab1" class="tab-pane formular">
+            <div id="formtab1" class="tab-pane formular {{ location == 'formtab1' ? 'active': '' }}">
                 <h3>{{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}</h3>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
@@ -68,10 +78,39 @@
                         <tr>
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ form_widget(item.luna) }}</td>
-                            <td>{{ form_widget(item.cantitateDeseuGenerate, {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate', 'type': 'number'} }) }}</td>
-                            <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata'} }) }}</td>
-                            <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata'} }) }}</td>
-                            <td>{{ form_widget(item.cantitateDeseuInStoc, {'attr': {'class': 'text-right EGD1CantitateDeseuInStoc'} }) }}</td>
+                            <td>{{ form_widget(item.cantitateDeseuGenerate, 
+                                    {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuGenerate.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            </td>
+                            <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            </td>
+                            <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            </td>
+                            <td>{{ form_widget(item.cantitateDeseuInStoc, {'attr': {'class': 'text-right EGD1CantitateDeseuInStoc', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuInStoc.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            </td>
                         </tr>
                     {% endfor %}
                     <tr>
@@ -84,10 +123,11 @@
                     </tr>
                 </table>
                 </br>
-                {{ form_widget(form.save2, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum'} } ) }}
+                {{ form_row(form.save2, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum save-button'} } ) }}
             </div>
-            <div id="formtab2" class="tab-pane formular">
+            <div id="formtab2" class="tab-pane formular {{ location == 'formtab2' ? 'active': '' }}">
                 <h3>{{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}</h3>
+
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
                         <th class="text-center width-35-px" rowspan="2">{{ 'Nr.' | trans }}</th>
@@ -111,13 +151,27 @@
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
                             <td>{{ form_widget(item.sectia) }}</td>
-                            <td>{{ form_widget(item.stocareCantitate, {'attr': {'class': 'text-right EGD2StocareCantitate'} }) }}</td>
-                            <td>{{ form_widget(item.stocareTip, {'attr': {'class': 'EDG2StocareTip'  } }) }}</td>
-                            <td>{{ form_widget(item.tratareCantitate, {'attr': {'class': 'text-right EGD2TratareCantitate'} }) }}</td>
-                            <td>{{ form_widget(item.tratareMod, {'attr': {'class': 'EDG2TratareMod'} }) }}</td>
-                            <td>{{ form_widget(item.tratareScop, {'attr': {'class': 'EDG2TratareScop'} }) }}</td>
-                            <td>{{ form_widget(item.transportMijloc, {'attr': {'class': 'EDG2TransportMijloc'} }) }}</td>
-                            <td>{{ form_widget(item.transportDestinatie, {'attr': {'class': 'EDG2TransportDestinatia'} }) }}</td>
+                            <td>{{ form_widget(item.stocareCantitate, {'attr': {'class': 'text-right EGD2StocareCantitate', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ item.stocareCantitate.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            </td>
+                            <td>{{ form_widget(item.stocareTip, {'attr': {'class': 'EDG2StocareTip max-width-48'  } }) }}</td>
+                            <td>{{ form_widget(item.tratareCantitate, {'attr': {'class': 'text-right EGD2TratareCantitate', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ item.tratareCantitate.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            </td>
+                            <td>{{ form_widget(item.tratareMod, {'attr': {'class': 'EDG2TratareMod max-width-60'} }) }}</td>
+                            <td>{{ form_widget(item.tratareScop, {'attr': {'class': 'EDG2TratareScop max-width-40'} }) }}</td>
+                            <td>{{ form_widget(item.transportMijloc, {'attr': {'class': 'EDG2TransportMijloc max-width-48'} }) }}</td>
+                            <td>{{ form_widget(item.transportDestinatie, {'attr': {'class': 'EDG2TransportDestinatia max-width-50'} }) }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
@@ -134,10 +188,10 @@
                     </tr>
                 </table>
                 </br>
-                {{ form_widget(form.save3, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum'} } ) }}
+                {{ form_row(form.save3, {'label' : 'form.label.save-and-continue'|trans , 'attr': {'class': 'costum save-button'} } ) }}
             </div>
             {% if form.EGD3ValorificareDeseuri is defined %}
-                <div id="formtab3" class="tab-pane formular">
+                <div id="formtab3" class="tab-pane formular {{ location == 'formtab3' ? 'active': '' }}">
                     <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
                     <table class="table-bordered text-center form-table form-table-layout-fixed">
                         <tr>
@@ -151,8 +205,15 @@
                             <tr>
                                 <td class="width-35-px">{{ loop.index }}</td>
                                 <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
-                                <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD3CantitateDeseuValorificata'} }) }}</td>
-                                <td>{{ form_widget(item.operatiaDeValorificare, {'attr': {'class': 'EGD3OperatiaValorificare'} }) }}</td>
+                                <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD3CantitateDeseuValorificata', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                    }}
+                                    <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
+                                </td>
+                                <td>{{ form_widget(item.operatiaDeValorificare, {'attr': {'class': 'EGD3OperatiaValorificare max-width-350'} }) }}</td>
                                 <td>{{ form_widget(item.agentEconomicValorificare) }}</td>
                             </tr>
                         {% endfor %}
@@ -165,12 +226,12 @@
                         </tr>
                     </table>
                     </br>
-                    {{ form_widget(form.save4, {'label' : 'form.label.save-info'|trans , 'attr': {'class': 'costum'} } ) }}
-                    {{ form_widget(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum'} }  )}}
+                    {{ form_row(form.save4, {'label' : 'form.label.save-info'|trans , 'attr': {'class': 'costum save-button'} } ) }}
+                    {{ form_row(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum save-button'} }  )}}
                 </div>
             {% endif %}
             {% if form.EGD4EliminareDeseuri is defined %}
-                <div id="formtab4" class="tab-pane formular">
+                <div id="formtab4" class="tab-pane formular {{ location == 'formtab4' ? 'active': '' }}">
                     <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
                     <table class="table-bordered text-center form-table form-table-layout-fixed">
                         <tr>
@@ -184,8 +245,15 @@
                             <tr>
                                 <td class="width-35-px">{{ loop.index }}</td>
                                 <td class="width-105-px">{{ form_widget(item.luna, {'attr': {'class': 'min-width-85'} }) }}</td>
-                                <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD4CantitateDeseuEliminata'} }) }}</td>
-                                <td>{{ form_widget(item.operatiaDeEliminare, {'attr': {'class': 'EGD4OperatiaEliminare'} }) }}</td>
+                                <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD4CantitateDeseuEliminata', 
+                                    'data-val': 'true',
+                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    ) 
+                                    }}
+                                    <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
+                                </td>
+                                <td>{{ form_widget(item.operatiaDeEliminare, {'attr': {'class': 'EGD4OperatiaEliminare max-width-350'} }) }}</td>
                                 <td>{{ form_widget(item.agentEconomicEliminare) }}</td>
                             </tr>
                         {% endfor %}
@@ -198,11 +266,10 @@
                         </tr>
                     </table>
                     </br>
-                    {{ form_widget(form.save5, {'label' : 'form.label.save-info'|trans, 'attr': {'class': 'costum'} } )}}
-                    {{ form_widget(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum'} }  )}}
+                    {{ form_row(form.save5, {'label' : 'form.label.save-info'|trans, 'attr': {'class': 'costum save-button'} } )}}
+                    {{ form_row(form.generateDocument, {'label' : 'form.label.generate-document'|trans, 'attr' : {'class' : 'pull-right costum save-button'} }  )}}
                 </div>
             {% endif %}
-
             {{ form_end(form) }}
         </div>
         <script type="text/javascript">
@@ -212,21 +279,30 @@
                     jQuery('.' + totalClass{{ key }}).change(function () {
                         var sum{{ key }} = 0;
                         jQuery('.' + totalClass{{ key }}).each(function () {
-                            sum{{ key }} += parseFloat(jQuery(this).val());
+                            if (jQuery(this).val().replace(',', '.').replace(' ', '') !== '') {
+                                sum{{ key }} += parseFloat(jQuery(this).val().replace(',', '.'));
+                            }
                         });
                         jQuery('#{{ key }}').text(sum{{ key }});
                     });
             {% endfor %}
-                    jQuery(window).load(function () {
-                        if ('{{ location }}' !== '') {
-                            jQuery("#nav-formtab").parent().removeClass("active");
-                            jQuery("#formtab").removeClass("active");
-                            jQuery('#nav-{{ location }}').parent().addClass("active");
-                            jQuery('#{{ location }}').addClass("active");
+                    jQuery('.save-button').click(function () {
+                        var errorNo = 0;
+                        jQuery('.field-validation-error').prevAll().each(function () {
+                            if (jQuery(this).html() !== '') {
+                                errorNo = errorNo + 1;
+                            }
+                        });
+                        console.log(errorNo);
+                        if (errorNo !== 0) {
+                            jQuery('#globalErrors').show();
+                            return false;
+                        } else {
+                            jQuery('#globalErrors').hide();
                         }
                     });
+                    
                 });
-
         </script>
     </div>
 {% endblock %}

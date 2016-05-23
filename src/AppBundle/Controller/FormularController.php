@@ -231,6 +231,8 @@ class FormularController extends Controller
 
             return 'formtab';
         }
+
+        return 'formtab';
     }
 
     public function calculateExtraTemplateDataEvidentaGestiuniiDeseurilor($formData)
