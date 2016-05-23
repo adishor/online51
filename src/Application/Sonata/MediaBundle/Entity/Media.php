@@ -76,6 +76,7 @@ class Media extends BaseMedia
     public function __construct()
     {
         $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->creditsUsage = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
     }
 
