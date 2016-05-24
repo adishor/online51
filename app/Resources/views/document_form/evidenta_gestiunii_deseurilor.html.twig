@@ -288,12 +288,11 @@
             {% endfor %}
                     jQuery('.save-button').click(function () {
                         var errorNo = 0;
-                        jQuery('.field-validation-error').prevAll().each(function () {
+                        jQuery(this).parent().parent().prevAll().find('.field-validation-error').each(function () {
                             if (jQuery(this).html() !== '') {
                                 errorNo = errorNo + 1;
                             }
                         });
-                        console.log(errorNo);
                         if (errorNo !== 0) {
                             jQuery('#globalErrors').show();
                             return false;
