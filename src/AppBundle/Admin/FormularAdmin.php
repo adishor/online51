@@ -139,9 +139,9 @@ class FormularAdmin extends Admin
               )
           ))
           ->add('subdomain')
+          ->add('notifyDays')
           ->add('deleted')
-          ->add('deletedAt')
-          ->add('notifyDays');
+          ->add('deletedAt');
     }
 
     public function getFilterParameters()

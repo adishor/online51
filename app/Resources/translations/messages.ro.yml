@@ -535,6 +535,7 @@ Media: Fisier
 Id: Numar
 Invoice: Factura Proforma
 Image: Imagine
+Notify Days: Zile notificare expirare
 
 #media
 sonata:
