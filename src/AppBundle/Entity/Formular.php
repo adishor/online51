@@ -18,7 +18,6 @@ class Formular
 {
 
     use ORMBehaviors\Sluggable\Sluggable;
-
     const MONTH_JANUARY = 1;
     const MONTH_FEBRUARY = 2;
     const MONTH_MARCH = 3;
@@ -109,6 +108,14 @@ class Formular
      * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id")
      */
     private $subdomain;
+
+    /**
+     *
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     */
+    private $notifyDays;
 
     public function __construct()
     {
@@ -335,4 +342,27 @@ class Formular
         return str_replace(array("/", " ", "-"), "_", implode('-', $values));
     }
 
+
+    /**
+     * Set notifyDays
+     *
+     * @param string $notifyDays
+     * @return Formular
+     */
+    public function setNotifyDays($notifyDays)
+    {
+        $this->notifyDays = $notifyDays;
+
+        return $this;
+    }
+
+    /**
+     * Get notifyDays
+     *
+     * @return string 
+     */
+    public function getNotifyDays()
+    {
+        return $this->notifyDays;
+    }
 }

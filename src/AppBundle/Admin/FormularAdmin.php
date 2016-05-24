@@ -57,7 +57,8 @@ class FormularAdmin extends Admin
               'disabled' => $disabled,
               'required' => false
           ))
-          ->add('subdomain', 'entity', $subdomainsOptions);
+          ->add('subdomain', 'entity', $subdomainsOptions)
+          ->add('notifyDays');
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
@@ -139,7 +140,8 @@ class FormularAdmin extends Admin
           ))
           ->add('subdomain')
           ->add('deleted')
-          ->add('deletedAt');
+          ->add('deletedAt')
+          ->add('notifyDays');
     }
 
     public function getFilterParameters()

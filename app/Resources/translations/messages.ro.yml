@@ -170,6 +170,7 @@ mail:
     name: 'Buna, %name%'
     thank-you: 'Multumim!'
     other-info: 'Alte informatii:'
+    team: 'Echipa Online51.'
     contact:
         subject: 'Formular de contact - '
         name: 'Mesaj nou de la %name%'
@@ -209,6 +210,13 @@ mail:
         price: 'Pretul abonamentului este de %price% RON.'
         invoice-attached: 'In atasament gasiti factura proforma aferenta comenzii.'
         subject: 'Comanda trimisa!'
+    form-expire-notification:
+        message: 'Accesul la completare pentru formularul formName, formText expira pe expireDate.'
+        message2: 'Va rugam completati datele si generati documentul daca nu ati facut-o deja.'
+        subject: 'Un formular urmeaza sa expire!'
+    form-expire-report:
+        message: 'S-au trimis urmatoarele mesaje de expirare a formularului:'
+        subject: 'Mesaje de expirare trimise '
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -411,6 +419,9 @@ document-form:
     error:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
+    text:
+        egd: ' cu tip deseu waste-type si operatia operation pentru anul year, '
+            
 pdf-doc-egd:
     waste-management-title: 'Evidenta Gestiunii Deseurilor'
     agent: 'Agent economic'

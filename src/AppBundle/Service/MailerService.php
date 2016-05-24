@@ -5,7 +5,6 @@ namespace AppBundle\Service;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-
 class MailerService
 {
     protected $mailer;
@@ -14,8 +13,9 @@ class MailerService
     protected $emailFrom;
     protected $contactEmail;
     protected $emailTitle;
+    protected $reportEmail;
 
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, TranslatorInterface $translator, $emailFrom, $contactEmail, $emailTitle)
+    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, TranslatorInterface $translator, $emailFrom, $contactEmail, $emailTitle, $reportEmail)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
@@ -23,6 +23,7 @@ class MailerService
         $this->emailFrom = $emailFrom;
         $this->contactEmail = $contactEmail;
         $this->emailTitle = $emailTitle;
+        $this->reportEmail = $reportEmail;
     }
 
     public function sendMessage($emailTo, $subject, $body, $attachment = null)
@@ -130,6 +131,32 @@ class MailerService
           ), 'text/html');
 
         $this->sendMessage($user->getEmail(), $this->translator->trans('mail.pending-order-remove.subject'), $removePendingOrderBody);
+    }
+
+    public function sendFormExpireNotificationMessage($creditsUsage, $formText)
+    {
+        $user = $creditsUsage->getUser();
+
+        $formExpireNotificationBody = $this->templating->render('document_form/form_expire_notification_body.html.twig', array(
+            'name' => $user->getName(),
+            'formName' => $creditsUsage->getFormular()->getName(),
+            'formText' => $formText,
+            'expireDate' => $creditsUsage->getExpireDate(),
+            'locale' => $this->translator->getLocale(),
+          ), 'text/html');
+
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.form-expire-notification.subject'), $formExpireNotificationBody);
+    }
+
+    public function sendFormExpireReportMessage($reportString)
+    {
+        $subject = $this->translator->trans('mail.form-expire-report.subject') . ' ' . date("d-m-Y", time());
+
+        $formExpireReportBody = $this->templating->render('document_form/form_expire_report_body.html.twig', array(
+            'reportString' => $reportString,
+          ), 'text/html');
+
+        $this->sendMessage($this->reportEmail, $subject, $formExpireReportBody);
     }
 
 }

@@ -2,8 +2,20 @@
 
 namespace AppBundle\Service;
 
+use Symfony\Component\Translation\TranslatorInterface;
+
 class FormularHelperService
 {
+    protected $translator;
+    protected $tipDeseuEGD;
+    protected $operatiaEGD;
+
+    public function __construct(TranslatorInterface $translator, $tipDeseu, $operatia)
+    {
+        $this->translator = $translator;
+        $this->tipDeseuEGD = $tipDeseu;
+        $this->operatiaEGD = $operatia;
+    }
 
     public function CalculateEvidentaGestiuniiDeseurilorTotals($formData)
     {
@@ -40,6 +52,21 @@ class FormularHelperService
         $EGDTotals['EGD4CantitateDeseuEliminataTotal'] = $EGD4CantitateDeseuEliminataTotal;
 
         return $EGDTotals;
+    }
+
+    public function getFormTextEvidentaGestiuniiDeseurilor($EncodedFormConfig)
+    {
+
+        $formConfig = json_decode($EncodedFormConfig);
+        $deseuCodes = explode(" ", $formConfig->tip_deseu);
+
+        return $this->translator->trans('document-form.text.egd', array(
+              'waste-type' => $this->tipDeseuEGD[$deseuCodes[0]]['name'] . "; " .
+              $this->tipDeseuEGD[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "; " .
+              $this->tipDeseuEGD[$deseuCodes[0]]['values'][$deseuCodes[1]]['values'][$deseuCodes[2]],
+              'year' => $formConfig->an,
+              'operation' => $this->operatiaEGD[$formConfig->operatia],
+        ));
     }
 
 }
