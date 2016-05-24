@@ -70,9 +70,10 @@
                     $('#' + key + '_level3').html(options);
                     $('#' + key + '_level3').selectmenu();
 
-                    $.each(items[key][subKey]['values'], function(index, value) {
-                        options = options + '<option value="' + subKey + ' ' + index + '">' + value['name'] + '</option>';            
-                    });
+                    var keysSubitemArray = Object.keys(items[key][subKey]['values']).sort();
+                    for (var keySubitem in keysSubitemArray) {
+                        options = options + '<option value="' + subKey + ' ' + keysSubitemArray[keySubitem] + '">' + items[key][subKey]['values'][keysSubitemArray[keySubitem]]['name'] + '</option>';
+                    }
                     $('#' + key + '_level2').html(options);
                     $('#' + key + '_level2').selectmenu();
                     $('#' + key).next().next().css('display', 'none');
@@ -91,9 +92,11 @@
                 if (objLength > 1) {
                     options = options + '<option></option>';            
                 }
-                $.each(items[key][keys[0]]['values'][keys[1]]['values'], function(index, value) {
-                    options = options + '<option value="' + sub2Key + ' ' + index + '">' + value + '</option>';            
-                });
+                
+                var keysSub2ItemArray = Object.keys(items[key][keys[0]]['values'][keys[1]]['values']).sort();
+                for (var key2Subitem in keysSub2ItemArray) {
+                    options = options + '<option value="' + sub2Key + ' ' + keysSub2ItemArray[key2Subitem] + '">' + items[key][keys[0]]['values'][keys[1]]['values'][keysSub2ItemArray[key2Subitem]] + '</option>';
+                }
                 $('#' + key + '_level3').html(options);
                 $('#' + key + '_level3').selectmenu();
                 $('#' + key + '_level2').next().next().css('display', 'none');

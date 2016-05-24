@@ -1,5 +1,5 @@
 <div class="tab-pane" id="usage">
-    {% if unlockedDocuments is not empty %}
+    {% if unlockedDocuments.items is not empty %}
         <h4>{{ 'order.used-credits'|trans }}</h4>
         <table class="col-xs-12 table-bordered text-center small">
             <th class="text-center ">{{ 'order.nr'|trans }}</th>
@@ -8,7 +8,7 @@
             <th class="text-center ">{{ 'order.unlocked-at'|trans }}</th>
             <th class="text-center ">{{ 'order.credits'|trans }}</th>
             <th class="text-center ">{{ 'order.until'|trans }}</th>
-                {% for document in unlockedDocuments %}
+                {% for document in unlockedDocuments.items %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ document.mentions }}</td>
@@ -24,6 +24,9 @@
                 </tr>    
             {% endfor %}
         </table>
+        <div class="navigation">
+            {{ knp_pagination_render(unlockedDocuments) }}
+        </div>
         {{ render(controller('AppBundle:Order:showCreditTotals')) }}
     {% else %}
         <h4>{{ 'order.no-used-credits'|trans }}</h4>

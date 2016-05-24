@@ -16,7 +16,7 @@ class FormularAdmin extends Admin
 
     public function configureFormFields(FormMapper $form)
     {
-        $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
+        $disabled = (!$this->getSubject()->getId()) ? TRUE : (($this->getSubject()->getDeleted()) ? TRUE : FALSE);
 
         $subdomainsOptions = array(
             'expanded' => false,
@@ -30,7 +30,7 @@ class FormularAdmin extends Admin
         );
 
         $form->add('name', null, array(
-              'disabled' => $disabled
+              'disabled' => ($disabled) ? TRUE : ($this->getSubject()->getId() ? TRUE : FALSE)
           ))
           ->add('creditValue', null, array(
               'disabled' => $disabled

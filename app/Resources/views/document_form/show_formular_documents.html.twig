@@ -10,7 +10,7 @@
             <a href="{{ path('formular_documents_show') }}"><button class="custom pull-right">{{ 'formular-documents.reset-filter'|trans }}</button></a>
             <h1 class="title-top">{{ 'formular-documents.title' | trans }}</h1>
         </div>
-        {% if formularDocuments is not empty %}
+        {% if pagination.items is not empty %}
             <table cellspacing="0" cellpadding="0" border="0" id="overview" class="display users documents clearfix dataTable" aria-describedby="overview_info">
                 <thead>
                     <tr role="row">
@@ -23,7 +23,7 @@
                     </tr>
                 </thead>           
                 <tbody>
-                    {% for doc in formularDocuments %}
+                    {% for doc in pagination.items %}
                         <tr class="{{ (loop.index % 2) ? "odd" : "even" }}">
                             <td class="">{{ doc.company }}</td>
                             <td class="">{{ doc.fname }}</td>
@@ -57,6 +57,11 @@
         {% else %}
             <p>{{ 'formular-documents.no-documents' | trans }}</p>
         {% endif %}
+    </div>
+        
+    {# display navigation #}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
     </div>
 {% endblock %}
 

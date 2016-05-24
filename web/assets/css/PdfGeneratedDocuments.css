@@ -9,7 +9,6 @@
 body {
     width: 1000px;
     height: 1414px;
-    border: 1px solid #000000;
     padding: 15px 0;
 }
 
@@ -31,4 +30,13 @@ body {
 
 .large-td{
     width: 400px;
+}
+
+.page {
+    overflow: hidden;
+    page-break-after: always;
+}
+
+table, tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid !important;
 }

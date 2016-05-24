@@ -329,8 +329,6 @@ order:
     status: 'Stare'
     active: 'Activ'
     expired: 'Expirat'
-document:
-    no-document: 'Nici o selectie'
 modal:
     document-confirm:
         title: 'Confirma deblocare'
@@ -412,14 +410,47 @@ document-form:
         operatia: Selecteaza operatia
     error:
         egd:
-            form-general-error: 'Eroare generala la creare document! </br> Reguli generale de validare la creare document: </br> 1. Asigurati-va ca toate campurile sunt completate </br> 2. Asigurati-va ca toate campurile numerice nu sunt negative, sunt compuse doar din cifre si au punctul (.) ca si separator de zecimale.'
+            form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
 pdf-doc-egd:
+    waste-management-title: 'Evidenta Gestiunii Deseurilor'
     agent: 'Agent economic'
-    year : 'An'
+    year : 'Anul'
     waste-type: 'Tip deseu'
     waste-code: 'Tip deseu cod'
     physical-state: 'Stare fizica'
     unit-of-measure: 'Unitate de masura'
+    chapter: 'CAPITOLUL'
+    waste-generation: 'Generare deseuri'
+    waste-management: 'Stocarea provizorie, tratarea si transportul deseurilor'
+    waste-reclamation: 'Valorificarea deseurilor'
+    waste-elimination: 'Eliminarea deseurilor'
+    number: 'Nr.'
+    month: 'Luna'
+    waste-quantity: 'Cantitatea de deseuri'
+    generated: 'Generate'
+    from-witch: 'din care'
+    reclaimed: 'valorificata'
+    eliminated: 'eliminata final'
+    in-stock: 'ramasa in stoc'
+    departament: 'Sectia'
+    storage: 'Stocare'
+    treatment: 'Tratare'
+    transport: 'Transport'
+    quantity: 'Cantitatea'
+    type: 'Tipul'
+    mode: 'Modul'
+    scope: 'Scopul'
+    means: 'Mijlocul'
+    destination: 'Destinatia'
+    storage-type: 'Tipul de stocare:'
+    treatment-mode: 'Modul tratarii'
+    treatment-scope: 'Scopul tratarii'
+    transportation-means: 'Mijlocul de transport'
+    reclamation-operation: 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' 
+    reclamation-agent: 'Agentul economic care efectueaza operatia de valorificare'
+    elimination-operation: 'Operatia de eliminare, conform Anexei IIA din legea 426/2001'
+    elimination-agent: 'Agentul economic care efectueaza operatia de eliminare'
+    waste-quantity-eliminated: 'Cantitatea de deseuri eliminata'
     
 #admin
 admin_label:
@@ -481,6 +512,8 @@ User: Utilizator
 Expire Date: Data de expirare
 No Domain: Fara domeniu
 No Subdomain: Fara subdomeniu
+No Document: Nici o selectie
+No Formular: Nici o selectie
 Deleted: Sters
 Deleted At: Sters la
 Create new: Creaza nou

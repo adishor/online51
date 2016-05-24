@@ -1,6 +1,6 @@
 <div class="tab-pane" id="history">
     <div class="tab-pane" id="usage">
-        {% if creditHistoryItems is not empty %}
+        {% if creditHistoryItems.items is not empty %}
             <h4>{{ 'order.credit-history'|trans }}</h4>
             <table class="col-xs-12 table-bordered text-center small">
                 <th class="text-center ">{{ 'order.nr'|trans }}</th>
@@ -9,7 +9,7 @@
                 <th class="text-center ">{{ 'order.until'|trans }}</th>
                 <th class="text-center ">{{ 'order.credits'|trans }}</th>
                 <th class="text-center ">{{ 'order.mentions'|trans }}</th>
-                    {% for item in creditHistoryItems %}
+                    {% for item in creditHistoryItems.items %}
                     <tr>
                         <td>{{ loop.index }}</td>
                         {% if item.documentId is defined and item.documentId is not null %}
@@ -33,6 +33,9 @@
                     </tr>    
                 {% endfor %}
             </table>
+            <div class="navigation">
+                {{ knp_pagination_render(creditHistoryItems) }}
+            </div>
             {{ render(controller('AppBundle:Order:showCreditTotals')) }}
         {% else %}
             <h4>{{ 'order.no-credit-history'|trans }}</h4>

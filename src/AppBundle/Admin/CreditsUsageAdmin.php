@@ -40,9 +40,14 @@ class CreditsUsageAdmin extends Admin
           ))
           ->add('document', null, array(
               'query_builder' => $queryDocument,
-              'empty_value' => 'document.no-document',
+              'empty_value' => 'No Document',
               'required' => false,
-              'disabled' => $disabled
+              'disabled' => ($this->getSubject()->getFormular()) ? true : $disabled
+          ))
+          ->add('formular', null, array(
+              'empty_value' => 'No Formular',
+              'required' => false,
+              'disabled' => TRUE
           ))
           ->add('credit', null, array(
               'disabled' => $disabled
@@ -57,6 +62,7 @@ class CreditsUsageAdmin extends Admin
     {
         $filter->add('user')
           ->add('document')
+          ->add('formular')
           ->add('credit')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
@@ -67,6 +73,8 @@ class CreditsUsageAdmin extends Admin
           ->add('createdAt')
           ->add('user')
           ->add('document')
+          ->add('formular')
+          ->add('media')
           ->add('credit')
           ->add('mentions')
           ->add('expireDate')
@@ -77,6 +85,10 @@ class CreditsUsageAdmin extends Admin
     {
         $show->add('user')
           ->add('document')
+          ->add('formular')
+          ->add('media', null, array(
+              'template' => 'sonata/credits_usage_base_show_field.html.twig',
+          ))
           ->add('credit')
           ->add('mentions')
           ->add('createdAt')
@@ -100,6 +112,8 @@ class CreditsUsageAdmin extends Admin
             $expireDate = new \DateTime();
             $expireDate->add(new \DateInterval('P' . $object->getDocument()->getValabilityDays() . 'D'));
             $object->setExpireDate($expireDate);
+            $object->setUsageType(\AppBundle\Entity\CreditsUsage::TYPE_DOCUMENT);
+            $object->setMedia($object->getDocument()->getMedia());
         }
     }
 
