@@ -31,6 +31,8 @@ services:
         arguments: [~, AppBundle\Entity\CreditsUsage, AppBundle:Admin\CreditsUsage]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.credits_usage, group: admin_group_credit }
+        calls:
+            - [setTemplates, [{ base_list_field: sonata/credits_usage_base_list_field.html.twig }]]
     admin.ad:
         class: AppBundle\Admin\AdAdmin
         arguments: [~, AppBundle\Entity\Ad, ~]

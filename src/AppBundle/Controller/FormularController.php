@@ -132,8 +132,11 @@ class FormularController extends Controller
             $formularDocuments[$index]['formConfig'] = $this->$getValuesForFormConfigOptions($doc['formConfig']);
         }
 
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($formularDocuments, $request->query->getInt('page', 1), $this->getParameter('pagination')['formularDocuments']);
+
         return $this->render('document_form/show_formular_documents.html.twig', array(
-              'formularDocuments' => $formularDocuments
+              'pagination' => $pagination
         ));
     }
 
@@ -141,7 +144,7 @@ class FormularController extends Controller
     {
         $filename = $name . $creditsUsage->getId() . '.pdf';
         $filePath = $fileDirectory . $filename;
-        $fileBody = $this->render($template, array('data' => $formData, 'formTemplateData' => $formTemplateData));
+        $fileBody = $this->renderView($template, array('data' => $formData, 'templateData' => $formTemplateData, 'formConfig' => json_decode($creditsUsage->getFormConfig())));
         $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
 
         $file = new UploadedFile($filePath, $filename);
@@ -176,12 +179,12 @@ class FormularController extends Controller
 
         $formConfig = json_decode($creditsUsage->getFormConfig());
         if ($formConfig->operatia === '3') {
-            $form->remove('EGD3ValorificareDeseuri');
-            $form->remove('save4');
-        }
-        if ($formConfig->operatia === '4') {
             $form->remove('EGD4EliminareDeseuri');
             $form->remove('save5');
+        }
+        if ($formConfig->operatia === '4') {
+            $form->remove('EGD3ValorificareDeseuri');
+            $form->remove('save4');
         }
     }
 
@@ -217,7 +220,7 @@ class FormularController extends Controller
             }
             if ($form->get('save3')->isClicked()) {
                 $formConfig = json_decode($creditsUsage->getFormConfig());
-                $location = $formConfig->operatia === '3' ? 'formtab4' : 'formtab3';
+                $location = $formConfig->operatia === '3' ? 'formtab3' : 'formtab4';
             }
 
             $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
@@ -231,6 +234,8 @@ class FormularController extends Controller
 
             return 'formtab';
         }
+
+        return 'formtab';
     }
 
     public function calculateExtraTemplateDataEvidentaGestiuniiDeseurilor($formData)

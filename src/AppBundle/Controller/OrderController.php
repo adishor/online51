@@ -12,9 +12,8 @@ class OrderController extends Controller
     /**
      * @Route("/information/", name="show_orders")
      */
-    public function showOrderAction()
+    public function showOrderAction(Request $request)
     {
-
         $userId = $this->getUser()->getId();
         $orderRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order');
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
@@ -22,14 +21,24 @@ class OrderController extends Controller
         $unlockedDocuments = $creditUsageRepository->findAllUserDocuments($userId);
         $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserFormularDocuments($userId));
 
+        $location = '';
+        foreach ($request->query as $key => $value) {
+            if (strpos($key, "page-") !== FALSE) {
+                $location = str_replace("page-", "", $key);
+                break;
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
         return $this->render('order/order_page.html.twig', array(
-              'activeOrders' => $orderRepository->findAllActiveUserOrders($userId),
-              'bonusOrders' => $orderRepository->findAllActiveBonusUserOrders($userId),
-              'pendingOrders' => $orderRepository->findAllPendingOrders($userId),
-              'validDocuments' => $validDocuments,
-              'unlockedDocuments' => $unlockedDocuments,
+              'activeOrders' => $paginator->paginate($orderRepository->findAllActiveUserOrders($userId), $request->query->getInt('page-active-credits', 1), $this->getParameter('pagination')['active-credits'], array('pageParameterName' => 'page-active-credits')),
+              'bonusOrders' => $paginator->paginate($orderRepository->findAllActiveBonusUserOrders($userId), $request->query->getInt('page-active-credits', 1), $this->getParameter('pagination')['active-credits'], array('pageParameterName' => 'page-active-credits')),
+              'pendingOrders' => $paginator->paginate($orderRepository->findAllPendingOrders($userId), $request->query->getInt('page-pending', 1), $this->getParameter('pagination')['pending'], array('pageParameterName' => 'page-pending')),
+              'validDocuments' => $paginator->paginate($validDocuments, $request->query->getInt('page-documents', 1), $this->getParameter('pagination')['documents'], array('pageParameterName' => 'page-documents')),
+              'unlockedDocuments' => $paginator->paginate($unlockedDocuments, $request->query->getInt('page-usage', 1), $this->getParameter('pagination')['usage'], array('pageParameterName' => 'page-usage')),
               'mediaObjects' => $this->get('app.order_helper')->getMediaObjects($unlockedDocuments),
-              'creditHistoryItems' => $this->get('app.order_helper')->getCreditHistory($userId),
+              'creditHistoryItems' => $paginator->paginate($this->get('app.order_helper')->getCreditHistory($userId), $request->query->getInt('page-history', 1), $this->getParameter('pagination')['history'], array('pageParameterName' => 'page-history')),
+              'location' => $location
         ));
     }
 

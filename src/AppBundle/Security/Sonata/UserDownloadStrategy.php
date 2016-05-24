@@ -45,13 +45,21 @@ class UserDownloadStrategy implements DownloadStrategyInterface
 
             return true;
         }
-        if (null !== $media->getCreditsUsage()->getDocument()) {
-            if (!$this->userHelper->isValidUserDocument($user->getId(), $media->getCreditsUsage()->getDocument()->getId())) {
+
+        if (empty($this->userHelper->getValidCreditsUsageForMedia($media->getId()))) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $creditsUsage = $this->userHelper->getValidCreditsUsageForMedia($media->getId())[0];
+
+
+        if (null !== $creditsUsage->getDocument()) {
+            if (!$this->userHelper->isValidUserDocument($user->getId(), $creditsUsage->getDocument()->getId())) {
                 throw new AccessDeniedHttpException();
             }
         }
-        if (null !== $media->getCreditsUsage()->getFormular()) {
-            if (!$this->userHelper->isValidUserFormularDocument($user->getId(), $media->getCreditsUsage()->getFormular()->getId())) {
+        if (null !== $creditsUsage->getFormular()) {
+            if (!$this->userHelper->isValidUserFormularDocument($user->getId(), $creditsUsage->getFormular()->getId())) {
                 throw new AccessDeniedHttpException();
             }
         }

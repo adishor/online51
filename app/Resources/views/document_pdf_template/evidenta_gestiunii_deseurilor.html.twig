@@ -1,135 +1,216 @@
 <head>
     <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
     <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
 </head>
 <body>
-    <div class='container'>
-        <div class='row'>
-            <h4>{{ 'pdf-doc-egd.agent' }}{{ data.agentEconomic }}</h4>
-            <h4>{{ 'pdf-doc-egd.year' }}{{ data.an }}</h4>
-            <h4>{{ 'pdf-doc-egd.waste-type' }}{{ data.tipDeseu }}</h4>
-            <h4>{{ 'pdf-doc-egd.waste-code' }}{{ data.tipDeseuCod }}</h4>
-            <h4>{{ 'pdf-doc-egd.physical-state' }}{{ data.stareFizica }}</h4>
-            <h4>{{ 'pdf-doc-egd.unit-of-measure' }}{{ data.unitateMasura }}</h4>
+    <div class="row">
+        <div class="col-xs-12">
+            <h2 class="title text-center">{{ 'pdf-doc-egd.waste-management-title' | trans }}</h2>
+            <div>{{ 'pdf-doc-egd.agent'|trans }}: <span class="text-bold">{{ data.agentEconomic }}</span></div>
+            <div>{{ 'pdf-doc-egd.year'|trans }}: <span class="text-bold">{{ data.an }}</span></div>
+            <div>{{ 'pdf-doc-egd.waste-type'|trans }}: <span class="text-bold">{{ data.tipDeseu }}</span></div>
+            <div>{{ 'pdf-doc-egd.waste-code'|trans }}: <span class="text-bold">{{ data.tipDeseuCod }}</span></div>
+            <div>{{ 'pdf-doc-egd.physical-state'|trans }}: <span class="text-bold">{{ data.stareFizica }}</span></div>
+            <div>{{ 'pdf-doc-egd.unit-of-measure'|trans }}: <span class="text-bold">{{ data.unitateMasura }}</span></div>
         </div>
-        <div class='row'>
-            <h3>
-                {{ 'CAPITOLUL 1' | trans}}
-                <br/>
-                {{'Generare deseuri' | trans}}
-            </h3>
-            <table class="table table-bordered text-center form-table">
+    </div>
+
+    <div class="row page">
+        <div class="col-xs-12">
+            <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 1<br/>{{'pdf-doc-egd.waste-generation' | trans}}</h3>
+            <table class="table table-bordered ">
                 <tr>
-                    <th class="text-center" rowspan="3">{{ 'Nr.' | trans }}</th>
-                    <th class="text-center" rowspan="3">{{ 'Luna' | trans }}</th>
-                    <th class="text-center" colspan="4">{{ 'Cantitatea de deseuri' | trans }}</th>
+                    <th class="text-center width-35-px" rowspan="3">{{ 'pdf-doc-egd.number'|trans }}</th>
+                    <th class="text-center width-105-px" rowspan="3">{{ 'pdf-doc-egd.month'|trans }}</th>
+                    <th class="text-center" colspan="4">{{ 'pdf-doc-egd.waste-quantity'|trans }}</th>
                 </tr>
                 <tr>
-                    <th class="text-center" rowspan="2">{{ 'Generate' | trans }}</th>
-                    <th class="text-center" colspan="3">{{ 'din care:' | trans }}</th>
+                    <th class="text-center" rowspan="2">{{ 'pdf-doc-egd.generated'|trans }}</th>
+                    <th class="text-center" colspan="3">{{ 'pdf-doc-egd.from-witch'|trans }}</th>
                 </tr>
                 <tr>
-                    <th class="text-center">{{ 'valorificata:' | trans }}</th>
-                    <th class="text-center">{{ 'eliminata final:' | trans }}</th>
-                    <th class="text-center">{{ 'ramasa in stoc:' | trans }}</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.reclaimed'|trans }}</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.eliminated'|trans }}</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.in-stock'|trans }}</th>
                 </tr>
                 {% for item in data.EGD1GenerareDeseuri %}
                     <tr>
-                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                        <td>{{ item.luna }}</td>
-                        <td>{{ item.cantitateDeseuGenerate }}</td>
-                        <td>{{ item.cantitateDeseuValorificata }}</td>
-                        <td>{{ item.cantitateDeseuEliminata }}</td>
-                        <td>{{ item.cantitateDeseuInStoc }}</td>
+                        <td class="width-35-px">{{ loop.index }}</td>
+                        <td class="width-105-px">{{ item.luna }}</td>
+                        <td class="text-right">{{ item.cantitateDeseuGenerate }}</td>
+                        <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
+                        <td class="text-right">{{ item.cantitateDeseuEliminata }}</td>
+                        <td class="text-right">{{ item.cantitateDeseuInStoc }}</td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <td class="width-35-px"></td>
+                    <td class="width-105-px">{{ 'TOTAL' | trans }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuGenerateTotal }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuValorificataTotal }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuEliminataTotal }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocTotal }}</td>
+                </tr>
             </table>
         </div>
-        <div class='row'>
-            <h3>
-                {{ 'CAPITOLUL 2' | trans}}
-                <br/>
-                {{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}
-            </h3>
-            <table class="table table-bordered text-center form-table">
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 2<br/>{{'pdf-doc-egd.waste-management' | trans}}</h3>
+            <table class="table table-bordered ">
                 <tr>
-                    <th class="text-center" rowspan="2">{{ 'Nr crt.' | trans }}</th>
-                    <th class="text-center" rowspan="2">{{ 'Luna' | trans }}</th>
-                    <th class="text-center" rowspan="2">{{ 'Sectia' | trans }}</th>
-                    <th class="text-center" colspan="2">{{ 'Stocare' | trans }}</th>
-                    <th class="text-center" colspan="3">{{ 'Tratare' | trans }}</th>
-                    <th class="text-center" colspan="2">{{ 'Transport' | trans }}</th>
+                    <th class="text-center width-35-px" rowspan="2">{{ 'pdf-doc-egd.number'|trans }}</th>
+                    <th class="text-center width-105-px" rowspan="2">{{ 'pdf-doc-egd.month'|trans }}</th>
+                    <th class="text-center" rowspan="2">{{ 'pdf-doc-egd.departament' | trans }}</th>
+                    <th class="text-center" colspan="2">{{ 'pdf-doc-egd.storage' | trans }}</th>
+                    <th class="text-center" colspan="3">{{ 'pdf-doc-egd.treatment' | trans }}</th>
+                    <th class="text-center" colspan="2">{{ 'pdf-doc-egd.transport' | trans }}</th>
                 </tr>
                 <tr>
-                    <th class="text-center">{{ 'Cantitatea' | trans }}</th>
-                    <th class="text-center">{{ 'Tipul' | trans }}</th>
-                    <th class="text-center">{{ 'Cantitatea' | trans }}</th>
-                    <th class="text-center">{{ 'Modul' | trans }}</th>
-                    <th class="text-center">{{ 'Scopul' | trans }}</th>
-                    <th class="text-center">{{ 'Mijlocul' | trans }}</th>
-                    <th class="text-center">{{ 'Destinatia' | trans }}</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.quantity' | trans }}</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.type' | trans }}*1)</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.quantity' | trans }}</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.mode' | trans }}*2)</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.scope' | trans }}*3)</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.means' | trans }}*4)</th>
+                    <th class="text-center">{{ 'pdf-doc-egd.destination' | trans }}*5)</th>
                 </tr>
+
                 {% for item in data.EGD2StocareTratareTransportDeseuri %}
                     <tr>
-                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                        <td>{{ item.luna }}</td>
+                        <td class="width-35-px">{{ loop.index }}</td>
+                        <td class="width-105-px">{{ item.luna }}</td>
                         <td>{{ item.sectia }}</td>
-                        <td>{{ item.stocareCantitate }}</td>
+                        <td class="text-right">{{ item.stocareCantitate }}</td>
                         <td>{{ item.stocareTip }}</td>
-                        <td>{{ item.tratareCantitate }}</td>
+                        <td class="text-right">{{ item.tratareCantitate }}</td>
                         <td>{{ item.tratareMod }}</td>
                         <td>{{ item.tratareScop }}</td>
                         <td>{{ item.transportMijloc }}</td>
                         <td>{{ item.transportDestinatie }}</td>
                     </tr>
                 {% endfor %}
-            </table>
-        </div>
-        <div class='row'>
-            <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
-            <table class="table table-bordered text-center form-table">
                 <tr>
-                    <th class="text-center">{{ 'Nr.' | trans }}</th>
-                    <th class="text-center">{{ 'Luna' | trans }}</th>
-                    <th class="text-center">{{ 'Cantitatea de deseu valorificata' | trans }}</th>
-                    <th class="text-center">{{ 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' | trans }}</th>
-                    <th class="text-center">{{ 'Agentul economic care efectueaza operatia de valorificare' | trans }}</th>
+                    <td class="width-35-px"></td>
+                    <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
+                    <td></td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD2StocareCantitateTotal }}</td>
+                    <td></td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD2TratareCantitateTotal }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-                {% for item in data.EGD3ValorificareDeseuri %}
-                    <tr>
-                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                        <td>{{ item.luna }}</td>
-                        <td>{{ item.cantitateDeseuValorificata }}</td>
-                        <td>{{ item.operatiaDeValorificare }}</td>
-                        <td>{{ item.agentEconomicValorificare }}</td>
-                    </tr>
-                {% endfor %}
             </table>
         </div>
-        <div class='row'>
-            <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
-            <table class="table table-bordered text-center form-table">
-                <tr>
-                    <th class="text-center">{{ 'Nr.' | trans }}</th>
-                    <th class="text-center">{{ 'Luna' | trans }}</th>
-                    <th class="text-center">{{ 'Cantitatea de deseu eliminata' | trans }}</th>
-                    <th class="text-center">{{ 'Operatia de eliminare, conform Anexei IIA din legea 426/2001' | trans }}</th>
-                    <th class="text-center">{{ 'Agentul economic care efectueaza operatia de eliminare' | trans }}</th>
-                </tr>
-                {% for item in data.EGD4EliminareDeseuri %}
-                    <tr>
-                        <td>{{ (loop.index != loop.last) ? loop.index : "" }}</td>
-                        <td>{{ item.luna }}</td>
-                        <td>{{ item.cantitateDeseuEliminata }}</td>
-                        <td>{{ item.operatiaDeEliminare }}</td>
-                        <td>{{ item.agentEconomicEliminare }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-
-
-        </div>
-
     </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h4> *1){{ 'pdf-doc-egd.storage-type' | trans }} </h4>
+            <ul>
+                {% for value in egd.tip_stocare %}
+                    <li>{{ value }}</li>
+                    {% endfor %}    
+            </ul>
+            <h4> *2){{ 'pdf-doc-egd.treatment-mode' | trans }} </h4>
+            <ul>
+                {% for value in egd.mod_tratare %}
+                    <li>{{ value }}</li>
+                    {% endfor %}    
+            </ul>
+            <h4> *3){{ 'pdf-doc-egd.treatment-scope' | trans }} </h4>
+            <ul>
+                {% for value in egd.scop_tratare %}
+                    <li>{{ value }}</li>
+                    {% endfor %}    
+            </ul>
+            <h4> *4){{ 'pdf-doc-egd.transportation-means' | trans }} </h4>
+            <ul class="page">
+                {% for value in egd.mijloc_transport %}
+                    <li>{{ value }}</li>
+                    {% endfor %}    
+            </ul>
+            <h4> *5){{ 'pdf-doc-egd.destination' | trans }} </h4>
+            <ul>
+                {% for value in egd.destinatia %}
+                    <li>{{ value }}</li>
+                    {% endfor %}    
+            </ul>
+        </div>
+    </div>
+            
+    {% if formConfig.operatia == 3 %}        
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 3<br/>{{'pdf-doc-egd.waste-reclamation' | trans}}</h3>
+                <table class="table table-bordered ">
+                    <tr>
+                        <th class="text-center width-35-px">{{ 'pdf-doc-egd.number'|trans }}</th>
+                        <th class="text-center width-105-px">{{ 'pdf-doc-egd.month'|trans }}</th>
+                        <th class="text-center">{{ 'pdf-doc-egd.waste-quantity' | trans }} {{ 'pdf-doc-egd.reclaimed'|trans }}</th>
+                        <th class="text-center">{{ 'pdf-doc-egd.reclamation-operation' | trans }}</th>
+                        <th class="text-center">{{ 'pdf-doc-egd.reclamation-agent' | trans }}</th>
+                    </tr>
+
+                    {% for item in data.EGD3ValorificareDeseuri %}
+                        <tr>
+                            <td class="width-35-px">{{ loop.index }}</td>
+                            <td class="width-105-px">{{ item.luna }}</td>
+                            <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
+                            <td>{{ egd.operatia_valorificare_deseu[item.operatiaDeValorificare] }}</td>
+                            <td>{{ item.agentEconomicValorificare }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td class="width-35-px"></td>
+                        <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
+                        <td class="text-right">{{ templateData.EGDTotals.EGD3CantitateDeseuValorificataTotal }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+    
+    {% if formConfig.operatia == 4 %}        
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 4<br/>{{'pdf-doc-egd.waste-elimination' | trans}}</h3>
+                <table class="table table-bordered ">
+                    <tr>
+                        <th class="text-center width-35-px">{{ 'pdf-doc-egd.number'|trans }}</th>
+                        <th class="text-center width-105-px">{{ 'pdf-doc-egd.month'|trans }}</th>
+                        <th class="text-center">{{ 'pdf-doc-egd.waste-quantity-eliminated' | trans }}</th>
+                        <th class="text-center">{{ 'pdf-doc-egd.elimination-operation' | trans }}</th>
+                        <th class="text-center">{{ 'pdf-doc-egd.elimination-agent' | trans }}</th>
+                    </tr>
+
+                    {% for item in data.EGD4EliminareDeseuri %}
+                        <tr>
+                            <td class="width-35-px">{{ loop.index }}</td>
+                            <td class="width-105-px">{{ item.luna }}</td>
+                            <td class="text-right">{{ item.cantitateDeseuEliminata }}</td>
+                            <td>{{ egd.operatia_eliminare_deseu[item.operatiaDeEliminare] }}</td>
+                            <td>{{ item.agentEconomicEliminare }}</td>
+                        </tr>
+                    {% endfor %}
+                     <tr>
+                            <td class="width-35-px"></td>
+                            <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
+                            <td class="text-right" >{{ templateData.EGDTotals.EGD4CantitateDeseuEliminataTotal }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
 </body>
 

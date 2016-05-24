@@ -1,5 +1,5 @@
 <div class="tab-pane" id="documents">
-    {% if validDocuments is not empty %}
+    {% if validDocuments.items is not empty %}
         <h4>{{ 'order.unlocked-documents'|trans }}</h4>
         <table class="col-xs-12 table-bordered text-center small">
             <th class="text-center ">{{ 'order.nr'|trans }}</th>
@@ -7,7 +7,7 @@
             <th class="text-center ">{{ 'order.domain'|trans }}</th>
             <th class="text-center ">{{ 'order.subdomain'|trans }}</th>
             <th class="text-center ">{{ 'order.until'|trans }}</th>
-                {% for document in validDocuments %}
+                {% for document in validDocuments.items %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>
@@ -23,6 +23,9 @@
                 </tr>    
             {% endfor %}
         </table>
+        <div class="navigation">
+            {{ knp_pagination_render(validDocuments) }}
+        </div>
     {% else %}
         <h4>{{ 'order.no-unlocked-documents'|trans }}</h4>
     {% endif %}

@@ -268,4 +268,21 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function findValidCreditsUsageForMedia($mediaId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('cu')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->where('cu.media = :media')
+          ->setParameter('media', $mediaId)
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime())
+          ->orderBy('cu.expireDate', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
 }
