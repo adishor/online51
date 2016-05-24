@@ -49,21 +49,25 @@ class FormularExpireNotificationCommand extends ContainerAwareCommand
             }
         }
 
-        $now = new \DateTime();
         $stringOut = '';
         foreach ($forms as $form) {
             $days = new \DateInterval('P' . $form->getNotifyDays() . 'D');
             $formHelperGetFormTextMethod = 'getFormText' . str_replace("_", "", $form->getSlug());
             foreach ($form->getFormularCreditsUsage() as $creditsUsage) {
+                $now = new \DateTime('03/01/2017');
                 if ($creditsUsage->getExpireDate()->diff($now->add($days))->days === 0) {
                     $formText = $container->get('app.formular_helper')->$formHelperGetFormTextMethod($creditsUsage->getFormConfig());
 
                     $container->get('app.mailer')->sendFormExpireNotificationMessage($creditsUsage, $formText);
 
-                    $stringOut .= date("d-m-Y H:i:s", time()) . '--Notify message sent to ' . $creditsUsage->getUser()->getName() . ', '
-                      . $creditsUsage->getUser()->getEmail() . ' for creditUsage - form ' . $creditsUsage->getId() . ' - '
-                      . $creditsUsage->getFormular()->getName() . ' witch expires on '
-                      . $creditsUsage->getExpireDate()->format('d/m/Y') . PHP_EOL;
+                    $line = date("d-m-Y H:i:s", time()) . '--' . $container->get('translator')->trans('document-form.report.egd.notify-sent')
+                      . $creditsUsage->getUser()->getName() . ', ' . $creditsUsage->getUser()->getEmail()
+                      . $container->get('translator')->trans('document-form.report.egd.for-credit-usage-form') . ':'
+                      . $creditsUsage->getId() . ' - ' . $creditsUsage->getFormular()->getName()
+                      . $container->get('translator')->trans('document-form.report.egd.expires-on')
+                      . $creditsUsage->getExpireDate()->format('d/m/Y');
+                    $output->writeln($line);
+                    $stringOut .= '<p>' . $line . '</p>';
                 }
             }
         }
@@ -75,7 +79,7 @@ class FormularExpireNotificationCommand extends ContainerAwareCommand
             return;
         }
 
-        $output->writeln($stringOut);
+
         $container->get('app.mailer')->sendFormExpireReportMessage($stringOut);
 
         return;

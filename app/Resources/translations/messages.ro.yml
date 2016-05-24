@@ -421,6 +421,12 @@ document-form:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
     text:
         egd: ' cu tip deseu waste-type si operatia operation pentru anul year, '
+    report:
+        egd:
+            notify-sent: 'Mesaj de notificare trimis catre '
+            for-credit-usage-form: ' pentru utilizarea de credite - formular '
+            expires-on: ' care expira in '
+            
             
 pdf-doc-egd:
     waste-management-title: 'Evidenta Gestiunii Deseurilor'
