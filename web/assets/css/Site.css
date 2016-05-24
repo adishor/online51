@@ -1909,3 +1909,7 @@ h5.first {
 .height-100-px{
     height: 100px;
 }
+
+.pagination li:before {
+    content: none;
+}

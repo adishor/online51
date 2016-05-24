@@ -41,3 +41,11 @@ parameters:
         VAT_percent: '20%'
         invoice_series: 'ALD'
         VAT: 0.2
+
+    pagination:
+        active-credits: 10
+        pending: 10
+        documents: 10
+        usage: 10
+        history: 10
+        formularDocuments: 10

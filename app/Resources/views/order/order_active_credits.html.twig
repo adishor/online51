@@ -1,5 +1,5 @@
 <div class="tab-pane" id="active-credits">
-    {% if activeOrders is not empty %}
+    {% if activeOrders.items is not empty %}
         <h4>{{ 'order.active-subscriptions'|trans }}</h4>
         <table class="col-xs-12 table-bordered text-center small">
             <th class="text-center ">{{ 'order.nr'|trans }}</th>
@@ -9,7 +9,7 @@
             <th class="text-center ">{{ 'order.credits'|trans }}</th>
             <th class="text-center ">{{ 'order.until'|trans }}</th>
             <th class="text-center ">{{ 'order.price'|trans }}</th>
-                {% for order in activeOrders %}
+                {% for order in activeOrders.items %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>#{{ "%06d"|format(order.id) }}</td>
@@ -39,7 +39,7 @@
         {% else %}
         <h4>{{ 'order.no-active-subscriptions'|trans }}</h4>
     {% endif %}
-    {% if bonusOrders is not empty %}
+    {% if bonusOrders.items is not empty %}
         <h4>{{ 'order.bonus-orders'|trans }}</h4>
         <table class="col-xs-12 table-bordered text-center small">
             <th class="text-center ">{{ 'order.nr'|trans }}</th>
@@ -48,7 +48,7 @@
             <th class="text-center ">{{ 'order.credits'|trans }}</th>
             <th class="text-center ">{{ 'order.until'|trans }}</th>
             <th class="text-center ">{{ 'order.price'|trans }}</th>
-                {% for order in bonusOrders %}
+                {% for order in bonusOrders.items %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>#{{ "%06d"|format(order.id) }}</td>
@@ -74,5 +74,8 @@
             {% endfor %}
         </table>
     {% endif %}
+    <div class="navigation">
+        {{ knp_pagination_render(activeOrders) }}
+    </div>
     {{ render(controller('AppBundle:Order:showCreditTotals')) }}
 </div>  

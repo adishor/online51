@@ -29,7 +29,7 @@
                 </ul>
             </div>
             {# active-credits #}
-            {% include 'order/order_active_credits.html.twig' with { 'activeOrders': activeOrders, 'bonusOrders': bonusOrders } %} 
+            {% include 'order/order_active_credits.html.twig' with { 'activeOrders': activeOrders, 'bonusOrders': bonusOrders } %}
             {#  pending orders  #}
             {% include 'order/order_pending_orders.html.twig' with { 'pendingOrders': pendingOrders } %} 
             {#  valid documents  #}
@@ -49,6 +49,18 @@
                 jQuery('#nav-' + extension).parent().addClass("active");
                 jQuery('#' + extension + ".tab-pane").addClass("active");
             }
+            
+            if ('{{ location }}' !== '') {
+                    jQuery(".nav li").each(function(){
+                        jQuery(this).removeClass("active");
+                    });
+                    jQuery(".tab-pane").each(function(){
+                       jQuery(this).removeClass("active"); 
+                    });
+                    jQuery('#nav-{{ location }}').parent().addClass("active");
+                    jQuery('#{{ location }}').addClass("active");
+            }
+            
         });
     </script>
 {% endblock %}

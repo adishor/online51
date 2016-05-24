@@ -286,26 +286,33 @@
                         jQuery('#{{ key }}').text(sum{{ key }});
                     });
             {% endfor %}
-                    jQuery('.save-button').click(function () {
-                        var errorNo = 0;
-                        jQuery(this).parent().parent().prevAll().find('.field-validation-error').each(function () {
-                            if (jQuery(this).html() !== '') {
-                                errorNo = errorNo + 1;
-                            }
-                        });
-                        if (errorNo !== 0) {
-                            jQuery('#globalErrors').show();
-                            return false;
-                        } else {
-                            jQuery('#globalErrors').hide();
-                            jQuery('.flash-message').hide();
+                jQuery('.save-button').click(function () {
+                    var errorNo = 0;
+                    jQuery(this).parent().parent().prevAll().find('.field-validation-error').each(function () {
+                        if (jQuery(this).html() !== '') {
+                            errorNo = errorNo + 1;
                         }
-
                     });
-                    jQuery('.navtab').click(function () {
+                    if (errorNo !== 0) {
+                        jQuery('#globalErrors').show();
+                        return false;
+                    } else {
+                        jQuery('#globalErrors').hide();
                         jQuery('.flash-message').hide();
-                    });
+                    }
+
                 });
+                jQuery('.navtab').click(function () {
+                    jQuery('.flash-message').hide();
+                });
+                
+                if ('{{ location }}' !== '') {
+                    jQuery("#nav-formtab").parent().removeClass("active");
+                    jQuery("#formtab").removeClass("active");
+                    jQuery('#nav-{{ location }}').parent().addClass("active");
+                    jQuery('#{{ location }}').addClass("active");
+                }
+            });
         </script>
     </div>
 {% endblock %}

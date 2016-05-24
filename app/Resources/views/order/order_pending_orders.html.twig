@@ -2,7 +2,7 @@
     {% for flash_message in app.session.flashbag.get('order-success') %}
         <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
     {% endfor %}
-    {% if pendingOrders is not empty %}
+    {% if pendingOrders.items is not empty %}
         <h4>{{ 'order.pending-orders'|trans }}</h4>
         <table class="col-xs-8 table-bordered text-center small">
             <th class="text-center ">{{ 'order.nr'|trans }}</th>
@@ -13,7 +13,7 @@
             <th class="text-center ">{{ 'order.valability'|trans }}</th>
             <th class="text-center ">{{ 'order.price'|trans }}</th>
             <th></th>
-                {% for order in pendingOrders %}
+                {% for order in pendingOrders.items %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>#{{ "%06d"|format(order.id) }}</td>
@@ -43,6 +43,9 @@
                 </tr>    
             {% endfor %}
         </table>
+        <div class="navigation">
+            {{ knp_pagination_render(pendingOrders) }}
+        </div>
     {% else %}
         <h4>{{ 'order.no-pending-orders'|trans }}</h4>
     {% endif %}

@@ -132,8 +132,11 @@ class FormularController extends Controller
             $formularDocuments[$index]['formConfig'] = $this->$getValuesForFormConfigOptions($doc['formConfig']);
         }
 
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($formularDocuments, $request->query->getInt('page', 1), $this->getParameter('pagination')['formularDocuments']);
+
         return $this->render('document_form/show_formular_documents.html.twig', array(
-              'formularDocuments' => $formularDocuments
+              'pagination' => $pagination
         ));
     }
 
