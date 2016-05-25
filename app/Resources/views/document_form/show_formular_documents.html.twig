@@ -1,5 +1,9 @@
 {% extends "::base.html.twig" %}
 
+{% block modal %}
+    {% include 'document_form/config_form_add_confirm_modal.html.twig' %}
+{% endblock modal %}
+
 {% block ccontainer %}
     {% for flash_message in app.session.flashbag.get('document-generated-success') %}
         <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
@@ -41,9 +45,21 @@
                                     </a>
                                 {% endif %}
                             </td>
-                            <td class=""></td>
+                            <td class="">
+                                {% if doc.discountedCreditValue is not null %}
+                                    {% set colorClass = (isUserException) ? "green" : ((doc.discountedCreditValue > 0) ? "red" : "green") %}
+                                    <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument({{ doc.cuid }}, '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.fname, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
+                                        <div class="credit-icon">
+                                            <div class="credit-icon-value color-{{ colorClass }} create-new">
+                                                {{ isUserException ? 0 : doc.discountedCreditValue }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr class="{{ (loop.index % 2) ? "odd" : "even" }}"><td colspan="6">
+                            <p id="formularError{{ doc.cuid }}"></p>
                             <b>{{ 'formular-documents.configuration' | trans }}</b>:
                             <span>
                                 {% for configName, configValue in doc.formConfig %}
@@ -63,5 +79,42 @@
     <div class="navigation">
         {{ knp_pagination_render(pagination) }}
     </div>
+        
+    <script type="text/javascript">
+        function createNewFormularDocument(creditUsageId, textBodyModal) {
+            {% if isUserException %}
+                AjaxCreateNewFormularDocument(creditUsageId); 
+            {% else %}
+                $('#configFormConfirmModalBody').text(textBodyModal);
+                $('#configFormConfirmModalCreditUsageId').val(creditUsageId);
+                $('#configFormAddConfirmModal').modal();
+            {% endif %}
+        }
+        
+        $('#configFormAddConfirmModalYes').click(function () {
+            $('#configFormAddConfirmModal').modal('toggle');
+            AjaxCreateNewFormularDocument(jQuery("#configFormConfirmModalCreditUsageId").val());
+        });
+
+        function AjaxCreateNewFormularDocument(creditUsageId)
+        {
+            $.ajax({
+                type: "POST",
+                url: '{{ path("unlock_formular_from_old") }}',
+                data: { 'creditUsageId': creditUsageId },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        $('#totalUserCredits').text(response.credits);
+                        var url = '{{ path('formular_show' , {'slug': 'slug', 'hash': 'hash' }) }}';
+                        window.location.href = url.replace("slug", response.formSlug).replace("hash", response.formHash); 
+                    } else {
+                        $('#formularError' + creditUsageId).addClass('color-red');
+                        $('#formularError' + creditUsageId).text(response.message);
+                    }
+                }
+            });
+        }
+    </script>
 {% endblock %}
 

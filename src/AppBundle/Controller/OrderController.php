@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\CreditsUsage;
 
 class OrderController extends Controller
 {
@@ -38,7 +39,8 @@ class OrderController extends Controller
               'unlockedDocuments' => $paginator->paginate($unlockedDocuments, $request->query->getInt('page-usage', 1), $this->getParameter('pagination')['usage'], array('pageParameterName' => 'page-usage')),
               'mediaObjects' => $this->get('app.order_helper')->getMediaObjects($unlockedDocuments),
               'creditHistoryItems' => $paginator->paginate($this->get('app.order_helper')->getCreditHistory($userId), $request->query->getInt('page-history', 1), $this->getParameter('pagination')['history'], array('pageParameterName' => 'page-history')),
-              'location' => $location
+              'location' => $location,
+              'formularType' => CreditsUsage::TYPE_FORMULAR
         ));
     }
 

@@ -39,9 +39,9 @@ class CreditsUsageRepository extends EntityRepository
             $queryBuilder->andWhere('sd.domain = :domain')
               ->setParameter('domain', $domainId);
         }
-        $queryBuilder->orderBy('dom.id')
-          ->orderBy('sd.id')
-          ->orderBy('d.id', 'DESC');
+        $queryBuilder->addOrderBy('dom.id')
+          ->addOrderBy('sd.id')
+          ->addOrderBy('d.id', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
@@ -53,7 +53,7 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('f.id as id, f.name, m.id as mid, '
-            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.id as cuid, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('AppBundle:Formular', 'f', 'WITH', 'cu.formular = f')
@@ -68,9 +68,9 @@ class CreditsUsageRepository extends EntityRepository
           ->andWhere('cu.deleted = FALSE')
           ->andWhere('sd.deleted = FALSE')
           ->andWhere('dom.deleted = FALSE');
-        $queryBuilder->orderBy('dom.id')
-          ->orderBy('sd.id')
-          ->orderBy('f.id', 'DESC');
+        $queryBuilder->addOrderBy('dom.id')
+          ->addOrderBy('sd.id')
+          ->addOrderBy('f.id', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
@@ -83,7 +83,7 @@ class CreditsUsageRepository extends EntityRepository
           ->createQueryBuilder()
           ->select('d.id as documentId, f.id as formularId, m.id as mediaId, '
             . 'd.name as documentName, f.name as formularName, '
-            . 'cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate, cu.usageType')
+            . 'cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate, cu.usageType, cu.id as cuid')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->leftJoin('cu.document', 'd')
           ->leftJoin('cu.formular', 'f')
@@ -104,7 +104,8 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('u.company, f.name as fname, f.slug as fslug, cu.formConfig, cu.formHash, m.id as mid, cu.expireDate')
+          ->select('u.company, f.name as fname, f.slug as fslug, f.discountedCreditValue,'
+            . 'cu.id as cuid, cu.formConfig, cu.formHash, m.id as mid, cu.expireDate')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('cu.formular', 'f')
           ->join('cu.user', 'u')
@@ -112,7 +113,8 @@ class CreditsUsageRepository extends EntityRepository
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.deleted = FALSE')
-          ->orderBy('cu.expireDate', 'DESC');
+          ->addOrderBy('cu.expireDate', 'DESC')
+          ->addOrderBy('cu.createdAt', 'DESC');
 
         if ($mediaId !== null) {
             $queryBuilder
