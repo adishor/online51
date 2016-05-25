@@ -52,23 +52,25 @@ class FormularExpireNotificationCommand extends ContainerAwareCommand
         $stringOut = '';
         foreach ($forms as $form) {
             foreach (explode(',', $form->getNotifyDays()) as $notifyDays) {
-                $days = new \DateInterval('P' . trim($notifyDays) . 'D');
-                $formHelperGetFormTextMethod = 'getFormText' . str_replace("_", "", $form->getSlug());
-                foreach ($form->getFormularCreditsUsage() as $creditsUsage) {
-                    $now = new \DateTime('');
-                    if ($creditsUsage->getExpireDate()->diff($now->add($days))->days === 0) {
-                        $formText = $container->get('app.formular_helper')->$formHelperGetFormTextMethod($creditsUsage->getFormConfig());
+                if (is_numeric($notifyDays)) {
+                    $days = new \DateInterval('P' . trim($notifyDays) . 'D');
+                    $formHelperGetFormTextMethod = 'getFormText' . str_replace("_", "", $form->getSlug());
+                    foreach ($form->getFormularCreditsUsage() as $creditsUsage) {
+                        $now = new \DateTime('');
+                        if ($creditsUsage->getExpireDate()->diff($now->add($days))->days === 0) {
+                            $formText = $container->get('app.formular_helper')->$formHelperGetFormTextMethod($creditsUsage->getFormConfig());
 
-                        $container->get('app.mailer')->sendFormExpireNotificationMessage($creditsUsage, $formText);
+                            $container->get('app.mailer')->sendFormExpireNotificationMessage($creditsUsage, $formText);
 
-                        $line = date("d-m-Y H:i:s", time()) . '--' . $container->get('translator')->trans('document-form.report.egd.notify-sent')
-                          . $creditsUsage->getUser()->getName() . ', ' . $creditsUsage->getUser()->getEmail()
-                          . $container->get('translator')->trans('document-form.report.egd.for-credit-usage-form') . ':'
-                          . $creditsUsage->getId() . ' - ' . $creditsUsage->getFormular()->getName()
-                          . $container->get('translator')->trans('document-form.report.egd.expires-on')
-                          . $creditsUsage->getExpireDate()->format('d/m/Y');
-                        $output->writeln($line);
-                        $stringOut .= '<p>' . $line . '</p>';
+                            $line = date("d-m-Y H:i:s", time()) . '--' . $container->get('translator')->trans('document-form.report.egd.notify-sent')
+                              . $creditsUsage->getUser()->getName() . ', ' . $creditsUsage->getUser()->getEmail()
+                              . $container->get('translator')->trans('document-form.report.egd.for-credit-usage-form') . ':'
+                              . $creditsUsage->getId() . ' - ' . $creditsUsage->getFormular()->getName()
+                              . $container->get('translator')->trans('document-form.report.egd.expires-on')
+                              . $creditsUsage->getExpireDate()->format('d/m/Y');
+                            $output->writeln($line);
+                            $stringOut .= '<p>' . $line . '</p>';
+                        }
                     }
                 }
             }
