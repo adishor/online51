@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
 use Application\Sonata\MediaBundle\Entity\Media;
+use AppBundle\Service\MailerService;
 
 class UserHelperService
 {
@@ -241,6 +242,33 @@ class UserHelperService
     {
         return $this->entityManager->getRepository('AppBundle:CreditsUsage')
             ->findValidCreditsUsageForMedia($mediaId);
+    }
+
+    public function createFreeAccount($email, $name, $demoPassword, $demoValues)
+    {
+        $user = new User();
+        $user->setUsername($email);
+        $user->setUsernameCanonical($email);
+        $user->setEmail($email);
+        $user->setEmailCanonical($email);
+        $user->setEnabled(true);
+        $user->setExpired(false);
+        $user->setLocked(false);
+        $user->setName($name);
+        $user->setCompany($demoValues['company']);
+        $user->setCui($demoValues['cui']);
+        $user->setNoRegistrationORC($demoValues['noRegistrationORC']);
+        $user->setNoEmployees($demoValues['noEmployees']);
+        $user->setNoCertifiedEmpowerment($demoValues['noCertifiedEmpowerment']);
+        $user->setIban($demoValues['iban']);
+        $user->setBank($demoValues['bank']);
+        $user->setPhone($demoValues['phone']);
+        $user->setAddress($demoValues['address']);
+        $user->addRole(User::ROLE_DEFAULT);
+        $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($demoPassword, $user->getSalt()));
+        $user->setDeleted(false);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 
 }

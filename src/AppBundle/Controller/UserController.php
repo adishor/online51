@@ -269,4 +269,33 @@ class UserController extends Controller
         return new Response(json_encode($errors), 200);
     }
 
+    /**
+     * @Route("/create-free-account", name="create_free_account")
+     */
+    public function createFreeAccountAction(Request $request)
+    {
+        $email = $request->request->get('email');
+        $name = $request->request->get('name');
+        $domains = $request->request->get('domains');
+        $errors = [];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['Msg'] = $this->get('translator')->trans('json-response.not-email');
+
+            return new Response(json_encode($errors), 200);
+        }
+        $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($email);
+        if (($user) && (!$user->getDeleted())) {
+            $errors['Msg'] = $this->get('translator')->trans('json-response.existing-user');
+
+            return new Response(json_encode($errors), 200);
+        }
+
+        //generate password
+        $this->container->get('app.user_helper')->createFreeAccount($email, $name, $domains);
+        //create demo order
+        //send email
+
+        return new Response(json_encode($errors), 200);
+    }
+
 }

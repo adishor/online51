@@ -249,9 +249,11 @@ login:
         logout: 'Logout'
         close: 'Inchide'
 json-response:
+    not-email: 'Email invalid.'
     no-user: 'Acest email nu este alocat.'
     not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
     enabled-user: 'Acest email este alocat deja unui utilizator activ.'
+    existing-user: 'Acest email este alocat deja unui utilizator existent.'
     link-expired: 'Link-ul de resetare parola a expirat.'
     link-invalid: 'Link-ul de resetare parola este invalid.'
 activate-account:

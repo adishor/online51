@@ -454,6 +454,115 @@ $(function () {
     });
 });
 
+function FreeAccountRegister() {
+    $("#resetPassDiv").hide();
+    $("#FreeAccountExist").hide();
+
+    $("#FreeUserNameDuplicateEmail").text("");
+    $("#FreeManagerNameValid").hide();
+    $("#FreeManagerName").val("");
+    $("#FreeUserNameValid").hide();
+    $("#FreeUserNameValidEmail").hide();
+    $("#FreeUserName").val("");
+    $('#freecheck').removeAttr('checked');
+    $("#FreeAccountText").hide();
+
+    $("#createFreeAccount").show();
+    $("#freeAccountDiv").show();
+}
+
+function FreeAccountSucceeded() {
+    $("#freeAccountDiv").hide();
+}
+
+function goFreeAccount() {
+    if ($('#freecheck').prop('checked')) {
+        $("#FreeAccountText").hide();
+    }
+}
+
+function SubmitFreeAccount(url) {
+
+    $("#FreeManagerNameValid").hide();
+    $("#FreeUserNameValid").hide();
+    $("#FreeUserNameValidEmail").hide();
+
+    var isValid = true;
+    if ($('#freecheck').prop('checked')) {
+        $("#FreeAccountText").hide();
+
+        var name = $("#FreeManagerName").val();
+        var email = $("#FreeUserName").val();
+
+        if (name == "") {
+            $("#FreeManagerNameValid").show();
+            isValid = false;
+        }
+
+        if (email == "") {
+            $("#FreeUserNameValid").show();
+            isValid = false;
+        } else {
+            if (!ValidateEmail(email)) {
+                $("#FreeUserNameValidEmail").show();
+                isValid = false;
+            }
+        }
+
+        if (isValid) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {name: name, email: email},
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Msg != "") {
+                        $("#FreeUserNameDuplicateEmail").text(response.Msg);
+                        $("#FreeUserNameDuplicateEmail").show();
+                    } else {
+                        $("#createFreeAccount").hide();
+                        $("#FreeAccountExist").show();
+                    }
+                }
+            })
+        }
+    } else {
+        $("#FreeAccountText").show();
+    }
+}
+
+$("#FreeManagerName").bind('input propertychange', function () {
+    $("#validUser").hide();
+    $("#validPass").hide();
+
+    $("#FreeUserNameDuplicateEmail").hide();
+    $("#FreeManagerNameValid").hide();
+
+    if ($("#FreeManagerName").val() == "") {
+        $("#FreeManagerNameValid").show();
+    }
+});
+
+$("#FreeUserName").bind('input propertychange', function () {
+    $("#validUser").hide();
+    $("#validPass").hide();
+
+    $("#FreeUserNameDuplicateEmail").hide();
+    $("#FreeUserNameValid").hide();
+
+    $("#FreeUserNameValidEmail").hide();
+
+    var emailText = $("#FreeUserName").val();
+
+    if (emailText == "") {
+        $("#FreeUserNameValid").show();
+    } else {
+        if (!ValidateEmail(emailText)) {
+            $("#FreeUserNameValidEmail").show();
+        }
+    }
+});
+
 
 
 // Js not currently used.
@@ -462,114 +571,6 @@ $(function () {
 //    link = link.replace("1", currentUserId);
 //    window.open(link, "_self");
 //}
-//
-//function FreeAccountRegister() {
-//    $("#resetPassDiv").hide();
-//    $("#FreeAccountExist").hide();
-//
-//    $("#FreeUserNameDuplicateEmail").text("");
-//    $("#FreeManagerNameValid").hide();
-//    $("#FreeManagerName").val("");
-//    $("#FreeUserNameValid").hide();
-//    $("#FreeUserNameValidEmail").hide();
-//    $("#FreeUserName").val("");
-//    $('#freecheck').removeAttr('checked');
-//    $("#FreeAccountText").hide();
-//
-//    $("#createFreeAccount").show();
-//    $("#freeAccountDiv").show();
-//}
-//
-//function FreeAccountSucceeded() {
-//    $("#freeAccountDiv").hide();
-//}
-//
-//function goFreeAccount() {
-//    if ($('#freecheck').prop('checked')) {
-//        $("#FreeAccountText").hide();
-//    }
-//}
-//
-//function SubmitFreeAccount() {
-//
-//    $("#FreeManagerNameValid").hide();
-//    $("#FreeUserNameValid").hide();
-//    $("#FreeUserNameValidEmail").hide();
-//
-//    var isValid = true;
-//    if ($('#freecheck').prop('checked')) {
-//        $("#FreeAccountText").hide();
-//
-//        var managerText = $("#FreeManagerName").val();
-//        var emailText = $("#FreeUserName").val();
-//
-//        if (managerText == "") {
-//            $("#FreeManagerNameValid").show();
-//            isValid = false;
-//        }
-//
-//        if (emailText == "") {
-//            $("#FreeUserNameValid").show();
-//            isValid = false;
-//        } else {
-//            if (!ValidateEmail(emailText)) {
-//                $("#FreeUserNameValidEmail").show();
-//                isValid = false;
-//            }
-//        }
-//
-//        if (isValid) {
-//            $.ajax({
-//                type: "POST",
-//                url: '/Aldex/Account/CreateFreeAccountPost',
-//                data: {managerName: managerText, email: emailText},
-//                success: function (response) {
-//                    if (response.Msg != "") {
-//                        $("#FreeUserNameDuplicateEmail").text(response.Msg);
-//                        $("#FreeUserNameDuplicateEmail").show();
-//                    } else {
-//                        $("#createFreeAccount").hide();
-//                        $("#FreeAccountExist").show();
-//                    }
-//                }
-//            })
-//        }
-//    } else {
-//        $("#FreeAccountText").show();
-//    }
-//}
-//
-//$("#FreeManagerName").bind('input propertychange', function () {
-//    $("#validUser").hide();
-//    $("#validPass").hide();
-//
-//    $("#FreeUserNameDuplicateEmail").hide();
-//    $("#FreeManagerNameValid").hide();
-//
-//    if ($("#FreeManagerName").val() == "") {
-//        $("#FreeManagerNameValid").show();
-//    }
-//});
-//
-//$("#FreeUserName").bind('input propertychange', function () {
-//    $("#validUser").hide();
-//    $("#validPass").hide();
-//
-//    $("#FreeUserNameDuplicateEmail").hide();
-//    $("#FreeUserNameValid").hide();
-//
-//    $("#FreeUserNameValidEmail").hide();
-//
-//    var emailText = $("#FreeUserName").val();
-//
-//    if (emailText == "") {
-//        $("#FreeUserNameValid").show();
-//    } else {
-//        if (!ValidateEmail(emailText)) {
-//            $("#FreeUserNameValidEmail").show();
-//        }
-//    }
-//});
 //
 //$("#UserNamePass").bind('input propertychange', function () {
 //    $("#validUser").hide();
