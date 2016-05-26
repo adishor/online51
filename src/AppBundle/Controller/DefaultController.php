@@ -42,6 +42,16 @@ class DefaultController extends Controller
         ));
     }
 
+    public function loginAction()
+    {
+        $domains = $this->getDoctrine()->getManager()
+            ->getRepository('AppBundle:Domain')->findBy(array('deleted' => false, 'demoDomain' => true));
+
+        return $this->render('default/login_box.html.twig', array(
+              'domains' => $domains
+        ));
+    }
+
     /**
      *
      * @Route("/advantages", name="advantages")

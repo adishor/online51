@@ -50,3 +50,13 @@ parameters:
         usage: 10
         history: 10
         formularDocuments: 10
+
+    demo_account_values:
+        company: 'Companie'
+        cui: 'RO1111'
+        noRegistrationORC: 'J11/1111/2011'
+        iban: 'RO2345'
+        bank: 'Banca'
+        phone: 0740000000
+        address: Adresa
+    demo_account_valid_days: 1

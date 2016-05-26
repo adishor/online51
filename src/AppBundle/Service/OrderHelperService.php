@@ -265,4 +265,28 @@ class OrderHelperService
         return $validDomains;
     }
 
+    public function createDemoOrder($demoUser, $domainId, $validDays)
+    {
+        $order = new Order();
+        $domain = $this->entityManager->getRepository('AppBundle:Domain')->find($domainId);
+
+        $order->setUser($demoUser);
+        $order->setCreditValue($domain->getDemoCreditValue());
+        $order->addDomain($domain);
+        $order->setPrice('0');
+        $order->setValabilityDays($validDays);
+        $startDate = new \DateTime();
+        $endDate = new \DateTime();
+        $endDate->add(new \DateInterval('P' . $validDays . 'D'));
+        $order->setStartDate($startDate);
+        $order->setEndingDate($endDate);
+        $order->setMentions($this->translator->trans('order.demo-account'));
+        $order->setActive(true);
+        $order->setFirstActive(true);
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
+
+        return $order;
+    }
+
 }

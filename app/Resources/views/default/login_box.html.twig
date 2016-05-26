@@ -53,9 +53,14 @@
                     <p id="FreeUserNameValid" class="color-red text-center" hidden="hidden">{{ 'form.required.email'|trans }}</p>
                     <p id="FreeUserNameValidEmail" class="color-red text-center" hidden="hidden">{{ 'form.valid.email'|trans }}</p>
                 </div>
+                <div class="editor-field">
+                    <select>
+                        
+                    </select>
+                </div>
                 <div class="editor-label clearfix">
                     <input class="pull-left" type="checkbox" name="selected" id="freecheck" onclick="goFreeAccount()" />
-                    <a href="{{ path('terms') }}" id="acceptTerms"  onclick="return popitup('{{ path('terms') }}')">{{ 'form.label.terms'|trans }}</a>    
+                    <a href="{{ path('terms') }}" id="acceptTerms"  onclick="return popitup('{{ path('terms') }}');">{{ 'form.label.terms'|trans }}</a>    
                 </div>
                 <p id="FreeAccountText" class="color-red" hidden="hidden">
                     {{ 'form.required.terms-of-use'|trans }}
@@ -67,7 +72,7 @@
             </div>
             <div id="FreeAccountExist" hidden="hidden">
                 <p>&nbsp;&nbsp; Crearea contului gratuit s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare. </p>
-                <p><a href="#"  data-toggle="modal" data-target="#myModal1" onclick="FreeAccountSucceeded()" >Inchide creare cont gratuit.</a></p>
+                <p><a href="#"  data-toggle="modal" data-target="#myModal1" onclick="FreeAccountSucceeded();" >Inchide creare cont gratuit.</a></p>
             </div>
         </div>
     </form>

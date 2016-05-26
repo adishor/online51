@@ -217,6 +217,17 @@ mail:
     form-expire-report:
         message: 'S-au trimis urmatoarele mesaje de expirare a formularului:'
         subject: 'Mesaje de expirare trimise '
+    free-account:
+        subject: 'Acces cont gratuit.'
+        message: 'Contul gratuit s-a creeat cu succes!'
+        connect: 'Te poti conecta la platforma Online 51 cu urmatoarele date:'
+        username: 'Utilizatorul: %email%'
+        password: 'Parola: %password%'
+        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul %domain% ales de tine pana in %date%.'
+        link: 'Pentru a accesa platforma poti folosi urmatorul link: '
+        
+        
+        
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -303,6 +314,7 @@ order:
     removed-by-administrator: 'Comanda anulata de administrator.'
     modified-by-administrator: 'Comanda modificata de administrator.'
     approved-by-administrator: 'Comanda aprobata de administrator.'
+    demo-account: 'Comanda aferenta contului gratuit.'
     tab:
         active-credits: 'Credite active'
         unlocked-documents: 'Documente deblocate'
@@ -544,6 +556,8 @@ Id: Numar
 Invoice: Factura Proforma
 Image: Imagine
 Notify Days: Zile notificare expirare
+Demo Domain: Disponibil pentru cont gratuit
+Demo Credit Value: Credite alocate la cont gratuit
 
 #media
 sonata:

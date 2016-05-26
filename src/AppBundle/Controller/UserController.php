@@ -272,11 +272,11 @@ class UserController extends Controller
     /**
      * @Route("/create-free-account", name="create_free_account")
      */
-    public function createFreeAccountAction(Request $request)
+    public function createDemoAccountAction(Request $request)
     {
         $email = $request->request->get('email');
         $name = $request->request->get('name');
-        $domains = $request->request->get('domains');
+        $domainId = $request->request->get('domain');
         $errors = [];
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['Msg'] = $this->get('translator')->trans('json-response.not-email');
@@ -290,10 +290,10 @@ class UserController extends Controller
             return new Response(json_encode($errors), 200);
         }
 
-        //generate password
-        $this->container->get('app.user_helper')->createFreeAccount($email, $name, $domains);
-        //create demo order
-        //send email
+        $demoPassword = $this->get('app.user_helper')->generateDemoPassword();
+        $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword, $this->getParameter('demo_account_values'));
+        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domainId, $this->getParameter('demo_account_valid_days'));
+        $this->get('app.mailer')->sendDemoAccountMessage($demoUser, $demoPassword, $demoOrder);
 
         return new Response(json_encode($errors), 200);
     }

@@ -31,7 +31,7 @@
 
             {% block modal %}
             {% endblock modal %}
-            
+
             {% block header %}
                 {% include 'header.html.twig' %}
             {% endblock header %}
@@ -52,7 +52,7 @@
                     {% block rcontainer %}
                         <div class="col-xs-3 set-width">
                             {% block login %}
-                                {% include 'login_box.html.twig' %}
+                                {{ render(controller('AppBundle:Default:login')) }}
                             {% endblock %}
                             {% include 'right_container.html.twig' %}
                         </div>
