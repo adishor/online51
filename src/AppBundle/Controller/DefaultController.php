@@ -42,7 +42,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function loginAction()
+    public function showLoginBoxAction()
     {
         $domains = $this->getDoctrine()->getManager()
             ->getRepository('AppBundle:Domain')->findBy(array('deleted' => false, 'demoDomain' => true));
