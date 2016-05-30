@@ -16,6 +16,9 @@
                     {% else %}
                         {{ document.usageType | capitalize }}: {{ document.name }}
                     {% endif %}
+                    {% if document.usageType == formularType %}
+                        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
+                    {% endif %}
                     </td>
                     <td>{{ document.domain }}</td>
                     <td>{{ document.subDomain }}</td>

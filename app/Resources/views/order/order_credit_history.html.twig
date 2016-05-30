@@ -12,15 +12,20 @@
                     {% for item in creditHistoryItems.items %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        {% if item.documentId is defined and item.documentId is not null %}
-                            <td>{{ item.subject|trans }}:<br/> {{ item.documentName|trans }}</td>
-                        {% endif %}
-                        {% if item.formularId is defined and item.formularId is not null %}
-                            <td>{{ item.subject|trans }}:<br/> {{ item.formularName|trans }}</td>
-                        {% endif %}
-                        {% if item.id is defined and item.id is not null %}
-                            <td>{{ item.subject|trans }}:<br/> {{ item.name|trans }}</td>
-                        {% endif %}
+                        <td>
+                            {% if item.documentId is defined and item.documentId is not null %}
+                                {{ item.subject|trans }}:<br/> {{ item.documentName|trans }}
+                            {% endif %}
+                            {% if item.formularId is defined and item.formularId is not null %}
+                                {{ item.subject|trans }}:<br/> {{ item.formularName|trans }}
+                            {% endif %}
+                            {% if item.id is defined and item.id is not null %}
+                                {{ item.subject|trans }}:<br/> {{ item.name|trans }}
+                            {% endif %}
+                            {% if item.usageType is defined and item.usageType == formularType %}
+                                {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : item.cuid })) }}
+                            {% endif %}
+                        </td>
                         <td>{{ item.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                         <td>{{ item.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                         <td>{{ item.sign ~ item.credit }}</td>
