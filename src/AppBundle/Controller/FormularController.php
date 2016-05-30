@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Response;
 
 class FormularController extends Controller
 {
@@ -136,8 +137,22 @@ class FormularController extends Controller
         $pagination = $paginator->paginate($formularDocuments, $request->query->getInt('page', 1), $this->getParameter('pagination')['formularDocuments']);
 
         return $this->render('document_form/show_formular_documents.html.twig', array(
-              'pagination' => $pagination
+              'pagination' => $pagination,
+              'isUserException' => $this->get('app.user_helper')->getIsUserException()
         ));
+    }
+
+    /**
+     * @Route("/shortFormConfigurationText/{creditUsageId}", name="short_form_configuration_text")
+     */
+    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId)
+    {
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
+
+        $name = str_replace("_", "", $creditsUsage->getFormular()->getSlug());
+        $function = "getFormText" . $name;
+
+        return new Response($this->get('app.formular_helper')->$function($creditsUsage->getFormConfig(), true));
     }
 
     public function generateDocument($name, $creditsUsage, $fileDirectory, $template, $formData, $formTemplateData)

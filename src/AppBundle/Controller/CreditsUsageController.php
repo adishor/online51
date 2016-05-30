@@ -54,14 +54,43 @@ class CreditsUsageController extends Controller
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
-        $userHelper = $this->get('app.user_helper');
-        $userHelper->updateValidUserCredits();
-        $formularId = $request->request->get('formularId');
-        $formular = $this->getDoctrine()->getManager()->getRepository('AppBundle:Formular')->find($formularId);
 
+        $formularId = $request->request->get('formularId');
         $formularConfig = $request->request->get('data');
 
+        return $this->processFormularAction($formularId, $formularConfig);
+    }
 
+    /**
+     * @Route("/createNewFormularDocument", name="unlock_formular_from_old")
+     */
+    public function createNewFormularDocumentAction(Request $request)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
+        $creditUsageId = $request->request->get('creditUsageId');
+        $creditUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
+        if ($creditUsage->getUser()->getId() != $user->getId()) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('invalid.data'));
+        }
+
+        $formularId = $creditUsage->getFormular()->getId();
+        $formularConfig = get_object_vars(json_decode($creditUsage->getFormConfig()));
+        if (isset($formularConfig['an'])) {
+            $formularConfig['an'] = $formularConfig['an'] + 1;
+        }
+
+        return $this->processFormularAction($formularId, $formularConfig, true);
+    }
+
+    public function processFormularAction($formularId, $formularConfig, $discounted = false)
+    {
+        $user = $this->getUser();
+        $userHelper = $this->get('app.user_helper');
+        $formular = $this->getDoctrine()->getManager()->getRepository('AppBundle:Formular')->find($formularId);
         if (true === $userHelper->isValidUserFormular($user->getId(), $formularId, $formularConfig)) {
             if (!$userHelper->getIsUserException()) {
                 $this->get('session')->getFlashBag()->add('formular-info', 'domain.formular.already-unlocked');
@@ -70,25 +99,30 @@ class CreditsUsageController extends Controller
                   'success' => true,
                   'message' => $this->get('translator')->trans('domain.formular.success'),
                   'credits' => $user->getCreditsTotal(),
+                  'formSlug' => $formular->getSlug(),
                   'formHash' => md5(json_encode($user->getId()) . json_encode($formularConfig))
             )));
 
             return $response;
         }
         if (!$userHelper->getIsUserException()) {
-            if (($user->getCreditsTotal() - $formular->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
+            $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
+            if (($user->getCreditsTotal() - $creditValue < 0) || (null === $user->getCreditsTotal())) {
                 $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.formular.no-credits'))));
 
                 return $response;
             }
         }
 
-        $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig);
+        $userHelper->updateValidUserCredits();
+
+        $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $discounted);
 
         $response = new Response(json_encode(array(
               'success' => true,
               'message' => $this->get('translator')->trans('domain.formular.success'),
               'credits' => $user->getCreditsTotal(),
+              'formSlug' => $formular->getSlug(),
               'formHash' => md5(json_encode($user->getId()) . json_encode($formularConfig))
         )));
 

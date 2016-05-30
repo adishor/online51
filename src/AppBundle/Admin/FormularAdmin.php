@@ -35,6 +35,9 @@ class FormularAdmin extends Admin
           ->add('creditValue', null, array(
               'disabled' => $disabled
           ))
+          ->add('discountedCreditValue', null, array(
+              'disabled' => $disabled
+          ))
           ->add('valabilityDays', null, array(
               'disabled' => $disabled
           ))
@@ -57,7 +60,8 @@ class FormularAdmin extends Admin
               'disabled' => $disabled,
               'required' => false
           ))
-          ->add('subdomain', 'entity', $subdomainsOptions);
+          ->add('subdomain', 'entity', $subdomainsOptions)
+          ->add('notifyDays');
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
@@ -66,6 +70,7 @@ class FormularAdmin extends Admin
 
         $filter->add('name')
           ->add('creditValue')
+          ->add('discountedCreditValue')
           ->add('valabilityDays')
           ->add('valabilityMonth', null, array(), 'choice', array(
               'choices' => array(
@@ -93,6 +98,7 @@ class FormularAdmin extends Admin
 
         $list->addIdentifier('name')
           ->add('creditValue')
+          ->add('discountedCreditValue')
           ->add('valabilityDays')
           ->add('valabilityMonth', 'choice', array(
               'choices' => array(
@@ -120,6 +126,7 @@ class FormularAdmin extends Admin
 
         $show->add('name')
           ->add('creditValue')
+          ->add('discountedCreditValue')
           ->add('valabilityDays')
           ->add('valabilityMonth', 'choice', array(
               'choices' => array(
@@ -138,6 +145,7 @@ class FormularAdmin extends Admin
               )
           ))
           ->add('subdomain')
+          ->add('notifyDays')
           ->add('deleted')
           ->add('deletedAt');
     }
