@@ -76,7 +76,7 @@
                                                                            );">
                                                             <div class="col-xs-2">
                                                                 <div class="credit-icon">
-                                                                    <div id="documentIcon{{ document.id }}" class="credit-icon-value color-red">
+                                                                    <div id="documentIcon{{ document.id }}" class="credit-icon-value color-{{ (document.creditValue > 0) ? "red" : "green" }}">
                                                                         {{ document.creditValue }}
                                                                     </div>
                                                                 </div>
@@ -100,8 +100,8 @@
                                                 <div class="row new-evaluation">
                                                     <div class="col-xs-2">
                                                             <div class="credit-icon">
-                                                                <div class="credit-icon-value color-red">
-                                                                    {{ formular.creditValue }}
+                                                                <div class="credit-icon-value color-{{ isUserException ? "green" : ((formular.creditValue > 0) ? "red" : "green") }}">
+                                                                    {{ isUserException ? 0 : formular.creditValue }}
                                                                 </div>
                                                             </div>
                                                     </div>

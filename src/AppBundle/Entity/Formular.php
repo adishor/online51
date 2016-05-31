@@ -80,6 +80,15 @@ class Formular
      *
      * @var integer
      *
+     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $discountedCreditValue;
+
+    /**
+     *
+     * @var integer
+     *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
      */
     private $deleted;
@@ -325,6 +334,29 @@ class Formular
     public function getSubdomain()
     {
         return $this->subdomain;
+    }
+
+    /**
+     * Set discountedCreditValue
+     *
+     * @param integer $discountedCreditValue
+     * @return Formular
+     */
+    public function setDiscountedCreditValue($discountedCreditValue)
+    {
+        $this->discountedCreditValue = $discountedCreditValue;
+
+        return $this;
+    }
+
+    /**
+     * Get discountedCreditValue
+     *
+     * @return integer
+     */
+    public function getDiscountedCreditValue()
+    {
+        return $this->discountedCreditValue;
     }
 
     public function __toString()

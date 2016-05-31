@@ -54,16 +54,18 @@ class FormularHelperService
         return $EGDTotals;
     }
 
-    public function getFormTextEvidentaGestiuniiDeseurilor($EncodedFormConfig)
+    public function getFormTextEvidentaGestiuniiDeseurilor($EncodedFormConfig, $short = false)
     {
 
         $formConfig = json_decode($EncodedFormConfig);
         $deseuCodes = explode(" ", $formConfig->tip_deseu);
 
+        $waste = (!$short) ? $this->tipDeseuEGD[$deseuCodes[0]]['name'] . "; " .
+          $this->tipDeseuEGD[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "; " .
+          $this->tipDeseuEGD[$deseuCodes[0]]['values'][$deseuCodes[1]]['values'][$deseuCodes[2]] : $formConfig->tip_deseu;
+
         return $this->translator->trans('document-form.text.egd', array(
-              'waste-type' => $this->tipDeseuEGD[$deseuCodes[0]]['name'] . "; " .
-              $this->tipDeseuEGD[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "; " .
-              $this->tipDeseuEGD[$deseuCodes[0]]['values'][$deseuCodes[1]]['values'][$deseuCodes[2]],
+              'waste-type' => $waste,
               'year' => $formConfig->an,
               'operation' => $this->operatiaEGD[$formConfig->operatia],
         ));

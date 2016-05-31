@@ -142,6 +142,7 @@ formular-documents:
     no-documents: Nu aveti documente pentru vizualizat
     access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
     reset-filter: 'Resetati filtrul'
+    new-documents: Creare document nou pe baza acestuia, pentru anul urmator
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -438,7 +439,7 @@ document-form:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
     text:
-        egd: ' cu tip deseu waste-type si operatia operation pentru anul year, '
+        egd: ' cu tip deseu waste-type si operatia operation pentru anul year; '
     report:
         egd:
             notify-sent: 'Mesaj de notificare trimis catre '
@@ -486,7 +487,9 @@ pdf-doc-egd:
     elimination-operation: 'Operatia de eliminare, conform Anexei IIA din legea 426/2001'
     elimination-agent: 'Agentul economic care efectueaza operatia de eliminare'
     waste-quantity-eliminated: 'Cantitatea de deseuri eliminata'
-
+invalid:
+    data: Datele sunt invalide.
+    
 #admin
 admin_label:
     subscription: 'Abonament'
@@ -531,6 +534,7 @@ Active: Activ
 Start Date: Data Inceput
 Ending Date: Data Sfarsit
 Credit Value: Valoare Credit
+Discounted Credit Value: Valoare Credit Discount
 Valability Days: Nr de zile valide
 Valability Month: Valabil pana la luna (inclusiv)
 Subscription: Abonament
