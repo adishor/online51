@@ -118,7 +118,7 @@ class MailerService
           ), 'text/html');
 
 
-        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.order-confirm.subject'), $orderBody, $attachment);
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.order-invoice.subject'), $orderBody, $attachment);
     }
 
     public function sendPendingOrderRemoveMessage($order)
