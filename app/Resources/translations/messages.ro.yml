@@ -30,6 +30,7 @@ form:
         save-and-continue: 'Salvati si continuati'
         save-info: 'Salvati informatiile'
         generate-document: 'Generati document'
+        demo-domain: 'Domeniu gratuit:'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
         function: 'Va rugam completati *Functia.'
@@ -148,13 +149,14 @@ subscription:
     price: 'Pret : '
     number-of-credits: 'Numar Credite : '
     valability: 'Termen de valabilitate : '
-    
+
     not-logged-in: 'Abonamentele se pot comanda dupa acces in sistem:'
     no_subscription: 'Fara abonament'
     bought: 'Abonament achizitionat de utilizator.'
     add-to-order: 'Adaugati la comanda'
     canceled: 'Anulata de utilizator'
     superadmin: 'Sunteti logat cu un cont de superadministrator.'
+    demo-account: 'Sunteti logat cu un cont gratuit, pentru a trimite o comanda trebuie sa va activati contul folosind link-ul din partea dreapta.'
 currency: ' RON'
 user:
     function:
@@ -172,6 +174,7 @@ mail:
     thank-you: 'Multumim!'
     other-info: 'Alte informatii:'
     team: 'Echipa Online51.'
+    link: 'Pentru a accesa platforma poti folosi urmatorul link: '
     contact:
         subject: 'Formular de contact - '
         name: 'Mesaj nou de la %name%'
@@ -218,6 +221,17 @@ mail:
     form-expire-report:
         message: 'S-au trimis urmatoarele mesaje de expirare a formularului:'
         subject: 'Mesaje de expirare trimise '
+    free-account:
+        subject: 'Acces cont gratuit.'
+        message: 'Contul gratuit s-a creat cu succes!'
+        connect: 'Te poti conecta la platforma Online 51 cu urmatoarele date:'
+        username: 'Utilizatorul: %email%'
+        password: 'Parola: %password%'
+        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul %domain%, pana in %date%.'
+
+
+
+
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -250,9 +264,12 @@ login:
         logout: 'Logout'
         close: 'Inchide'
 json-response:
+    not-email: 'Email invalid.'
     no-user: 'Acest email nu este alocat.'
+    no-demo-domain: 'Acest domeniu nu poate fi gratuit.'
     not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
     enabled-user: 'Acest email este alocat deja unui utilizator activ.'
+    existing-user: 'Acest email este alocat deja unui utilizator existent.'
     link-expired: 'Link-ul de resetare parola a expirat.'
     link-invalid: 'Link-ul de resetare parola este invalid.'
 activate-account:
@@ -302,6 +319,7 @@ order:
     removed-by-administrator: 'Comanda anulata de administrator.'
     modified-by-administrator: 'Comanda modificata de administrator.'
     approved-by-administrator: 'Comanda aprobata de administrator.'
+    demo-account: 'Comanda aferenta contului gratuit.'
     tab:
         active-credits: 'Credite active'
         unlocked-documents: 'Documente deblocate'
@@ -427,8 +445,8 @@ document-form:
             notify-sent: 'Mesaj de notificare trimis catre '
             for-credit-usage-form: ' pentru utilizarea de credite - formular '
             expires-on: ' care expira in '
-            
-            
+
+
 pdf-doc-egd:
     waste-management-title: 'Evidenta Gestiunii Deseurilor'
     agent: 'Agent economic'
@@ -464,7 +482,7 @@ pdf-doc-egd:
     treatment-mode: 'Modul tratarii'
     treatment-scope: 'Scopul tratarii'
     transportation-means: 'Mijlocul de transport'
-    reclamation-operation: 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' 
+    reclamation-operation: 'Operatia de valorificare, conform Anexei IIB din legea 426/2001'
     reclamation-agent: 'Agentul economic care efectueaza operatia de valorificare'
     elimination-operation: 'Operatia de eliminare, conform Anexei IIA din legea 426/2001'
     elimination-agent: 'Agentul economic care efectueaza operatia de eliminare'
@@ -546,6 +564,8 @@ Id: Numar
 Invoice: Factura Proforma
 Image: Imagine
 Notify Days: Zile notificare expirare
+Demo Domain: Disponibil pentru cont gratuit
+Demo Credit Value: Credite alocate la cont gratuit
 
 #media
 sonata:

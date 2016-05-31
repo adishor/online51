@@ -47,7 +47,7 @@ class Domain
 
     /**
      *
-     * @var string
+     * @var text
      *
      * @ORM\Column(type="text", nullable=true)
      */
@@ -55,7 +55,7 @@ class Domain
 
     /**
      *
-     * @var integer
+     * @var boolean
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
      */
@@ -79,6 +79,22 @@ class Domain
      * @ORM\ManyToMany(targetEntity="Order", mappedBy="domains")
      */
     private $orders;
+
+    /**
+     *
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $demoDomain;
+
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(nullable=true)
+     */
+    private $demoCreditValue;
 
     /**
      *
@@ -383,4 +399,50 @@ class Domain
         return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
 
+
+    /**
+     * Set demoDomain
+     *
+     * @param boolean $demoDomain
+     * @return Domain
+     */
+    public function setDemoDomain($demoDomain)
+    {
+        $this->demoDomain = $demoDomain;
+
+        return $this;
+    }
+
+    /**
+     * Get demoDomain
+     *
+     * @return boolean
+     */
+    public function getDemoDomain()
+    {
+        return $this->demoDomain;
+    }
+
+    /**
+     * Set demoCreditValue
+     *
+     * @param string $demoCreditValue
+     * @return Domain
+     */
+    public function setDemoCreditValue($demoCreditValue)
+    {
+        $this->demoCreditValue = $demoCreditValue;
+
+        return $this;
+    }
+
+    /**
+     * Get demoCreditValue
+     *
+     * @return string
+     */
+    public function getDemoCreditValue()
+    {
+        return $this->demoCreditValue;
+    }
 }

@@ -1,0 +1,31 @@
+<body>
+    <p>
+        {{ 'mail.name'|trans({'%name%': name}) }}
+    </p>
+    <p>
+        {{ 'mail.free-account.message'|trans }}
+    </p>
+    <p>
+        {{ 'mail.free-account.connect'|trans }}
+    </p>
+    <ul>
+        <li>
+            {{ 'mail.free-account.username'|trans({ "%email%" : email }) }}
+        </li>
+        <li>
+            {{ 'mail.free-account.password'|trans({ "%password%" : password }) }}
+        </li>
+    </ul>
+    <p>
+        {{ 'mail.free-account.order'|trans({ "%credits%" : order.creditValue ,"%domain%" : order.domains[0].name ,"%date%" : order.endingDate| localizeddate('medium', 'short', app.request.locale)  }) }}
+    </p>
+    <p>
+        {{ 'mail.link'|trans }}{{ url('homepage') }}
+    </p>
+    <p>
+        {{ 'mail.thank-you'|trans }}
+    </p>
+    <p>
+        {{ 'mail.team'|trans }}
+    </p>
+</body>

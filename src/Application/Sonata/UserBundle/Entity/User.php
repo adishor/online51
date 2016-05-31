@@ -238,6 +238,14 @@ class User extends BaseUser
      *
      * @var integer
      *
+     * @ORM\Column(type="boolean", nullable=true, options={"default":0})
+     */
+    private $demoAccount;
+
+    /**
+     *
+     * @var integer
+     *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
      */
     private $deleted;
@@ -788,5 +796,28 @@ class User extends BaseUser
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set demoAccount
+     *
+     * @param boolean $demoAccount
+     * @return User
+     */
+    public function setDemoAccount($demoAccount)
+    {
+        $this->demoAccount = $demoAccount;
+
+        return $this;
+    }
+
+    /**
+     * Get demoAccount
+     *
+     * @return boolean 
+     */
+    public function getDemoAccount()
+    {
+        return $this->demoAccount;
     }
 }
