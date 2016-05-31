@@ -293,14 +293,14 @@ class UserController extends Controller
         $name = $request->request->get('name');
         $domainSlug = $request->request->get('domainSlug');
 
+        $domain = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($this->getParameter('default_demo_domain_slug'));
         if ($domainSlug !== 'default_demo_domain') {
             $domain = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug);
-            if (!$domain->getDemoDomain) {
+            if (!$domain->getDemoDomain()) {
                 $errors['Msg'] = $this->get('translator')->trans('json-response.not-demo-domain');
 
                 return new Response(json_encode($errors), 200);
             }
-
         }
 
         $demoPassword = $this->get('app.user_helper')->generateDemoPassword();
