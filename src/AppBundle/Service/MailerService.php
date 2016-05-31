@@ -118,7 +118,7 @@ class MailerService
           ), 'text/html');
 
 
-        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.order-confirm.subject'), $orderBody, $attachment);
+        $this->sendMessage($user->getEmail(), $this->translator->trans('mail.order-invoice.subject'), $orderBody, $attachment);
     }
 
     public function sendPendingOrderRemoveMessage($order)
@@ -164,7 +164,7 @@ class MailerService
         $subject = $this->translator->trans('mail.free-account.subject');
 
         $demoAccountMessageBody = $this->templating->render('user/demo_account_message_body.html.twig', array(
-            'name' => $demoUser->getName,
+            'name' => $demoUser->getName(),
             'email' => $demoUser->getEmail(),
             'password' => $demoPassword,
             'order' => $demoOrder,

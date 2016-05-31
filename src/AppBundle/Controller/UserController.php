@@ -49,8 +49,8 @@ class UserController extends Controller
         }
 
         return $this->render('user/register.html.twig', array(
-              'form' => $form->createView(),
-              'registerErrors' => $registerErrors,
+                    'form' => $form->createView(),
+                    'registerErrors' => $registerErrors,
         ));
     }
 
@@ -154,7 +154,7 @@ class UserController extends Controller
         }
 
         return $this->render('user/reset.html.twig', array(
-              'form' => $form->createView(),
+                    'form' => $form->createView(),
         ));
     }
 
@@ -195,7 +195,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('homepage'));
         }
         return $this->render('user/change_password.html.twig', array(
-              'form' => $form->createView(),
+                    'form' => $form->createView(),
         ));
     }
 
@@ -233,8 +233,8 @@ class UserController extends Controller
         }
 
         return $this->render('user/change_info.html.twig', array(
-              'form' => $form->createView(),
-              'changeInfoErrors' => $changeInfoErrors,
+                    'form' => $form->createView(),
+                    'changeInfoErrors' => $changeInfoErrors,
         ));
     }
 
@@ -270,19 +270,19 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/create-free-account", name="create_free_account")
+     * @Route("/create-demo-account", name="create_demo_account")
      */
     public function createDemoAccountAction(Request $request)
     {
         $email = $request->request->get('email');
-        $name = $request->request->get('name');
-        $domainId = $request->request->get('domain');
         $errors = [];
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['Msg'] = $this->get('translator')->trans('json-response.not-email');
 
             return new Response(json_encode($errors), 200);
         }
+
         $user = $this->container->get('fos_user.user_manager')->findUserByUsernameOrEmail($email);
         if (($user) && (!$user->getDeleted())) {
             $errors['Msg'] = $this->get('translator')->trans('json-response.existing-user');
@@ -290,9 +290,23 @@ class UserController extends Controller
             return new Response(json_encode($errors), 200);
         }
 
+        $name = $request->request->get('name');
+        $domainSlug = $request->request->get('domainSlug');
+
+        if ($domainSlug !== 'default_demo_domain') {
+            $domain = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug);
+            if (!$domain->getDemoDomain) {
+                $errors['Msg'] = $this->get('translator')->trans('json-response.not-demo-domain');
+
+                return new Response(json_encode($errors), 200);
+            }
+
+        }
+
         $demoPassword = $this->get('app.user_helper')->generateDemoPassword();
+        $defaultDemoCredits = ($domainSlug !== 'default_demo_domain') ? $domain->getDemoCreditValue() : $this->getParameter('default_demo_domain_credits');
         $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword, $this->getParameter('demo_account_values'));
-        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domainId, $this->getParameter('demo_account_valid_days'));
+        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domain, $this->getParameter('demo_account_valid_days'), $defaultDemoCredits);
         $this->get('app.mailer')->sendDemoAccountMessage($demoUser, $demoPassword, $demoOrder);
 
         return new Response(json_encode($errors), 200);

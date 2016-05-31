@@ -92,7 +92,7 @@ class Domain
      *
      * @var integer
      *
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     private $demoCreditValue;
 

@@ -493,7 +493,14 @@ function SubmitFreeAccount(url) {
 
         var name = $("#FreeManagerName").val();
         var email = $("#FreeUserName").val();
-
+        var domainSlug = '';
+        if ($("#domainSlug").is('select')) {
+            console.log(1);
+            domainSlug = $("#domainSlug option:selected").val();
+        } else {
+            domainSlug = $("#domainSlug").val();
+        }
+        console.log(domainSlug);
         if (name == "") {
             $("#FreeManagerNameValid").show();
             isValid = false;
@@ -513,10 +520,10 @@ function SubmitFreeAccount(url) {
             $.ajax({
                 type: "POST",
                 url: url,
-                data: {name: name, email: email},
+                data: {name: name, email: email, domainSlug: domainSlug},
                 dataType: 'json',
                 success: function (response) {
-                    if (response.Msg != "") {
+                    if (response.Msg) {
                         $("#FreeUserNameDuplicateEmail").text(response.Msg);
                         $("#FreeUserNameDuplicateEmail").show();
                     } else {

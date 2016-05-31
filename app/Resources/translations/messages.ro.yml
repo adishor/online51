@@ -30,6 +30,7 @@ form:
         save-and-continue: 'Salvati si continuati'
         save-info: 'Salvati informatiile'
         generate-document: 'Generati document'
+        demo-domain: 'Domeniu gratuit:'
     required:
         name: 'Va rugam completati *Numele si prenumele.'
         function: 'Va rugam completati *Functia.'
@@ -147,7 +148,7 @@ subscription:
     price: 'Pret : '
     number-of-credits: 'Numar Credite : '
     valability: 'Termen de valabilitate : '
-    
+
     not-logged-in: 'Abonamentele se pot comanda dupa acces in sistem:'
     no_subscription: 'Fara abonament'
     bought: 'Abonament achizitionat de utilizator.'
@@ -171,6 +172,7 @@ mail:
     thank-you: 'Multumim!'
     other-info: 'Alte informatii:'
     team: 'Echipa Online51.'
+    link: 'Pentru a accesa platforma poti folosi urmatorul link: '
     contact:
         subject: 'Formular de contact - '
         name: 'Mesaj nou de la %name%'
@@ -219,15 +221,15 @@ mail:
         subject: 'Mesaje de expirare trimise '
     free-account:
         subject: 'Acces cont gratuit.'
-        message: 'Contul gratuit s-a creeat cu succes!'
+        message: 'Contul gratuit s-a creat cu succes!'
         connect: 'Te poti conecta la platforma Online 51 cu urmatoarele date:'
         username: 'Utilizatorul: %email%'
         password: 'Parola: %password%'
         order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul %domain% ales de tine pana in %date%.'
-        link: 'Pentru a accesa platforma poti folosi urmatorul link: '
-        
-        
-        
+
+
+
+
 success:
     activate: 'Success! Contul dumneavoastra a fost activat'
     login: 'Success! Login reusit!'
@@ -262,6 +264,7 @@ login:
 json-response:
     not-email: 'Email invalid.'
     no-user: 'Acest email nu este alocat.'
+    no-demo-domain: 'Acest domeniu nu poate fi gratuit.'
     not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
     enabled-user: 'Acest email este alocat deja unui utilizator activ.'
     existing-user: 'Acest email este alocat deja unui utilizator existent.'
@@ -440,8 +443,8 @@ document-form:
             notify-sent: 'Mesaj de notificare trimis catre '
             for-credit-usage-form: ' pentru utilizarea de credite - formular '
             expires-on: ' care expira in '
-            
-            
+
+
 pdf-doc-egd:
     waste-management-title: 'Evidenta Gestiunii Deseurilor'
     agent: 'Agent economic'
@@ -477,12 +480,12 @@ pdf-doc-egd:
     treatment-mode: 'Modul tratarii'
     treatment-scope: 'Scopul tratarii'
     transportation-means: 'Mijlocul de transport'
-    reclamation-operation: 'Operatia de valorificare, conform Anexei IIB din legea 426/2001' 
+    reclamation-operation: 'Operatia de valorificare, conform Anexei IIB din legea 426/2001'
     reclamation-agent: 'Agentul economic care efectueaza operatia de valorificare'
     elimination-operation: 'Operatia de eliminare, conform Anexei IIA din legea 426/2001'
     elimination-agent: 'Agentul economic care efectueaza operatia de eliminare'
     waste-quantity-eliminated: 'Cantitatea de deseuri eliminata'
-    
+
 #admin
 admin_label:
     subscription: 'Abonament'

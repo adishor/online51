@@ -262,11 +262,14 @@ class UserHelperService
         $user->setBank($demoAccountValues['bank']);
         $user->setPhone($demoAccountValues['phone']);
         $user->setAddress($demoAccountValues['address']);
+        $user->setFunction($demoAccountValues['function']);
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($demoPassword, $user->getSalt()));
         $user->setDeleted(false);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+        
+        return $user;
     }
 
     public function generateDemoPassword()

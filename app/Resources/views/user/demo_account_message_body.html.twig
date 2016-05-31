@@ -17,7 +17,7 @@
         </li>
     </ul>
     <p>
-        {{ 'mail.free-account.order'|trans({ "%credits%" : order.creditValue ,"%domain%" : order.domains[0].name ,"%date%" : order.endingDate| localizeddate('medium', 'short', app.request.locale  }) }}
+        {{ 'mail.free-account.order'|trans({ "%credits%" : order.creditValue ,"%domain%" : order.domains[0].name ,"%date%" : order.endingDate| localizeddate('medium', 'short', app.request.locale)  }) }}
     </p>
     <p>
         {{ 'mail.link'|trans }}{{ url('homepage') }}

@@ -20,6 +20,7 @@ use AppBundle\Entity\CreditsUsage;
 
 class OrderHelperService
 {
+
     protected $entityManager;
     protected $translator;
     protected $tokenStorage;
@@ -265,13 +266,12 @@ class OrderHelperService
         return $validDomains;
     }
 
-    public function createDemoOrder($demoUser, $domainId, $validDays)
+    public function createDemoOrder($demoUser, $domain, $validDays, $defaultDemoCredits)
     {
         $order = new Order();
-        $domain = $this->entityManager->getRepository('AppBundle:Domain')->find($domainId);
 
         $order->setUser($demoUser);
-        $order->setCreditValue($domain->getDemoCreditValue());
+        $order->setCreditValue($defaultDemoCredits);
         $order->addDomain($domain);
         $order->setPrice('0');
         $order->setValabilityDays($validDays);
@@ -283,6 +283,8 @@ class OrderHelperService
         $order->setMentions($this->translator->trans('order.demo-account'));
         $order->setActive(true);
         $order->setFirstActive(true);
+        $order->setDomainAmount(1);
+        $demoUser->setCreditsTotal($defaultDemoCredits);
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 

@@ -1794,7 +1794,7 @@ h5.first {
     margin: 0 auto;
 }
 
-.domain-description th, 
+.domain-description th,
 .domain-description td,
 .field-validation-error
 {
@@ -1803,7 +1803,7 @@ h5.first {
 }
 
 
-.document-info
+.document-info, .input-element
 {
     padding: 0 10px;
 
@@ -1844,7 +1844,7 @@ h5.first {
 }
 
 .ui-selectmenu {
-    height: 1.75em !important; 
+    height: 1.75em !important;
 }
 
 .config-unique-title {
