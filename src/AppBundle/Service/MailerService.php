@@ -159,4 +159,18 @@ class MailerService
         $this->sendMessage($this->reportEmail, $subject, $formExpireReportBody);
     }
 
+    public function sendDemoAccountMessage($demoUser, $demoPassword, $demoOrder)
+    {
+        $subject = $this->translator->trans('mail.free-account.subject');
+
+        $demoAccountMessageBody = $this->templating->render('user/demo_account_message_body.html.twig', array(
+            'name' => $demoUser->getName(),
+            'email' => $demoUser->getEmail(),
+            'password' => $demoPassword,
+            'order' => $demoOrder,
+          ), 'text/html');
+
+        $this->sendMessage($demoUser->getEmail(), $subject, $demoAccountMessageBody);
+    }
+
 }

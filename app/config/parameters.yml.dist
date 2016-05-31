@@ -50,3 +50,17 @@ parameters:
         usage: 10
         history: 10
         formularDocuments: 10
+
+    default_demo_domain_slug: 'ssm'
+    default_demo_domain_credits: '5'
+    demo_account_values:
+        company: 'Companie'
+        cui: 'RO1111'
+        noRegistrationORC: 'J11/1111/2016'
+        noCertifiedEmpowerment: '12345'
+        iban: 'RO2345'
+        bank: 'Banca'
+        phone: '0740000000'
+        address: 'Adresa'
+        function: 1
+    demo_account_valid_days: '7'

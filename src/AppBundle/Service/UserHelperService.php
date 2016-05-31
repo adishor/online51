@@ -244,4 +244,39 @@ class UserHelperService
             ->findValidCreditsUsageForMedia($mediaId);
     }
 
+    public function createDemoAccount($email, $name, $demoPassword, $demoAccountValues)
+    {
+        $user = new User();
+        $user->setUsername($email);
+        $user->setUsernameCanonical($email);
+        $user->setEmail($email);
+        $user->setEmailCanonical($email);
+        $user->setEnabled(true);
+        $user->setExpired(false);
+        $user->setLocked(false);
+        $user->setName($name);
+        $user->setCompany($demoAccountValues['company']);
+        $user->setCui($demoAccountValues['cui']);
+        $user->setNoRegistrationORC($demoAccountValues['noRegistrationORC']);
+        $user->setNoCertifiedEmpowerment($demoAccountValues['noCertifiedEmpowerment']);
+        $user->setIban($demoAccountValues['iban']);
+        $user->setBank($demoAccountValues['bank']);
+        $user->setPhone($demoAccountValues['phone']);
+        $user->setAddress($demoAccountValues['address']);
+        $user->setFunction($demoAccountValues['function']);
+        $user->addRole(User::ROLE_DEFAULT);
+        $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($demoPassword, $user->getSalt()));
+        $user->setDeleted(false);
+        $user->setDemoAccount(true);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
+    }
+
+    public function generateDemoPassword()
+    {
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+    }
+
 }

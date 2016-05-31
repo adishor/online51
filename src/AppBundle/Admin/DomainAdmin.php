@@ -85,7 +85,15 @@ class DomainAdmin extends Admin
               'disabled' => $disabled
           ))
           ->add('subdomains', 'entity', $subdomainsOptions)
-          ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions);
+          ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions)
+          ->add('demoDomain', null, array(
+              'required' => false,
+              'disabled' => $disabled
+          ))
+          ->add('demoCreditValue', null, array(
+              'required' => false,
+              'disabled' => $disabled
+        ));
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
@@ -113,6 +121,8 @@ class DomainAdmin extends Admin
           ->add('dedicated')
           ->add('subdomains')
           ->add('subscriptions')
+          ->add('demoDomain')
+          ->add('demoCreditValue')
           ->add('deleted')
           ->add('deletedAt');
     }

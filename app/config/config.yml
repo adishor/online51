@@ -46,7 +46,7 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     globals:
-        egd: 
+        egd:
             tip_stocare: %tip_stocare%
             mod_tratare: %mod_tratare%
             scop_tratare: %scop_tratare%
@@ -54,7 +54,6 @@ twig:
             destinatia: %destinatia%
             operatia_valorificare_deseu: %operatia_valorificare_deseu%
             operatia_eliminare_deseu: %operatia_eliminare_deseu%
-
 
     #sonata
     form:
@@ -264,10 +263,10 @@ knp_snappy:
 
 boekkooi_jquery_validation:
     form:
-        enabled: true 
+        enabled: true
     twig:
-        enabled: true 
-        
+        enabled: true
+
 knp_paginator:
     template:
         pagination: pagination/twitter_bootstrap_v3_pagination.html.twig    # sliding pagination controls template
