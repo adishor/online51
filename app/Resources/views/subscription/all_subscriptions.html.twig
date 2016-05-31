@@ -16,7 +16,7 @@
                         <input type="hidden" value="{{ subscription.id }}" name="subscriptionId"/>
                     </div>
                     <div class="col-xs-3">
-                        {% if app.user and not isUserException %}
+                        {% if app.user and not isUserException and not app.user.demoAccount %}
                             <input id="ssm{{ loop.index }}button" class="costum pull-right" type="button" value="{{ 'subscription.add-to-order'|trans }}" />
                         {% endif %}
                     </div>
@@ -70,6 +70,14 @@
                             </p>
                         </div>
                     </div>
+                {% elseif app.user.demoAccount %}
+                    <div class="panel">
+                        <div class="panel-body">
+                            <p>
+                                {{ 'subscription.demo-account'|trans }}<br />
+                            </p>
+                        </div>
+                    </div>
                 {% endif%}
             </form>
         </div>
@@ -82,7 +90,7 @@
                     var cb = $(this);
                             isCheckedx(cb, id, {{ subscription.domainAmount }});
                 });
-                $("#" + "ssm" +     {{ loop.index }} + "button").click(function () {
+                $("#" + "ssm" +      {{ loop.index }} + "button").click(function () {
                 if (!areAllChecked(id, {{ subscription.domainAmount }})){
             {% if subscription.domainAmount == 1 %}
                     $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
@@ -96,12 +104,12 @@
                     $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
                     }
                 });
-                });        </script>
-    {% endif %}
-    {% if ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
+                });</script>
+        {% endif %}
+        {% if ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
         <script type="text/javascript">
                     $(document).ready(function () {
-                $("#" + "ssm" +     {{ loop.index }} +"button").click(function () {
+                $("#" + "ssm" +      {{ loop.index }} +"button").click(function () {
                     $('#subscriptionAddConfirmModal').modal();
                     $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
                 });

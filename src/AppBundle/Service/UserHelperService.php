@@ -266,9 +266,10 @@ class UserHelperService
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($demoPassword, $user->getSalt()));
         $user->setDeleted(false);
+        $user->setDemoAccount(true);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        
+
         return $user;
     }
 

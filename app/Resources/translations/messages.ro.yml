@@ -155,6 +155,7 @@ subscription:
     add-to-order: 'Adaugati la comanda'
     canceled: 'Anulata de utilizator'
     superadmin: 'Sunteti logat cu un cont de superadministrator.'
+    demo-account: 'Sunteti logat cu un cont gratuit, pentru a trimite o comanda trebuie sa va activati contul folosind link-ul din partea dreapta.'
 currency: ' RON'
 user:
     function:
