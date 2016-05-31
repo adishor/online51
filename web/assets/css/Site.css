@@ -1913,3 +1913,7 @@ h5.first {
 .pagination li:before {
     content: none;
 }
+
+.panel {
+    margin: 20px 0;
+}
