@@ -227,7 +227,7 @@ mail:
         connect: 'Te poti conecta la platforma Online 51 cu urmatoarele date:'
         username: 'Utilizatorul: %email%'
         password: 'Parola: %password%'
-        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul %domain% ales de tine pana in %date%.'
+        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul %domain%, pana in %date%.'
 
 
 
