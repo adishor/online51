@@ -221,7 +221,7 @@ class UserController extends Controller
         }
         if ($form->isSubmitted() && $form->isValid() && !in_array(false, $changeInfoErrors)) {
 
-            if ($user->getImage()->getProviderName() === 'sonata.media.provider.image') {
+            if (null !== $user->getImage() && $user->getImage()->getProviderName() === 'sonata.media.provider.image') {
                 $media = $user->getImage();
                 $media->setMediaType(Media::IMAGE_TYPE);
                 $user->setImage($media);
