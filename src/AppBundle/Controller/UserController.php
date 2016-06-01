@@ -221,10 +221,19 @@ class UserController extends Controller
         }
         if ($form->isSubmitted() && $form->isValid() && !in_array(false, $changeInfoErrors)) {
 
-            if ($user->getImage()->getProviderName() === 'sonata.media.provider.image') {
+            if (($user->getImage()) && ($user->getImage()->getProviderName() === 'sonata.media.provider.image')) {
                 $media = $user->getImage();
                 $media->setMediaType(Media::IMAGE_TYPE);
                 $user->setImage($media);
+            }
+
+            if ($user->getDemoAccount()){
+                $user->setDemoAccount(FALSE);
+                $this->container->get('fos_user.user_manager')->updateUser($user);
+                $this->addFlash('successful-account-activate', 'success.demo-activate');
+
+
+                return $this->redirectToRoute('homepage');
             }
             $this->container->get('fos_user.user_manager')->updateUser($user);
             $this->addFlash('successful-change-info', 'success.change-info');

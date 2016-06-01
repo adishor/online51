@@ -243,6 +243,7 @@ success:
     order-remove: 'Comanda s-a anulat cu succes.'
     document-generated: 'Documentul a fost generat cu succes!'
     form-saved: 'Datele din formular s-au salvat cu succes!'
+    demo-activate: 'Contul a fost activat! Aveti acces deplin la platforma!'
 login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
@@ -254,6 +255,7 @@ login:
     failed: 'User sau parola invalida!'
     close-password: 'Inchide resetare parola.'
     credit-status: 'Situatie credite'
+    activate-account: 'Activati cont'
     administration: 'Administrare'
     button:
         login: 'Login'
@@ -279,6 +281,8 @@ change-password:
     title: 'Schimbare parola'
 change-info:
     title: 'Schimbare date cont'
+    activate-account: 'Activeaza cont'
+    activate-account-information: 'Pentru a va activa contul bifati casuta alaturata, introduceti si verificati toate datele si apasati butonul salveaza.'
     save: Salveaza
     back: Inapoi
 credit-usage:

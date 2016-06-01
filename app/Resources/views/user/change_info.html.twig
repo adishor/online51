@@ -3,11 +3,29 @@
 {% block ccontainer %}
     <h1 class="title-top">
         <i class="fa fa-graduation-cap"></i>
-        {{ 'change-info.title'|trans }}
+        {% if not app.user.demoAccount %}
+            {{ 'change-info.title'|trans }}
+        {% else %}
+            {{ 'change-info.activate-account'|trans }}
+        {% endif %}
     </h1>
+
     {% for flash_message in app.session.flashbag.get('successful-change-info') %}
         <h3 class="color-blue text-center first" >{{ flash_message|trans }}</h3>
     {% endfor %}
+
+    {% if app.user.demoAccount %}
+        <div class="panel">
+            <div class="panel-body">
+                <p>
+                    {{ 'change-info.activate-account-information'|trans }}<br />
+                </p>
+                <input type="checkbox" id='demoAccountCheck'> {{ 'change-info.activate-account'|trans }} </br>
+            </div>
+        </div>
+    {% endif %}
+
+
     {{ form_start(form, { 'attr': {'id': 'ChangeInfoForm'} }) }}
     {% form_theme form 'user/form/error_template.html.twig' %}
     <fieldset>
@@ -15,7 +33,7 @@
         <input id="Logo" name="Logo" type="hidden" value="" />
         <input id="EmployeesNr" name="EmployeesNr" type="hidden" value="" />
 
-        <div class="row register">
+        <div id='formDiv' class="row register">
             <div class="col-xs-6">
                 {#          name#}
                 <div class="editor-label text-small" id="lblManager">
@@ -24,8 +42,8 @@
                 <div class="editor-field">
                     {{ form_widget(form.name, {'attr':
                 { 'data-val': 'true',
-                  'data-val-required': 'form.required.name'|trans
-                } })
+                  'data-val-required': 'form.required.name'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.name) }}
@@ -37,8 +55,8 @@
                 { 'data-val': 'true',
                   'data-val-number': 'form.valid.number.function'|trans,
                   'data-val-required': 'form.required.function'|trans,
-                  'onchange': 'ShowHideItems()'
-              } })
+                  'onchange': 'ShowHideItems()', },
+                })
                     }}
                     {{ form_errors(form.function) }}
                 </div>
@@ -51,8 +69,8 @@
                 { 'data-val': 'true',
                   'data-val-regex': 'form.valid.email'|trans,
                   'data-val-regex-pattern': '.+\@.+\..+',
-                  'data-val-required': 'form.required.email'|trans
-              } })
+                  'data-val-required': 'form.required.email'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.email) }}
@@ -64,8 +82,8 @@
                 <div class="editor-field">
                     {{ form_widget(form.company, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'form.required.company'|trans
-              } })
+                'data-val-required': 'form.required.company'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.company) }}
@@ -78,8 +96,8 @@
                     {{ form_widget(form.cui, {'attr':
               { 'data-val': 'true',
                 'data-val-required': 'form.required.company-id'|trans,
-                'placeholder': 'form.placeholder.company-id'|trans
-              } })
+                'placeholder': 'form.placeholder.company-id'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.cui) }}
@@ -96,8 +114,8 @@
                 'data-val-required': 'form.required.company-number'|trans,
                 'placeholder': 'form.placeholder.company-number'|trans,
                 'data-val-regex-pattern': '(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})',
-                'data-val-regex': 'form.valid.orc'|trans,
-              } })
+                'data-val-regex': 'form.valid.orc'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.noRegistrationORC) }}
@@ -109,8 +127,8 @@
               { 'data-val': 'true',
                 'data-val-number': 'form.valid.number.employees'|trans,
                 'onchange': 'EmployeesNrChanged()',
-                'class': 'form-control shortdropdown'
-              } })
+                'class': 'form-control shortdropdown', },
+                })
                     }}
                     {{ form_errors(form.noEmployees) }}
                 </div>
@@ -119,7 +137,8 @@
                     {{ form_label(form.noCertifiedEmpowerment, 'form.label.certificate'|trans) }}
                 </div>
                 <div class="editor-field" id="tbCertificateNumber">
-                    {{ form_widget(form.noCertifiedEmpowerment) }}
+                    {{ form_widget(form.noCertifiedEmpowerment)
+                    }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.noCertifiedEmpowerment) }}
                 </div>
@@ -130,8 +149,8 @@
                 <div class="editor-field">
                     {{ form_widget(form.iban, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'form.required.bank-account'|trans
-              } })
+                'data-val-required': 'form.required.bank-account'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.iban) }}
@@ -145,8 +164,8 @@
                 <div class="editor-field">
                     {{ form_widget(form.bank, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'form.required.bank'|trans
-              } })
+                'data-val-required': 'form.required.bank'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.bank) }}
@@ -162,8 +181,8 @@
               { 'data-val': 'true',
                 'data-val-regex': 'form.valid.phone'|trans,
                 'data-val-regex-pattern': '^(07|)\\d{8}$',
-                'data-val-required': 'form.required.phone'|trans
-              } })
+                'data-val-required': 'form.required.phone'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.phone) }}
@@ -176,8 +195,8 @@
                 'data-val-number': 'form.valid.number.county'|trans,
                 'data-val-required': 'form.required.county'|trans,
                 'class': 'form-control shortdropdown',
-                'onChange': 'getLocalities(null)'
-              } })
+                'onChange': 'getLocalities(null)', },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.county) }}
@@ -192,8 +211,8 @@
                 { 'data-val': 'true',
                   'data-val-required': 'form.required.city'|trans,
                   'data-val-number': 'form.valid.number.city'|trans,
-                  'class': 'form-control shortdropdown'
-                } })
+                  'class': 'form-control shortdropdown', },
+                })
                         }}
                         <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" ></span>
                         {{ form_errors(form.city) }}
@@ -206,8 +225,8 @@
                 <div class="editor-field">
                     {{ form_widget(form.address, {'attr':
               { 'data-val': 'true',
-                'data-val-required': 'form.required.address'|trans
-              } })
+                'data-val-required': 'form.required.address'|trans, },
+                })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.address) }}
@@ -230,6 +249,22 @@
     {{ form_end(form) }}
     <script type="text/javascript">
         var ajax_localities = '{{ path('ajax_localities') }}';
+        $(document).ready(function () {
+            if ('true' === '{% if app.user.demoAccount %}true{% else %}false{% endif %}') {
+                $('#formDiv input, #formDiv select').each(function (i, v) {
+                    $(v).prop('disabled', true);
+                });
+            }
+        });
+        $('#demoAccountCheck').click(function () {
+            $('#formDiv input, #formDiv select').each(function (i, v) {
+                if ($('#demoAccountCheck').is(':checked')) {
+                    $(v).prop('disabled', false);
+                } else {
+                    $(v).prop('disabled', true);
+                }
+            });
+        });
     </script>
 {% endblock %}
 
