@@ -226,6 +226,15 @@ class UserController extends Controller
                 $media->setMediaType(Media::IMAGE_TYPE);
                 $user->setImage($media);
             }
+
+            if ($user->getDemoAccount()) {
+                $user->setDemoAccount(FALSE);
+                $this->container->get('fos_user.user_manager')->updateUser($user);
+                $this->addFlash('successful-account-activate', 'success.demo-activate');
+
+
+                return $this->redirectToRoute('homepage');
+            }
             $this->container->get('fos_user.user_manager')->updateUser($user);
             $this->addFlash('successful-change-info', 'success.change-info');
 
