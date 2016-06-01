@@ -422,7 +422,7 @@ table.users.documents td:nth-child(4),table.users.documents th:nth-child(4) {
 table.users.documents td:nth-child(5),table.users.documents th:nth-child(5){
     width:5%;
 }
-table.users.documents td:nth-child(3), table.users.documents td:nth-child(4),table.users.documents td:nth-child(5),table.users.documents td:nth-child(6) {
+table.users.documents td:nth-child(3), table.users.documents td:nth-child(4),table.users.documents td:nth-child(5),table.users.documents td:nth-child(6), table.users.documents td:nth-child(7) {
     text-align:center;
 }
 table.users.documents td:nth-child(6), table.users.documents th:nth-child(6) {
@@ -1818,7 +1818,7 @@ h5.first {
 }
 
 .credit-icon-value{
-    margin: 4px 18px 0px 0px;
+    padding: 4px 18px 4px 0px;
     font-weight: bold;
     text-align: right;
     font-size: 18px;
@@ -1916,4 +1916,8 @@ h5.first {
 
 .panel {
     margin: 20px 0;
+}
+
+.create-new {
+    cursor: pointer;
 }

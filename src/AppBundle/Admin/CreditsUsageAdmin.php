@@ -78,7 +78,12 @@ class CreditsUsageAdmin extends Admin
           ->add('credit')
           ->add('mentions')
           ->add('expireDate')
-          ->add('deleted');
+          ->add('deleted')
+          ->add('_action', null, array(
+              'actions' => array(
+                  'edit' => array(),
+              ))
+        );
     }
 
     protected function configureShowFields(ShowMapper $show)

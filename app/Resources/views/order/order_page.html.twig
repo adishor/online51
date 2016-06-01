@@ -33,11 +33,11 @@
             {#  pending orders  #}
             {% include 'order/order_pending_orders.html.twig' with { 'pendingOrders': pendingOrders } %} 
             {#  valid documents  #}
-            {% include 'order/order_valid_documents.html.twig' with { 'validDocuments': validDocuments } %} 
+            {% include 'order/order_valid_documents.html.twig' with { 'validDocuments': validDocuments, 'formularType': formularType } %} 
             {#  credit usage  #}
-            {% include 'order/order_credit_usage.html.twig' with { 'unlockedDocuments': unlockedDocuments } %} 
+            {% include 'order/order_credit_usage.html.twig' with { 'unlockedDocuments': unlockedDocuments, 'formularType': formularType } %} 
             {#  credit history  #}
-            {% include 'order/order_credit_history.html.twig' with { 'creditHistoryItems': creditHistoryItems } %} 
+            {% include 'order/order_credit_history.html.twig' with { 'creditHistoryItems': creditHistoryItems, 'formularType': formularType } %} 
         </div>
     </div>
     <script type="text/javascript">
@@ -49,18 +49,18 @@
                 jQuery('#nav-' + extension).parent().addClass("active");
                 jQuery('#' + extension + ".tab-pane").addClass("active");
             }
-            
+
             if ('{{ location }}' !== '') {
-                    jQuery(".nav li").each(function(){
-                        jQuery(this).removeClass("active");
-                    });
-                    jQuery(".tab-pane").each(function(){
-                       jQuery(this).removeClass("active"); 
-                    });
-                    jQuery('#nav-{{ location }}').parent().addClass("active");
-                    jQuery('#{{ location }}').addClass("active");
+                jQuery(".nav li").each(function () {
+                    jQuery(this).removeClass("active");
+                });
+                jQuery(".tab-pane").each(function () {
+                    jQuery(this).removeClass("active");
+                });
+                jQuery('#nav-{{ location }}').parent().addClass("active");
+                jQuery('#{{ location }}').addClass("active");
             }
-            
+
         });
     </script>
 {% endblock %}

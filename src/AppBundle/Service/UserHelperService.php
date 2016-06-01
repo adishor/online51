@@ -189,13 +189,14 @@ class UserHelperService
         $this->entityManager->flush();
     }
 
-    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig)
+    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig, $discounted)
     {
         $creditsUsage = new CreditsUsage();
         $creditsUsage->setUser($user);
         $creditsUsage->setFormular($formular);
+        $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
         if (!$this->getIsUserException()) {
-            $user->setCreditsTotal($user->getCreditsTotal() - $formular->getCreditValue());
+            $user->setCreditsTotal($user->getCreditsTotal() - $creditValue);
             $user->setLastCreditUpdate(new \DateTime());
         }
         $creditsUsage->setMentions($this->translator->trans('credit-usage.formular-unlocked-by-user'));
@@ -209,7 +210,7 @@ class UserHelperService
             $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
         }
         $creditsUsage->setExpireDate($expireDate);
-        $creditsUsage->setCredit((!$this->getIsUserException()) ? $formular->getCreditValue() : 0);
+        $creditsUsage->setCredit((!$this->getIsUserException()) ? $creditValue : 0);
         $creditsUsage->setUsageType(CreditsUsage::TYPE_FORMULAR);
         $creditsUsage->setFormConfig(json_encode($formularConfig));
         $creditsUsage->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));

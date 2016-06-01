@@ -110,7 +110,12 @@ class OrderAdmin extends Admin
           ->add('approvedBy')
           ->add('approvedDate')
           ->add('invoice')
-          ->add('deleted');
+          ->add('deleted')
+          ->add('_action', null, array(
+              'actions' => array(
+                  'edit' => array(),
+              ))
+        );
     }
 
     protected function configureShowFields(ShowMapper $show)

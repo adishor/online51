@@ -12,12 +12,17 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ document.mentions }}</td>
-                    {% if document.documentId is not null %}
-                        <td>{{ document.documentName }}</td>
-                    {% endif %}
-                    {% if document.formularId is not null %}
-                        <td>{{ document.formularName }}</td>
-                    {% endif %}
+                    <td>
+                        {% if document.documentId is not null %}
+                            {{ document.documentName }}
+                        {% endif %}
+                        {% if document.formularId is not null %}
+                            {{ document.formularName }}
+                        {% endif %}
+                        {% if document.usageType == formularType %}
+                            {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
+                        {% endif %}
+                    </td>
                     <td>{{ document.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                     <td>{{ document.credit }}</td>
                     <td>{{ document.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
