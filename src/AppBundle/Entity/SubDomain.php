@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class SubDomain
 {
+
+    use ORMBehaviors\Sluggable\Sluggable;
     /**
      *
      * @var integer
@@ -281,6 +284,16 @@ class SubDomain
     public function __toString()
     {
         return ($this->getId() ? $this->getName() : 'Create new');
+    }
+
+    public function getSluggableFields()
+    {
+        return [ 'name'];
+    }
+
+    public function generateSlugValue($values)
+    {
+        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
 
 }

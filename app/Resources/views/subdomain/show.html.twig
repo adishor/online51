@@ -1,0 +1,141 @@
+{% extends "base.html.twig" %}
+
+{% block modal %}
+    {% include 'domain/domain_document_confirm_modal.html.twig' %}
+    {% include 'document_form/config_form_add_confirm_modal.html.twig' %}
+{% endblock modal %}
+
+{% block ccontainer %}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            {% for subdomainItem in domain.subdomains %}
+                {% if not subdomainItem.deleted %}
+                    {% set active = (subdomain.id == subdomainItem.id) ? "class=active" : "" %}
+                    <li {{ active }}><a href="{{ path("subdomain_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug }) }}">{{ subdomainItem.name | upper }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if app.user %}
+                <li><a href="{{ path('formular_documents_show') }}">{{ 'formular-documents.navigation' | trans }}</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <!-- Tab panes -->
+        <div class="tab-content domain-description">
+            {% if not subdomain.deleted %}
+                <div class="tab-pane active">
+                    <h3>{{ subdomain.name | upper }}</h3>
+                    {{ subdomain.description | raw }}
+                    {% if app.user %}
+                        {% if isValid or isUserException %}
+                            {% set subdomainEmptyDocuments = TRUE %}
+                            {% for document in subdomain.documents %}
+                                {% if not document.deleted or not document.media.deleted %}
+                                    {% set subdomainEmptyDocuments = FALSE %}
+                                {% endif %}
+                            {% endfor %}
+                            {% set subdomainEmptyFormulars = TRUE %}
+                            {% for formular in subdomain.formulars %}
+                                {% if not formular.deleted %}
+                                    {% set subdomainEmptyFormulars = FALSE %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if not subdomainEmptyDocuments %}
+                                <h4>{{ 'domain.documents' | trans }}</h4>
+                                <ul>
+                                    {% for document in subdomain.documents %}
+                                        {% if (not document.deleted) and (not document.media.deleted) %}
+                                            <div class="row new-evaluation">
+                                                {% if validDocuments[document.id] is defined or isUserException %}
+                                                    <a href="{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}">
+                                                        <div class="col-xs-2">
+                                                            <div class="credit-icon">
+                                                                <div class="credit-icon-value color-green">
+                                                                    {{ 0 }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-10">
+                                                            <h4>{{ document.name }}</h4>
+                                                        </div>        
+                                                    </a>
+                                                    {% if not isUserException %}
+                                                        <p class="document-info" >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</p>            
+                                                    {% endif %}
+                                                {% else %}
+                                                    <a id="downloadLink{{ document.id }}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
+                                                                    '{{ 'modal.document-confirm.body'|trans({'%title%': document.name, '%credits%': document.creditValue, '%plural%' : (document.creditValue == 1) ? 'modal.document-confirm.credit'|trans : 'modal.document-confirm.credits'|trans }) }}',
+                                                                    '{{ path('unlock_document') }}',
+                                                       {{ document.id }},
+                                                                       '{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}'
+                                                                       );">
+                                                        <div class="col-xs-2">
+                                                            <div class="credit-icon">
+                                                                <div id="documentIcon{{ document.id }}" class="credit-icon-value color-{{ (document.creditValue > 0) ? "red" : "green" }}">
+                                                                    {{ document.creditValue }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-10">
+                                                            <h4>{{ document.name }}</h4>
+                                                        </div> 
+                                                    </a>
+                                                    <p class="document-info" id="errorOrSuccess{{document.id}}" hidden="hidden"></p>            
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>                                                                        
+                            {% endif %}
+                            {% if not subdomainEmptyFormulars %}
+                                <h4>{{ 'domain.formulars' | trans }}</h4>
+                                <ul>
+                                    {% for formular in subdomain.formulars %}
+                                        {% if not formular.deleted %}
+                                            <div class="row new-evaluation">
+                                                <div class="col-xs-2">
+                                                        <div class="credit-icon">
+                                                            <div class="credit-icon-value color-{{ isUserException ? "green" : ((formular.creditValue > 0) ? "red" : "green") }}">
+                                                                {{ isUserException ? 0 : formular.creditValue }}
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                                <div class="col-xs-10">
+                                                    <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
+                                                </div>
+                                                {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug, 'request' : app.request })) }}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>                                                                        
+                            {% endif %}
+                        {% else %}
+                            <br/>
+                            <br/>
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <p>
+                                        {{ 'domain.go-to-subscription'|trans }} <a href="{{ path('subscriptions')}}">{{ 'domain.subscriptions'|trans }}</a>
+                                        {{ 'domain.go-to-contact'|trans }} <a href="{{ path('contact')}}">{{ 'domain.contact'|trans }}</a><br />
+                                    </p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% elseif not app.user %}
+                        <br/>
+                        <br/>
+                        <div class="panel">
+                            <div class="panel-body">
+                                <p>
+                                    {{ 'domain.not-logged-in'|trans }}<br />
+                                    {{ 'please-login'|trans }}<br />
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

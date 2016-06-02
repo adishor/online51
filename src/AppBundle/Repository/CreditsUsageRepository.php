@@ -14,7 +14,7 @@ use AppBundle\Entity\CreditsUsage;
 class CreditsUsageRepository extends EntityRepository
 {
 
-    public function findAllValidUserDocuments($userId, $domainId = null)
+    public function findAllValidUserDocuments($userId, $domainId = null, $subdomainId = null)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -38,6 +38,10 @@ class CreditsUsageRepository extends EntityRepository
         if (null !== $domainId) {
             $queryBuilder->andWhere('sd.domain = :domain')
               ->setParameter('domain', $domainId);
+        }
+        if (null !== $subdomainId) {
+            $queryBuilder->andWhere('sd.id = :subdomainId')
+              ->setParameter('subdomainId', $subdomainId);
         }
         $queryBuilder->addOrderBy('dom.id')
           ->addOrderBy('sd.id')

@@ -1,39 +1,57 @@
-<div class="tab-pane" id="usage">
-    {% if unlockedDocuments.items is not empty %}
-        <h4>{{ 'order.used-credits'|trans }}</h4>
-        <table class="col-xs-12 table-bordered text-center small">
-            <th class="text-center ">{{ 'order.nr'|trans }}</th>
-            <th class="text-center ">{{ 'order.mentions'|trans }}</th>
-            <th class="text-center ">{{ 'order.document'|trans }}</th>
-            <th class="text-center ">{{ 'order.unlocked-at'|trans }}</th>
-            <th class="text-center ">{{ 'order.credits'|trans }}</th>
-            <th class="text-center ">{{ 'order.until'|trans }}</th>
-                {% for document in unlockedDocuments.items %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ document.mentions }}</td>
-                    <td>
-                        {% if document.documentId is not null %}
-                            {{ document.documentName }}
-                        {% endif %}
-                        {% if document.formularId is not null %}
-                            {{ document.formularName }}
-                        {% endif %}
-                        {% if document.usageType == formularType %}
-                            {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
-                        {% endif %}
-                    </td>
-                    <td>{{ document.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
-                    <td>{{ document.credit }}</td>
-                    <td>{{ document.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
-                </tr>    
-            {% endfor %}
-        </table>
-        <div class="navigation">
-            {{ knp_pagination_render(unlockedDocuments) }}
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            <li><a href="{{ path("show_active_credits") }}" id="nav-active-credits">{{ 'order.tab.active-credits'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_pending_orders") }}" id="nav-pending">{{ 'order.tab.pending-orders'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_valid_documents") }}" id="nav-documents">{{ 'order.tab.unlocked-documents'|trans|upper }}</a></li>
+            <li class="active"><a href="{{ path("show_credit_usage") }}" id="nav-usage">{{ 'order.tab.credit-usage'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_credit_history") }}" id="nav-history">{{ 'order.tab.credit-history'|trans|upper }}</a></li>
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <div class="tab-content domain-description">
+            <div class="tab-pane active" id="usage">
+                {% if unlockedDocuments.items is not empty %}
+                    <h4>{{ 'order.used-credits'|trans }}</h4>
+                    <table class="col-xs-12 table-bordered text-center small">
+                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
+                        <th class="text-center ">{{ 'order.mentions'|trans }}</th>
+                        <th class="text-center ">{{ 'order.document'|trans }}</th>
+                        <th class="text-center ">{{ 'order.unlocked-at'|trans }}</th>
+                        <th class="text-center ">{{ 'order.credits'|trans }}</th>
+                        <th class="text-center ">{{ 'order.until'|trans }}</th>
+                            {% for document in unlockedDocuments.items %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ document.mentions }}</td>
+                                <td>
+                                    {% if document.documentId is not null %}
+                                        {{ document.documentName }}
+                                    {% endif %}
+                                    {% if document.formularId is not null %}
+                                        {{ document.formularName }}
+                                    {% endif %}
+                                    {% if document.usageType == formularType %}
+                                        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ document.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
+                                <td>{{ document.credit }}</td>
+                                <td>{{ document.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
+                            </tr>    
+                        {% endfor %}
+                    </table>
+                    <div class="navigation">
+                        {{ knp_pagination_render(unlockedDocuments) }}
+                    </div>
+                    {{ render(controller('AppBundle:Order:showCreditTotals')) }}
+                {% else %}
+                    <h4>{{ 'order.no-used-credits'|trans }}</h4>
+                {% endif %}
+            </div> 
         </div>
-        {{ render(controller('AppBundle:Order:showCreditTotals')) }}
-    {% else %}
-        <h4>{{ 'order.no-used-credits'|trans }}</h4>
-    {% endif %}
-</div> 
+    </div>
+{% endblock %}

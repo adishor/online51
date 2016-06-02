@@ -1,35 +1,53 @@
-<div class="tab-pane" id="documents">
-    {% if validDocuments.items is not empty %}
-        <h4>{{ 'order.unlocked-documents'|trans }}</h4>
-        <table class="col-xs-12 table-bordered text-center small">
-            <th class="text-center ">{{ 'order.nr'|trans }}</th>
-            <th class="text-center ">{{ 'order.document'|trans }}</th>
-            <th class="text-center ">{{ 'order.domain'|trans }}</th>
-            <th class="text-center ">{{ 'order.subdomain'|trans }}</th>
-            <th class="text-center ">{{ 'order.until'|trans }}</th>
-                {% for document in validDocuments.items %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>
-                    {% if document.mid is defined and document.mid is not null %}
-                        <a href="{{ path('sonata_media_download', { 'id':document.mid }) }}">{{ document.usageType | capitalize }}: {{ document.name }}</a>
-                    {% else %}
-                        {{ document.usageType | capitalize }}: {{ document.name }}
-                    {% endif %}
-                    {% if document.usageType == formularType %}
-                        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
-                    {% endif %}
-                    </td>
-                    <td>{{ document.domain }}</td>
-                    <td>{{ document.subDomain }}</td>
-                    <td>{{ document.date| localizeddate('medium', 'short', app.request.locale ) }}</td>
-                </tr>    
-            {% endfor %}
-        </table>
-        <div class="navigation">
-            {{ knp_pagination_render(validDocuments) }}
+{% extends "base.html.twig" %}
+
+{% block ccontainer %}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            <li><a href="{{ path("show_active_credits") }}" id="nav-active-credits">{{ 'order.tab.active-credits'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_pending_orders") }}" id="nav-pending">{{ 'order.tab.pending-orders'|trans|upper }}</a></li>
+            <li class="active"><a href="{{ path("show_valid_documents") }}" id="nav-documents">{{ 'order.tab.unlocked-documents'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_credit_usage") }}" id="nav-usage">{{ 'order.tab.credit-usage'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_credit_history") }}" id="nav-history">{{ 'order.tab.credit-history'|trans|upper }}</a></li>
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <div class="tab-content domain-description">
+            <div class="tab-pane active" id="documents">
+                {% if validDocuments.items is not empty %}
+                    <h4>{{ 'order.unlocked-documents'|trans }}</h4>
+                    <table class="col-xs-12 table-bordered text-center small">
+                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
+                        <th class="text-center ">{{ 'order.document'|trans }}</th>
+                        <th class="text-center ">{{ 'order.domain'|trans }}</th>
+                        <th class="text-center ">{{ 'order.subdomain'|trans }}</th>
+                        <th class="text-center ">{{ 'order.until'|trans }}</th>
+                            {% for document in validDocuments.items %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                {% if document.mid is defined and document.mid is not null %}
+                                    <a href="{{ path('sonata_media_download', { 'id':document.mid }) }}">{{ document.usageType | capitalize }}: {{ document.name }}</a>
+                                {% else %}
+                                    {{ document.usageType | capitalize }}: {{ document.name }}
+                                {% endif %}
+                                {% if document.usageType == formularType %}
+                                    {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
+                                {% endif %}
+                                </td>
+                                <td>{{ document.domain }}</td>
+                                <td>{{ document.subDomain }}</td>
+                                <td>{{ document.date| localizeddate('medium', 'short', app.request.locale ) }}</td>
+                            </tr>    
+                        {% endfor %}
+                    </table>
+                    <div class="navigation">
+                        {{ knp_pagination_render(validDocuments) }}
+                    </div>
+                {% else %}
+                    <h4>{{ 'order.no-unlocked-documents'|trans }}</h4>
+                {% endif %}
+            </div>
         </div>
-    {% else %}
-        <h4>{{ 'order.no-unlocked-documents'|trans }}</h4>
-    {% endif %}
-</div> 
+    </div>
+{% endblock %}

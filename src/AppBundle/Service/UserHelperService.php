@@ -99,9 +99,9 @@ class UserHelperService
         return true;
     }
 
-    public function getValidUserDocuments($userId, $domainId = null)
+    public function getValidUserDocuments($userId, $domainId = null, $subdomainId = null)
     {
-        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId);
+        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId, $subdomainId);
         $validDocuments = array();
         foreach ($documents as $document) {
             $validDocuments[$document['id']] = $document['date'];
