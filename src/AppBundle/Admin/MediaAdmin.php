@@ -72,6 +72,9 @@ class MediaAdmin extends SonataMediaAdmin
         if ($media->getProviderName() === 'sonata.media.provider.image') {
             $media->setMediaType(Media::IMAGE_TYPE);
         }
+        if ($media->getProviderName() === 'sonata.media.provider.video') {
+            $media->setMediaType(Media::VIDEO_TYPE);
+        }
         parent::prePersist($media);
     }
 

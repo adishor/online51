@@ -19,6 +19,7 @@ class CreditsUsage
 {
     const TYPE_DOCUMENT = 'document';
     const TYPE_FORMULAR = 'formular';
+    const TYPE_VIDEO = 'video';
     const TYPE_EXPIRED = 'expired';
 
     /**
@@ -71,6 +72,14 @@ class CreditsUsage
      * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
     protected $document;
+
+    /**
+     *
+     * @var \AppBundle\Entity\Video
+     * @ORM\ManyToOne(targetEntity="Video", inversedBy="videoCreditsUsage")
+     * @ORM\JoinColumn(name="video_id", referencedColumnName="id", nullable=true)
+     */
+    protected $video;
 
     /**
      *
@@ -445,6 +454,29 @@ class CreditsUsage
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * Set video
+     *
+     * @param \AppBundle\Entity\Video $video
+     * @return CreditsUsage
+     */
+    public function setVideo(\AppBundle\Entity\Video $video = null)
+    {
+        $this->video = $video;
+
+        return $this;
+    }
+
+    /**
+     * Get video
+     *
+     * @return \AppBundle\Entity\Video
+     */
+    public function getVideo()
+    {
+        return $this->video;
     }
 
     /**

@@ -60,6 +60,12 @@ class SubDomain
 
     /**
      *
+     * @ORM\OneToMany(targetEntity="Video", mappedBy="subdomain")
+     */
+    private $videos;
+
+    /**
+     *
      * @ORM\OneToMany(targetEntity="Formular", mappedBy="subdomain")
      */
     private $formulars;
@@ -86,6 +92,7 @@ class SubDomain
     public function __construct()
     {
         $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->videos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulars = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
     }
@@ -200,6 +207,39 @@ class SubDomain
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    /**
+     * Add videos
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $videos
+     * @return SubDomain
+     */
+    public function addVideo(\Application\Sonata\MediaBundle\Entity\Media $videos)
+    {
+        $this->videos[] = $videos;
+
+        return $this;
+    }
+
+    /**
+     * Remove videos
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $videos
+     */
+    public function removeVideo(\Application\Sonata\MediaBundle\Entity\Media $videos)
+    {
+        $this->videos->removeElement($videos);
+    }
+
+    /**
+     * Get videos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVideo()
+    {
+        return $this->videos;
     }
 
     /**

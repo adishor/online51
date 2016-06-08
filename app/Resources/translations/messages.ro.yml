@@ -504,6 +504,8 @@ admin_label:
     ad: 'Reclame'
     document: 'Documente'
     formular: 'Formulare'
+    area: 'Zone'
+    video: 'Video'
 Subscription List: Lista Abonamente
 Subscription Delete: Stergere Abonamente
 Domain List: Lista Domenii
@@ -520,6 +522,10 @@ Document List: Lista documente
 Document Delete: Stergere documente
 Formular List: Lista formulare
 Formular Delete: Stergere formulare
+R O Area List: Lista zone
+R O Area Delete: Stergere zone
+Video List: Lista video
+Video Delete: Stergere video
 Name: Nume
 Price: Pret
 Credit: Credit
@@ -570,6 +576,8 @@ Image: Imagine
 Notify Days: Zile notificare expirare
 Demo Domain: Disponibil pentru cont gratuit
 Demo Credit Value: Credite alocate la cont gratuit
+Areas: Zone
+Counties: Judete
 
 #media
 sonata:
