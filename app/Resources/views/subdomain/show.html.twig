@@ -2,6 +2,7 @@
 
 {% block modal %}
     {% include 'domain/domain_document_confirm_modal.html.twig' %}
+    {% include 'domain/domain_video_confirm_modal.html.twig' %}
     {% include 'document_form/config_form_add_confirm_modal.html.twig' %}
 {% endblock modal %}
 
@@ -13,11 +14,11 @@
                 {% if not subdomainItem.deleted %}
                     {% set active = (subdomain.id == subdomainItem.id) ? "class=active" : "" %}
                     <li {{ active }}><a href="{{ path("subdomain_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug }) }}">{{ subdomainItem.name | upper }}</a></li>
-                {% endif %}
-            {% endfor %}
-            {% if app.user %}
+                    {% endif %}
+                {% endfor %}
+                {% if app.user %}
                 <li><a href="{{ path('formular_documents_show') }}">{{ 'formular-documents.navigation' | trans }}</a></li>
-            {% endif %}
+                {% endif %}
         </ul>
     </div>
     <div class="col-xs-9">
@@ -35,12 +36,19 @@
                                     {% set subdomainEmptyDocuments = FALSE %}
                                 {% endif %}
                             {% endfor %}
+                            {% set subdomainEmptyVideos = TRUE %}
+                            {% for video in subdomain.videos %}
+                                {% if not video.deleted or not video.media.deleted %}
+                                    {% set subdomainEmptyVideos = FALSE %}
+                                {% endif %}
+                            {% endfor %}
                             {% set subdomainEmptyFormulars = TRUE %}
                             {% for formular in subdomain.formulars %}
                                 {% if not formular.deleted %}
                                     {% set subdomainEmptyFormulars = FALSE %}
                                 {% endif %}
                             {% endfor %}
+
                             {% if not subdomainEmptyDocuments %}
                                 <h4>{{ 'domain.documents' | trans }}</h4>
                                 <ul>
@@ -64,12 +72,7 @@
                                                         <p class="document-info" >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</p>            
                                                     {% endif %}
                                                 {% else %}
-                                                    <a id="downloadLink{{ document.id }}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup(
-                                                                    '{{ 'modal.document-confirm.body'|trans({'%title%': document.name, '%credits%': document.creditValue, '%plural%' : (document.creditValue == 1) ? 'modal.document-confirm.credit'|trans : 'modal.document-confirm.credits'|trans }) }}',
-                                                                    '{{ path('unlock_document') }}',
-                                                       {{ document.id }},
-                                                                       '{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}'
-                                                                       );">
+                                                    <a id="downloadLink{{ document.id }}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup('{{ 'modal.document-confirm.body'|trans({'%title%': document.name, '%credits%': document.creditValue, '%plural%' : (document.creditValue == 1) ? 'modal.document-confirm.credit'|trans : 'modal.document-confirm.credits'|trans }) }}', '{{ path('unlock_document') }}', {{ document.id }}, '{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}');">
                                                         <div class="col-xs-2">
                                                             <div class="credit-icon">
                                                                 <div id="documentIcon{{ document.id }}" class="credit-icon-value color-{{ (document.creditValue > 0) ? "red" : "green" }}">
@@ -88,6 +91,79 @@
                                     {% endfor %}
                                 </ul>                                                                        
                             {% endif %}
+
+                            {% if not subdomainEmptyVideos %}
+                                <h4>{{ 'domain.videos' | trans }}</h4>
+                                <ul>
+                                    {% for video in subdomain.videos %}
+                                        {% if (not video.deleted) and (not video.media.deleted) %}
+                                            <div class="row new-evaluation">
+                                                {% if validVideos[video.id] is defined or isUserException %}
+                                                    <a href="javascript:;" onclick="showVideoModal{{ video.media.id }}();">
+                                                        <div class="col-xs-2">
+                                                            <div class="credit-icon">
+                                                                <div class="credit-icon-value color-green">
+                                                                    {{ 0 }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-10">
+                                                            <h4>{{ video.name }}</h4>
+                                                        </div>        
+                                                    </a>
+                                                    {% if not isUserException %}
+                                                        <p class="document-info" >{{ "domain.video.available-until"|trans({ '%date%' : validVideos[video.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</p>            
+                                                    {% endif %}
+                                                    <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ video.media.id }}" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog  modal-sm" role="video">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <video width="480" height="320" controls>
+                                                                        <source src='{% path video.media, 'reference' %}' type='video/mp4' />
+                                                                        <object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="480" height="320" >
+                                                                            <param name="movie" value="flowplayer-3.2.2.swf">
+                                                                            <param name="allowfullscreen" value="true">
+                                                                            <param name="flashvars" value="config={'clip':{'url':'{% path video.media, 'reference' %}','autoPlay':false}}">
+                                                                        </object> 
+
+                                                                    </video>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>       
+                                                    <script type="text/javascript">
+                                                        function showVideoModal{{ video.media.id }}()
+                                                        {
+                                                            $('#showVideoModal{{ video.media.id }}').modal();
+                                                        }
+                                                    </script>
+                                                {% else %}
+                                                    <a id="showLink{{ video.id }}" href ="javascript:;" onclick="javascript:VideoConfirmPopup('{{ 'modal.video-confirm.body'|trans({'%title%': video.name, '%credits%': video.creditValue, '%plural%' : (video.creditValue == 1) ? 'modal.video-confirm.credit'|trans : 'modal.video-confirm.credits'|trans }) }}', '{{ path('unlock_video') }}', '{{ video.id }}', '{% path video.media, 'reference' %}' );">
+                                                        <div class="col-xs-2">
+                                                            <div class="credit-icon">
+                                                                <div id="documentIcon{{ video.id }}" class="credit-icon-value color-{{ (video.creditValue > 0) ? "red" : "green" }}">
+                                                                    {{ video.creditValue }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-10">
+                                                            <h4>{{ video.name }}</h4>
+                                                        </div> 
+                                                    </a>
+                                                    <script type="text/javascript">
+                                                        function showVideoModal{{ video.id }}()
+                                                        {
+                                                            $('#showVideoModal{{ video.id }}').modal();
+                                                        }
+                                                    </script>
+                                                    <p class="document-info" id="errorOrSuccessVideo{{video.id}}" hidden="hidden"></p>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>                                                                        
+                            {% endif %}
+
                             {% if not subdomainEmptyFormulars %}
                                 <h4>{{ 'domain.formulars' | trans }}</h4>
                                 <ul>
@@ -95,11 +171,11 @@
                                         {% if not formular.deleted %}
                                             <div class="row new-evaluation">
                                                 <div class="col-xs-2">
-                                                        <div class="credit-icon">
-                                                            <div class="credit-icon-value color-{{ isUserException ? "green" : ((formular.creditValue > 0) ? "red" : "green") }}">
-                                                                {{ isUserException ? 0 : formular.creditValue }}
-                                                            </div>
+                                                    <div class="credit-icon">
+                                                        <div class="credit-icon-value color-{{ isUserException ? "green" : ((formular.creditValue > 0) ? "red" : "green") }}">
+                                                            {{ isUserException ? 0 : formular.creditValue }}
                                                         </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-xs-10">
                                                     <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
@@ -110,6 +186,7 @@
                                     {% endfor %}
                                 </ul>                                                                        
                             {% endif %}
+
                         {% else %}
                             <br/>
                             <br/>

@@ -54,7 +54,7 @@ class OrderController extends Controller
     {
         $userId = $this->getUser()->getId();
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
-        $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserFormularDocuments($userId));
+        $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserVideos($userId), $creditUsageRepository->findAllValidUserFormularDocuments($userId));
 
         return $this->render('order/order_valid_documents.html.twig', array(
               'validDocuments' => $this->get('knp_paginator')->paginate($validDocuments, $request->query->getInt('page-documents', 1), $this->getParameter('pagination')['documents'], array('pageParameterName' => 'page-documents')),

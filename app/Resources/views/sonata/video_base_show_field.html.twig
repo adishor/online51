@@ -12,7 +12,7 @@ file that was distributed with this source code.
 <th{% if(is_diff|default(false)) %} class="diff"{% endif %}>{% block name %}{{ admin.trans(field_description.label, {}, field_description.translationDomain) }}{% endblock %}</th>
 <td>
     {% if field_description.name == 'media' %}
-        <a href="javascript:;" onclick="showVideoModal{{ object.media.id }}('{% path object.media, 'reference' %}');">{{ object.media.name }}</a>
+        <a href="javascript:;" onclick="showVideoModal{{ object.media.id }}();">{{ object.media.name }}</a>
         <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ object.media.id }}" tabindex="-1" role="dialog">
             <div class="modal-dialog  modal-sm" role="video">
                 <div class="modal-content">
@@ -31,7 +31,7 @@ file that was distributed with this source code.
             </div>
         </div>       
         <script type="text/javascript">
-            function showVideoModal{{ object.media.id }}(videoPath)
+            function showVideoModal{{ object.media.id }}()
             {
                 $('#showVideoModal{{ object.media.id }}').modal();
             }

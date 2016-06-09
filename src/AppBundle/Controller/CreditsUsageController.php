@@ -46,6 +46,40 @@ class CreditsUsageController extends Controller
     }
 
     /**
+     * @Route("/unlock-video", name="unlock_video")
+     */
+    public function unlockVideoAction(Request $request)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+        $userHelper = $this->get('app.user_helper');
+        $userHelper->updateValidUserCredits();
+        $videoId = $request->request->get('videoId');
+        $video = $this->getDoctrine()->getManager()->getRepository('AppBundle:Video')->find($videoId);
+
+        if (true === $userHelper->isValidUserVideo($user->getId(), $videoId)) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.video.already-unlocked'));
+        }
+        if (($user->getCreditsTotal() - $video->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
+            $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.video.no-credits'))));
+
+            return $response;
+        }
+
+        $userHelper->createUnlockVideoCreditUsage($user, $video);
+
+        $response = new Response(json_encode(array(
+              'success' => true,
+              'message' => $this->get('translator')->trans('domain.video.success'),
+              'credits' => $user->getCreditsTotal(),
+        )));
+
+        return $response;
+    }
+
+    /**
      * @Route("/unlock-formular", name="unlock_formular")
      */
     public function unlockFormularAction(Request $request)

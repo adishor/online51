@@ -52,6 +52,44 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
+    public function findAllValidUserVideos($userId, $domainId = null, $subdomainId = null)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('v.id as id, v.name, m.id as mid, '
+            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+            . 'sd.name as subDomain, dom.name as domain')
+          ->from('AppBundle:CreditsUsage ', 'cu')
+          ->join('AppBundle:Video', 'v', 'WITH', 'cu.video = v')
+          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
+          ->join('AppBundle:SubDomain', 'sd', 'WITH', 'v.subdomain = sd')
+          ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('v.deleted = FALSE')
+          ->andWhere('m.deleted = FALSE')
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('sd.deleted = FALSE')
+          ->andWhere('dom.deleted = FALSE');
+        if (null !== $domainId) {
+            $queryBuilder->andWhere('sd.domain = :domain')
+              ->setParameter('domain', $domainId);
+        }
+        if (null !== $subdomainId) {
+            $queryBuilder->andWhere('sd.id = :subdomainId')
+              ->setParameter('subdomainId', $subdomainId);
+        }
+        $queryBuilder->addOrderBy('dom.id')
+          ->addOrderBy('sd.id')
+          ->addOrderBy('v.id', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
     public function findAllValidUserFormularDocuments($userId)
     {
         $queryBuilder = $this->getEntityManager()
@@ -85,11 +123,12 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('d.id as documentId, f.id as formularId, m.id as mediaId, '
-            . 'd.name as documentName, f.name as formularName, '
+          ->select('d.id as documentId, v.id as videoId, f.id as formularId, m.id as mediaId, '
+            . 'd.name as documentName, v.name as videoName, f.name as formularName, '
             . 'cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate, cu.usageType, cu.id as cuid')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->leftJoin('cu.document', 'd')
+          ->leftJoin('cu.video', 'v')
           ->leftJoin('cu.formular', 'f')
           ->leftJoin('cu.media', 'm')
           ->where('cu.user = :user')
@@ -166,6 +205,30 @@ class CreditsUsageRepository extends EntityRepository
           ->andWhere('cu.deleted = FALSE')
           ->andWhere('m.deleted = FALSE')
           ->andWhere('d.deleted = FALSE')
+        ;
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    public function findValidUserVideo($userId, $videoId)
+    {
+        $queryBuilder = $this->getEntityManager()
+          ->createQueryBuilder()
+          ->select('v.id')
+          ->from('AppBundle:CreditsUsage', 'cu')
+          ->join('cu.media', 'm')
+          ->join('cu.video', 'v')
+          ->where('cu.user = :user')
+          ->setParameter('user', $userId)
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->andWhere('v.id = :video')
+          ->setParameter('video', $videoId)
+          ->andWhere('cu.deleted = FALSE')
+          ->andWhere('m.deleted = FALSE')
+          ->andWhere('v.deleted = FALSE')
         ;
 
         $query = $queryBuilder->getQuery();

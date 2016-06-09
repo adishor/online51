@@ -108,6 +108,7 @@ domain:
     in-the-section: 'In sectiunea %domain% gasesti :'
     documents: 'Documente'
     formulars: 'Formulare'
+    videos: 'Video'
     not-logged-in: 'Documentele si Formularele sunt accesibile dupa acces in sistem:'
     no-subscription: 'Nu aveti acces la documentele si formularele din acest domeniu!'
     go-to-subscription: 'Daca doriti sa accesati documentele/formularele aferente acestui domeniu va rugam sa achizitionati un'
@@ -115,10 +116,15 @@ domain:
     subscriptions: 'abonament'
     contact: 'formularul de contact.'
     document:
-        already-unlocked: 'Documetul este deja deblocat.'
+        already-unlocked: 'Documentul este deja deblocat. Nu s-au consumat credite.'
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest document.'
         success: 'Document deblocat cu succes.'
         available-until: 'Documentul este deblocat pana la data de %date%'
+    video:
+        already-unlocked: 'Video-ul este deja deblocat. Nu s-au consumat credite.'
+        no-credits: 'Nu aveti suficiente credite pentru a debloca acest video.'
+        success: 'Video deblocat cu succes.'
+        available-until: 'Video-ul este deblocat pana la data de %date%'
     formular:
         config: 'Va rugam completati toate campurile de mai jos.'
         already-unlocked: 'Formularul este deja deblocat. Nu s-au consumat credite.'
@@ -288,6 +294,7 @@ change-info:
     back: Inapoi
 credit-usage:
     document-unlocked-by-user: 'Document deblocat de utilizator'
+    video-unlocked-by-user: 'Video deblocat de utilizator'
     formular-unlocked-by-user: 'Formular deblocat de utilizator'
     expired: 'Credite expirate.'
 register-success:
@@ -364,6 +371,11 @@ modal:
     document-confirm:
         title: 'Confirma deblocare'
         body: 'Sunteti sigur ca doriti sa deblocati documentul %title%? Atentie veti consuma %credits% %plural%!'
+        credit:  'credit'
+        credits:  'credite'
+    video-confirm:
+        title: 'Confirma deblocare'
+        body: 'Sunteti sigur ca doriti sa deblocati videoul %title%? Atentie veti consuma %credits% %plural%!'
         credit:  'credit'
         credits:  'credite'
     subscription-add-confirm:

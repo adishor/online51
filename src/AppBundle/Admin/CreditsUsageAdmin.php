@@ -34,6 +34,13 @@ class CreditsUsageAdmin extends Admin
           ->from('AppBundle:Document', 'd')
           ->where('d.deleted = 0');
 
+        $queryVideo = $this->modelManager
+          ->getEntityManager('AppBundle:Video')
+          ->createQueryBuilder()
+          ->select('v')
+          ->from('AppBundle:Video', 'v')
+          ->where('v.deleted = 0');
+
         $form->add('user', null, array(
               'query_builder' => $queryUser,
               'disabled' => $disabled
@@ -41,6 +48,12 @@ class CreditsUsageAdmin extends Admin
           ->add('document', null, array(
               'query_builder' => $queryDocument,
               'empty_value' => 'No Document',
+              'required' => false,
+              'disabled' => ($this->getSubject()->getFormular()) ? true : $disabled
+          ))
+          ->add('video', null, array(
+              'query_builder' => $queryVideo,
+              'empty_value' => 'No Video',
               'required' => false,
               'disabled' => ($this->getSubject()->getFormular()) ? true : $disabled
           ))
@@ -63,6 +76,7 @@ class CreditsUsageAdmin extends Admin
         $filter->add('user')
           ->add('document')
           ->add('formular')
+          ->add('video')
           ->add('credit')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
@@ -74,6 +88,7 @@ class CreditsUsageAdmin extends Admin
           ->add('user')
           ->add('document')
           ->add('formular')
+          ->add('video')
           ->add('media')
           ->add('credit')
           ->add('mentions')
@@ -91,6 +106,7 @@ class CreditsUsageAdmin extends Admin
         $show->add('user')
           ->add('document')
           ->add('formular')
+          ->add('video')
           ->add('media', null, array(
               'template' => 'sonata/credits_usage_base_show_field.html.twig',
           ))

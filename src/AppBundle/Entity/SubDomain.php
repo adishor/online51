@@ -237,7 +237,7 @@ class SubDomain
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVideo()
+    public function getVideos()
     {
         return $this->videos;
     }

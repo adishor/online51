@@ -27,6 +27,7 @@ class SubDomainController extends Controller
             $userHelper = $this->get('app.user_helper');
             $isValid = $userHelper->isDomainValidForUser($userId, $domain->getId());
             $validDocuments = $userHelper->getValidUserDocuments($userId, $domain->getId(), $subdomain->getId());
+            $validVideos = $userHelper->getValidUserVideos($userId, $domain->getId(), $subdomain->getId());
             $isUserException = $userHelper->getIsUserException($userId);
         }
         return $this->render('subdomain/show.html.twig', array(
@@ -34,6 +35,7 @@ class SubDomainController extends Controller
               'subdomain' => $subdomain,
               'isValid' => $isValid,
               'validDocuments' => $validDocuments,
+              'validVideos' => $validVideos,
               'isUserException' => $isUserException,
         ));
     }
