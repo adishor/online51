@@ -30,7 +30,7 @@
 {#        final configuration for this cases is done by selecting multiple level values#}
 {#        example select value 01, after that another select is being loaded , select value 03 and final configiuration is 01 03#}
         {% if not singleSelect and items|length > 0 %}
-            <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" id='{{ key }}' onChange="loadSubItem('{{ key }}', jQuery(this).find('option:selected').val());">
+            <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" id='{{ key }}' onChange="loadSubItem('{{ key }}', jQuery(this).find('option:selected').val());">
                 {% if items|length > 1 %}
                     <option></option>
                 {% endif %} 
@@ -41,14 +41,20 @@
             <span class="field-validation-valid" data-valmsg-for="select_{{ key }}" data-valmsg-replace="true" ></span>
             
             <div class="multipleSelectLevel2">
-                <select name="select_{{ key }}_level2" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level2" onChange="loadSub2Item('{{ key }}', jQuery(this).find('option:selected').val());"></select>
+                <select name="select_{{ key }}_level2" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level2" onChange="loadSub2Item('{{ key }}', jQuery(this).find('option:selected').val());"></select>
                 <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level2" data-valmsg-replace="true" ></span>
             </div>
             <div class="multipleSelectLevel3">
-                <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3"></select>
+                <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3"></select>
                 <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level3" data-valmsg-replace="true" ></span>
             </div>
 
+            <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
+            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}"/>
+            <span class="field-validation-valid" data-valmsg-for="autocomplete_{{ key }}" data-valmsg-replace="true" ></span>
+
+            <span class="field-validation-error" id="autocomplete-generic-error-{{ key }}"></span>
+            
         {% endif %}    
     {% endfor %}
     <p class="register-form2 pull-right">
@@ -80,6 +86,15 @@
                     $('.multipleSelectLevel2').css('display', 'block');
                 }
             }    
+        } else {
+            $('#' + key + '_level2').html("");
+            $('#' + key + '_level2').selectmenu();
+            $('#' + key + '_level3').html("");
+            $('#' + key + '_level3').selectmenu();
+            $('#' + key).next().next().css('display', 'block');
+            $(".multipleSelectLevel2").css('display', 'none');
+            $('#' + key + '_level2').next().next().css('display', 'block');
+            $(".multipleSelectLevel3").css('display', 'none');
         }
     }
     
@@ -106,25 +121,52 @@
     }
     
     var data = {};
-    function SubmitFormConfig_{{ formular.slug }}()
-    {
+    function SubmitFormConfig_{{ formular.slug }}() {
         $.each(items, function(index, value) {
             $("#" + index).valid();
+            if ( $("#autocomplete_" + index).length) {
+                //check if both select and autocomplete have values
+                if ($("#" + index).val() && $("#autocomplete_" + index).val()) {
+                    $("#autocomplete-generic-error-" + index).css('display', 'block').html('{{ 'form.required-autocomplete.multiple-completed' | trans }}');
+                } else {
+                    $("#autocomplete-generic-error-" + index).html("");
+                }
+
+                if ($("#" + index + "_level3").length) {
+                    if ($("#" + index + "_level3").val() == null || $("#" + index + "_level3").val() == '') {
+                        $("#autocomplete_" + index).valid();
+                    }
+                }
+            }
+
             data[index] = $("#" + index).val();
             if (typeof value === 'object') {
                 for (var firstSubitem in value) break;
                 if (typeof value[firstSubitem] === 'object') {
-                    if (value[firstSubitem].hasOwnProperty('values')) {
-                        $("#" + index + "_level2").valid();
-                        data[index] = $("#" + index+ "_level2").val();
-                        if (typeof value[firstSubitem]['values'] === 'object') {
-                            for (var firstSub2item in value[firstSubitem]['values']) break;
-                            if (typeof value[firstSubitem]['values'][firstSub2item] === 'object') {
-                                if (value[firstSubitem]['values'][firstSub2item].hasOwnProperty('values')) {
-                                    $("#" + index + "_level3").valid();
-                                    data[index] = $("#" + index+ "_level3").val();
+                    if ($("#" + index).val()) {
+                        if (value[firstSubitem].hasOwnProperty('values')) {
+                            $("#" + index + "_level2").valid();
+                            data[index] = $("#" + index + "_level2").val();
+                            if (typeof value[firstSubitem]['values'] === 'object') {
+                                for (var firstSub2item in value[firstSubitem]['values']) break;
+                                if (typeof value[firstSubitem]['values'][firstSub2item] === 'object') {
+                                    if (value[firstSubitem]['values'][firstSub2item].hasOwnProperty('values')) {
+                                        $("#" + index + "_level3").valid();
+                                        data[index] = $("#" + index + "_level3").val();
+                                        if ($("#" + index + "_level3").val()) {
+                                            $("#autocomplete_" + index).next().html("");
+                                            $("#autocomplete_" + index).removeClass('input-validation-error');
+                                        }
+                                    }
                                 }
                             }
+                        }
+                    } else {
+                        if ($("#autocomplete_" + index).val()) {
+                            $("#" + index).next().next().html("");
+                            $("#" + index + "_level2").next().next().html("");
+                            $("#" + index + "_level3").next().next().html("");
+                            data[index] = $("#autocomplete_" + index).val();
                         }
                     }
                 }
@@ -133,12 +175,13 @@
 
         var errorNo = 0;
         $('.field-validation-error').each(function(){
-            if ($(this).html() !== '') {
+            if ($(this).html() != '') {
                 errorNo = errorNo + 1;
             }
         });
+        
         if (errorNo === 0) {
-            {% if isUserException %}
+            {% if isUserException or isDraft %}
                 AjaxCheckSubmitFormConfig(); 
             {% else %}
                 $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
@@ -146,14 +189,37 @@
             {% endif %}
         }
     }
+        
+    $( document ).ready(function() {
+       $(".loadAutocompleteItems").each(function(){
+            var id = $(this).attr("id");
+            var key = id.replace("autocomplete_", "");
+            
+            var autocompleteItems = [];
+            if (key == 'tip_deseu') {
+                autocompleteItems = AutocompleteTipDeseu(key);
+            }
+
+            $("#" + id).autocomplete({
+                source: function(req, responseFn) {
+                    var re = $.ui.autocomplete.escapeRegex(req.term);
+                    var matcher = new RegExp( "^" + re, "i" );
+                    var a = $.grep( autocompleteItems, function(item,index){
+                        return matcher.test(item);
+                    });
+                    responseFn( a );
+                }
+            });
+            
+       }); 
+    });
     
     $('#configFormAddConfirmModalYes').click(function () {
         $('#configFormAddConfirmModal').modal('toggle');
         AjaxCheckSubmitFormConfig();
     });
     
-    function AjaxCheckSubmitFormConfig()
-    {
+    function AjaxCheckSubmitFormConfig() {
         $.ajax({
             type: "POST",
             url: '{{ path('unlock_formular') }}',
@@ -170,6 +236,30 @@
                 }
             }
         });
+    }
+    
+    function AutocompleteTipDeseu(key) {
+        var autocompleteItems = [];
+        var keySubitemArray = Object.keys(items[key]).sort();
+        for (var keySubitem in keySubitemArray) {
+            if (items[key][keySubitemArray[keySubitem]].hasOwnProperty('values')) {
+                var key2SubitemArray = Object.keys(items[key][keySubitemArray[keySubitem]]['values']).sort();
+                for (var key2Subitem in key2SubitemArray) {
+                    if (items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]].hasOwnProperty('values')) {
+                        var key3SubitemArray = Object.keys(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']).sort();
+                        for (var key3Subitem in key3SubitemArray) {
+                            autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem] + " " + key3SubitemArray[key3Subitem]);
+                        }
+                    } else {
+                        autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem]);
+                    }
+                }
+            } else {
+                autocompleteItems.push(keySubitemArray[keySubitem]);
+            }
+        }
+
+        return autocompleteItems;
     }
     
 </script>

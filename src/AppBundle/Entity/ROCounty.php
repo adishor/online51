@@ -43,11 +43,19 @@ class ROCounty
     private $cities;
 
     /**
+     *
+     * @ORM\ManyToMany(targetEntity="ROArea", mappedBy="counties", cascade={"persist"})
+     * @ORM\JoinTable(name="roarea_county")
+     */
+    protected $areas;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->cities = new ArrayCollection();
+        $this->areas = new ArrayCollection();
     }
 
     /**
@@ -114,6 +122,41 @@ class ROCounty
     public function getCities()
     {
         return $this->cities;
+    }
+
+    /**
+     * Add areas
+     *
+     * @param \AppBundle\Entity\ROArea $areas
+     * @return ROCounty
+     */
+    public function addArea(\AppBundle\Entity\ROArea $areas)
+    {
+        $areas->addCounty($this);
+        $this->areas[] = $areas;
+
+        return $this;
+    }
+
+    /**
+     * Remove areas
+     *
+     * @param \AppBundle\Entity\ROArea $areas
+     */
+    public function removeArea(\AppBundle\Entity\ROArea $areas)
+    {
+        $this->areas->removeElement($areas);
+        $areas->removeCounty($this);
+    }
+
+    /**
+     * Get areas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAreas()
+    {
+        return $this->areas;
     }
 
     public function getSluggableFields()

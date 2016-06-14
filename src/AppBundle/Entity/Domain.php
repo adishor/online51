@@ -384,22 +384,6 @@ class Domain
         return $this->deletedAt;
     }
 
-    public function __toString()
-    {
-        return ($this->getId() ? $this->getName() : 'Create new');
-    }
-
-    public function getSluggableFields()
-    {
-        return [ 'name'];
-    }
-
-    public function generateSlugValue($values)
-    {
-        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
-    }
-
-
     /**
      * Set demoDomain
      *
@@ -444,5 +428,20 @@ class Domain
     public function getDemoCreditValue()
     {
         return $this->demoCreditValue;
+    }
+
+    public function __toString()
+    {
+        return ($this->getId() ? $this->getName() : 'Create new');
+    }
+
+    public function getSluggableFields()
+    {
+        return [ 'name'];
+    }
+
+    public function generateSlugValue($values)
+    {
+        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
 }

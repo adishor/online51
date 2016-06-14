@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class SubscriptionAdmin extends Admin
 {

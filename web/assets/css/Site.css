@@ -1889,9 +1889,16 @@ h5.first {
     max-width: 60px
 }
 
+.max-width-250 {
+    max-width: 250px;
+}
 
 .max-width-350{
     max-width: 350px
+}
+
+.max-width-500{
+    max-width: 500px
 }
 
 .width-100-percent{
@@ -1920,4 +1927,121 @@ h5.first {
 
 .create-new {
     cursor: pointer;
+}
+
+.m-video.bs-modal-sm {
+    width: 560px;
+}
+
+.m-video .modal-content {
+    width: 520px;
+}
+
+.ui-menu {
+    max-width: 550px;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow: scroll;
+}
+
+.ui-menu li {
+    list-style-type: none;
+}
+
+.ui-menu li a {
+    display: block;
+}
+
+
+.craue_formflow_steplist {
+    margin:10px 0px;
+    padding: 0;
+    min-height:630px;
+    font-family: "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+    border-bottom:0;
+}
+
+.craue_formflow_steplist li {
+    font-weight: bold;
+    color: #333;
+    border: 0;
+    -webkit-box-shadow: 2px 2px 3px 0px rgba(77, 79, 79, 0.75);
+    -moz-box-shadow: 2px 2px 3px 0px rgba(77, 79, 79, 0.75);
+    box-shadow: 2px 2px 3px 0px rgba(77, 79, 79, 0.75);
+    margin-bottom: 8px;
+    border-radius: 0px;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+.craue_formflow_steplist li {
+    background: #ddd;
+    border: 0 none !important;
+    box-shadow: none !important;
+    color: #999 !important;
+    cursor: default !important;
+    text-shadow: none !important;
+    transform: translate(0px, 0px);
+}
+
+.craue_formflow_steplist a {
+    background: #AFCA36;
+    display: block;
+    margin: -10px -15px;
+    padding: 10px;
+}
+
+.craue_formflow_steplist li a {
+    color: #333 !important;
+}
+
+.craue_formflow_steplist li a:hover {
+    text-decoration: none;
+}
+
+li.craue_formflow_done_step {
+    float:none!important;
+    border:0;
+    font-weight:bold;
+    color:#333;
+    background: #AFCA36;
+    border:0;
+    -webkit-box-shadow: 2px 2px 3px 0px rgba(77, 79, 79, 0.75);
+    -moz-box-shadow:    2px 2px 3px 0px rgba(77, 79, 79, 0.75);
+    box-shadow:         2px 2px 3px 0px rgba(77, 79, 79, 0.75);
+    margin-bottom:8px;
+    border-radius:0px;
+}
+
+li.craue_formflow_current_step {
+    color:#333!important;
+    text-shadow: none;
+    background:#efefef;
+    border:0;
+    -webkit-box-shadow: inset 3px 3px 3px -2px rgba(77,79,79,0.75);
+    -moz-box-shadow: inset 3px 3px 3px -2px rgba(77,79,79,0.75);
+    box-shadow: 3px 3px 3px -2px rgba(77, 79, 79, 0.75) inset !important;
+}
+
+.craue_formflow_steplist li:hover {
+    border:0;
+    -moz-box-shadow:    none;
+    -webkit-box-shadow: none;
+    box-shadow:         none;
+}
+
+.craue_formflow_buttons {
+    margin: 20px 0;
+}
+
+.formular-form label {
+    margin:10px 0 3px 0;
+}
+
+.formular-form ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }

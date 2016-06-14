@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "323bbb5a69c2b7eb9049f2a5a7c9df98",
-    "content-hash": "6737a302390b53e3e9c88fb4f8b87bbb",
+    "hash": "3bb7995be592d9440e4e03bb1462f457",
+    "content-hash": "822e993c4ca9f5d5a612463d8f353472",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -169,6 +169,63 @@
                 "slugify"
             ],
             "time": "2016-02-11 09:53:46"
+        },
+        {
+            "name": "craue/formflow-bundle",
+            "version": "2.1.9",
+            "target-dir": "Craue/FormFlowBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/craue/CraueFormFlowBundle.git",
+                "reference": "dc3ff410a7168228a98c49338639bb6ad9c17587"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/craue/CraueFormFlowBundle/zipball/dc3ff410a7168228a98c49338639bb6ad9c17587",
+                "reference": "dc3ff410a7168228a98c49338639bb6ad9c17587",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2|~7.0",
+                "symfony/form": "^2.1.3",
+                "symfony/framework-bundle": "^2.1.3"
+            },
+            "require-dev": {
+                "doctrine/common": "~2.3",
+                "phpunit/phpunit": "~4.1|~5.0",
+                "sensio/framework-extra-bundle": "~2.1|~3.0",
+                "symfony/phpunit-bridge": "^2.8.1",
+                "symfony/symfony": "^2.1.3"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Craue\\FormFlowBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Raue",
+                    "email": "christian.raue@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/craue/CraueFormFlowBundle/contributors"
+                }
+            ],
+            "description": "Multi-step forms for your Symfony2 project.",
+            "homepage": "https://github.com/craue/CraueFormFlowBundle",
+            "keywords": [
+                "Symfony2",
+                "form",
+                "step",
+                "wizard"
+            ],
+            "time": "2015-12-29 17:31:25"
         },
         {
             "name": "doctrine/annotations",
@@ -3283,6 +3340,53 @@
             "time": "2015-11-07 08:07:40"
         },
         {
+            "name": "shtumi/useful-bundle",
+            "version": "dev-master",
+            "target-dir": "Shtumi/UsefulBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shtumi/ShtumiUsefulBundle.git",
+                "reference": "857508126f2456ffda4e2d2dc00d3f62e66269cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shtumi/ShtumiUsefulBundle/zipball/857508126f2456ffda4e2d2dc00d3f62e66269cc",
+                "reference": "857508126f2456ffda4e2d2dc00d3f62e66269cc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "suggest": {
+                "sonata-project/admin-bundle": "master-dev",
+                "sonata-project/doctrine-orm-admin-bundle": "master-dev"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Shtumi\\UsefulBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mikhail Shtukin",
+                    "email": "shtumi@tut.by"
+                }
+            ],
+            "description": "Symfony ShtumiUsefulBundle",
+            "keywords": [
+                "Ajax Autocomplete form type",
+                "Dependent filtered form type",
+                "daterange",
+                "shtumi"
+            ],
+            "time": "2014-11-19 21:34:07"
+        },
+        {
             "name": "sonata-project/admin-bundle",
             "version": "2.3.10",
             "source": {
@@ -5639,7 +5743,8 @@
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
         "sonata-project/user-bundle": 20,
-        "sonata-project/formatter-bundle": 20
+        "sonata-project/formatter-bundle": 20,
+        "shtumi/useful-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

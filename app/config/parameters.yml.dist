@@ -64,3 +64,5 @@ parameters:
         address: 'Adresa'
         function: 1
     demo_account_valid_days: '7'
+
+    default_ads_area_slug: 'bucuresti-ilfov'
