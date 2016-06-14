@@ -48,7 +48,7 @@
                             <td class="">
                                 {% if doc.discountedCreditValue is not null %}
                                     {% set colorClass = (isUserException) ? "green" : ((doc.discountedCreditValue > 0) ? "red" : "green") %}
-                                    <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument({{ doc.cuid }}, '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.fname, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
+                                    <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument('{{ doc.cuid }}', '{{ doc.isDraft }}', '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.fname, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
                                         <div class="credit-icon">
                                             <div class="credit-icon-value color-{{ colorClass }} create-new">
                                                 {{ isUserException ? 0 : doc.discountedCreditValue }}
@@ -81,13 +81,17 @@
     </div>
         
     <script type="text/javascript">
-        function createNewFormularDocument(creditUsageId, textBodyModal) {
+        function createNewFormularDocument(creditUsageId, isDraft, textBodyModal) {
             {% if isUserException %}
                 AjaxCreateNewFormularDocument(creditUsageId); 
             {% else %}
-                $('#configFormConfirmModalBody').text(textBodyModal);
-                $('#configFormConfirmModalCreditUsageId').val(creditUsageId);
-                $('#configFormAddConfirmModal').modal();
+                if (isDraft) {
+                    AjaxCreateNewFormularDocument(creditUsageId);
+                } else {
+                    $('#configFormConfirmModalBody').text(textBodyModal);
+                    $('#configFormConfirmModalCreditUsageId').val(creditUsageId);
+                    $('#configFormAddConfirmModal').modal();
+                }
             {% endif %}
         }
         

@@ -42,6 +42,7 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Boekkooi\Bundle\JqueryValidationBundle\BoekkooiJqueryValidationBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Craue\FormFlowBundle\CraueFormFlowBundle(),
             new AppBundle\AppBundle()
         );
 

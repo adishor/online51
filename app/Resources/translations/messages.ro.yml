@@ -52,6 +52,9 @@ form:
         subject: 'Va rugam completati *Subiectul'
         message: 'Va rugam completati *Mesajul'
         field: 'Campul este obligatoriu.'
+    required-autocomplete:
+        field: Unul din aceste campuri este obligatoriu
+        multiple-completed: Completati doar unul din cele 2 campuri
     placeholder:
         username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
@@ -127,9 +130,10 @@ domain:
         available-until: 'Video-ul este deblocat pana la data de %date%'
     formular:
         config: 'Va rugam completati toate campurile de mai jos.'
-        already-unlocked: 'Formularul este deja deblocat. Nu s-au consumat credite.'
+        already-unlocked: 'Configuratia aleasa a fost utilizata deja pentru acest formular.'
         no-credits: 'Nu aveti suficiente credite pentru a debloca acest formular.'
         success: 'Formular deblocat cu succes.'
+        no-credits-used: Nu s-au consumat credite
 formular-documents:
     title: Vizualizare/Creare documente
     navigation: Documentele mele
@@ -392,6 +396,12 @@ modal:
         body: 'Sunteti sigur ca doriti sa deblocati %title% pentru configuratia aleasa? Atentie veti consuma %credits% %plural%!'
         credit:  'credit'
         credits:  'credite'
+    config-form-add-uniqueness-on-form:
+        title: 'Confirma deblocare formular'
+        body: 'Sunteti sigur ca doriti sa deblocati %title% pentru configuratia aleasa? Atentie veti consuma %credits% %plural%! Aceasta optiune nu se va putea modifica ulterior.'
+        credit:  'credit'
+        credits:  'credite'
+        error: 'Eroare la salvare configuratia aleasa. reincercati din nou.'
 total-credits: 'Credite Totale:'
 year: ' an'
 years: ' ani'
@@ -447,10 +457,14 @@ month:
     december: Decembrie
     no_select: Neselectat
 document-form:
+    uniqueness-incomplete-credits: Nu s-a realizat consum de credite.
+    uniqueness-incomplete: Accesul dvs la completarea formularului este blocat.<br/> Selecteaza una din optiunile disponibile pentru deblocare.
     select:
         an: Selecteaza an
         tip_deseu: Selecteaza tipul de deseu
         operatia: Selecteaza operatia
+    autocomplete:
+        tip_deseu: Sau tasteaza direct codul pentru tipul de deseu
     error:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
@@ -505,6 +519,8 @@ pdf-doc-egd:
     waste-quantity-eliminated: 'Cantitatea de deseuri eliminata'
 invalid:
     data: Datele sunt invalide.
+    
+Start month: Data de inceput
     
 #admin
 admin_label:

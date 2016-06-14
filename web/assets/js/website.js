@@ -10,16 +10,9 @@ $(document).ready(function () {
         $("#register_noEmployees option:selected").text($("#EmployeesNr").val());
     }
     $(function () {
-        $('select.EDG2StocareTip, select.EDG2TratareMod, select.EDG2TransportMijloc, select.EDG2TransportDestinatia').selectmenu({
-            width: 48,
-            menuWidth: 200
-        });
-    });
-
-    $(function () {
-        $('select.EDG2TratareScop').selectmenu({
-            width: 40,
-            menuWidth: 180
+        $('select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare').selectmenu({
+            width: 500,
+            menuWidth: 500
         });
     });
 
@@ -34,7 +27,7 @@ $(document).ready(function () {
 function popitup(url) {
     newwindow = window.open(url, 'name', 'height=1000,width=1200');
     if (window.focus) {
-        newwindow.focus()
+        newwindow.focus();
     }
     return false;
 }

@@ -11,7 +11,7 @@ class EGD3ValorificareDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $luna;
 
@@ -19,9 +19,9 @@ class EGD3ValorificareDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button4"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button4"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $cantitateDeseuValorificata;
 
@@ -29,7 +29,7 @@ class EGD3ValorificareDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $operatiaDeValorificare;
 
@@ -37,46 +37,46 @@ class EGD3ValorificareDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $agentEconomicValorificare;
 
-    function getLuna()
+    public function getLuna()
     {
         return $this->luna;
     }
 
-    function getCantitateDeseuValorificata()
+    public function getCantitateDeseuValorificata()
     {
         return $this->cantitateDeseuValorificata;
     }
 
-    function getOperatiaDeValorificare()
+    public function getOperatiaDeValorificare()
     {
         return $this->operatiaDeValorificare;
     }
 
-    function getAgentEconomicValorificare()
+    public function getAgentEconomicValorificare()
     {
         return $this->agentEconomicValorificare;
     }
 
-    function setLuna($luna)
+    public function setLuna($luna)
     {
         $this->luna = $luna;
     }
 
-    function setCantitateDeseuValorificata($cantitateDeseuValorificata)
+    public function setCantitateDeseuValorificata($cantitateDeseuValorificata)
     {
         $this->cantitateDeseuValorificata = $cantitateDeseuValorificata;
     }
 
-    function setOperatiaDeValorificare($operatiaDeValorificare)
+    public function setOperatiaDeValorificare($operatiaDeValorificare)
     {
         $this->operatiaDeValorificare = $operatiaDeValorificare;
     }
 
-    function setAgentEconomicValorificare($agentEconomicValorificare)
+    public function setAgentEconomicValorificare($agentEconomicValorificare)
     {
         $this->agentEconomicValorificare = $agentEconomicValorificare;
     }

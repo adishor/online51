@@ -11,7 +11,7 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $luna;
 
@@ -19,7 +19,7 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $sectia;
 
@@ -27,9 +27,9 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button3"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button3"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $stocareCantitate;
 
@@ -37,7 +37,7 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $stocareTip;
 
@@ -45,9 +45,9 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button3"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button3"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $tratareCantitate;
 
@@ -55,7 +55,7 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $tratareMod;
 
@@ -63,7 +63,7 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $tratareScop;
 
@@ -71,7 +71,7 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $transportMijloc;
 
@@ -79,97 +79,97 @@ class EGD2StocareTratareTransportDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $transportDestinatie;
 
 
-    function getLuna()
+    public function getLuna()
     {
         return $this->luna;
     }
 
-    function getSectia()
+    public function getSectia()
     {
         return $this->sectia;
     }
 
-    function getStocareCantitate()
+    public function getStocareCantitate()
     {
         return $this->stocareCantitate;
     }
 
-    function getStocareTip()
+    public function getStocareTip()
     {
         return $this->stocareTip;
     }
 
-    function getTratareCantitate()
+    public function getTratareCantitate()
     {
         return $this->tratareCantitate;
     }
 
-    function getTratareMod()
+    public function getTratareMod()
     {
         return $this->tratareMod;
     }
 
-    function getTratareScop()
+    public function getTratareScop()
     {
         return $this->tratareScop;
     }
 
-    function getTransportMijloc()
+    public function getTransportMijloc()
     {
         return $this->transportMijloc;
     }
 
-    function getTransportDestinatie()
+    public function getTransportDestinatie()
     {
         return $this->transportDestinatie;
     }
 
-    function setLuna($luna)
+    public function setLuna($luna)
     {
         $this->luna = $luna;
     }
 
-    function setSectia($sectia)
+    public function setSectia($sectia)
     {
         $this->sectia = $sectia;
     }
 
-    function setStocareCantitate($stocareCantitate)
+    public function setStocareCantitate($stocareCantitate)
     {
         $this->stocareCantitate = $stocareCantitate;
     }
 
-    function setStocareTip($stocareTip)
+    public function setStocareTip($stocareTip)
     {
         $this->stocareTip = $stocareTip;
     }
 
-    function setTratareCantitate($tratareCantitate)
+    public function setTratareCantitate($tratareCantitate)
     {
         $this->tratareCantitate = $tratareCantitate;
     }
 
-    function setTratareMod($tratareMod)
+    public function setTratareMod($tratareMod)
     {
         $this->tratareMod = $tratareMod;
     }
 
-    function setTratareScop($tratareScop)
+    public function setTratareScop($tratareScop)
     {
         $this->tratareScop = $tratareScop;
     }
 
-    function setTransportMijloc($transportMijloc)
+    public function setTransportMijloc($transportMijloc)
     {
         $this->transportMijloc = $transportMijloc;
     }
 
-    function setTransportDestinatie($transportDestinatie)
+    public function setTransportDestinatie($transportDestinatie)
     {
         $this->transportDestinatie = $transportDestinatie;
     }

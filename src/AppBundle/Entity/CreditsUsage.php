@@ -107,6 +107,14 @@ class CreditsUsage
 
     /**
      *
+     * @var integer
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    private $isFormConfigFinished;
+
+    /**
+     *
      * @var string JSON
      *
      * @ORM\Column(type="json_array", nullable=true)
@@ -156,6 +164,7 @@ class CreditsUsage
     public function __construct()
     {
         $this->deleted = FALSE;
+        $this->isFormConfigFinished = FALSE;
     }
 
     /**
@@ -385,6 +394,29 @@ class CreditsUsage
     public function getFormConfig()
     {
         return $this->formConfig;
+    }
+
+    /**
+     * Set isFormConfigFinished
+     *
+     * @param boolean $isFormConfigFinished
+     * @return CreditsUsage
+     */
+    public function setIsFormConfigFinished($isFormConfigFinished)
+    {
+        $this->isFormConfigFinished = $isFormConfigFinished;
+
+        return $this;
+    }
+
+    /**
+     * Get isFormConfigFinished
+     *
+     * @return boolean
+     */
+    public function getIsFormConfigFinished()
+    {
+        return $this->isFormConfigFinished;
     }
 
     /**

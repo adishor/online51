@@ -116,11 +116,12 @@ class CreditsUsageController extends Controller
         if (isset($formularConfig['an'])) {
             $formularConfig['an'] = $formularConfig['an'] + 1;
         }
+        $discountedIsDraft = !$creditUsage->getIsFormConfigFinished();
 
-        return $this->processFormularAction($formularId, $formularConfig, true);
+        return $this->processFormularAction($formularId, $formularConfig, true, $discountedIsDraft);
     }
 
-    public function processFormularAction($formularId, $formularConfig, $discounted = false)
+    public function processFormularAction($formularId, $formularConfig, $discounted = false, $discountedIsDraft = false)
     {
         $user = $this->getUser();
         $userHelper = $this->get('app.user_helper');
@@ -128,6 +129,7 @@ class CreditsUsageController extends Controller
         if (true === $userHelper->isValidUserFormular($user->getId(), $formularId, $formularConfig)) {
             if (!$userHelper->getIsUserException()) {
                 $this->get('session')->getFlashBag()->add('formular-info', 'domain.formular.already-unlocked');
+                $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
             }
             $response = new Response(json_encode(array(
                   'success' => true,
@@ -150,7 +152,14 @@ class CreditsUsageController extends Controller
 
         $userHelper->updateValidUserCredits();
 
-        $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $discounted);
+        $name = str_replace("_", "", $formular->getSlug());
+        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
+        $isDraft = ($discounted) ? $discountedIsDraft : !$entity::$oneStepFormConfig;
+        if ($isDraft) {
+            $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
+        }
+
+        $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted);
 
         $response = new Response(json_encode(array(
               'success' => true,

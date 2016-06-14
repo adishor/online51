@@ -148,7 +148,7 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('u.company, f.name as fname, f.slug as fslug, f.discountedCreditValue,'
-            . 'cu.id as cuid, cu.formConfig, cu.formHash, m.id as mid, cu.expireDate')
+            . 'cu.id as cuid, cu.formConfig, cu.formHash, cu.isFormConfigFinished, m.id as mid, cu.expireDate')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('cu.formular', 'f')
           ->join('cu.user', 'u')

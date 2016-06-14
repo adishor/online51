@@ -90,6 +90,13 @@ services:
             - [setContainer, ['@service_container']]
         tags:
             - { name: form.type, alias: 'container_aware' }
+    
+    app.form.flow.egd:
+        class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow
+        parent: craue.form.flow
+        scope: request
+        arguments: [@doctrine.orm.entity_manager]
+
 
     sonata.media.provider.video:
         class: AppBundle\Provider\VideoFileProvider
@@ -103,3 +110,9 @@ services:
             - ['video/mp4']
         tags:
             - { name: sonata.media.provider }
+            
+    app.twig.extension.json_decode:
+        class: AppBundle\Twig\Extension\VarsExtension
+        tags:
+            - { name: twig.extension }
+        arguments: ['@service_container']

@@ -21,6 +21,7 @@ class SubDomainController extends Controller
 
         $isValid = false;
         $validDocuments = null;
+        $validVideos = null;
         $isUserException = false;
         if ($this->getUser()) {
             $userId = $this->getUser()->getId();
