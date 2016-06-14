@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class SubDomain
 {
+
+    use ORMBehaviors\Sluggable\Sluggable;
     /**
      *
      * @var integer
@@ -57,6 +60,12 @@ class SubDomain
 
     /**
      *
+     * @ORM\OneToMany(targetEntity="Video", mappedBy="subdomain")
+     */
+    private $videos;
+
+    /**
+     *
      * @ORM\OneToMany(targetEntity="Formular", mappedBy="subdomain")
      */
     private $formulars;
@@ -83,6 +92,7 @@ class SubDomain
     public function __construct()
     {
         $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->videos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulars = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
     }
@@ -200,6 +210,39 @@ class SubDomain
     }
 
     /**
+     * Add videos
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $videos
+     * @return SubDomain
+     */
+    public function addVideo(\Application\Sonata\MediaBundle\Entity\Media $videos)
+    {
+        $this->videos[] = $videos;
+
+        return $this;
+    }
+
+    /**
+     * Remove videos
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $videos
+     */
+    public function removeVideo(\Application\Sonata\MediaBundle\Entity\Media $videos)
+    {
+        $this->videos->removeElement($videos);
+    }
+
+    /**
+     * Get videos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
+    /**
      * Add formulars
      *
      * @param \AppBundle\Entity\Formular $formulars
@@ -281,6 +324,16 @@ class SubDomain
     public function __toString()
     {
         return ($this->getId() ? $this->getName() : 'Create new');
+    }
+
+    public function getSluggableFields()
+    {
+        return [ 'name'];
+    }
+
+    public function generateSlugValue($values)
+    {
+        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
     }
 
 }

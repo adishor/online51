@@ -12,7 +12,7 @@ class EGD1GenerareDeseuri
      * @var type
      *
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $luna;
 
@@ -20,9 +20,9 @@ class EGD1GenerareDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $cantitateDeseuGenerate;
 
@@ -30,9 +30,9 @@ class EGD1GenerareDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $cantitateDeseuValorificata;
 
@@ -40,9 +40,9 @@ class EGD1GenerareDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $cantitateDeseuEliminata;
 
@@ -50,58 +50,58 @@ class EGD1GenerareDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button2"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button2"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $cantitateDeseuInStoc;
 
-    function getLuna()
+    public function getLuna()
     {
         return $this->luna;
     }
 
-    function getCantitateDeseuGenerate()
+    public function getCantitateDeseuGenerate()
     {
         return $this->cantitateDeseuGenerate;
     }
 
-    function getCantitateDeseuValorificata()
+    public function getCantitateDeseuValorificata()
     {
         return $this->cantitateDeseuValorificata;
     }
 
-    function getCantitateDeseuEliminata()
+    public function getCantitateDeseuEliminata()
     {
         return $this->cantitateDeseuEliminata;
     }
 
-    function getCantitateDeseuInStoc()
+    public function getCantitateDeseuInStoc()
     {
         return $this->cantitateDeseuInStoc;
     }
 
-    function setLuna($luna)
+    public function setLuna($luna)
     {
         $this->luna = $luna;
     }
 
-    function setCantitateDeseuGenerate($cantitateDeseuGenerate)
+    public function setCantitateDeseuGenerate($cantitateDeseuGenerate)
     {
         $this->cantitateDeseuGenerate = $cantitateDeseuGenerate;
     }
 
-    function setCantitateDeseuValorificata($cantitateDeseuValorificata)
+    public function setCantitateDeseuValorificata($cantitateDeseuValorificata)
     {
         $this->cantitateDeseuValorificata = $cantitateDeseuValorificata;
     }
 
-    function setCantitateDeseuEliminata($cantitateDeseuEliminata)
+    public function setCantitateDeseuEliminata($cantitateDeseuEliminata)
     {
         $this->cantitateDeseuEliminata = $cantitateDeseuEliminata;
     }
 
-    function setCantitateDeseuInStoc($cantitateDeseuInStoc)
+    public function setCantitateDeseuInStoc($cantitateDeseuInStoc)
     {
         $this->cantitateDeseuInStoc = $cantitateDeseuInStoc;
     }

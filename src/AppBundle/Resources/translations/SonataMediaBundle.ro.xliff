@@ -345,6 +345,10 @@
                 <source>sonata.media.provider.file</source>
                 <target>Fisier</target>
             </trans-unit>
+            <trans-unit id="sonata.media.provider.video">
+                <source>sonata.media.provider.video</source>
+                <target>Video</target>
+            </trans-unit>
             <trans-unit id="sonata.media.provider.dailymotion.description">
                 <source>sonata.media.provider.dailymotion.description</source>
                 <target>Add a video hosted on DailyMotion</target>
@@ -364,6 +368,10 @@
             <trans-unit id="sonata.media.provider.file.description">
                 <source>sonata.media.provider.file.description</source>
                 <target>Adaugati un fisier</target>
+            </trans-unit>
+            <trans-unit id="sonata.media.provider.video.description">
+                <source>sonata.media.provider.video.description</source>
+                <target>Adaugati un video</target>
             </trans-unit>
             <trans-unit id="title.media_preview">
                 <source>title.media_preview</source>

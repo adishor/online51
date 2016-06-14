@@ -11,7 +11,7 @@ class EGD4EliminareDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $luna;
 
@@ -19,9 +19,9 @@ class EGD4EliminareDeseuri
      *
      * @var type
      * @Type("double")
-     * @Assert\NotBlank(groups={"generateDocument"})
-     * @Assert\Type(type="double", groups={"generateDocument", "button5"})
-     * @Assert\Range(min = 0, groups={"generateDocument", "button5"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="double")
+     * @Assert\Range(min = 0)
      */
     protected $cantitateDeseuEliminata;
 
@@ -29,7 +29,7 @@ class EGD4EliminareDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $operatiaDeEliminare;
 
@@ -37,46 +37,46 @@ class EGD4EliminareDeseuri
      *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument"})
+     * @Assert\NotBlank()
      */
     protected $agentEconomicEliminare;
 
-    function getLuna()
+    public function getLuna()
     {
         return $this->luna;
     }
 
-    function getCantitateDeseuEliminata()
+    public function getCantitateDeseuEliminata()
     {
         return $this->cantitateDeseuEliminata;
     }
 
-    function getOperatiaDeEliminare()
+    public function getOperatiaDeEliminare()
     {
         return $this->operatiaDeEliminare;
     }
 
-    function getAgentEconomicEliminare()
+    public function getAgentEconomicEliminare()
     {
         return $this->agentEconomicEliminare;
     }
 
-    function setLuna($luna)
+    public function setLuna($luna)
     {
         $this->luna = $luna;
     }
 
-    function setCantitateDeseuEliminata($cantitateDeseuEliminata)
+    public function setCantitateDeseuEliminata($cantitateDeseuEliminata)
     {
         $this->cantitateDeseuEliminata = $cantitateDeseuEliminata;
     }
 
-    function setOperatiaDeEliminare($operatiaDeEliminare)
+    public function setOperatiaDeEliminare($operatiaDeEliminare)
     {
         $this->operatiaDeEliminare = $operatiaDeEliminare;
     }
 
-    function setAgentEconomicEliminare($agentEconomicEliminare)
+    public function setAgentEconomicEliminare($agentEconomicEliminare)
     {
         $this->agentEconomicEliminare = $agentEconomicEliminare;
     }

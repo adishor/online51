@@ -1,52 +1,74 @@
-<div class="tab-pane" id="pending">
-    {% for flash_message in app.session.flashbag.get('order-success') %}
-        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
-    {% endfor %}
-    {% if pendingOrders.items is not empty %}
-        <h4>{{ 'order.pending-orders'|trans }}</h4>
-        <table class="col-xs-8 table-bordered text-center small">
-            <th class="text-center ">{{ 'order.nr'|trans }}</th>
-            <th class="text-center ">{{ 'order.order-nr'|trans }}</th>
-            <th class="text-center ">{{ 'order.subscription'|trans }}</th>
-            <th class="text-center ">{{ 'order.domains'|trans }}</th>
-            <th class="text-center ">{{ 'order.credits'|trans }}</th>
-            <th class="text-center ">{{ 'order.valability'|trans }}</th>
-            <th class="text-center ">{{ 'order.price'|trans }}</th>
-            <th></th>
-                {% for order in pendingOrders.items %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>#{{ "%06d"|format(order.id) }}</td>
-                    <td>{{ order.subscription.name }}</td>
-                    <td>
-                        {% if order.domains is not empty %}
-                            {% for domain in order.domains %}
-                                {% if loop.last %}
-                                    {{ domain.name }}
-                                {% else %}
-                                    {{ domain.name ~ ', ' }}
-                                {% endif %}    
-                            {% endfor %}
-                        {% else %}
-                            {{ 'order.no-domains'|trans }}
-                        {% endif%}    
-                    </td>
-                    <td>{{ order.creditValue }}</td>
-                    <td>
-                        {{ order.subscription.valability }}
-                        {% transchoice order.subscription.valability with {'%year%': 'year'|trans, '%years%': 'years'|trans } %}
-                        {1} %year% |]1,Inf[ %years%
-                        {% endtranschoice %}
-                    </td>
-                    <td>{{ order.price }}</td>
-                    <td><a href="javascript:;" onclick="removeOrder('{{ path("remove_order", { "orderId" : order.id }) }}');">{{ 'order.remove-order'|trans }}</a></td>
-                </tr>    
-            {% endfor %}
-        </table>
-        <div class="navigation">
-            {{ knp_pagination_render(pendingOrders) }}
+{% extends "base.html.twig" %}
+
+{% block modal %}
+    {% include 'order/order_remove_confirm_modal.html.twig' %} 
+{% endblock modal %}
+
+{% block ccontainer %}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            <li><a href="{{ path("show_active_credits") }}" id="nav-active-credits">{{ 'order.tab.active-credits'|trans|upper }}</a></li>
+            <li class="active"><a href="{{ path("show_pending_orders") }}" id="nav-pending">{{ 'order.tab.pending-orders'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_valid_documents") }}" id="nav-documents">{{ 'order.tab.unlocked-documents'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_credit_usage") }}" id="nav-usage">{{ 'order.tab.credit-usage'|trans|upper }}</a></li>
+            <li><a href="{{ path("show_credit_history") }}" id="nav-history">{{ 'order.tab.credit-history'|trans|upper }}</a></li>
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <div class="tab-content domain-description">
+            <div class="tab-pane active" id="pending">
+                {% for flash_message in app.session.flashbag.get('order-success') %}
+                    <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+                {% endfor %}
+                {% if pendingOrders.items is not empty %}
+                    <h4>{{ 'order.pending-orders'|trans }}</h4>
+                    <table class="col-xs-8 table-bordered text-center small">
+                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
+                        <th class="text-center ">{{ 'order.order-nr'|trans }}</th>
+                        <th class="text-center ">{{ 'order.subscription'|trans }}</th>
+                        <th class="text-center ">{{ 'order.domains'|trans }}</th>
+                        <th class="text-center ">{{ 'order.credits'|trans }}</th>
+                        <th class="text-center ">{{ 'order.valability'|trans }}</th>
+                        <th class="text-center ">{{ 'order.price'|trans }}</th>
+                        <th></th>
+                            {% for order in pendingOrders.items %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>#{{ "%06d"|format(order.id) }}</td>
+                                <td>{{ order.subscription.name }}</td>
+                                <td>
+                                    {% if order.domains is not empty %}
+                                        {% for domain in order.domains %}
+                                            {% if loop.last %}
+                                                {{ domain.name }}
+                                            {% else %}
+                                                {{ domain.name ~ ', ' }}
+                                            {% endif %}    
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ 'order.no-domains'|trans }}
+                                    {% endif%}    
+                                </td>
+                                <td>{{ order.creditValue }}</td>
+                                <td>
+                                    {{ order.subscription.valability }}
+                                    {% transchoice order.subscription.valability with {'%year%': 'year'|trans, '%years%': 'years'|trans } %}
+                                    {1} %year% |]1,Inf[ %years%
+                                    {% endtranschoice %}
+                                </td>
+                                <td>{{ order.price }}</td>
+                                <td><a href="javascript:;" onclick="removeOrder('{{ path("remove_order", { "orderId" : order.id }) }}');">{{ 'order.remove-order'|trans }}</a></td>
+                            </tr>    
+                        {% endfor %}
+                    </table>
+                    <div class="navigation">
+                        {{ knp_pagination_render(pendingOrders) }}
+                    </div>
+                {% else %}
+                    <h4>{{ 'order.no-pending-orders'|trans }}</h4>
+                {% endif %}
+            </div>
         </div>
-    {% else %}
-        <h4>{{ 'order.no-pending-orders'|trans }}</h4>
-    {% endif %}
-</div>    
+    </div>
+{% endblock %}

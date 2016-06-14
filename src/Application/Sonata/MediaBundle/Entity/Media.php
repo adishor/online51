@@ -29,6 +29,7 @@ class Media extends BaseMedia
     const INVOICE_TYPE = 'Factura proforma';
     const FORM_GENERATED_TYPE = 'Document generat de formular';
     const IMAGE_TYPE = 'Imagine';
+    const VIDEO_TYPE = 'Video';
 
     /**
      * @var int $id
@@ -49,6 +50,11 @@ class Media extends BaseMedia
      * @var AppBundle\Entity\Document
      */
     private $document;
+
+    /**
+     * @var AppBundle\Entity\Video
+     */
+    private $video;
 
     /**
      * @var AppBundle\Entity\Order
@@ -180,6 +186,29 @@ class Media extends BaseMedia
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * Set video
+     *
+     * @param \AppBundle\Entity\Video $video
+     * @return Media
+     */
+    public function setVideo(\AppBundle\Entity\Video $video = null)
+    {
+        $this->video = $video;
+
+        return $this;
+    }
+
+    /**
+     * Get video
+     *
+     * @return \AppBundle\Entity\Video
+     */
+    public function getVideo()
+    {
+        return $this->video;
     }
 
     /**

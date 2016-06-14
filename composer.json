@@ -39,7 +39,9 @@
         "knplabs/knp-snappy-bundle": "1.4",
         "h4cc/wkhtmltopdf-amd64": "0.12.3",
         "boekkooi/jquery-validation-bundle": "1.1.0",
-        "knplabs/knp-paginator-bundle": "^2.5"
+        "knplabs/knp-paginator-bundle": "^2.5",
+        "shtumi/useful-bundle": "dev-master",
+        "craue/formflow-bundle": "2.1.9"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

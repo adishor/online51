@@ -99,9 +99,9 @@ class UserHelperService
         return true;
     }
 
-    public function getValidUserDocuments($userId, $domainId = null)
+    public function getValidUserDocuments($userId, $domainId = null, $subdomainId = null)
     {
-        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId);
+        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId, $subdomainId);
         $validDocuments = array();
         foreach ($documents as $document) {
             $validDocuments[$document['id']] = $document['date'];
@@ -113,6 +113,25 @@ class UserHelperService
     public function isValidUserDocument($userId, $documentId)
     {
         if (empty($this->entityManager->getRepository('AppBundle:CreditsUsage')->findValidUserDocument($userId, $documentId))) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getValidUserVideos($userId, $domainId = null, $subdomainId = null)
+    {
+        $videos = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserVideos($userId, $domainId, $subdomainId);
+        $validVideos = array();
+        foreach ($videos as $video) {
+            $validVideos[$video['id']] = $video['date'];
+        }
+
+        return $validVideos;
+    }
+
+    public function isValidUserVideo($userId, $videoId)
+    {
+        if (empty($this->entityManager->getRepository('AppBundle:CreditsUsage')->findValidUserVideo($userId, $videoId))) {
             return false;
         }
         return true;
@@ -189,13 +208,32 @@ class UserHelperService
         $this->entityManager->flush();
     }
 
-    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig, $discounted)
+    public function createUnlockVideoCreditUsage($user, $video)
+    {
+        $creditsUsage = new CreditsUsage();
+        $creditsUsage->setUser($user);
+        $creditsUsage->setVideo($video);
+        $user->setCreditsTotal($user->getCreditsTotal() - $video->getCreditValue());
+        $user->setLastCreditUpdate(new \DateTime());
+        $creditsUsage->setMentions($this->translator->trans('credit-usage.video-unlocked-by-user'));
+        $expireDate = new \DateTime();
+        $expireDate->add(new \DateInterval('P' . $creditsUsage->getVideo()->getValabilityDays() . 'D'));
+        $creditsUsage->setExpireDate($expireDate);
+        $creditsUsage->setCredit($video->getCreditValue());
+        $creditsUsage->setUsageType(CreditsUsage::TYPE_VIDEO);
+        $creditsUsage->setMedia($video->getMedia());
+        $this->entityManager->persist($creditsUsage);
+        $this->entityManager->flush();
+    }
+
+    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted)
     {
         $creditsUsage = new CreditsUsage();
         $creditsUsage->setUser($user);
         $creditsUsage->setFormular($formular);
         $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
-        if (!$this->getIsUserException()) {
+        //consumul de credite se realizeaza doar daca configuratia este finala
+        if (!$this->getIsUserException() && !$isDraft) {
             $user->setCreditsTotal($user->getCreditsTotal() - $creditValue);
             $user->setLastCreditUpdate(new \DateTime());
         }
@@ -214,6 +252,7 @@ class UserHelperService
         $creditsUsage->setUsageType(CreditsUsage::TYPE_FORMULAR);
         $creditsUsage->setFormConfig(json_encode($formularConfig));
         $creditsUsage->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
+        $creditsUsage->setIsFormConfigFinished(!$isDraft);
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
     }

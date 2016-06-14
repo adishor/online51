@@ -28,6 +28,21 @@ class AdAdmin extends Admin
           ->andWhere('u.id is null')
           ->setParameter('adId', $this->getSubject()->getId());
 
+        $queryROAreas = $this->modelManager
+          ->getEntityManager('AppBundle:ROArea')
+          ->createQueryBuilder()
+          ->select('a')
+          ->from('AppBundle:ROArea', 'a')
+          ->where('a.deleted = 0');
+
+        $areasOptions = array(
+            'query' => $queryROAreas,
+            'expanded' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'required' => false,
+        );
+
         $form->add('name')
           ->add('image', 'sonata_type_model', array(
               'query' => $queryImage,
@@ -37,18 +52,22 @@ class AdAdmin extends Admin
                   'context' => 'default',
                   'provider' => 'sonata.media.provider.image',
               )
-        ));
+          ))
+          ->add('areas', 'sonata_type_model', $areasOptions)
+        ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $filter->add('name');
+        $filter->add('name')
+          ->add('areas');
     }
 
     protected function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name')
-          ->add('image');
+          ->add('image')
+          ->add('areas');
     }
 
     protected function configureShowFields(ShowMapper $show)
@@ -58,8 +77,9 @@ class AdAdmin extends Admin
               'provider' => 'sonata.media.provider.image',
               'context' => 'default',
               'template' => 'sonata/ad_and_user_base_show_field.html.twig',
-        ));
-
+          ))
+          ->add('areas')
+        ;
     }
 
 }

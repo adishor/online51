@@ -40,6 +40,11 @@ services:
             - { name: sonata.admin, manager_type: orm, label: admin_label.ad, group: admin_group_website }
         calls:
             - [setTemplates, [{ base_list_field: sonata/ad_base_list_field.html.twig }]]
+    admin.area:
+        class: AppBundle\Admin\ROAreaAdmin
+        arguments: [~, AppBundle\Entity\ROArea, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: admin_label.area, group: admin_group_website }
     admin.document:
         class: AppBundle\Admin\DocumentAdmin
         arguments: [~, AppBundle\Entity\Document, ~]
@@ -47,6 +52,13 @@ services:
             - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: sonata_media }
         calls:
             - [setTemplates, [{ base_list_field: sonata/document_base_list_field.html.twig }]]
+    admin.video:
+        class: AppBundle\Admin\VideoAdmin
+        arguments: [~, AppBundle\Entity\Video, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: admin_label.video, group: sonata_media }
+        calls:
+            - [setTemplates, [{ base_list_field: sonata/video_base_list_field.html.twig }]]
     admin.formular:
         class: AppBundle\Admin\FormularAdmin
         arguments: [~, AppBundle\Entity\Formular, ~]
@@ -78,3 +90,29 @@ services:
             - [setContainer, ['@service_container']]
         tags:
             - { name: form.type, alias: 'container_aware' }
+    
+    app.form.flow.egd:
+        class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow
+        parent: craue.form.flow
+        scope: request
+        arguments: [@doctrine.orm.entity_manager]
+
+
+    sonata.media.provider.video:
+        class: AppBundle\Provider\VideoFileProvider
+        arguments: 
+            - sonata.media.provider.video
+            - @sonata.media.filesystem.local
+            - @sonata.media.cdn.server
+            - @sonata.media.generator.default
+            - @sonata.media.thumbnail.format
+            - ['mp4']
+            - ['video/mp4']
+        tags:
+            - { name: sonata.media.provider }
+            
+    app.twig.extension.json_decode:
+        class: AppBundle\Twig\Extension\VarsExtension
+        tags:
+            - { name: twig.extension }
+        arguments: ['@service_container']

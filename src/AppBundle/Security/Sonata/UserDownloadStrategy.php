@@ -58,6 +58,11 @@ class UserDownloadStrategy implements DownloadStrategyInterface
                 throw new AccessDeniedHttpException();
             }
         }
+        if (null !== $creditsUsage->getVideo()) {
+            if (!$this->userHelper->isValidUserVideo($user->getId(), $creditsUsage->getVideo()->getId())) {
+                throw new AccessDeniedHttpException();
+            }
+        }
         if (null !== $creditsUsage->getFormular()) {
             if (!$this->userHelper->isValidUserFormularDocument($user->getId(), $creditsUsage->getFormular()->getId())) {
                 throw new AccessDeniedHttpException();

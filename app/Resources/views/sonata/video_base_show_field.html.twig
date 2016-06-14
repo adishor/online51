@@ -1,0 +1,52 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+<th{% if(is_diff|default(false)) %} class="diff"{% endif %}>{% block name %}{{ admin.trans(field_description.label, {}, field_description.translationDomain) }}{% endblock %}</th>
+<td>
+    {% if field_description.name == 'media' %}
+        <a href="javascript:;" onclick="showVideoModal{{ object.media.id }}();">{{ object.media.name }}</a>
+        <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ object.media.id }}" tabindex="-1" role="dialog">
+            <div class="modal-dialog  modal-sm" role="video">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <video width="480" height="320" controls>
+                            <source src='{% path object.media, 'reference' %}' type='video/mp4' />
+                            <object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="480" height="320" >
+                                <param name="movie" value="flowplayer-3.2.2.swf">
+                                <param name="allowfullscreen" value="true">
+                                <param name="flashvars" value="config={'clip':{'url':'{% path object.media, 'reference' %}','autoPlay':false}}">
+                            </object> 
+
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>       
+        <script type="text/javascript">
+            function showVideoModal{{ object.media.id }}()
+            {
+                $('#showVideoModal{{ object.media.id }}').modal();
+            }
+        </script>
+    {% else %}
+    {% block field %}{% if field_description.options.safe %}{{ value|raw }}{% else %}{{ value|nl2br }}{% endif %}{% endblock %}
+{% endif %}
+
+</td>
+
+{% block field_compare %}
+    {% if(value_compare is defined) %}
+        <td>
+            {% set value = value_compare %}
+            {{ block('field') }}
+        </td>
+    {% endif %}
+{% endblock %}

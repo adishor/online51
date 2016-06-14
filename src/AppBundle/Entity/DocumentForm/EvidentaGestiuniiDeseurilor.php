@@ -17,7 +17,13 @@ class EvidentaGestiuniiDeseurilor
      * @var array
      * @Type("array")
      */
-    static public $uniqueness = [self::UNIQUE_AN, 'tip_deseu', 'operatia'];
+    static public $uniqueness = [self::UNIQUE_AN, 'tip_deseu'];
+
+    /**
+     * @var type
+     * @Type("boolean")
+     */
+    static public $oneStepFormConfig = FALSE;
 
     /**
      * @var array
@@ -37,49 +43,109 @@ class EvidentaGestiuniiDeseurilor
         'Decembrie',
     ];
 
-    /**
-     *
+   /**
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument", "button1"})
+     * @Assert\NotBlank()
      */
     protected $agentEconomic;
 
     /**
-     *
      * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument", "button1"})
+     * @Assert\NotBlank()
      */
     protected $an;
 
     /**
-     *
+     * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument", "button1"})
+     * @Assert\NotBlank()
      */
     protected $tipDeseu;
 
     /**
-     *
+     * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument", "button1"})
+     * @Assert\NotBlank()
      */
     protected $tipDeseuCod;
 
     /**
-     *
+     * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument", "button1"})
+     * @Assert\NotBlank()
      */
     protected $stareFizica;
 
     /**
-     *
+     * @var type
      * @Type("string")
-     * @Assert\NotBlank(groups={"generateDocument", "button1"})
+     * @Assert\NotBlank()
      */
     protected $unitateMasura;
+
+    /**
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $stocareTip;
+
+    /**
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $tratareMod;
+
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $tratareScop;
+
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $transportMijloc;
+
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $transportDestinatie;
+
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $operatiaDeValorificare;
+
+    /**
+     *
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $operatiaDeEliminare;
+
+    /**
+     *
+     * @var type
+     * @Type("array<AppBundle\Entity\DocumentForm\EGDCompany>")
+     * @Assert\Count(min="1")
+     */
+    protected $EGDCompany;
 
     /**
      *
@@ -157,84 +223,164 @@ class EvidentaGestiuniiDeseurilor
         $this->EGD4EliminareDeseuri = $EGD4;
     }
 
-    function getAgentEconomic()
+    public function getAgentEconomic()
     {
         return $this->agentEconomic;
     }
 
-    function getAn()
+    public function getAn()
     {
         return $this->an;
     }
 
-    function getTipDeseu()
+    public function getTipDeseu()
     {
         return $this->tipDeseu;
     }
 
-    function getTipDeseuCod()
+    public function getTipDeseuCod()
     {
         return $this->tipDeseuCod;
     }
 
-    function getStareFizica()
+    public function getStareFizica()
     {
         return $this->stareFizica;
     }
 
-    function getUnitateMasura()
+    public function getUnitateMasura()
     {
         return $this->unitateMasura;
     }
 
-    function setAgentEconomic($agentEconomic)
+    public function setAgentEconomic($agentEconomic)
     {
         $this->agentEconomic = $agentEconomic;
     }
 
-    function setAn($an)
+    public function setAn($an)
     {
         $this->an = $an;
     }
 
-    function setTipDeseu($tipDeseu)
+    public function setTipDeseu($tipDeseu)
     {
         $this->tipDeseu = $tipDeseu;
     }
 
-    function setTipDeseuCod($tipDeseuCod)
+    public function setTipDeseuCod($tipDeseuCod)
     {
         $this->tipDeseuCod = $tipDeseuCod;
     }
 
-    function setStareFizica($stareFizica)
+    public function setStareFizica($stareFizica)
     {
         $this->stareFizica = $stareFizica;
     }
 
-    function setUnitateMasura($unitateMasura)
+    public function setUnitateMasura($unitateMasura)
     {
         $this->unitateMasura = $unitateMasura;
     }
 
-    function getEGD1GenerareDeseuri()
+    public function getStocareTip()
+    {
+        return $this->stocareTip;
+    }
+
+    public function getTratareMod()
+    {
+        return $this->tratareMod;
+    }
+
+    public function getTratareScop()
+    {
+        return $this->tratareScop;
+    }
+
+    public function getTransportMijloc()
+    {
+        return $this->transportMijloc;
+    }
+
+    public function getTransportDestinatie()
+    {
+        return $this->transportDestinatie;
+    }
+
+    public function setStocareTip($stocareTip)
+    {
+        $this->stocareTip = $stocareTip;
+    }
+
+    public function setTratareMod($tratareMod)
+    {
+        $this->tratareMod = $tratareMod;
+    }
+
+    public function setTratareScop($tratareScop)
+    {
+        $this->tratareScop = $tratareScop;
+    }
+
+    public function setTransportMijloc($transportMijloc)
+    {
+        $this->transportMijloc = $transportMijloc;
+    }
+
+    public function setTransportDestinatie($transportDestinatie)
+    {
+        $this->transportDestinatie = $transportDestinatie;
+    }
+
+    public function getOperatiaDeValorificare()
+    {
+        return $this->operatiaDeValorificare;
+    }
+
+    public function getOperatiaDeEliminare()
+    {
+        return $this->operatiaDeEliminare;
+    }
+
+    public function setOperatiaDeValorificare($operatiaDeValorificare)
+    {
+        $this->operatiaDeValorificare = $operatiaDeValorificare;
+    }
+
+    public function setOperatiaDeEliminare($operatiaDeEliminare)
+    {
+        $this->operatiaDeEliminare = $operatiaDeEliminare;
+    }
+
+    public function getEGDCompany()
+    {
+        return $this->EGDCompany;
+    }
+
+    public function getEGD1GenerareDeseuri()
     {
         return $this->EGD1GenerareDeseuri;
     }
 
-    function getEGD2StocareTratareTransportDeseuri()
+    public function getEGD2StocareTratareTransportDeseuri()
     {
         return $this->EGD2StocareTratareTransportDeseuri;
     }
 
-    function getEGD3ValorificareDeseuri()
+    public function getEGD3ValorificareDeseuri()
     {
         return $this->EGD3ValorificareDeseuri;
     }
 
-    function getEGD4EliminareDeseuri()
+    public function getEGD4EliminareDeseuri()
     {
         return $this->EGD4EliminareDeseuri;
+    }
+
+    public function setEGDCompany($EGDCompany)
+    {
+        $this->EGDCompany = $EGDCompany;
     }
 
 }

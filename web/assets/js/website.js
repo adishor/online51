@@ -10,16 +10,9 @@ $(document).ready(function () {
         $("#register_noEmployees option:selected").text($("#EmployeesNr").val());
     }
     $(function () {
-        $('select.EDG2StocareTip, select.EDG2TratareMod, select.EDG2TransportMijloc, select.EDG2TransportDestinatia').selectmenu({
-            width: 48,
-            menuWidth: 200
-        });
-    });
-
-    $(function () {
-        $('select.EDG2TratareScop').selectmenu({
-            width: 40,
-            menuWidth: 180
+        $('select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare').selectmenu({
+            width: 500,
+            menuWidth: 500
         });
     });
 
@@ -34,7 +27,7 @@ $(document).ready(function () {
 function popitup(url) {
     newwindow = window.open(url, 'name', 'height=1000,width=1200');
     if (window.focus) {
-        newwindow.focus()
+        newwindow.focus();
     }
     return false;
 }
@@ -418,6 +411,42 @@ $('#documentConfirmModalYes').click(function () {
             $('#errorOrSuccess' + documentId).text(response.message);
             $('#errorOrSuccess' + documentId).show();
             $('#documentConfirmModal').modal('toggle');
+        }
+    });
+});
+
+function VideoConfirmPopup(message, path, videoId, videoPath) {
+    $('#videoConfirmModalBody').text(message);
+    $('#videoConfirmModal').modal();
+    $('#videoConfirmModalPath').val(path);
+    $('#videoConfirmModalId').val(videoId);
+    $('#videoConfirmModalDownload').val(videoPath);
+}
+
+$('#videoConfirmModalYes').click(function () {
+    var path = $('#videoConfirmModalPath').val();
+    var videoId = $('#videoConfirmModalId').val();
+    var videoPath = $('#videoConfirmModalDownload').val();
+    $.ajax({
+        type: "POST",
+        url: path,
+        data: {videoId: videoId},
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><video width="480" height="320" controls><source src="' + videoPath + '" type="video/mp4" /><object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="480" height="320" ><param name="movie" value="flowplayer-3.2.2.swf"><param name="allowfullscreen" value="true"><param name="flashvars" value="config={\'clip\':{\'url\':\'' + videoPath + '\',\'autoPlay\':false}}"></object></video></div></div></div></div>';
+                
+                $('#showLink' + videoId).attr("href", "javascript:;").attr("onclick", "showVideoModal" + videoId + "();");
+                $('#showLink' + videoId).append(html);
+                $('#totalUserCredits').text(response.credits);
+                $('#errorOrSuccessVideo' + videoId).addClass('color-green');
+                $('#documentIcon' + videoId).removeClass('color-red').addClass('color-green').text('0');
+            } else {
+                $('#errorOrSuccessVideo' + videoId).addClass('color-red');
+            }
+            $('#errorOrSuccessVideo' + videoId).text(response.message);
+            $('#errorOrSuccessVideo' + videoId).show();
+            $('#videoConfirmModal').modal('toggle');
         }
     });
 });

@@ -3,10 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\AdsRepository")
  */
 class Ad
 {
@@ -38,6 +39,21 @@ class Ad
     protected $image;
 
     /**
+     *
+     * @ORM\ManyToMany(targetEntity="ROArea", mappedBy="ads", cascade={"persist"})
+     * @ORM\JoinTable(name="roarea_ad")
+     */
+    protected $areas;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->areas = new ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -46,8 +62,6 @@ class Ad
     {
         return $this->id;
     }
-
-
 
     /**
      * Set image
@@ -93,6 +107,41 @@ class Ad
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Add areas
+     *
+     * @param \AppBundle\Entity\ROArea $areas
+     * @return Ad
+     */
+    public function addArea(\AppBundle\Entity\ROArea $areas)
+    {
+        $areas->addAd($this);
+        $this->areas[] = $areas;
+
+        return $this;
+    }
+
+    /**
+     * Remove areas
+     *
+     * @param \AppBundle\Entity\ROArea $areas
+     */
+    public function removeArea(\AppBundle\Entity\ROArea $areas)
+    {
+        $this->areas->removeElement($areas);
+        $areas->removeAd($this);
+    }
+
+    /**
+     * Get areas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAreas()
+    {
+        return $this->areas;
     }
 
     public function __toString()
