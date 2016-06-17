@@ -1,0 +1,37 @@
+{% extends "::base.html.twig" %}
+
+{% block ccontainer %}
+    <form action="" method="post" onsubmit="return false">
+        <div class="login-form" id="freeAccountDiv">
+            <div id="createFreeAccount">
+                <p id="FreeUserNameDuplicateEmail" class="color-red text-center" hidden="hidden"></p>
+                <div class="editor-field">
+                    <input data-val="true" data-val-required="{{ 'form.required.name'|trans }}" id="FreeManagerName" name="ManagerName" placeholder="{{ 'form.label.name'|trans }}" type="text" value="" />
+                    <p id="FreeManagerNameValid" class="color-red text-center" hidden="hidden">{{ 'form.required.name'|trans }}</p>
+                </div>
+                <div class="editor-field">
+                    <input id="FreeUserName" name="UserName" placeholder="{{ 'form.label.email'|trans }}" type="text" value="" />
+                    <p id="FreeUserNameValid" class="color-red text-center" hidden="hidden">{{ 'form.required.email'|trans }}</p>
+                    <p id="FreeUserNameValidEmail" class="color-red text-center" hidden="hidden">{{ 'form.valid.email'|trans }}</p>
+                </div>       
+                <div class="editor-label clearfix">
+                    <input class="pull-left" type="checkbox" name="selected" id="freecheck" onclick="goFreeAccount()" />
+                    <a href="{{ path('terms') }}" id="acceptTerms"  onclick="return popitup('{{ path('terms') }}');">{{ 'form.label.terms'|trans }}</a>
+                </div>
+                <p id="FreeAccountText" class="color-red text-center" hidden="hidden">
+                    {{ 'form.required.terms-of-use'|trans }}
+                </p>
+                <p class="login-form">
+                    <input type="submit" value="{{ 'login.button.register'|trans }}" id="btnFreeAccount" class="costum" onclick="SubmitFreeAccount('{{ path('ajax_create_demo_account')}}');" />
+                </p>
+                <br class="clear" />
+            </div>
+            <div id="FreeAccountExist" hidden="hidden">
+                <p>&nbsp;&nbsp; Crearea contului gratuit s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare. </p>
+                <p><a href="{{ path("homepage") }}">Inchide creare cont gratuit.</a></p>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block rcontainer %}
+{% endblock %}

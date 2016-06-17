@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use AppBundle\Entity\Formular;
+use AppBundle\Entity\CreditsUsage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
@@ -17,22 +18,16 @@ class FormularController extends Controller
 {
 
     /**
-     * @Route("/showFormular/{slug}/{hash}", name="formular_show")
+     * @Route("/showFormular/{slug}/{creditsUsageId}", name="formular_show")
      * @ParamConverter("formular")
+     * @ParamConverter("creditsUsage", options={"id" = "creditsUsageId"})
      */
-    public function showFormularAction(Request $request, Formular $formular, $hash)
+    public function showFormularAction(Request $request, Formular $formular, CreditsUsage $creditsUsage)
     {
 
         $user = $this->getUser();
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
-        }
-
-        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')
-          ->findOneByFormHashNotExpired($hash);
-        $creditsUsage = reset($creditsUsage);
-        if (empty($creditsUsage)) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied-expired'));
         }
 
         $name = str_replace("_", "", $formular->getSlug());
@@ -216,7 +211,33 @@ class FormularController extends Controller
         if ($flow->isValid($form)) {
             $flow->saveCurrentStepData($form);
 
-            if ($flow->getCurrentStep() == 1) {
+            if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
+                $formConfig = $this->getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($creditsUsage->getFormConfig());
+                $formConfig['tip_deseu'] = $formConfig['tip_deseu_cod'];
+                unset($formConfig['tip_deseu_cod']);
+                $formConfig['operatia'] = $formData->getOperatia();
+                $creditsUsage->setFormConfig(json_encode($formConfig));
+
+                foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
+                    $item->setTratareScop(str_replace(array(3, 4), array('V', 'E'), $formData->getOperatia()));
+                    $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
+                }
+
+                if ($formData->getOperatia() == 3) {
+                    foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+                        $item->setCantitateDeseuEliminata(0);
+                        $formData->getEGD1GenerareDeseuri()[$key] = $item;
+                    }
+                }
+                if ($formData->getOperatia() == 4) {
+                    foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+                        $item->setCantitateDeseuValorificata(0);
+                        $formData->getEGD1GenerareDeseuri()[$key] = $item;
+                    }
+                }
+            }
+
+            if ($flow->getCurrentStep() == ($creditsUsage->getIsFormConfigFinished() ? 2 : 1)) {
                 foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
                     $item->setStocareTip($formData->getStocareTip());
                     $item->setTratareMod($formData->getTratareMod());
@@ -256,11 +277,10 @@ class FormularController extends Controller
             $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
-            $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
-
             if ($flow->nextStep()) {
                 // form for the next step
                 $form = $flow->createForm();
+                $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
             } else {
                 // flow finished
                 $flow->reset(); // remove step data from the session

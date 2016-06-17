@@ -57,8 +57,7 @@ class UserAdmin extends SonataUserAdmin
           ->tab('Security')
           ->with('Status', array('class' => 'col-md-4'))->end()
           ->with('Groups', array('class' => 'col-md-4'))->end()
-          ->with('Keys', array('class' => 'col-md-4'))->end()
-          ->with('Roles', array('class' => 'col-md-12'))->end()
+          ->with('Roles', array('class' => 'col-md-4'))->end()
           ->end()
         ;
 
@@ -71,10 +70,6 @@ class UserAdmin extends SonataUserAdmin
               'disabled' => $disabled
           ))
           ->add('email', null, array(
-              'disabled' => $disabled
-          ))
-          ->add('plainPassword', 'text', array(
-              'required' => false,
               'disabled' => $disabled
           ))
           ->add('name', null, array(
@@ -172,7 +167,7 @@ class UserAdmin extends SonataUserAdmin
           ))
           ->end()
           ->with('Roles')
-          ->add('realRoles', 'sonata_security_roles', array(
+          ->add('realRoles', 'app_sonata_security_roles', array(
               'label' => 'form.label_roles',
               'expanded' => true,
               'multiple' => true,

@@ -281,7 +281,15 @@ class UserController extends Controller
     /**
      * @Route("/create-demo-account", name="create_demo_account")
      */
-    public function createDemoAccountAction(Request $request)
+    public function createDemoAccountAction()
+    {
+        return $this->render("user/demo_account.html.twig");
+    }
+
+    /**
+     * @Route("/ajax-create-demo-account", name="ajax_create_demo_account")
+     */
+    public function ajaxCreateDemoAccountAction(Request $request)
     {
         $email = $request->request->get('email');
         $errors = [];
@@ -300,23 +308,17 @@ class UserController extends Controller
         }
 
         $name = $request->request->get('name');
-        $domainSlug = $request->request->get('domainSlug');
+        $domainSlug = $this->getParameter('default_demo_domain_slug');
 
-        if ($domainSlug === 'default_demo_domain') {
-            $domain = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($this->getParameter('default_demo_domain_slug'));
+        if ($domainSlug === 'all') {
+            $domains = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findAll();
         } else {
-            $domain = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug);
-            if (!$domain->getDemoDomain()) {
-                $errors['Msg'] = $this->get('translator')->trans('json-response.not-demo-domain');
-
-                return new Response(json_encode($errors), 200);
-            }
+            $domains = array($this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug));
         }
 
         $demoPassword = $this->get('app.user_helper')->generateDemoPassword();
-        $defaultDemoCredits = ($domainSlug !== 'default_demo_domain') ? $domain->getDemoCreditValue() : $this->getParameter('default_demo_domain_credits');
-        $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword, $this->getParameter('demo_account_values'));
-        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domain, $this->getParameter('demo_account_valid_days'), $defaultDemoCredits);
+        $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword);
+        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domains, $this->getParameter('demo_account_valid_days'), $this->getParameter('default_demo_domain_credits'));
         $this->get('app.mailer')->sendDemoAccountMessage($demoUser, $demoPassword, $demoOrder);
 
         return new Response(json_encode($errors), 200);

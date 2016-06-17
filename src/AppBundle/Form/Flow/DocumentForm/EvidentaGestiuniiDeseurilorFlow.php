@@ -3,12 +3,15 @@
 namespace AppBundle\Form\Flow\DocumentForm;
 
 use Craue\FormFlowBundle\Form\FormFlow;
+use AppBundle\Form\Type\DocumentForm\EGDStep0Type;
 use AppBundle\Form\Type\DocumentForm\EGDStep1Type;
 use AppBundle\Form\Type\DocumentForm\EGDStep2Type;
 use AppBundle\Form\Type\DocumentForm\EGDStep3Type;
 use AppBundle\Form\Type\DocumentForm\EGDStep4Type;
 use AppBundle\Form\Type\DocumentForm\EGDStep5Type;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor;
 
 class EvidentaGestiuniiDeseurilorFlow extends FormFlow
 {
@@ -22,15 +25,20 @@ class EvidentaGestiuniiDeseurilorFlow extends FormFlow
 
     protected function loadStepsConfig()
     {
-        $hash = $this->getRequest()->get('hash');
-        $creditsUsage = $this->entityManager->getRepository('AppBundle:CreditsUsage')
-          ->findOneByFormHashNotExpired($hash);
+        $creditsUsageId = $this->getRequest()->get('creditsUsageId');
+        $creditsUsage = $this->entityManager->getRepository('AppBundle:CreditsUsage')->find($creditsUsageId);
         if (empty($creditsUsage)) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied-expired'));
+            throw new AccessDeniedHttpException('formular-documents.access-denied-expired');
         }
-        $creditsUsage = reset($creditsUsage);
 
         $stepConfig = array();
+        if (EvidentaGestiuniiDeseurilor::$oneStepFormConfig) {
+            $stepConfig[] = array(
+                'label' => 'Operatia',
+                'type' => new EGDStep0Type(),
+            );
+        }
+
         $stepConfig[] = array(
             'label' => 'Date Generale',
             'type' => new EGDStep1Type(),

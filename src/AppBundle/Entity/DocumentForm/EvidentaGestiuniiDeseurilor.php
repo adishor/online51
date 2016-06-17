@@ -23,7 +23,7 @@ class EvidentaGestiuniiDeseurilor
      * @var type
      * @Type("boolean")
      */
-    static public $oneStepFormConfig = FALSE;
+    static public $oneStepFormConfig = TRUE;
 
     /**
      * @var array
@@ -43,7 +43,14 @@ class EvidentaGestiuniiDeseurilor
         'Decembrie',
     ];
 
-   /**
+    /**
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $operatia;
+
+    /**
      * @var type
      * @Type("string")
      * @Assert\NotBlank()
@@ -381,6 +388,16 @@ class EvidentaGestiuniiDeseurilor
     public function setEGDCompany($EGDCompany)
     {
         $this->EGDCompany = $EGDCompany;
+    }
+
+    public function getOperatia()
+    {
+        return $this->operatia;
+    }
+
+    public function setOperatia($operatia)
+    {
+        $this->operatia = $operatia;
     }
 
 }

@@ -266,13 +266,15 @@ class OrderHelperService
         return $validDomains;
     }
 
-    public function createDemoOrder($demoUser, $domain, $validDays, $defaultDemoCredits)
+    public function createDemoOrder($demoUser, $domains, $validDays, $defaultDemoCredits)
     {
         $order = new Order();
 
         $order->setUser($demoUser);
         $order->setCreditValue($defaultDemoCredits);
-        $order->addDomain($domain);
+        foreach ($domains as $domain) {
+            $order->addDomain($domain);
+        }
         $order->setPrice('0');
         $order->setValabilityDays($validDays);
         $startDate = new \DateTime();
@@ -283,7 +285,7 @@ class OrderHelperService
         $order->setMentions($this->translator->trans('order.demo-account'));
         $order->setActive(true);
         $order->setFirstActive(true);
-        $order->setDomainAmount(1);
+        $order->setDomainAmount(count($domains));
         $demoUser->setCreditsTotal($defaultDemoCredits);
         $this->entityManager->persist($order);
         $this->entityManager->flush();

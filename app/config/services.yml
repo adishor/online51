@@ -90,6 +90,11 @@ services:
             - [setContainer, ['@service_container']]
         tags:
             - { name: form.type, alias: 'container_aware' }
+    app.sonata_security_roles:
+        class: AppBundle\Form\Type\AppSecurityRolesType
+        tags:
+            - { name: form.type, alias: 'app_sonata_security_roles' }
+        arguments: [@sonata.user.editable_role_builder]
     
     app.form.flow.egd:
         class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow

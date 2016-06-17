@@ -10,7 +10,7 @@ $(document).ready(function () {
         $("#register_noEmployees option:selected").text($("#EmployeesNr").val());
     }
     $(function () {
-        $('select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare').selectmenu({
+        $('select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare, select.operatia').selectmenu({
             width: 500,
             menuWidth: 500
         });
@@ -524,12 +524,10 @@ function SubmitFreeAccount(url) {
         var email = $("#FreeUserName").val();
         var domainSlug = '';
         if ($("#domainSlug").is('select')) {
-            console.log(1);
             domainSlug = $("#domainSlug option:selected").val();
         } else {
             domainSlug = $("#domainSlug").val();
         }
-        console.log(domainSlug);
         if (name == "") {
             $("#FreeManagerNameValid").show();
             isValid = false;
@@ -560,7 +558,7 @@ function SubmitFreeAccount(url) {
                         $("#FreeAccountExist").show();
                     }
                 }
-            })
+            });
         }
     } else {
         $("#FreeAccountText").show();

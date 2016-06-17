@@ -780,9 +780,13 @@ ul.list-check {
     transform: translate(0, 0px);
 }
 
-
 .disabled:hover {
 
+}
+
+.readonly {
+    background: #eee;
+    text-align:right;
 }
 
 .nav-tabs > li > a.disabled:active {

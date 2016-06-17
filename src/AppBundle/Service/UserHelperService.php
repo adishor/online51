@@ -255,6 +255,8 @@ class UserHelperService
         $creditsUsage->setIsFormConfigFinished(!$isDraft);
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
+
+        return $creditsUsage->getId();
     }
 
     public function createExpiredCreditUsage($user, $credit)
@@ -283,7 +285,7 @@ class UserHelperService
             ->findValidCreditsUsageForMedia($mediaId);
     }
 
-    public function createDemoAccount($email, $name, $demoPassword, $demoAccountValues)
+    public function createDemoAccount($email, $name, $demoPassword)
     {
         $user = new User();
         $user->setUsername($email);
@@ -294,15 +296,15 @@ class UserHelperService
         $user->setExpired(false);
         $user->setLocked(false);
         $user->setName($name);
-        $user->setCompany($demoAccountValues['company']);
-        $user->setCui($demoAccountValues['cui']);
-        $user->setNoRegistrationORC($demoAccountValues['noRegistrationORC']);
-        $user->setNoCertifiedEmpowerment($demoAccountValues['noCertifiedEmpowerment']);
-        $user->setIban($demoAccountValues['iban']);
-        $user->setBank($demoAccountValues['bank']);
-        $user->setPhone($demoAccountValues['phone']);
-        $user->setAddress($demoAccountValues['address']);
-        $user->setFunction($demoAccountValues['function']);
+        $user->setCompany('');
+        $user->setCui(NULL);
+        $user->setNoRegistrationORC(NULL);
+        $user->setNoCertifiedEmpowerment(NULL);
+        $user->setIban(NULL);
+        $user->setBank(NULL);
+        $user->setPhone(NULL);
+        $user->setAddress(NULL);
+        $user->setFunction('');
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($demoPassword, $user->getSalt()));
         $user->setDeleted(false);

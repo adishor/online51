@@ -44,52 +44,7 @@
             <input type="submit" class="costum" value="{{ 'login.button.login'|trans }}" onclick="GoLogin('{{ path('sonata_user_security_check') }}', '{{ path('homepage') }}', '{{ path('sonata_admin_dashboard') }}');" />
             <br class="clear" />
             <p class="last"><a onclick="ResetPasswordShow();" href="#">{{ 'login.forgot'|trans }}</a></p>
-            <p class="last"><a onclick="FreeAccountRegister();" href="#">{{ 'login.free'|trans }}</a></p>
-        </div>
-    </form>
-    <form action="" method="post" onsubmit="return false">
-        <div class="login-form" id="freeAccountDiv" hidden="hidden">
-            <div id="createFreeAccount">
-                <p id="FreeUserNameDuplicateEmail" class="color-red" hidden="hidden"></p>
-                <div class="editor-field">
-                    <input data-val="true" data-val-required="{{ 'form.required.name'|trans }}" id="FreeManagerName" name="ManagerName" placeholder="{{ 'form.label.name'|trans }}" type="text" value="" />
-                    <p id="FreeManagerNameValid" class="color-red" hidden="hidden">{{ 'form.required.name'|trans }}</p>
-                </div>
-                <div class="editor-field">
-                    <input id="FreeUserName" name="UserName" placeholder="{{ 'form.label.email'|trans }}" type="text" value="" />
-                    <p id="FreeUserNameValid" class="color-red text-center" hidden="hidden">{{ 'form.required.email'|trans }}</p>
-                    <p id="FreeUserNameValidEmail" class="color-red text-center" hidden="hidden">{{ 'form.valid.email'|trans }}</p>
-                </div>
-                {% if domains is empty %}
-                    <input id="domainSlug" type="hidden" value="{{ 'default_demo_domain' }}" />
-                {% elseif domains|length == 1 %}
-                    <input id="domainSlug" type="hidden" value="{{ domains[0].slug }}" />
-                {% else %}
-                    <div class="editor-field input-element">
-                        <label class="small">{{ 'form.label.demo-domain'|trans }}</label>
-                        <select id="domainSlug">
-                            {% for domain in domains %}
-                                <option value="{{ domain.slug }}">{{ domain.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                {% endif %}
-                <div class="editor-label clearfix">
-                    <input class="pull-left" type="checkbox" name="selected" id="freecheck" onclick="goFreeAccount()" />
-                    <a href="{{ path('terms') }}" id="acceptTerms"  onclick="return popitup('{{ path('terms') }}');">{{ 'form.label.terms'|trans }}</a>
-                </div>
-                <p id="FreeAccountText" class="color-red" hidden="hidden">
-                    {{ 'form.required.terms-of-use'|trans }}
-                </p>
-                <p class="login-form">
-                    <input type="submit" value="{{ 'login.button.register'|trans }}" id="btnFreeAccount" class="costum" onclick="SubmitFreeAccount('{{ path('create_demo_account')}}');" />
-                </p>
-                <br class="clear" />
-            </div>
-            <div id="FreeAccountExist" hidden="hidden">
-                <p>&nbsp;&nbsp; Crearea contului gratuit s-a realizat. Veti primi pe adresa de mail introdusa, datele de contact pentru logare. </p>
-                <p><a href="#"  data-toggle="modal" data-target="#myModal1" onclick="FreeAccountSucceeded();" >Inchide creare cont gratuit.</a></p>
-            </div>
+            <p class="last"><a href="{{ path('create_demo_account') }}">{{ 'login.free'|trans }}</a></p>
         </div>
     </form>
     <form action="" method="post" onsubmit="return false">

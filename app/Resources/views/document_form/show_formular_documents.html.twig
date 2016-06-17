@@ -35,7 +35,7 @@
                             <td class="">{{ doc.expireDate|date('d-m-Y') }}</td>
                             <td class="">
                                 {% if date(doc.expireDate) > date() %}
-                                    <a href="{{ path('formular_show' , {'slug': doc.fslug, 'hash': doc.formHash }) }}">
+                                    <a href="{{ path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) }}">
                                         <img alt="EditDocImg" src="{{ asset("assets/images/EditDoc.png") }}" id="EditDocImg" title="{{ 'formular-documents.edit' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
                                     </a>
                                 {% endif %}
@@ -110,8 +110,8 @@
                 success: function (response) {
                     if (response.success) {
                         $('#totalUserCredits').text(response.credits);
-                        var url = '{{ path('formular_show' , {'slug': 'slug', 'hash': 'hash' }) }}';
-                        window.location.href = url.replace("slug", response.formSlug).replace("hash", response.formHash); 
+                        var url = '{{ path('formular_show' , {'slug': 'slug', 'creditsUsageId': 'creditsUsageId' }) }}';
+                        window.location.href = url.replace("slug", response.formSlug).replace("creditsUsageId", response.creditsUsageId); 
                     } else {
                         $('#formularError' + creditUsageId).addClass('color-red');
                         $('#formularError' + creditUsageId).text(response.message);

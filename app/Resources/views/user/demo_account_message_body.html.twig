@@ -17,7 +17,11 @@
         </li>
     </ul>
     <p>
-        {{ 'mail.free-account.order'|trans({ "%credits%" : order.creditValue ,"%domain%" : order.domains[0].name ,"%date%" : order.endingDate| localizeddate('medium', 'short', app.request.locale)  }) }}
+        {% set domainElems = '' %}
+        {% for domain in order.domains %}
+            {% set domainElems = domainElems ~ ((loop.index0 != 0) ? ", " : "") ~ domain.name %}
+        {% endfor %}
+        {{ 'mail.free-account.order'|trans({ "%credits%" : order.creditValue ,"%domain%" : domainElems ,"%date%" : order.endingDate| localizeddate('medium', 'short', app.request.locale)  }) }}
     </p>
     <p>
         {{ 'mail.link'|trans }}{{ url('homepage') }}

@@ -54,7 +54,6 @@ form:
         field: 'Campul este obligatoriu.'
     required-autocomplete:
         field: Unul din aceste campuri este obligatoriu
-        multiple-completed: Completati doar unul din cele 2 campuri
     placeholder:
         username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
@@ -237,7 +236,7 @@ mail:
         connect: 'Te poti conecta la platforma Online 51 cu urmatoarele date:'
         username: 'Utilizatorul: %email%'
         password: 'Parola: %password%'
-        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul %domain%, pana in %date%.'
+        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul/domeniile %domain%, pana in %date%.'
 
 
 
@@ -278,7 +277,6 @@ login:
 json-response:
     not-email: 'Email invalid.'
     no-user: 'Acest email nu este alocat.'
-    no-demo-domain: 'Acest domeniu nu poate fi gratuit.'
     not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
     enabled-user: 'Acest email este alocat deja unui utilizator activ.'
     existing-user: 'Acest email este alocat deja unui utilizator existent.'
@@ -293,7 +291,7 @@ change-password:
 change-info:
     title: 'Schimbare date cont'
     activate-account: 'Activeaza cont'
-    activate-account-information: 'Pentru a va activa contul bifati casuta alaturata, introduceti si verificati toate datele si apasati butonul salveaza.'
+    activate-account-information: 'Pentru a va activa contul, completati formularul de mai jos cu toate datele.'
     save: Salveaza
     back: Inapoi
 credit-usage:
