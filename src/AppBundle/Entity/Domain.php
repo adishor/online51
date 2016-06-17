@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Domain
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @UniqueEntity("name", message="assert.unique.name")
  */
 class Domain
 {
@@ -437,7 +439,7 @@ class Domain
 
     public function getSluggableFields()
     {
-        return [ 'name'];
+        return ['name'];
     }
 
     public function generateSlugValue($values)
