@@ -1,8 +1,33 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace AppBundle\Form\Flow;
 
+use Craue\FormFlowBundle\Form\FormFlow;
+use AppBundle\Form\Type\RegisterType;
+use AppBundle\Form\Type\RegisterOrderType;
+
+class RegisterFlow extends FormFlow
+{
+
+    protected function loadStepsConfig()
+    {
+
+        $stepConfig = array();
+        $stepConfig[] = array(
+            'label' => 'Register',
+            'type' => new RegisterType(),
+        );
+        $stepConfig[] = array(
+            'label' => 'Order',
+            'type' => new RegisterOrderType(),
+        );
+
+        return $stepConfig;
+    }
+
+    public function getName()
+    {
+        return 'register_flow';
+    }
+
+}

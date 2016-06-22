@@ -53,10 +53,10 @@ class UserHelperService
         $user->setCounty($data->getCounty());
         $user->setCity($data->getCity());
         $user->setAddress($data->getAddress());
-        $media = $data->getImage();
-        if ($media) {
-            $media->setMediaType(Media::IMAGE_TYPE);
-            $user->setImage($media);
+        $mediaId = $this->session->get('tmpMedia');
+        if ($mediaId) {
+            $user->setImage($this->entityManager->getRepository('ApplicationSonataMediaBundle:Media')->find($mediaId));
+            $this->session->remove('tmpMedia');
         }
         $user->setFunction($data->getFunction());
         $user->setConfirmationToken($data->getConfirmationToken());
@@ -65,6 +65,8 @@ class UserHelperService
         $user->setDeleted(false);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
+        return $user->getId();
     }
 
     public function checkCUI($data)

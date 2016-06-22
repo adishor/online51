@@ -1,6 +1,7 @@
 ## YAML Template.
 register:
     title: 'Inregistrare'
+    subscription: 'Pentru finalizarea inregistrarii este necesar sa comandati un abonament'
 form:
     label:
         name: '*Nume si prenume'

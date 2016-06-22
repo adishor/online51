@@ -53,67 +53,101 @@
                     </div>
                 </div>
                 {{ subscription.description | raw }}
-                {% if not app.user %}
-                    <div class="panel">
-                        <div class="panel-body">
-                            <p>
-                                {{ 'subscription.not-logged-in'|trans }}<br />
-                                {{ 'please-login'|trans }}<br />
-                            </p>
+                {% if not isRegister %}
+                    {% if not app.user %}
+                        <div class="panel">
+                            <div class="panel-body">
+                                <p>
+                                    {{ 'subscription.not-logged-in'|trans }}<br />
+                                    {{ 'please-login'|trans }}<br />
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                {% elseif isUserException %}
-                    <div class="panel">
-                        <div class="panel-body">
-                            <p>
-                                {{ 'subscription.superadmin'|trans }}<br />
-                            </p>
+                    {% elseif isUserException %}
+                        <div class="panel">
+                            <div class="panel-body">
+                                <p>
+                                    {{ 'subscription.superadmin'|trans }}<br />
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                {% elseif app.user.demoAccount %}
-                    <div class="panel">
-                        <div class="panel-body">
-                            <p>
-                                {{ 'subscription.demo-account'|trans }}<br />
-                            </p>
+                    {% elseif app.user.demoAccount %}
+                        <div class="panel">
+                            <div class="panel-body">
+                                <p>
+                                    {{ 'subscription.demo-account'|trans }}<br />
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                {% endif%}
+                    {% endif%}
+                {% endif %}
             </form>
         </div>
     </div>
-    {% if not ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
-                $("#" + id + " input").change(function () {
-                    var cb = $(this);
-                            isCheckedx(cb, id, {{ subscription.domainAmount }});
+        {% if not ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
+                    $("#" + id + " input").change(function () {
+                        var cb = $(this);
+                        isCheckedx(cb, id, {{ subscription.domainAmount }}, {{ (isRegister) ? 'true' : 'false' }});
+                    });
+                    {% if not isRegister %}
+                        $("#" + "ssm" + "{{ loop.index }}" + "button").click(function () {
+                            if (!areAllChecked(id, {{ subscription.domainAmount }})){
+                                {% if subscription.domainAmount == 1 %}
+                                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
+                                {% else %}
+                                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
+                                {% endif %}
+                                    $("#" + "ssm" + "{{ loop.index }}" + "error").show();
+                            }
+                            if (areAllChecked(id, {{ subscription.domainAmount }})) {
+                                $('#subscriptionAddConfirmModal').modal();
+                                $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
+                            }
+                        });
+                    {% else %}
+                        $(".craue_formflow_button_last").click(function() {
+                            selectedId = $(".tab-pane.active .selecting-checkbox").attr("id");
+                            if (selectedId == id) {                
+                                if (!areAllChecked(id, {{ subscription.domainAmount }})){
+                                    {% if subscription.domainAmount == 1 %}
+                                        $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
+                                    {% else %}
+                                        $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
+                                    {% endif %}
+                                        $("#" + "ssm" + "{{ loop.index }}" + "error").show();
+                                }
+                                if (areAllChecked(id, {{ subscription.domainAmount }})) {
+                                    $("#RegisterForm").submit();
+                                }
+                            }
+                        });
+                    {% endif %}
                 });
-                $("#" + "ssm" +      {{ loop.index }} + "button").click(function () {
-                if (!areAllChecked(id, {{ subscription.domainAmount }})){
-            {% if subscription.domainAmount == 1 %}
-                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-one"|trans }}');
-            {% else %}
-                    $("#" + "ssm" + "{{ loop.index }}" + "error").text('{{ "order.error.select-all"|trans({'%maxNumber%' : subscription.domainAmount}) }}');
-            {% endif %}
-                    $("#" + "ssm" + "{{ loop.index }}" + "error").show();
-                    }
-                    if (areAllChecked(id, {{ subscription.domainAmount }})) {
-                    $('#subscriptionAddConfirmModal').modal();
-                    $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
-                    }
-                });
-                });</script>
+            </script>
         {% endif %}
         {% if ((subscription.domainAmount == 1) and (validDomainsCount == 1)) %}
-        <script type="text/javascript">
+            <script type="text/javascript">
+                {% if not isRegister %}
                     $(document).ready(function () {
-                $("#" + "ssm" +      {{ loop.index }} +"button").click(function () {
-                    $('#subscriptionAddConfirmModal').modal();
-                    $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
-                });
-            });
-        </script>
-    {% endif %}
+                        $("#" + "ssm" +      {{ loop.index }} +"button").click(function () {
+                            $('#subscriptionAddConfirmModal').modal();
+                            $('#subscriptionAddConfirmModalId').val("#" + "ssm" + "{{ loop.index }}" + "form");
+                        });
+                    });
+                {% else %}
+                    $(document).ready(function () {
+                        $(".craue_formflow_button_last").click(function() {
+                            var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
+                            selectedId = $(".tab-pane.active .selecting-checkbox").attr("id");
+                            if (selectedId == id) {
+                                $("#RegisterForm").submit();
+                            }
+                        });
+                    });
+                {% endif %}
+            </script>
+        {% endif %}
 {% endfor %}

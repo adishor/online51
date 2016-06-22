@@ -20,7 +20,6 @@ use AppBundle\Entity\CreditsUsage;
 
 class OrderHelperService
 {
-
     protected $entityManager;
     protected $translator;
     protected $tokenStorage;
@@ -44,9 +43,9 @@ class OrderHelperService
         $this->invoiceName = $invoiceName;
     }
 
-    public function addSubscription($subscriptionId, $billingData, $fileProvider, $domains = null)
+    public function addSubscription($subscriptionId, $billingData, $fileProvider, $domains = null, $userId = null)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = ($userId) ? $this->entityManager->getRepository('ApplicationSonataUserBundle:User')->find($userId) : $this->tokenStorage->getToken()->getUser();
         $order = new Order();
 
         $subscription = $this->entityManager->getRepository('AppBundle:Subscription')->find($subscriptionId);

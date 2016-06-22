@@ -61,7 +61,7 @@
                 <p>E GRATUIT si dureaza doar cateva minute. SUCCES!</p>
                 <p>Pentru orice nelamurire sau alte amanunte specifice pe care nu le gasesti pe site, iti stam la dispozitie telefonic sau pe mail</p>
             </div>
-            {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions, 'isUserException' : isUserException } %}
+            {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions, 'isUserException' : isUserException, 'isRegister': false } %}
         </div>
     </div>
 {% endblock %}

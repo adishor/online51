@@ -101,6 +101,10 @@ services:
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
+    app.form.flow.register:
+        class: AppBundle\Form\Flow\RegisterFlow
+        parent: craue.form.flow
+        scope: request
 
 
     sonata.media.provider.video:

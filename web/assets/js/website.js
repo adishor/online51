@@ -88,7 +88,12 @@ function SubmitRegister() {
     }
 }
 
+function SubmitRegisterOrder() {
+    $("#RegisterForm").submit();
+}
+
 $("#register_cui").bind('input propertychange', function () {
+    $("#validCuiCustomError").hide();
     $("#ValidCui").hide();
     var cuiText = $("#register_cui").val();
 
@@ -119,6 +124,7 @@ $("#register_cui").bind('input propertychange', function () {
 });
 
 $("#register_iban").bind('input propertychange', function () {
+    $("#validIbanCustomError").hide();
     $("#ValidIban").hide();
     var ibanText = $("#register_iban").val();
     var link = 'http://openapi.ro/api/validate/iban/' + ibanText + '.json';
@@ -180,10 +186,21 @@ function disableCheckedCheckedbox(cb) {
     }, 5000);
 }
 
-function isCheckedx(cb, id, no) {
+function isCheckedx(cb, id, no, isRegister) {
     var checkedOffice = $("#" + id + " input:checked").length;
+    if (isRegister) {
+        var value = $(cb).attr("name").replace("domains", "").replace("[","").replace("]","");
+        if ($(cb).prop('checked')) {
+            $("#register_order_type_registerDomainIds").val($("#register_order_type_registerDomainIds").val() + "," + value);
+        } else {
+            $("#register_order_type_registerDomainIds").val($("#register_order_type_registerDomainIds").val().replace("," + value, ""));
+        }
+    }
     if (checkedOffice > no) {
         disableCheckedCheckedbox(cb);
+        if (isRegister) {
+            $("#register_order_type_registerDomainIds").val($("#register_order_type_registerDomainIds").val().replace("," + value, ""));
+        }
     }
 }
 

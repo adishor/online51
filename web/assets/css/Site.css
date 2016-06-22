@@ -2049,3 +2049,12 @@ li.craue_formflow_current_step {
     margin: 0;
     list-style: none;
 }
+
+.clear-both {
+    clear: both;
+}
+
+.craue_formflow_buttons_relative {
+    position:relative;
+    top: 600px;
+}
