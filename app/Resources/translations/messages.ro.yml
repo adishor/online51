@@ -136,9 +136,9 @@ domain:
         no-credits-used: Nu s-au consumat credite
 formular-documents:
     title: Vizualizare/Creare documente
-    navigation: Documentele mele
     company: Firma
-    type: Tip document
+    name: Nume
+    type: Tip
     configuration: Configuratia
     generated: Generat
     generated-yes: DA
@@ -150,6 +150,7 @@ formular-documents:
     edit: Continuare editare document
     download: Descarca document
     no-documents: Nu aveti documente pentru vizualizat
+    access-denied: Acces interzis.
     access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
     reset-filter: 'Resetati filtrul'
     new-documents: Creare document nou pe baza acestuia, pentru anul urmator
@@ -266,6 +267,7 @@ login:
     failed: 'User sau parola invalida!'
     close-password: 'Inchide resetare parola.'
     credit-status: 'Situatie credite'
+    my-documents: 'Documentele mele'
     activate-account: 'Activati cont'
     administration: 'Administrare'
     button:
@@ -468,7 +470,8 @@ document-form:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
     text:
-        egd: ' cu tip deseu waste-type si operatia operation pentru anul year; '
+        egd: ' <span>Tip deseu: <b>waste-type</b>; Operatia: <b>operation</b>; Anul: <b>year</b>; </span>'
+        egd-operatia-unselect: neselectat
     report:
         egd:
             notify-sent: 'Mesaj de notificare trimis catre '

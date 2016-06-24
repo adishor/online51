@@ -73,7 +73,7 @@ class FormularHelperService
         return $this->translator->trans('document-form.text.egd', array(
               'waste-type' => $waste,
               'year' => $formConfig->an,
-              'operation' => $this->operatiaEGD[$formConfig->operatia],
+              'operation' => (isset($formConfig->operatia)) ? $this->operatiaEGD[$formConfig->operatia] : $this->translator->trans('document-form.text.egd-operatia-unselect'),
         ));
     }
 

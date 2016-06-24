@@ -400,7 +400,7 @@ table.users th, table.users td{
     min-height: 1px;
     padding:5px 15px;
     position: relative;
-
+    font-size: 1em;
     width: 8.33333%;
 }
 
@@ -410,7 +410,7 @@ table.users td:nth-child(7), table.users td:nth-child(6), table.users td:nth-chi
 }
 
 table.users.documents td:nth-child(2),table.users.documents th:nth-child(2){
-    width:22%;
+    width:47%;
 }
 
 table.users.documents td:nth-child(3),table.users.documents th:nth-child(3){
@@ -463,7 +463,7 @@ aside:nth-child(2n) .lines  {
 }
 
 table#overview {
-    margin:30px 0;
+    margin:0px 0 15px;
     width:100%;
 }
 
@@ -619,6 +619,18 @@ h2.title {
     padding-top:10px;
 }
 
+h2.subtitle {
+    color:#333;
+    border-bottom:1px solid;
+    line-height:18px;
+    font-size: 18px;
+    padding:10px 0 3px 0;
+    margin: 0;
+}
+
+.error-formular {
+    margin: 0;
+}
 
 nav ul {
     display:block;
@@ -1794,7 +1806,6 @@ h5.first {
 }
 
 .bs-modal-sm {
-    width: 500px;
     margin: 0 auto;
 }
 
@@ -1802,8 +1813,7 @@ h5.first {
 .domain-description td,
 .field-validation-error
 {
-    padding: 10px;
-
+    padding: 5px;
 }
 
 
@@ -1933,10 +1943,6 @@ h5.first {
     cursor: pointer;
 }
 
-.m-video.bs-modal-sm {
-    width: 560px;
-}
-
 .m-video .modal-content {
     width: 520px;
 }
@@ -2057,4 +2063,9 @@ li.craue_formflow_current_step {
 .craue_formflow_buttons_relative {
     position:relative;
     top: 600px;
+}
+
+.modal-dialog {
+    margin: 10px auto;
+    width: 500px;
 }

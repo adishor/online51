@@ -432,18 +432,20 @@ $('#documentConfirmModalYes').click(function () {
     });
 });
 
-function VideoConfirmPopup(message, path, videoId, videoPath) {
+function VideoConfirmPopup(message, path, videoId, videoPath, flowplayerPath) {
     $('#videoConfirmModalBody').text(message);
     $('#videoConfirmModal').modal();
     $('#videoConfirmModalPath').val(path);
     $('#videoConfirmModalId').val(videoId);
     $('#videoConfirmModalDownload').val(videoPath);
+    $('#videoConfirmModalFlowplayer').val(flowplayerPath);
 }
 
 $('#videoConfirmModalYes').click(function () {
     var path = $('#videoConfirmModalPath').val();
     var videoId = $('#videoConfirmModalId').val();
     var videoPath = $('#videoConfirmModalDownload').val();
+    var flowplayerPath = $('#videoConfirmModalFlowplayer').val();
     $.ajax({
         type: "POST",
         url: path,
@@ -451,7 +453,7 @@ $('#videoConfirmModalYes').click(function () {
         dataType: 'json',
         success: function (response) {
             if (response.success) {
-                var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><video width="480" height="320" controls><source src="' + videoPath + '" type="video/mp4" /><object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="480" height="320" ><param name="movie" value="flowplayer-3.2.2.swf"><param name="allowfullscreen" value="true"><param name="flashvars" value="config={\'clip\':{\'url\':\'' + videoPath + '\',\'autoPlay\':false}}"></object></video></div></div></div></div>';
+                var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><video width="480" height="320" controls><source src="' + videoPath + '" type="video/mp4" /><object id="flowplayer" data="' + flowplayerPath + '" type="application/x-shockwave-flash" width="480" height="320" ><param name="movie" value="' + flowplayerPath + '"><param name="allowfullscreen" value="true"><param name="flashvars" value="config={\'clip\':{\'url\':\'' + videoPath + '\',\'autoPlay\':false}}"></object></video></div></div></div></div>';
                 
                 $('#showLink' + videoId).attr("href", "javascript:;").attr("onclick", "showVideoModal" + videoId + "();");
                 $('#showLink' + videoId).append(html);

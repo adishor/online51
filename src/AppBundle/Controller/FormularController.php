@@ -29,6 +29,15 @@ class FormularController extends Controller
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
+        if ($creditsUsage->getUser()->getId() !== $user->getId()) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
+        }
+        if (null === $creditsUsage->getFormular()) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
+        }
+        if (null !== $creditsUsage->getMedia()) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
+        }
 
         $name = str_replace("_", "", $formular->getSlug());
         $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
@@ -56,7 +65,7 @@ class FormularController extends Controller
         $this->$applyFormCustomizationMethod($flow, $form, $creditsUsage);
         $response = $this->$handleFormMethod($creditsUsage, $name, $flow, $form, $formData, $formular->getSlug());
         if ($response) {
-            return $this->redirect($this->generateUrl('formular_documents_show') . '?mediaId=' . $response);
+            return $this->redirect($this->generateUrl('show_valid_documents') . '?mediaId=' . $response);
         }
 
         $formTemplateData = $this->$calculateExtraTemplateDataMethod($formData);
@@ -112,35 +121,6 @@ class FormularController extends Controller
               'formular' => $formular,
               'isUserException' => $this->get('app.user_helper')->getIsUserException(),
               'isDraft' => !$entity::$oneStepFormConfig,
-        ));
-    }
-
-    /**
-     * @Route("/myFormularDocuments", name="formular_documents_show")
-     */
-    public function showFormularDocumentsAction(Request $request)
-    {
-        $user = $this->getUser();
-        if (null === $user) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
-        }
-
-        $formularDocuments = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')
-          ->findAllUserFormularDocuments($user->getId(), ($request->query->has('mediaId')) ? $request->query->get('mediaId') : null );
-
-        foreach ($formularDocuments as $index => $doc) {
-            $name = str_replace("_", "", $doc['fslug']);
-            $getValuesForFormConfigOptions = 'getValuesForFormConfigOptions' . $name;
-            $formularDocuments[$index]['formConfig'] = $this->$getValuesForFormConfigOptions($doc['formConfig']);
-            $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
-        }
-
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate($formularDocuments, $request->query->getInt('page', 1), $this->getParameter('pagination')['formularDocuments']);
-
-        return $this->render('document_form/show_formular_documents.html.twig', array(
-              'pagination' => $pagination,
-              'isUserException' => $this->get('app.user_helper')->getIsUserException(),
         ));
     }
 

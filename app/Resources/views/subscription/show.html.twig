@@ -10,8 +10,8 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs clearfix" role="tablist">
             {% for subscription in subscriptions %}
-                <li><a href="#ssm{{ loop.index }}" id="navssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
-                    {% endfor %}
+                <li><a href="#ssm{{ loop.index }}" id="navssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a></li>
+            {% endfor %}
         </ul>
     </div>
     <div class="col-xs-9">

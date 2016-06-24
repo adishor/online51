@@ -27,6 +27,7 @@
             <p class="last"><a href="{{ path('change_info') }}">{{ 'login.activate-account'|trans }}</a></p>
         {% else %}
             <p class="last"><a href="{{ path('show_orders') }}">{{ 'login.credit-status'|trans }}</a></p>
+            <p class="last"><a href="{{ path('show_valid_documents') }}">{{ 'login.my-documents'|trans }}</a></p>
             <p class="last"><a href="{{ path('change_info') }}">{{ 'login.change-user-information'|trans }}</a></p>
             <p class="last"><a href="{{ path('change_password') }}">{{ 'login.change-password'|trans }}</a></p>
         {% endif %}
