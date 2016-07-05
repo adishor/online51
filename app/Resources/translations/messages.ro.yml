@@ -395,6 +395,7 @@ modal:
     config-form-add-confirm:
         title: 'Confirma deblocare formular'
         body: 'Sunteti sigur ca doriti sa deblocati %title% pentru configuratia aleasa? Atentie veti consuma %credits% %plural%!'
+        body-no-config: 'Sunteti sigur ca doriti sa deblocati %title%? Atentie veti consuma %credits% %plural%!'
         credit:  'credit'
         credits:  'credite'
     config-form-add-uniqueness-on-form:
@@ -536,6 +537,7 @@ admin_label:
     formular: 'Formulare'
     area: 'Zone'
     video: 'Video'
+    document-generated: 'Fisiere generate'
 Subscription List: Lista Abonamente
 Subscription Delete: Stergere Abonamente
 Domain List: Lista Domenii

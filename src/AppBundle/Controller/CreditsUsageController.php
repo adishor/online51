@@ -112,7 +112,7 @@ class CreditsUsageController extends Controller
         }
 
         $formularId = $creditUsage->getFormular()->getId();
-        $formularConfig = get_object_vars(json_decode($creditUsage->getFormConfig()));
+        $formularConfig = (json_decode($creditUsage->getFormConfig())) ? get_object_vars(json_decode($creditUsage->getFormConfig())) : null;
         if (isset($formularConfig['an'])) {
             $formularConfig['an'] = $formularConfig['an'] + 1;
         }

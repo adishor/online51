@@ -80,7 +80,9 @@ class OrderController extends Controller
         foreach ($formularDocuments as $index => $doc) {
             $name = str_replace("_", "", $doc['fslug']);
             $formHelperGetFormTextMethod = 'getFormText' . $name;
-            $formularDocuments[$index]['formConfig'] = $this->container->get('app.formular_helper')->$formHelperGetFormTextMethod($doc['formConfig'], true);
+            if (function_exists($formHelperGetFormTextMethod)) {
+                $formularDocuments[$index]['formConfig'] = $this->container->get('app.formular_helper')->$formHelperGetFormTextMethod($doc['formConfig'], true);
+            }
             $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
         }
 

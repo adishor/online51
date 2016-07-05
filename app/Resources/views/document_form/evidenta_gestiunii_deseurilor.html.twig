@@ -92,7 +92,7 @@
                 <p>{{ 'Va rugam introduceti in ordinea cronologica a lunilor agentii economici' | trans }}</p>
                 <ul id="company-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/company_prototype.html.twig', { 'form': form.EGDCompany.vars.prototype }) }}
+                        {{ include('document_form/prototype_company.html.twig', { 'form': form.EGDCompany.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.EGDCompany %}
                         <li>

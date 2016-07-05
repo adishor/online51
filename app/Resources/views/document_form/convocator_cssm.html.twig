@@ -1,0 +1,100 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@CraueFormFlowBundle/Resources/assets/css/buttons.css' %}
+        <link type="text/css" rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block ccontainer %}
+    
+    <h2 class="title">{{ 'Convocator CSSM' | trans }}</h2>
+
+    {% for flash_message in app.session.flashbag.get('form-success') %}
+        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashbag.get('form-error') %}
+        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
+    {% endfor %}
+
+    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">
+        {{ 'Mai aveti erori. Verificati si celelalte capitole!' | trans }}
+    </h4>
+
+    <div class="col-xs-12">    
+        <form class="formular-form" id="convocator_cssm" method="post" {{ form_enctype(form) }}>
+            {{ form_errors(form) }}
+            
+            {{ form_row(form.company) }}
+            {{ form_row(form.meetingDate) }}
+            
+            <ul id="puncte-fields-list" data-prototype="
+                {% filter escape %}
+                    {{ include('document_form/prototype_punct_ordine_zi.html.twig', { 'form': form.puncteOrdineIntrunire.vars.prototype }) }}
+                {% endfilter %}">
+                {% for item in form.puncteOrdineIntrunire %}
+                    <li>
+                        {{ form_row(item.punctOrdineZi, 
+                            {'attr': {'data-val': 'true',
+                            'data-val-required': 'Acest camp este obligatoriu' | trans,
+                            } } ) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.puncteOrdineIntrunire.vars.full_name }}[{{ loop.index0 }}][punctOrdineZi]" data-valmsg-replace="true" ></span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a href="#" id="add-another-punct">{{ 'Adauga un nou punct pe ordinea de zi' | trans }}</a>            
+            <script type="text/javascript">
+                // keep track of how many puncte fields have been rendered
+                var puncteCount = '{{ form.puncteOrdineIntrunire|length }}';
+
+                jQuery(document).ready(function() {
+
+                    var puncteList = jQuery('#puncte-fields-list');
+
+                    // add a delete link to all of the existing speaker form li elements
+                    puncteList.find('li').each(function(index) {
+                        if (index+1 === puncteCount) {
+                            addPuncteFormDeleteLink($(this));
+                        }
+                    });
+
+                    jQuery('#add-another-puncte').click(function(e) {
+                        e.preventDefault();
+
+                        var puncteList = jQuery('#puncte-fields-list');
+
+                        // grab the prototype template
+                        var newWidget = puncteList.attr('data-prototype');
+                        // replace the "__name__" used in the id and name of the prototype
+                        // with a number that's unique to your companies
+                        newWidget = newWidget.replace(/__name__/g, puncteCount);
+                        puncteCount++;
+
+                        // create a new list element and add it to the list
+                        var newLi = jQuery('<li></li>').html(newWidget);
+                        newLi.appendTo(puncteList);
+                    });
+                });
+
+                function addPuncteFormDeleteLink($puncteFormLi) {
+                    var $removeFormA = $('<a href="#">{{ 'Sterge punct pe ordinea de zi'|trans }}</a>');
+                    $puncteFormLi.append($removeFormA);
+
+                    $removeFormA.on('click', function(e) {
+                        // prevent the link from creating a "#" on the URL
+                        e.preventDefault();
+
+                        // remove the li for the puncte form
+                        $puncteFormLi.remove();
+                    });
+                }
+            </script>
+            
+            <div class="hidden2">{{ form_rest(form) }}</div>
+
+            {% include 'CraueFormFlowBundle:FormFlow:buttons.html.twig' %}
+        </form>
+    </div>
+{% endblock %}

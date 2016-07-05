@@ -193,7 +193,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-10">
-                                                    <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
+                                                    <a id="{{ formular.slug }}" class="show-form-config">
+                                                        <h4>{{ formular.name }}</h4>
+                                                    </a>
                                                 </div>
                                                 {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug, 'request' : app.request })) }}
                                             </div>

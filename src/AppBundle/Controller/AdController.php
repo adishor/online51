@@ -17,14 +17,12 @@ class AdController extends Controller
                 if ($this->getUser()) {
                     $countyName = $this->getUser()->getCounty()->getName();
                 } else {
-                    try {
-                        $location = json_decode(file_get_contents('http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR']));
-                    } catch (Exception $ex) {
-
-                    }
-
-                    if (isset($location->region_name)) {
-                        $countyName = str_replace("Judetul ", "", $location->region_name);
+                    $location = file_get_contents('http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR']);
+                    if (FALSE !== $location) {
+                        $location = json_decode($location);
+                        if (isset($location->region_name)) {
+                            $countyName = str_replace("Judetul ", "", $location->region_name);
+                        }
                     }
                 }
             }
