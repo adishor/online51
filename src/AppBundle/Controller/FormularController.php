@@ -35,9 +35,9 @@ class FormularController extends Controller
         if (null === $creditsUsage->getFormular()) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
         }
-        if (null !== $creditsUsage->getMedia()) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
-        }
+//        if (null !== $creditsUsage->getMedia()) {
+//            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
+//        }
 
         $name = str_replace("_", "", $formular->getSlug());
         $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
@@ -321,6 +321,19 @@ class FormularController extends Controller
                     $formData->getEGD4EliminareDeseuri()[$key] = $item;
                 }
             }
+        }
+    }
+
+    public function handleFormConvocatorCSSM($creditsUsage, $flow, &$formData)
+    {
+        if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
+            $hour = $formData->getMeetingDate()->format('H');
+
+            $formConfig['data'] = $formData->getMeetingDate()->format('d/m/Y');
+            $formConfig['ora'] = $hour;
+            $creditsUsage->setFormConfig(json_encode($formConfig));
+
+            $formData->setMeetingHour($hour);
         }
     }
 

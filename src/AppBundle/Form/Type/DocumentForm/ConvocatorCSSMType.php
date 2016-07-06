@@ -39,7 +39,8 @@ class ConvocatorCSSMType extends AbstractType
               'allow_add' => true,
               'allow_delete' => true,
               'prototype' => true
-        ));
+          ))
+          ->add('medic', TextType::class);
     }
 
     public function getName()

@@ -960,7 +960,7 @@ ul.list-check i{
     content: '\f1b6';
 }
 
-input.costum {
+input.costum, a.costum {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     margin:15px 0px;
     padding:3px 10px;
@@ -974,8 +974,11 @@ input.costum {
     transition: all 0.2s ease-in;
 }
 
+a.costum {
+    float:right;
+}
 
-input.costum:hover{
+input.costum:hover, a.costum:hover {
     background-color:#aecb06 ;
     color:#fff;
 }
@@ -2068,4 +2071,19 @@ li.craue_formflow_current_step {
 .modal-dialog {
     margin: 10px auto;
     width: 500px;
+}
+
+#convocator_cssm_type_meetingDate_date {
+    float:left;
+}
+
+form section {
+    background: #ddd;
+    padding: 0 10px 10px 10px;
+    margin-top: 10px;
+}
+
+input[readonly] {
+    background: #eee;
+    color: #888;
 }

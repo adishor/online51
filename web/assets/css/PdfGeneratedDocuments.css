@@ -40,3 +40,32 @@ body {
 table, tr, td, th, tbody, thead, tfoot {
     page-break-inside: avoid !important;
 }
+
+.height-20-px {
+    margin-top:20px;
+    height:1px;
+}
+
+.height-40-px {
+    margin-top:40px;
+    height:1px;
+}
+
+.height-60-px {
+    margin-top:40px;
+    height:1px;
+}
+
+.height-120-px {
+    margin-top:120px;
+    height:1px;
+}
+
+.text-indent {
+    display: inline-block;
+    width: 50px;
+}
+
+.font-size-18 {
+    font-size: 18px;
+}

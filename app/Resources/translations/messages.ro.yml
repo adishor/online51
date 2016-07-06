@@ -473,6 +473,7 @@ document-form:
     text:
         egd: ' <span>Tip deseu: <b>waste-type</b>; Operatia: <b>operation</b>; Anul: <b>year</b>; </span>'
         egd-operatia-unselect: neselectat
+        ccssm: '<span>Ziua: <b>day</b>; Ora: <b>hour</b>; </span>'
     report:
         egd:
             notify-sent: 'Mesaj de notificare trimis catre '
@@ -616,3 +617,7 @@ sonata:
     media:
         provider:
             file: Fisier
+
+#formulars
+Company: Firma
+Meeting date: Ziua si ora intalnirii

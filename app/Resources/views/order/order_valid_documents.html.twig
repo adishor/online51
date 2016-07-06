@@ -59,7 +59,7 @@
                             <td class="">{{ doc.company }}</td>
                             <td class="">{{ doc.name }}<br/>
                             <span class="small">
-                            {% if doc.usageType == formularType %}
+                            {% if doc.usageType == formularType and doc.formConfig != 'null' %}
                                 {{ doc.formConfig | raw }}
                             {% endif %}
                             </span>
@@ -88,7 +88,6 @@
                                                                 <param name="allowfullscreen" value="true">
                                                                 <param name="flashvars" value="config={'clip':{'url':'{% path doc.media, 'reference' %}','autoPlay':false}}">
                                                             </object> 
-
                                                         </video>
                                                     </div>
                                                 </div>

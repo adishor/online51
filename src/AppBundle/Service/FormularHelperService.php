@@ -77,4 +77,15 @@ class FormularHelperService
         ));
     }
 
+    public function getFormTextConvocatorCSSM($EncodedFormConfig, $short = false)
+    {
+
+        $formConfig = json_decode($EncodedFormConfig);
+
+        return $this->translator->trans('document-form.text.ccssm', array(
+              'day' => $formConfig->data,
+              'hour' => $formConfig->ora,
+        ));
+    }
+
 }

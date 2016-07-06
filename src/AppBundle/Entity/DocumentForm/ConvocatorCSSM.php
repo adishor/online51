@@ -24,7 +24,7 @@ class ConvocatorCSSM
 
     /**
      * @var type
-     * @Type("string")
+     * @Type("DateTime")
      * @Assert\NotBlank()
      * @Assert\DateTime()
      */
@@ -188,7 +188,7 @@ class ConvocatorCSSM
         $this->meetingHour = $meetingHour;
     }
 
-    public function setMedic(type $medic)
+    public function setMedic($medic)
     {
         $this->medic = $medic;
     }

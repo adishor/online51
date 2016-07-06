@@ -1,7 +1,5 @@
-<div>
-    {{ form_row(form.punctOrdineZi, 
-        {'attr': {'data-val': 'true',
-        'data-val-required': 'Acest camp este obligatoriu' | trans,
-        } } ) }}
-    <span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[punctOrdineZi]" data-valmsg-replace="true" ></span>
-</div>
+{{ form_row(form.punctOrdineZi, 
+    {'attr': {'data-val': 'true',
+    'data-val-required': 'Acest camp este obligatoriu' | trans,
+    } } ) }}
+<span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[punctOrdineZi]" data-valmsg-replace="true" ></span>
