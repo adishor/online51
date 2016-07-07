@@ -13,9 +13,12 @@ class DecizieComponentaCSSMType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $container = $options['container'];
+        $user = $container->get('security.context')->getToken()->getUser();
+
         $builder
           ->add('company', TextType::class, array(
-              'read_only' => TRUE
+              'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
           ->add('administrator', TextType::class)
           ->add('presedinte', TextType::class)
@@ -32,6 +35,11 @@ class DecizieComponentaCSSMType extends AbstractType
     public function getName()
     {
         return 'decizie_componenta_cssm_type';
+    }
+
+    public function getParent()
+    {
+        return 'container_aware';
     }
 
 }

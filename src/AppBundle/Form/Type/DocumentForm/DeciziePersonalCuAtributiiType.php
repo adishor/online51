@@ -13,9 +13,12 @@ class DeciziePersonalCuAtributiiType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $container = $options['container'];
+        $user = $container->get('security.context')->getToken()->getUser();
+
         $builder
           ->add('company', TextType::class, array(
-              'read_only' => TRUE
+              'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
           ->add('angajatiConducatoriMunca', CollectionType::class, array(
               'entry_type' => PersonType::class,
@@ -47,6 +50,11 @@ class DeciziePersonalCuAtributiiType extends AbstractType
     public function getName()
     {
         return 'decizie_personal_cu_atributii_type';
+    }
+
+    public function getParent()
+    {
+        return 'container_aware';
     }
 
 }

@@ -15,9 +15,12 @@ class ConvocatorCSSMType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $container = $options['container'];
+        $user = $container->get('security.context')->getToken()->getUser();
+
         $builder
           ->add('company', TextType::class, array(
-              'read_only' => TRUE
+              'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
           ->add('meetingDate', DateTimeType::class, array(
               'placeholder' => array(
@@ -46,6 +49,11 @@ class ConvocatorCSSMType extends AbstractType
     public function getName()
     {
         return 'convocator_cssm_type';
+    }
+
+    public function getParent()
+    {
+        return 'container_aware';
     }
 
 }

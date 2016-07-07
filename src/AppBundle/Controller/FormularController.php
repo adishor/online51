@@ -182,8 +182,11 @@ class FormularController extends Controller
 
         $name = str_replace("_", "", $creditsUsage->getFormular()->getSlug());
         $function = "getFormText" . $name;
+        if (method_exists($this->get('app.formular_helper'), $function)) {
+            return new Response($this->get('app.formular_helper')->$function($creditsUsage->getFormConfig(), true));
+        }
 
-        return new Response($this->get('app.formular_helper')->$function($creditsUsage->getFormConfig(), true));
+        return new Response();
     }
 
     public function generateDocument($name, $creditsUsage, $fileDirectory, $template, $formData, $formTemplateData)
