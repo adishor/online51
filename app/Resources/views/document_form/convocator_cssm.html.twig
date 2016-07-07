@@ -19,9 +19,7 @@
         <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
     {% endfor %}
 
-    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">
-        {{ 'Mai aveti erori. Verificati si celelalte capitole!' | trans }}
-    </h4>
+    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
 
     <div class="col-xs-12">    
         <form class="formular-form" id="convocator_cssm" method="post" {{ form_enctype(form) }}>
@@ -128,7 +126,7 @@
                 <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru CSSM' | trans }}</a>            
                 <script type="text/javascript">
                     // keep track of how many membrii fields have been rendered
-                    var membriiCount = '{{ form.puncteOrdineIntrunire|length }}';
+                    var membriiCount = '{{ form.membrii|length }}';
 
                     jQuery(document).ready(function () {
 

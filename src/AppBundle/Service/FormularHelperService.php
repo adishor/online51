@@ -82,10 +82,10 @@ class FormularHelperService
 
         $formConfig = json_decode($EncodedFormConfig);
 
-        return $this->translator->trans('document-form.text.ccssm', array(
+        return ($formConfig) ? $this->translator->trans('document-form.text.ccssm', array(
               'day' => $formConfig->data,
               'hour' => $formConfig->ora,
-        ));
+        )) : null;
     }
 
 }

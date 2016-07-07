@@ -2051,6 +2051,7 @@ li.craue_formflow_current_step {
 
 .formular-form label {
     margin:10px 0 3px 0;
+    font-size: 1em;
 }
 
 .formular-form ul {
@@ -2083,7 +2084,22 @@ form section {
     margin-top: 10px;
 }
 
+form h3 {
+    font-size: 18px;
+    padding-top: 5px;
+}
+
 input[readonly] {
     background: #eee;
     color: #888;
+}
+
+.no-margin-left {
+    margin-left: 0;
+    padding-left: 0 !important;
+}
+
+.no-margin-right {
+    margin-right: 0;
+    padding-right: 0 !important;
 }

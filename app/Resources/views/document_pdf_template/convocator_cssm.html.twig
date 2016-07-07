@@ -18,10 +18,12 @@
             <p><span class="text-indent"></span>{{ 'Ordinea de zi a intrunirii este:' | trans }}</p>
             <div class="height-20-px"></div>
             {% for punct in data.puncteOrdineIntrunire %}
-                <p><b>{{ loop.index }}.  </b>{{ punct.punctOrdineZi }}</p>
+                {% if punct.punctOrdineZi %}
+                    <p><b>{{ loop.index }}.  </b>{{ punct.punctOrdineZi }}</p>
+                {% endif %}
             {% endfor %}
             <div class="height-120-px"></div>
-            <div class="col-xs-6">
+            <div class="col-xs-6 no-margin-left">
                 <p>{{ 'Dl/Dna ' | trans }} {{ data.administrator }}</p>
                 <p>{{ 'Administrator - Presedinte CSSM' | trans }}</p>
                 <p>.........................................</p>
@@ -29,13 +31,15 @@
                 <p>{{ 'Am luat la cunostiinta' | trans }},</p>
                 <p>{{ 'Membrii CSSM, reprezentanti ai lucratorilor:' | trans }}</p>
                 {% for membru in data.membrii %}
-                    <p>{{ 'Dl/Dna ' | trans }} {{ membru.name }}</p>
+                    {% if membru.name %}
+                        <p>{{ 'Dl/Dna ' | trans }} {{ membru.name }}</p>
+                    {% endif %}
                 {% endfor %}
                 <div class="height-60-px"></div>
                 <p>{{ 'Medic de medicina muncii' | trans }}</p>
                 <p>{{ 'Dl/Dna ' | trans }} {{ data.medic }}</p>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6 no-margin-right">
                 <p>{{ 'Dl/Dna ' | trans }} {{ data.secretar }}</p>
                 <p>{{ 'Secretar CSSM' | trans }}</p>
                 <p>.........................................</p>
@@ -45,7 +49,9 @@
                     <p>{{ 'Semnatura' | trans }}</p>
                     <div class="height-40-px"></div>
                     {% for membru in data.membrii %}
-                        <p>...........................................................</p>
+                        {% if membru.name %}
+                            <p>...........................................................</p>
+                        {% endif %}
                     {% endfor %}
                     <div class="height-40-px"></div>
                     <div class="height-40-px"></div>

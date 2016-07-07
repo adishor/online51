@@ -51,12 +51,13 @@
             
             {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 2 : 1) %}
                 {{ form_row(form.agentEconomic) }}
-                <div class="col-xs-6">
+                <div class="col-xs-6 no-margin-left">
                     {{ form_row(form.an) }}
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6 no-margin-right">
                     {{ form_row(form.tipDeseuCod) }}
                 </div>
+                <div class="clear-both"></div>
                 {{ form_row(form.tipDeseu, {'attr': {'class': 'width-100-percent height-100-px text-justify'} }) }}
                 {{ form_row(form.stareFizica, 
                     {'attr': {'data-val': 'true',

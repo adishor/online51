@@ -35,9 +35,9 @@ class FormularController extends Controller
         if (null === $creditsUsage->getFormular()) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
         }
-//        if (null !== $creditsUsage->getMedia()) {
-//            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
-//        }
+        if (null !== $creditsUsage->getMedia()) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
+        }
 
         $name = str_replace("_", "", $formular->getSlug());
         $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;

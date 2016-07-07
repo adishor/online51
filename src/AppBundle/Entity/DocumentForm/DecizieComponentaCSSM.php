@@ -128,4 +128,9 @@ class DecizieComponentaCSSM
         return $this->membrii;
     }
 
+    public function setMembrii($membrii)
+    {
+        $this->membrii = $membrii;
+    }
+
 }

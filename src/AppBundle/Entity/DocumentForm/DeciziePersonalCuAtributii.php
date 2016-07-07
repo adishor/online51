@@ -56,13 +56,6 @@ class DeciziePersonalCuAtributii
      */
     protected $angajatiResponsabili;
 
-    /**
-     * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
-     */
-    protected $administrator;
-
     public function __construct()
     {
         $x = new Person();
@@ -99,19 +92,9 @@ class DeciziePersonalCuAtributii
         return $this->company;
     }
 
-    public function getAdministrator()
-    {
-        return $this->administrator;
-    }
-
     public function setCompany($company)
     {
         $this->company = $company;
-    }
-
-    public function setAdministrator($administrator)
-    {
-        $this->administrator = $administrator;
     }
 
     public function getAngajatiConducatoriMunca()
@@ -132,6 +115,26 @@ class DeciziePersonalCuAtributii
     public function getAngajatiResponsabili()
     {
         return $this->angajatiResponsabili;
+    }
+
+    public function setAngajatiConducatoriMunca($angajatiConducatoriMunca)
+    {
+        $this->angajatiConducatoriMunca = $angajatiConducatoriMunca;
+    }
+
+    public function setAngajatiCondusAutoturisme($angajatiCondusAutoturisme)
+    {
+        $this->angajatiCondusAutoturisme = $angajatiCondusAutoturisme;
+    }
+
+    public function setAngajatiPrimAjutor($angajatiPrimAjutor)
+    {
+        $this->angajatiPrimAjutor = $angajatiPrimAjutor;
+    }
+
+    public function setAngajatiResponsabili($angajatiResponsabili)
+    {
+        $this->angajatiResponsabili = $angajatiResponsabili;
     }
 
 }

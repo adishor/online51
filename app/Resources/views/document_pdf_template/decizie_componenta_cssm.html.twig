@@ -4,5 +4,74 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    {{ data.company }}
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-60-px"></div>
+            <h3 class="text-center"><b>{{ 'DECIZIE privind componenta CSSM' | trans}}</b></h3>
+            <div class="height-20-px"></div>
+            <p class="text-center"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-40-px"></div>
+            <p><span class="text-indent"></span>{{ 'Avand in vedere prevederile:' | trans }}</p>
+            <div class="height-20-px"></div>
+            <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp;Legii 319/2006 privind securitatea si sanatatea in munca' | trans | raw }}</p>
+            <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp;HG 1425/2006 Normele metologice de aplicare a Legii 319/2006, cu modificarile ulterioare' | trans | raw }}</p>
+            <div class="height-20-px"></div>
+            <p><span class="text-indent"></span>{{ 'Dl/Dna ' | trans }} {{ data.administrator }} {{ ' in calitate de administrator la ' | trans }} {{ data.company }}, {{ 'decide:' | trans }}</p>
+            <div class="height-20-px"></div>
+            <div class="section-group">
+                <p><span class="text-small-indent"></span>{{ '<b>1.</b> &nbsp;&nbsp; Componenta CSSM constituita la ' | trans | raw }} {{ data.company }} {{ ' este urmatoarea:' | trans }}</p>
+                <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp; Reprezentantii din partea angajatorului sunt urmatorii: ' | trans | raw }}</p>
+                <ul>
+                    <li>{{ 'Dl/Dna ' | trans }} {{ data.presedinte }} {{ ' - angajator - presedinte CSSM (sau reprezentant legal)' | trans }}</li>
+                    <li>{{ 'Dl/Dna ' | trans }} {{ data.secretar }} {{ ' - lucrator desemnat - secretar CSSM' | trans }}</li>
+                </ul>
+                <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp; Conform hotararii angajatilor, reprezentantii lucratorilor sunt urmatorii: ' | trans | raw }}</p>
+                <ul>
+                    {% for item in data.membrii %}
+                        {% if item.name %}
+                            <li>{{ 'Dl/Dna ' | trans }} {{ item.name }} {{ ' - reprezentant al lucratorilor - membru' | trans }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp; Medic de Medicina Muncii ' | trans | raw }}</p>
+                <ul>
+                    <li>{{ 'Dl/Dna ' | trans }} {{ data.medic }}</li>
+                </ul>
+                <div class="height-20-px"></div>
+                <p><span class="text-small-indent"></span>{{ '<b>2.</b> &nbsp;&nbsp; Prezenta decizie va fi adusa la cunostiinta tuturor lucratorilor.' | trans | raw }} </p>
+                <p><span class="text-small-indent"></span>{{ '<b>3.</b> &nbsp;&nbsp; Se va avea in vedere inscrierea persoanelor de mai sus la cursurile de SSM (de 80 de ore - lucratorul desemnat, respectiv 40 de ore - reprezentantii lucratorilor), conform cerintelor HG 1425/2006 Normele metologice de aplicare a Legii 319/2006, cu modificarile ulterioare.' | trans | raw }} </p>
+            </div>
+            <div class="height-60-px"></div>
+            <p>{{ data.company }}</p>
+            <p>{{ 'Administrator' | trans }}</p>
+            <div class="height-60-px"></div>
+            <div class="col-xs-6 no-margin-left">
+                <p>{{ 'Am luat la cunostinta,' | trans }}</p>
+                <div class="height-20-px"></div>
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.presedinte }}</p>
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.secretar }}</p>
+                {% for item in data.membrii %}
+                    {% if item.name %}
+                        <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                    {% endif %}
+                {% endfor %}
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.medic }}</p>
+            </div>
+            <div class="col-xs-6 no-margin-right">
+                <p>{{ 'Semnatura' | trans }}</p>
+                <div class="height-20-px"></div>
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <p>..............................................</p>
+                    <p>..............................................</p>
+                    {% for item in data.membrii %}
+                        {% if item.name %}
+                            <p>..............................................</p>
+                        {% endif %}
+                    {% endfor %}
+                    <p>..............................................</p>
+                </div>
+            </div>
 </body>

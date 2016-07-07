@@ -41,7 +41,7 @@ class DeciziePersonalCuAtributiiType extends AbstractType
               'allow_delete' => true,
               'prototype' => true
           ))
-          ->add('administrator', TextType::class);
+        ;
     }
 
     public function getName()
