@@ -134,7 +134,24 @@ class DomainAdmin extends Admin
 
     public function preUpdate($object)
     {
-        $object->setSubdomains($object->getSubdomains());
+        if ($object->getId()) {
+
+            $params = $this->getRequest()->request->get($this->getUniqid());
+
+            $subdomains = $this->getModelManager()
+              ->getEntityManager('AppBundle:SubDomain')
+              ->getRepository('AppBundle:SubDomain')
+              ->findBy(array('domain' => $object->getId()));
+
+            foreach ($subdomains as $subdomain) {
+                if (!in_array($subdomain->getId(), $params['subdomains'])) {
+                    $subdomain->setDomain(NULL);
+                    $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
+                    $em->persist($subdomain);
+                    $em->flush();
+                }
+            }
+        }
     }
 
     public function getFormTheme()

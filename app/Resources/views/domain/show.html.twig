@@ -9,9 +9,6 @@
                     <li><a href="{{ path("subdomain_show", {'domain': domain.slug, 'subdomain': subdomain.slug }) }}">{{ subdomain.name | upper }}</a></li>
                 {% endif %}
             {% endfor %}
-            {% if app.user %}
-                <li><a href="{{ path('formular_documents_show') }}">{{ 'formular-documents.navigation' | trans }}</a></li>
-            {% endif %}
         </ul>
     </div>
     <div class="col-xs-9">

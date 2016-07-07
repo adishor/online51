@@ -10,8 +10,8 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs clearfix" role="tablist">
             {% for subscription in subscriptions %}
-                <li><a href="#ssm{{ loop.index }}" id="navssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a><span></span></li>
-                    {% endfor %}
+                <li><a href="#ssm{{ loop.index }}" id="navssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab">{{ subscription.name | upper }}</a></li>
+            {% endfor %}
         </ul>
     </div>
     <div class="col-xs-9">
@@ -19,7 +19,7 @@
             {% for flash_message in app.session.flashbag.get('order-error') %}
                 <h5 class="color-red text-center first" >{{ flash_message|trans }}</h5>
             {% endfor %}
-            {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions, 'isUserException' : isUserException } %}
+            {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions, 'isUserException' : isUserException, 'isRegister': false } %}
             <script type="text/javascript">
                 jQuery(window).load(function () {
                     jQuery(".tab-pane-menu").first().parent().addClass("active");

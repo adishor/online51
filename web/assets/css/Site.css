@@ -400,7 +400,7 @@ table.users th, table.users td{
     min-height: 1px;
     padding:5px 15px;
     position: relative;
-
+    font-size: 1em;
     width: 8.33333%;
 }
 
@@ -410,7 +410,7 @@ table.users td:nth-child(7), table.users td:nth-child(6), table.users td:nth-chi
 }
 
 table.users.documents td:nth-child(2),table.users.documents th:nth-child(2){
-    width:22%;
+    width:47%;
 }
 
 table.users.documents td:nth-child(3),table.users.documents th:nth-child(3){
@@ -463,7 +463,7 @@ aside:nth-child(2n) .lines  {
 }
 
 table#overview {
-    margin:30px 0;
+    margin:0px 0 15px;
     width:100%;
 }
 
@@ -619,6 +619,18 @@ h2.title {
     padding-top:10px;
 }
 
+h2.subtitle {
+    color:#333;
+    border-bottom:1px solid;
+    line-height:18px;
+    font-size: 18px;
+    padding:10px 0 3px 0;
+    margin: 0;
+}
+
+.error-formular {
+    margin: 0;
+}
 
 nav ul {
     display:block;
@@ -780,9 +792,13 @@ ul.list-check {
     transform: translate(0, 0px);
 }
 
-
 .disabled:hover {
 
+}
+
+.readonly {
+    background: #eee;
+    text-align:right;
 }
 
 .nav-tabs > li > a.disabled:active {
@@ -944,7 +960,7 @@ ul.list-check i{
     content: '\f1b6';
 }
 
-input.costum {
+input.costum, a.costum {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     margin:15px 0px;
     padding:3px 10px;
@@ -958,8 +974,11 @@ input.costum {
     transition: all 0.2s ease-in;
 }
 
+a.costum {
+    float:right;
+}
 
-input.costum:hover{
+input.costum:hover, a.costum:hover {
     background-color:#aecb06 ;
     color:#fff;
 }
@@ -1790,7 +1809,6 @@ h5.first {
 }
 
 .bs-modal-sm {
-    width: 500px;
     margin: 0 auto;
 }
 
@@ -1798,8 +1816,7 @@ h5.first {
 .domain-description td,
 .field-validation-error
 {
-    padding: 10px;
-
+    padding: 5px;
 }
 
 
@@ -1929,10 +1946,6 @@ h5.first {
     cursor: pointer;
 }
 
-.m-video.bs-modal-sm {
-    width: 560px;
-}
-
 .m-video .modal-content {
     width: 520px;
 }
@@ -2038,10 +2051,55 @@ li.craue_formflow_current_step {
 
 .formular-form label {
     margin:10px 0 3px 0;
+    font-size: 1em;
 }
 
 .formular-form ul {
     padding: 0;
     margin: 0;
     list-style: none;
+}
+
+.clear-both {
+    clear: both;
+}
+
+.craue_formflow_buttons_relative {
+    position:relative;
+    top: 600px;
+}
+
+.modal-dialog {
+    margin: 10px auto;
+    width: 500px;
+}
+
+#convocator_cssm_type_meetingDate_date {
+    float:left;
+}
+
+form section {
+    background: #ddd;
+    padding: 0 10px 10px 10px;
+    margin-top: 10px;
+}
+
+form h3 {
+    font-size: 18px;
+    padding-top: 5px;
+}
+
+input[readonly] {
+    background: #eee;
+    color: #888;
+}
+
+.no-margin-left {
+    margin-left: 0;
+    padding-left: 0 !important;
+}
+
+.no-margin-right {
+    margin-right: 0;
+    padding-right: 0 !important;
 }

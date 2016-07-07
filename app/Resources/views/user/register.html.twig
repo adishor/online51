@@ -1,280 +1,306 @@
 {% extends "base.html.twig" %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@CraueFormFlowBundle/Resources/assets/css/buttons.css' %}
+        <link type="text/css" rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block ccontainer %}
     <h1 class="title-top">
         <i class="fa fa-graduation-cap"></i>
         {{ 'register.title'|trans }}
     </h1>
-    {{ form_start(form, { 'attr': {'id': 'RegisterForm'} }) }}
     {% form_theme form 'user/form/error_template.html.twig' %}
-    <fieldset>
-        <legend>Account Information</legend>
-        <input id="Logo" name="Logo" type="hidden" value="" />
-        <input id="EmployeesNr" name="EmployeesNr" type="hidden" value="" />
+    <form id="RegisterForm" method="post" {{ form_enctype(form) }}>
+        {{ form_errors(form) }}
+        {% if flow.getCurrentStepNumber() == 1 %}
+        <fieldset>
+            <legend>Account Information</legend>
+            <input id="Logo" name="Logo" type="hidden" value="" />
+            <input id="EmployeesNr" name="EmployeesNr" type="hidden" value="" />
 
-        <div class="row register">
-            <div class="col-xs-6">
-                {#          name#}
-                <div class="editor-label text-small" id="lblManager">
-                    {{ form_label(form.name, 'form.label.name'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.name, {'attr':
-                { 'data-val': 'true',
-                  'data-val-required': 'form.required.name'|trans
-                } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.name) }}
-                </div>
-                {#          function#}
-                <div>
-                    {{ form_label(form.function, 'form.label.function'|trans) }}
-                    {{ form_widget(form.function, {'attr':
-                { 'data-val': 'true',
-                  'data-val-number': 'form.valid.number.function'|trans,
-                  'data-val-required': 'form.required.function'|trans,
-                  'onchange': 'ShowHideItems()'
-              } })
-                    }}
-                    {{ form_errors(form.function) }}
-                </div>
-                {#          email#}
-                <div class="editor-label">
-                    {{ form_label(form.email, 'form.label.email'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.email, {'attr':
-                { 'data-val': 'true',
-                  'data-val-regex': 'form.valid.email'|trans,
-                  'data-val-regex-pattern': '.+\@.+\..+',
-                  'data-val-required': 'form.required.email'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.email) }}
-                </div>
-                {#          parola#}
-                <div class="editor-label">
-                    {{ form_label(form.password.first, 'form.label.password'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.password.first, {'attr':
-                { 'data-val': 'true',
-                  'data-val-length': 'form.password.length'|trans,
-                  'data-val-length-min': '6',
-                  'data-val-required': 'form.required.password'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.password.first) }}
-                </div>
-                {#          confirmare parola#}
-                <div class="editor-label">
-                    {{ form_label(form.password.second, 'form.label.password-confirm'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.password.second, {'attr':
-                { 'data-val': 'true',
-                  'data-val-equalto': 'form.password.same'|trans,
-                  'data-val-equalto-other': '*.register[password][first]',
-                  'data-val-required': 'form.required.password-confirm'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.password.second) }}
-                </div>
-                {#          companie#}
-                <div class="editor-label">
-                    {{ form_label(form.company, 'form.label.company'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.company, {'attr':
-              { 'data-val': 'true',
-                'data-val-required': 'form.required.company'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.company) }}
-                </div>
-                {#          cui#}
-                <div class="editor-label">
-                    {{ form_label(form.cui, 'form.label.company-id'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.cui, {'attr':
-              { 'data-val': 'true',
-                'data-val-required': 'form.required.company-id'|trans,
-                'placeholder': 'form.placeholder.company-id'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.cui) }}
-                    {% if registerErrors.cui is defined and registerErrors.cui == false %} <span class="field-validation-error" >{{ 'form.valid.company-id'|trans }}</span> {% endif%}
-                    <p class="color-red" id ="ValidCui" hidden="hidden"> {{ 'form.valid.company-id'|trans }} </p>
-                </div>
-                {#          numar inregistrare orc#}
-                <div class="editor-label">
-                    {{ form_label(form.noRegistrationORC, 'form.label.company-number'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.noRegistrationORC, {'attr':
-              { 'data-val': 'true',
-                'data-val-required': 'form.required.company-number'|trans,
-                'placeholder': 'form.placeholder.company-number'|trans,
-                'data-val-regex-pattern': '(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})',
-                'data-val-regex': 'form.valid.orc'|trans,
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.noRegistrationORC) }}
-                </div>
-                {#          numar de angajati#}
-                <div>
-                    {{ form_label(form.noEmployees, 'form.label.employees'|trans, {'label_attr': {'id': 'lblEmployeesNr'} }) }}
-                    {{ form_widget(form.noEmployees, {'attr':
-              { 'data-val': 'true',
-                'data-val-number': 'form.valid.number.employees'|trans,
-                'onchange': 'EmployeesNrChanged()',
-                'class': 'form-control shortdropdown'
-              } })
-                    }}
-                    {{ form_errors(form.noEmployees) }}
-                </div>
-                {#          numar certificat de abilitare#}
-                <div class="editor-label" id="lblCertificateNumber">
-                    {{ form_label(form.noCertifiedEmpowerment, 'form.label.certificate'|trans) }}
-                </div>
-                <div class="editor-field" id="tbCertificateNumber">
-                    {{ form_widget(form.noCertifiedEmpowerment) }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.noCertifiedEmpowerment) }}
-                </div>
-            </div>
-            <div class="col-xs-6">
-                {#          iban#}
-                <div class="editor-label">
-                    {{ form_label(form.iban, 'form.label.bank-account'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.iban, {'attr':
-              { 'data-val': 'true',
-                'data-val-required': 'form.required.bank-account'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.iban) }}
-                    {% if registerErrors.iban is defined and registerErrors.iban == false %} <span class="field-validation-error" >{{ 'form.valid.bank-account'|trans }}</span> {% endif%}
-                    <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-account'|trans }} </p>
-                </div>
-                {#          banca#}
-                <div class="editor-label">
-                    {{ form_label(form.bank, 'form.label.bank'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.bank, {'attr':
-              { 'data-val': 'true',
-                'data-val-required': 'form.required.bank'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.bank) }}
-                </div>
-                {#          telefon#}
-                <div class="editor-label">
-                    {{ form_label(form.phone, 'form.label.phone'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.phone, {'attr':
-              { 'data-val': 'true',
-                'data-val-regex': 'form.valid.phone'|trans,
-                'data-val-regex-pattern': '^(07|)\\d{8}$',
-                'data-val-required': 'form.required.phone'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.phone) }}
-                </div>
-                {#          judet#}
-                <div>
-                    {{ form_label(form.county, 'form.label.county'|trans) }}
-                    {{ form_widget(form.county, {'attr':
-              { 'data-val': 'true',
-                'data-val-number': 'form.valid.number.county'|trans,
-                'data-val-required': 'form.required.county'|trans,
-                'class': 'form-control shortdropdown',
-                'onChange': 'getLocalities(null)'
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.county) }}
-                </div>
-                {#          localitati#}
-                <div id="LocalitiesDiv">
-                    <div class="editor-label">
-                        {{ form_label(form.city, 'form.label.city'|trans) }}
+            <div class="row register">
+                <div class="col-xs-6">
+                    {#          name#}
+                    <div class="editor-label text-small" id="lblManager">
+                        {{ form_label(form.name, 'form.label.name'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.city, {'attr':
-                { 'data-val': 'true',
-                  'data-val-required': 'form.required.city'|trans,
-                  'data-val-number': 'form.valid.number.city'|trans,
-                  'class': 'form-control shortdropdown'
-                } })
+                        {{ form_widget(form.name, {'attr':
+                    { 'data-val': 'true',
+                      'data-val-required': 'form.required.name'|trans
+                    } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.city) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.name) }}
+                    </div>
+                    {#          function#}
+                    <div>
+                        {{ form_label(form.function, 'form.label.function'|trans) }}
+                        {{ form_widget(form.function, {'attr':
+                    { 'data-val': 'true',
+                      'data-val-number': 'form.valid.number.function'|trans,
+                      'data-val-required': 'form.required.function'|trans,
+                      'onchange': 'ShowHideItems()'
+                  } })
+                        }}
+                        {{ form_errors(form.function) }}
+                    </div>
+                    {#          email#}
+                    <div class="editor-label">
+                        {{ form_label(form.email, 'form.label.email'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.email, {'attr':
+                    { 'data-val': 'true',
+                      'data-val-regex': 'form.valid.email'|trans,
+                      'data-val-regex-pattern': '.+\@.+\..+',
+                      'data-val-required': 'form.required.email'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.email.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.email) }}
+                    </div>
+                    {#          parola#}
+                    <div class="editor-label">
+                        {{ form_label(form.password.first, 'form.label.password'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.password.first, {'attr':
+                    { 'data-val': 'true',
+                      'data-val-length': 'form.password.length'|trans,
+                      'data-val-length-min': '6',
+                      'data-val-required': 'form.required.password'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.password.first.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.password.first) }}
+                    </div>
+                    {#          confirmare parola#}
+                    <div class="editor-label">
+                        {{ form_label(form.password.second, 'form.label.password-confirm'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.password.second, {'attr':
+                    { 'data-val': 'true',
+                      'data-val-equalto': 'form.password.same'|trans,
+                      'data-val-equalto-other': '*.register[password][first]',
+                      'data-val-required': 'form.required.password-confirm'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.password.second.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.password.second) }}
+                    </div>
+                    {#          companie#}
+                    <div class="editor-label">
+                        {{ form_label(form.company, 'form.label.company'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.company, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-required': 'form.required.company'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.company) }}
+                    </div>
+                    {#          cui#}
+                    <div class="editor-label">
+                        {{ form_label(form.cui, 'form.label.company-id'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.cui, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-required': 'form.required.company-id'|trans,
+                    'placeholder': 'form.placeholder.company-id'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.cui) }}
+                        {% if registerErrors.cui is defined and registerErrors.cui == false %} <span id="validCuiCustomError" class="field-validation-error" >{{ 'form.valid.company-id'|trans }}</span> {% endif%}
+                        <p class="color-red" id ="ValidCui" hidden="hidden"> {{ 'form.valid.company-id'|trans }} </p>
+                    </div>
+                    {#          numar inregistrare orc#}
+                    <div class="editor-label">
+                        {{ form_label(form.noRegistrationORC, 'form.label.company-number'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.noRegistrationORC, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-required': 'form.required.company-number'|trans,
+                    'placeholder': 'form.placeholder.company-number'|trans,
+                    'data-val-regex-pattern': '(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})',
+                    'data-val-regex': 'form.valid.orc'|trans,
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.noRegistrationORC) }}
+                    </div>
+                    {#          numar de angajati#}
+                    <div>
+                        {{ form_label(form.noEmployees, 'form.label.employees'|trans, {'label_attr': {'id': 'lblEmployeesNr'} }) }}
+                        {{ form_widget(form.noEmployees, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-number': 'form.valid.number.employees'|trans,
+                    'onchange': 'EmployeesNrChanged()',
+                    'class': 'form-control shortdropdown'
+                  } })
+                        }}
+                        {{ form_errors(form.noEmployees) }}
+                    </div>
+                    {#          numar certificat de abilitare#}
+                    <div class="editor-label" id="lblCertificateNumber">
+                        {{ form_label(form.noCertifiedEmpowerment, 'form.label.certificate'|trans) }}
+                    </div>
+                    <div class="editor-field" id="tbCertificateNumber">
+                        {{ form_widget(form.noCertifiedEmpowerment) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.noCertifiedEmpowerment) }}
                     </div>
                 </div>
-                {#          adresa#}
-                <div class="editor-label">
-                    {{ form_label(form.address, 'form.label.address'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.address, {'attr':
-              { 'data-val': 'true',
-                'data-val-required': 'form.required.address'|trans
-              } })
-                    }}
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" ></span>
-                    {{ form_errors(form.address) }}
-                </div>
-                {#          logo#}
-                <div class="editor-label">
-                    {{ form_label(form.image, 'form.label.logo'|trans) }}
-                </div>
-                <div class="editor-field">
-                    {{ form_widget(form.image, {'required' : false })
-                    }}
-                    {{ form_errors(form.image) }}
-                </div>
-                {#          captcha#}
-                <div class="editor-label">
-                    {{ form_label(form.captcha, 'form.label.captcha'|trans) }}
-                    {{ form_widget(form.captcha, {'attr':
+                <div class="col-xs-6">
+                    {#          iban#}
+                    <div class="editor-label">
+                        {{ form_label(form.iban, 'form.label.bank-account'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.iban, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-required': 'form.required.bank-account'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.iban) }}
+                        {% if registerErrors.iban is defined and registerErrors.iban == false %} <span id="validIbanCustomError" class="field-validation-error" >{{ 'form.valid.bank-account'|trans }}</span> {% endif%}
+                        <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-account'|trans }} </p>
+                    </div>
+                    {#          banca#}
+                    <div class="editor-label">
+                        {{ form_label(form.bank, 'form.label.bank'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.bank, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-required': 'form.required.bank'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.bank) }}
+                    </div>
+                    {#          telefon#}
+                    <div class="editor-label">
+                        {{ form_label(form.phone, 'form.label.phone'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.phone, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-regex': 'form.valid.phone'|trans,
+                    'data-val-regex-pattern': '^(07|)\\d{8}$',
+                    'data-val-required': 'form.required.phone'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.phone) }}
+                    </div>
+                    {#          judet#}
+                    <div>
+                        {{ form_label(form.county, 'form.label.county'|trans) }}
+                        {{ form_widget(form.county, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-number': 'form.valid.number.county'|trans,
+                    'data-val-required': 'form.required.county'|trans,
+                    'class': 'form-control shortdropdown',
+                    'onChange': 'getLocalities(null)'
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.county) }}
+                    </div>
+                    {#          localitati#}
+                    <div id="LocalitiesDiv">
+                        <div class="editor-label">
+                            {{ form_label(form.city, 'form.label.city'|trans) }}
+                        </div>
+                        <div class="editor-field">
+                            {{ form_widget(form.city, {'attr':
                     { 'data-val': 'true',
-                    'data-val-required': 'form.required.captcha'|trans,
+                      'data-val-required': 'form.required.city'|trans,
+                      'data-val-number': 'form.valid.number.city'|trans,
+                      'class': 'form-control shortdropdown'
                     } })
-                    }}
-                    </br>
-                    <span class="field-validation-valid" data-valmsg-for="{{ form.captcha.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            {{ form_errors(form.city) }}
+                        </div>
+                    </div>
+                    {#          adresa#}
+                    <div class="editor-label">
+                        {{ form_label(form.address, 'form.label.address'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.address, {'attr':
+                  { 'data-val': 'true',
+                    'data-val-required': 'form.required.address'|trans
+                  } })
+                        }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.address) }}
+                    </div>
+                    {#          logo#}
+                    <div class="editor-label">
+                        {{ form_label(form.image, 'form.label.logo'|trans) }}
+                    </div>
+                    <div class="editor-field">
+                        {{ form_widget(form.image, {'required' : false })
+                        }}
+                        {{ form_errors(form.image) }}
+                    </div>
+                    {#          termeni si conditii#}
+                    <div class="editor-label clearfix" >
+                        <input class="pull-left" type="checkbox" name="selected" id="check" onclick="goRegister()"/>
+                        <a href="{{ path('terms') }}" id="acceptTerms" class="btn" onclick="return popitup('{{ path('terms') }}')">{{ 'form.label.terms-of-use'|trans }}</a>
+                    </div>
+                    <p id="RegisterText" class="color-red" hidden="hidden">
+                        {{ 'form.required.terms-of-use'|trans }}
+                    </p>
                 </div>
-                {{ form_errors(form.captcha) }}
-                {#          termeni si conditii#}
-                <div class="editor-label clearfix" >
-                    <input class="pull-left" type="checkbox" name="selected" id="check" onclick="goRegister()"/>
-                    <a href="{{ path('terms') }}" id="acceptTerms" class="btn" onclick="return popitup('{{ path('terms') }}')">{{ 'form.label.terms-of-use'|trans }}</a>
-                </div>
-                <p id="RegisterText" class="color-red" hidden="hidden">
-                    {{ 'form.required.terms-of-use'|trans }}
-                </p>
-                <p class="register-form2 pull-right">
-                    <input type="button" value="{{ 'form.label.save'|trans }}" id="btnRegister" class="costum" onclick="SubmitRegister()" />
-                </p>
+            </div>
+        </fieldset>
+        {% endif %}
+        <div class="hidden">{{ form_rest(form) }}</div>
+        {% include 'user/form/form_flow_buttons.html.twig' %}
+    </form>
+    {% if flow.getCurrentStepNumber() == 2 %}
+        <h3>{{ 'register.subscription' | trans }}</h3>
+        <div class="col-xs-3">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs clearfix" role="tablist">
+                {% for subscription in subscriptions %}
+                    <li><a href="#ssm{{ loop.index }}" id="navssm{{ loop.index }}" class="tab-pane-menu" role="tab" data-toggle="tab" data-subscriptionId="{{ subscription.id }}" data-domainAll="{{ (subscription.domains|length == subscription.domainAmount ) ? "true" : "false" }}">{{ subscription.name | upper }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-9">
+            <div class="tab-content">
+                {% include 'subscription/all_subscriptions.html.twig' with {'subscriptions' : subscriptions, 'isUserException' : false, 'isRegister' : true } %}
+                <script type="text/javascript">
+                    jQuery(window).load(function () {
+                        jQuery(".tab-pane-menu").first().parent().addClass("active");
+                        jQuery(".tab-pane").first().addClass("active");
+                        jQuery("#register_order_type_registerSubscriptionId").val(jQuery(".tab-pane-menu").first().attr("data-subscriptionId"));
+                        jQuery("#register_order_type_registerDomainIds").val("");
+                    });
+                    jQuery(".nav-tabs li a").on('click', function(){
+                        jQuery("#register_order_type_registerSubscriptionId").val(jQuery(this).attr("data-subscriptionId"));
+                        jQuery("#register_order_type_registerDomainIds").val("");
+                    });
+                </script>
             </div>
         </div>
-    </fieldset>
-    {{ form_end(form) }}
+        <p class="clear-both"></p>
+    {% endif %}
     <script type="text/javascript">
         var ajax_localities = '{{ path('ajax_localities') }}';
     </script>

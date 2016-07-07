@@ -15,6 +15,11 @@ class OrderController extends Controller
      */
     public function showOrderAction()
     {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
         return $this->render('order/order_page.html.twig');
     }
 
@@ -23,6 +28,11 @@ class OrderController extends Controller
      */
     public function showActiveCreditsAction(Request $request)
     {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
         $userId = $this->getUser()->getId();
         $orderRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Order');
         $paginator = $this->get('knp_paginator');
@@ -41,6 +51,11 @@ class OrderController extends Controller
      */
     public function showPendingOrdersAction(Request $request)
     {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
         return $this->render('order/order_pending_orders.html.twig', array(
               'pendingOrders' => $this->get('knp_paginator')->paginate($this->getDoctrine()->getManager()->getRepository('AppBundle:Order')->findAllPendingOrders($this->getUser()->getId()), $request->query->getInt('page-pending', 1), $this->getParameter('pagination')['pending'], array('pageParameterName' => 'page-pending')),
             )
@@ -52,13 +67,43 @@ class OrderController extends Controller
      */
     public function showValidDocumentsAction(Request $request)
     {
+
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
         $userId = $this->getUser()->getId();
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
-        $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserVideos($userId), $creditUsageRepository->findAllValidUserFormularDocuments($userId));
+
+        $formularDocuments = $creditUsageRepository->findAllUserFormularDocuments($userId, ($request->query->get('mediaId') ? $request->query->get('mediaId') : null));
+        foreach ($formularDocuments as $index => $doc) {
+            $name = str_replace("_", "", $doc['fslug']);
+            $formHelperGetFormTextMethod = 'getFormText' . $name;
+            if (method_exists($this->container->get('app.formular_helper'), $formHelperGetFormTextMethod)) {
+                $formularDocuments[$index]['formConfig'] = $this->container->get('app.formular_helper')->$formHelperGetFormTextMethod($doc['formConfig'], true);
+            }
+            $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
+        }
+
+        if ($request->query->has('mediaId')) {
+            $validDocuments = $formularDocuments;
+        } else {
+            $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserVideos($userId), $formularDocuments);
+
+            //sort documents by domain Name - group them
+            usort($validDocuments, function ($item1, $item2) {
+                if ($item1['domain'] == $item2['domain'])
+                    return 0;
+                return $item1['domain'] < $item2['domain'] ? -1 : 1;
+            });
+        }
 
         return $this->render('order/order_valid_documents.html.twig', array(
-              'validDocuments' => $this->get('knp_paginator')->paginate($validDocuments, $request->query->getInt('page-documents', 1), $this->getParameter('pagination')['documents'], array('pageParameterName' => 'page-documents')),
-              'formularType' => CreditsUsage::TYPE_FORMULAR
+              'validDocuments' => $validDocuments,
+              'isUserException' => $this->get('app.user_helper')->getIsUserException(),
+              'formularType' => CreditsUsage::TYPE_FORMULAR,
+              'videoType' => CreditsUsage::TYPE_VIDEO,
             )
         );
     }
@@ -80,6 +125,11 @@ class OrderController extends Controller
      */
     public function showCreditHistoryAction(Request $request)
     {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
         return $this->render('order/order_credit_history.html.twig', array(
               'creditHistoryItems' => $this->get('knp_paginator')->paginate($this->get('app.order_helper')->getCreditHistory($this->getUser()->getId()), $request->query->getInt('page-history', 1), $this->getParameter('pagination')['history'], array('pageParameterName' => 'page-history')),
               'formularType' => CreditsUsage::TYPE_FORMULAR

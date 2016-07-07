@@ -22,35 +22,75 @@ class UserController extends Controller
     public function showRegisterAction(Request $request)
     {
         $register = new User();
-        $form = $this->createForm(new RegisterType(), $register);
-
-        $form->handleRequest($request);
+        $flow = $this->get('app.form.flow.register'); // must match the flow's service id
+        $flow->bind($register);
 
         $registerErrors = array();
-        if ($form->isSubmitted()) {
-            if ($form->get('cui')->getData()) {
-                $registerErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
-            }
-            if ($form->get('iban')->getData()) {
-                $registerErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
-            }
-        }
-        if ($form->isSubmitted() && $form->isValid() && !in_array(false, $registerErrors)) {
+        // form of the current step
+        $form = $flow->createForm();
 
-            if (null === $register->getConfirmationToken()) {
-                /** @var $tokenGenerator TokenGeneratorInterface */
-                $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-                $register->setConfirmationToken($tokenGenerator->generateToken());
-            }
-            $this->container->get('app.mailer')->sendActivationMessage($register);
-            $this->get('app.user_helper')->addUserToDatabase($register);
+        if ($flow->isValid($form)) {
+            if ($flow->getCurrentStep() == 1) {
+                if ($form->isSubmitted()) {
+                    if ($form->get('cui')->getData()) {
+                        $registerErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
+                    }
+                    if ($form->get('iban')->getData()) {
+                        $registerErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
+                    }
 
-            return $this->render('user/register-success.html.twig');
+                    //save media in session
+                    $media = $register->getImage();
+                    if ($media) {
+                        $media->setMediaType(Media::IMAGE_TYPE);
+                        $this->getDoctrine()->getManager()->persist($media);
+                        $this->getDoctrine()->getManager()->flush();
+                        $this->getRequest()->getSession()->set('tmpMedia', $media->getId());
+                    }
+                }
+            }
+
+            if (($flow->getCurrentStep() == 1 && !in_array(false, $registerErrors)) || ($flow->getCurrentStep() != 1)) {
+                $flow->saveCurrentStepData($form);
+
+                if ($flow->nextStep()) {
+                    // form for the next step
+                    $form = $flow->createForm();
+                } else {
+                    // flow finished
+                    $flow->reset(); // remove step data from the session
+
+                    $domainKeys = [];
+                    $domainTxtLength = strlen($register->getRegisterDomainIds());
+                    if ($domainTxtLength > 0) {
+                        $domains = explode(",", substr($register->getRegisterDomainIds(), 1, $domainTxtLength));
+                        foreach ($domains as $domain) {
+                            $domainKeys[$domain] = 'on';
+                        }
+                    }
+
+                    if (null === $register->getConfirmationToken()) {
+                        /** @var $tokenGenerator TokenGeneratorInterface */
+                        $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+                        $register->setConfirmationToken($tokenGenerator->generateToken());
+                    }
+                    $this->container->get('app.mailer')->sendActivationMessage($register);
+                    $userId = $this->get('app.user_helper')->addUserToDatabase($register);
+
+                    if ($userId) {
+                        $this->get('app.order_helper')->addSubscription($register->getRegisterSubscriptionId(), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), count($domainKeys) ? $domainKeys : null, $userId);
+                    }
+
+                    return $this->render('user/register-success.html.twig');
+                }
+            }
         }
 
         return $this->render('user/register.html.twig', array(
-                    'form' => $form->createView(),
-                    'registerErrors' => $registerErrors,
+              'form' => $form->createView(),
+              'flow' => $flow,
+              'registerErrors' => null,
+              'subscriptions' => $this->getDoctrine()->getManager()->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false))
         ));
     }
 
@@ -154,7 +194,7 @@ class UserController extends Controller
         }
 
         return $this->render('user/reset.html.twig', array(
-                    'form' => $form->createView(),
+              'form' => $form->createView(),
         ));
     }
 
@@ -195,7 +235,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('homepage'));
         }
         return $this->render('user/change_password.html.twig', array(
-                    'form' => $form->createView(),
+              'form' => $form->createView(),
         ));
     }
 
@@ -242,8 +282,8 @@ class UserController extends Controller
         }
 
         return $this->render('user/change_info.html.twig', array(
-                    'form' => $form->createView(),
-                    'changeInfoErrors' => $changeInfoErrors,
+              'form' => $form->createView(),
+              'changeInfoErrors' => $changeInfoErrors,
         ));
     }
 
@@ -281,7 +321,15 @@ class UserController extends Controller
     /**
      * @Route("/create-demo-account", name="create_demo_account")
      */
-    public function createDemoAccountAction(Request $request)
+    public function createDemoAccountAction()
+    {
+        return $this->render("user/demo_account.html.twig");
+    }
+
+    /**
+     * @Route("/ajax-create-demo-account", name="ajax_create_demo_account")
+     */
+    public function ajaxCreateDemoAccountAction(Request $request)
     {
         $email = $request->request->get('email');
         $errors = [];
@@ -300,23 +348,17 @@ class UserController extends Controller
         }
 
         $name = $request->request->get('name');
-        $domainSlug = $request->request->get('domainSlug');
+        $domainSlug = $this->getParameter('default_demo_domain_slug');
 
-        if ($domainSlug === 'default_demo_domain') {
-            $domain = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($this->getParameter('default_demo_domain_slug'));
+        if ($domainSlug === 'all') {
+            $domains = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findBy(array('deleted' => FALSE));
         } else {
-            $domain = $this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug);
-            if (!$domain->getDemoDomain()) {
-                $errors['Msg'] = $this->get('translator')->trans('json-response.not-demo-domain');
-
-                return new Response(json_encode($errors), 200);
-            }
+            $domains = array($this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug));
         }
 
         $demoPassword = $this->get('app.user_helper')->generateDemoPassword();
-        $defaultDemoCredits = ($domainSlug !== 'default_demo_domain') ? $domain->getDemoCreditValue() : $this->getParameter('default_demo_domain_credits');
-        $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword, $this->getParameter('demo_account_values'));
-        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domain, $this->getParameter('demo_account_valid_days'), $defaultDemoCredits);
+        $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword);
+        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domains, $this->getParameter('demo_account_valid_days'), $this->getParameter('default_demo_domain_credits'));
         $this->get('app.mailer')->sendDemoAccountMessage($demoUser, $demoPassword, $demoOrder);
 
         return new Response(json_encode($errors), 200);

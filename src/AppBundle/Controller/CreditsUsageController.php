@@ -112,7 +112,7 @@ class CreditsUsageController extends Controller
         }
 
         $formularId = $creditUsage->getFormular()->getId();
-        $formularConfig = get_object_vars(json_decode($creditUsage->getFormConfig()));
+        $formularConfig = (json_decode($creditUsage->getFormConfig())) ? get_object_vars(json_decode($creditUsage->getFormConfig())) : null;
         if (isset($formularConfig['an'])) {
             $formularConfig['an'] = $formularConfig['an'] + 1;
         }
@@ -126,26 +126,10 @@ class CreditsUsageController extends Controller
         $user = $this->getUser();
         $userHelper = $this->get('app.user_helper');
         $formular = $this->getDoctrine()->getManager()->getRepository('AppBundle:Formular')->find($formularId);
-        if (true === $userHelper->isValidUserFormular($user->getId(), $formularId, $formularConfig)) {
-            if (!$userHelper->getIsUserException()) {
-                $this->get('session')->getFlashBag()->add('formular-info', 'domain.formular.already-unlocked');
-                $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
-            }
-            $response = new Response(json_encode(array(
-                  'success' => true,
-                  'message' => $this->get('translator')->trans('domain.formular.success'),
-                  'credits' => $user->getCreditsTotal(),
-                  'formSlug' => $formular->getSlug(),
-                  'formHash' => md5(json_encode($user->getId()) . json_encode($formularConfig))
-            )));
-
-            return $response;
-        }
         if (!$userHelper->getIsUserException()) {
             $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
             if (($user->getCreditsTotal() - $creditValue < 0) || (null === $user->getCreditsTotal())) {
                 $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.formular.no-credits'))));
-
                 return $response;
             }
         }
@@ -159,14 +143,15 @@ class CreditsUsageController extends Controller
             $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
         }
 
-        $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted);
+        $creditsUsageId = $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted);
 
         $response = new Response(json_encode(array(
               'success' => true,
               'message' => $this->get('translator')->trans('domain.formular.success'),
               'credits' => $user->getCreditsTotal(),
               'formSlug' => $formular->getSlug(),
-              'formHash' => md5(json_encode($user->getId()) . json_encode($formularConfig))
+              'formHash' => md5(json_encode($user->getId()) . json_encode($formularConfig)),
+              'creditsUsageId' => $creditsUsageId,
         )));
 
         return $response;

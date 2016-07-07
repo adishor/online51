@@ -1,5 +1,23 @@
 {% extends "base.html.twig" %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets filter='cssrewrite'
+        'assets/flowplayer/skin/minimalist.css'
+    %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+          'assets/flowplayer/flowplayer.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block modal %}
     {% include 'domain/domain_document_confirm_modal.html.twig' %}
     {% include 'domain/domain_video_confirm_modal.html.twig' %}
@@ -16,9 +34,6 @@
                     <li {{ active }}><a href="{{ path("subdomain_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug }) }}">{{ subdomainItem.name | upper }}</a></li>
                     {% endif %}
                 {% endfor %}
-                {% if app.user %}
-                <li><a href="{{ path('formular_documents_show') }}">{{ 'formular-documents.navigation' | trans }}</a></li>
-                {% endif %}
         </ul>
     </div>
     <div class="col-xs-9">
@@ -117,11 +132,11 @@
                                                     <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ video.media.id }}" tabindex="-1" role="dialog">
                                                         <div class="modal-dialog  modal-sm" role="video">
                                                             <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    <video width="480" height="320" controls>
+                                                                <div class="modal-body flowplayer" data-embed="false">
+                                                                    <video width="480" height="320">
                                                                         <source src='{% path video.media, 'reference' %}' type='video/mp4' />
-                                                                        <object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="480" height="320" >
-                                                                            <param name="movie" value="flowplayer-3.2.2.swf">
+                                                                        <object id="flowplayer" data="{{ asset('assets/flowplayer/flowplayer.swf') }}" type="application/x-shockwave-flash" width="480" height="320" >
+                                                                            <param name="movie" value="{{ asset('assets/flowplayer/flowplayer.swf') }}">
                                                                             <param name="allowfullscreen" value="true">
                                                                             <param name="flashvars" value="config={'clip':{'url':'{% path video.media, 'reference' %}','autoPlay':false}}">
                                                                         </object> 
@@ -138,7 +153,7 @@
                                                         }
                                                     </script>
                                                 {% else %}
-                                                    <a id="showLink{{ video.id }}" href ="javascript:;" onclick="javascript:VideoConfirmPopup('{{ 'modal.video-confirm.body'|trans({'%title%': video.name, '%credits%': video.creditValue, '%plural%' : (video.creditValue == 1) ? 'modal.video-confirm.credit'|trans : 'modal.video-confirm.credits'|trans }) }}', '{{ path('unlock_video') }}', '{{ video.id }}', '{% path video.media, 'reference' %}' );">
+                                                    <a id="showLink{{ video.id }}" href ="javascript:;" onclick="javascript:VideoConfirmPopup('{{ 'modal.video-confirm.body'|trans({'%title%': video.name, '%credits%': video.creditValue, '%plural%' : (video.creditValue == 1) ? 'modal.video-confirm.credit'|trans : 'modal.video-confirm.credits'|trans }) }}', '{{ path('unlock_video') }}', '{{ video.id }}', '{% path video.media, 'reference' %}', '{{ asset('assets/flowplayer/flowplayer.swf') }}' );">
                                                         <div class="col-xs-2">
                                                             <div class="credit-icon">
                                                                 <div id="documentIcon{{ video.id }}" class="credit-icon-value color-{{ (video.creditValue > 0) ? "red" : "green" }}">
@@ -178,7 +193,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-10">
-                                                    <a class="show-form-config"><h4>{{ formular.name }}</h4></a>
+                                                    <a id="{{ formular.slug }}" class="show-form-config">
+                                                        <h4>{{ formular.name }}</h4>
+                                                    </a>
                                                 </div>
                                                 {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug, 'request' : app.request })) }}
                                             </div>

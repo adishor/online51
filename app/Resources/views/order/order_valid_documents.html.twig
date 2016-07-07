@@ -1,53 +1,174 @@
-{% extends "base.html.twig" %}
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets filter='cssrewrite'
+        'assets/flowplayer/skin/minimalist.css'
+    %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+          'assets/flowplayer/flowplayer.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block modal %}
+    {% include 'document_form/config_form_add_confirm_modal.html.twig' %}
+{% endblock modal %}
 
 {% block ccontainer %}
-    <div class="col-xs-3">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs clearfix" role="tablist">
-            <li><a href="{{ path("show_active_credits") }}" id="nav-active-credits">{{ 'order.tab.active-credits'|trans|upper }}</a></li>
-            <li><a href="{{ path("show_pending_orders") }}" id="nav-pending">{{ 'order.tab.pending-orders'|trans|upper }}</a></li>
-            <li class="active"><a href="{{ path("show_valid_documents") }}" id="nav-documents">{{ 'order.tab.unlocked-documents'|trans|upper }}</a></li>
-            <li><a href="{{ path("show_credit_usage") }}" id="nav-usage">{{ 'order.tab.credit-usage'|trans|upper }}</a></li>
-            <li><a href="{{ path("show_credit_history") }}" id="nav-history">{{ 'order.tab.credit-history'|trans|upper }}</a></li>
-        </ul>
-    </div>
-    <div class="col-xs-9">
-        <div class="tab-content domain-description">
-            <div class="tab-pane active" id="documents">
-                {% if validDocuments.items is not empty %}
-                    <h4>{{ 'order.unlocked-documents'|trans }}</h4>
-                    <table class="col-xs-12 table-bordered text-center small">
-                        <th class="text-center ">{{ 'order.nr'|trans }}</th>
-                        <th class="text-center ">{{ 'order.document'|trans }}</th>
-                        <th class="text-center ">{{ 'order.domain'|trans }}</th>
-                        <th class="text-center ">{{ 'order.subdomain'|trans }}</th>
-                        <th class="text-center ">{{ 'order.until'|trans }}</th>
-                            {% for document in validDocuments.items %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>
-                                {% if document.mid is defined and document.mid is not null %}
-                                    <a href="{{ path('sonata_media_download', { 'id':document.mid }) }}">{{ document.usageType | capitalize }}: {{ document.name }}</a>
-                                {% else %}
-                                    {{ document.usageType | capitalize }}: {{ document.name }}
-                                {% endif %}
-                                {% if document.usageType == formularType %}
-                                    {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
-                                {% endif %}
-                                </td>
-                                <td>{{ document.domain }}</td>
-                                <td>{{ document.subDomain }}</td>
-                                <td>{{ document.date| localizeddate('medium', 'short', app.request.locale ) }}</td>
-                            </tr>    
-                        {% endfor %}
-                    </table>
-                    <div class="navigation">
-                        {{ knp_pagination_render(validDocuments) }}
-                    </div>
-                {% else %}
-                    <h4>{{ 'order.no-unlocked-documents'|trans }}</h4>
-                {% endif %}
-            </div>
+    {% for flash_message in app.session.flashbag.get('document-generated-success') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="{{ path('show_valid_documents') }}"><button class="custom pull-right">{{ 'formular-documents.reset-filter'|trans }}</button></a>
+            <h1 class="title-top">{{ 'formular-documents.title' | trans }}</h1>
         </div>
+        <div class="clear-both"></div>
+        {% set defaultDomain = '' %}
+        {% if validDocuments is not empty %}
+            {% for doc in validDocuments %}
+                {% if defaultDomain != doc.domain %}
+                    {% if defaultDomain != '' %}
+                        </tbody></table>
+                    {% endif %}
+                    {% set defaultDomain = doc.domain %}
+                    <h2 class="subtitle">{{ doc.domain }}</h2>
+                    <table cellspacing="0" cellpadding="0" border="0" id="overview" class="display users documents clearfix dataTable" aria-describedby="overview_info">
+                        <thead>
+                            <tr role="row">
+                                <th>{{ 'formular-documents.company' | trans }}</th>
+                                <th>{{ 'formular-documents.name' | trans }}</th>
+                                <th class="text-center">{{ 'formular-documents.type' | trans }}</th>
+                                <th class="text-center">{{ 'formular-documents.date-expired' | trans }}</th>
+                                <th class="text-center">{{ 'formular-documents.actions' | trans }}</th>
+                                <th class="text-center">{{ 'formular-documents.new' | trans }}</th>
+                            </tr>
+                        </thead>           
+                        <tbody>
+                {% endif %}                 
+                        <tr class="{{ (loop.index % 2) ? "odd" : "even" }}">
+                            <td class="">{{ doc.company }}</td>
+                            <td class="">{{ doc.name }}<br/>
+                            <span class="small">
+                            {% if doc.usageType == formularType and doc.formConfig != 'null' %}
+                                {{ doc.formConfig | raw }}
+                            {% endif %}
+                            </span>
+                            </td>
+                            <td class="">{{ doc.usageType }}</td>
+                            <td class="">{{ doc.date|date('d-m-Y') }}</td>
+                            <td class="">
+                                {% if doc.usageType == formularType and date(doc.date) > date() and not doc.mid %}
+                                    <a href="{{ path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) }}">
+                                        <img alt="EditDocImg" src="{{ asset("assets/images/EditDoc.png") }}" id="EditDocImg" title="{{ 'formular-documents.edit' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                    </a>
+                                {% endif %}
+                                {% if doc.mid is not null %}
+                                    {% if doc.usageType == videoType %}
+                                        <a href="javascript:;" onclick="showVideoModal{{ doc.mid }}();">
+                                            <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">        
+                                        </a>
+                                        <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ doc.mid }}" tabindex="-1" role="dialog">         
+                                            <div class="modal-dialog  modal-sm" role="video">                                     
+                                                <div class="modal-content">
+                                                    <div class="modal-body flowplayer" data-embed="false">
+                                                        <video width="480" height="320">
+                                                            <source src='{% path doc.media, 'reference' %}' type='video/mp4' />
+                                                            <object id="flowplayer" data="{{ asset('assets/flowplayer/flowplayer.swf') }}" type="application/x-shockwave-flash" width="480" height="320" >
+                                                                <param name="movie" value="{{ asset('assets/flowplayer/flowplayer.swf') }}">
+                                                                <param name="allowfullscreen" value="true">
+                                                                <param name="flashvars" value="config={'clip':{'url':'{% path doc.media, 'reference' %}','autoPlay':false}}">
+                                                            </object> 
+                                                        </video>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>       
+                                        <script type="text/javascript">
+                                            function showVideoModal{{ doc.mid }}()
+                                            {
+                                                $('#showVideoModal{{ doc.mid }}').modal();
+                                            }
+                                        </script>
+                                    {% else %}
+                                        <a href="{{ path('sonata_media_download', {'id': doc.mid }) }}">
+                                            <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td class="">
+                                {% if doc.usageType == formularType and doc.discountedCreditValue is not null %}
+                                    {% set colorClass = (isUserException) ? "green" : ((doc.discountedCreditValue > 0) ? "red" : "green") %}
+                                    <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument('{{ doc.cuid }}', '{{ doc.isDraft }}', '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.name, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
+                                        <div class="credit-icon">
+                                            <div class="credit-icon-value color-{{ colorClass }} create-new">
+                                                {{ isUserException ? 0 : doc.discountedCreditValue }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if doc.usageType == formularType %}
+                            <tr class="{{ (loop.index % 2) ? "odd" : "even" }}"><td colspan="6">
+                                <p class="error-formular" id="formularError{{ doc.cuid }}"></p>
+                            </td></tr>
+                        {% endif %}
+            {% endfor %}
+            </tbody></table>
+        {% else %}
+            <p>{{ 'formular-documents.no-documents' | trans }}</p>
+        {% endif %}
     </div>
+                
+    <script type="text/javascript">
+        function createNewFormularDocument(creditUsageId, isDraft, textBodyModal) {
+            {% if isUserException %}
+                AjaxCreateNewFormularDocument(creditUsageId); 
+            {% else %}
+                if (isDraft) {
+                    AjaxCreateNewFormularDocument(creditUsageId);
+                } else {
+                    $('#configFormConfirmModalBody').text(textBodyModal);
+                    $('#configFormConfirmModalCreditUsageId').val(creditUsageId);
+                    $('#configFormAddConfirmModal').modal();
+                }
+            {% endif %}
+        }
+        
+        $('#configFormAddConfirmModalYes').click(function () {
+            $('#configFormAddConfirmModal').modal('toggle');
+            AjaxCreateNewFormularDocument(jQuery("#configFormConfirmModalCreditUsageId").val());
+        });
+
+        function AjaxCreateNewFormularDocument(creditUsageId)
+        {
+            $.ajax({
+                type: "POST",
+                url: '{{ path("unlock_formular_from_old") }}',
+                data: { 'creditUsageId': creditUsageId },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        $('#totalUserCredits').text(response.credits);
+                        var url = '{{ path('formular_show' , {'slug': 'slug', 'creditsUsageId': 'creditsUsageId' }) }}';
+                        window.location.href = url.replace("slug", response.formSlug).replace("creditsUsageId", response.creditsUsageId); 
+                    } else {
+                        $('#formularError' + creditUsageId).addClass('color-red');
+                        $('#formularError' + creditUsageId).text(response.message);
+                    }
+                }
+            });
+        }
+    </script>
 {% endblock %}

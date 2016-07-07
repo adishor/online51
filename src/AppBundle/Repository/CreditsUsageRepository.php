@@ -18,14 +18,15 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('d.id as id, d.name, m.id as mid, '
-            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+          ->select('u.company, d.id as id, d.name, m.id as mid, '
+            . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage ', 'cu')
           ->join('AppBundle:Document', 'd', 'WITH', 'cu.document = d')
           ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
+          ->join('cu.user', 'u')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
@@ -56,14 +57,15 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('v.id as id, v.name, m.id as mid, '
-            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+          ->select('u.company, v.id as id, v.name, m.id as mid, m as media, '
+            . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage ', 'cu')
           ->join('AppBundle:Video', 'v', 'WITH', 'cu.video = v')
           ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'v.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
+          ->join('cu.user', 'u')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
@@ -87,21 +89,23 @@ class CreditsUsageRepository extends EntityRepository
 
         $query = $queryBuilder->getQuery();
 
-        return $query->getArrayResult();
+        return $query->getResult();
     }
 
     public function findAllValidUserFormularDocuments($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('f.id as id, f.name, m.id as mid, '
+          ->select('u.company, f.id as id, f.name, f.slug, f.discountedCreditValue, m.id as mid, '
             . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.id as cuid, '
+            . 'cu.formConfig, cu.formHash, cu.isFormConfigFinished, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('AppBundle:Formular', 'f', 'WITH', 'cu.formular = f')
           ->leftJoin('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'f.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
+          ->join('cu.user', 'u')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
@@ -147,11 +151,14 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('u.company, f.name as fname, f.slug as fslug, f.discountedCreditValue,'
-            . 'cu.id as cuid, cu.formConfig, cu.formHash, cu.isFormConfigFinished, m.id as mid, cu.expireDate')
+          ->select('u.company, f.name, f.slug as fslug, f.discountedCreditValue, m.id as mid, '
+            . 'cu.id as cuid, cu.formConfig, cu.formHash, cu.isFormConfigFinished, cu.usageType, cu.expireDate as date, '
+            . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('cu.formular', 'f')
           ->join('cu.user', 'u')
+          ->join('f.subdomain', 'sd')
+          ->join('sd.domain', 'dom')
           ->leftJoin('cu.media', 'm')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)

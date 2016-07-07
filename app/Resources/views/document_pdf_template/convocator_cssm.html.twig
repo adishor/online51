@@ -1,0 +1,64 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-20-px"></div>
+            <p class="text-right"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-40-px"></div>
+            <h3 class="text-center"><b>{{ 'CONVOCATOR' | trans}}</b></h3>
+            <div class="height-20-px"></div>
+            <p><span class="text-indent"></span>{{ 'Prin prezenta va informam ca in data de ' | trans }} {{ data.meetingDate | date("d/m/Y") }}, {{ ' la ora ' | trans }} {{ data.meetingHour }},  {{ ' la sediul ' | trans }} {{ data.company }} {{ ' din localitatea ' }} {{ data.companyCity }}, {{ 'jud' | trans }} {{ data.companyCounty }}, {{ ' sala de sedinte, va avea loc intrunirea Comitetului de Securitate si Sanatate in Munca' | trans }}</p>
+            <div class="height-40-px"></div>
+            <p><span class="text-indent"></span>{{ 'Ordinea de zi a intrunirii este:' | trans }}</p>
+            <div class="height-20-px"></div>
+            {% for punct in data.puncteOrdineIntrunire %}
+                {% if punct.punctOrdineZi %}
+                    <p><b>{{ loop.index }}.  </b>{{ punct.punctOrdineZi }}</p>
+                {% endif %}
+            {% endfor %}
+            <div class="height-120-px"></div>
+            <div class="col-xs-6 no-margin-left">
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.administrator }}</p>
+                <p>{{ 'Administrator - Presedinte CSSM' | trans }}</p>
+                <p>.........................................</p>
+                <div class="height-40-px"></div>
+                <p>{{ 'Am luat la cunostiinta' | trans }},</p>
+                <p>{{ 'Membrii CSSM, reprezentanti ai lucratorilor:' | trans }}</p>
+                {% for membru in data.membrii %}
+                    {% if membru.name %}
+                        <p>{{ 'Dl/Dna ' | trans }} {{ membru.name }}</p>
+                    {% endif %}
+                {% endfor %}
+                <div class="height-60-px"></div>
+                <p>{{ 'Medic de medicina muncii' | trans }}</p>
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.medic }}</p>
+            </div>
+            <div class="col-xs-6 no-margin-right">
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.secretar }}</p>
+                <p>{{ 'Secretar CSSM' | trans }}</p>
+                <p>.........................................</p>
+                <div class="height-60-px"></div>
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <p>{{ 'Semnatura' | trans }}</p>
+                    <div class="height-40-px"></div>
+                    {% for membru in data.membrii %}
+                        {% if membru.name %}
+                            <p>...........................................................</p>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="height-40-px"></div>
+                    <div class="height-40-px"></div>
+                    <p>...........................................................</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</body>

@@ -1,0 +1,259 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@CraueFormFlowBundle/Resources/assets/css/buttons.css' %}
+        <link type="text/css" rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block ccontainer %}
+    
+    <h2 class="title">{{ 'Decizie Personal cu atributii' | trans }}</h2>
+
+    {% for flash_message in app.session.flashbag.get('form-success') %}
+        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashbag.get('form-error') %}
+        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
+    {% endfor %}
+
+    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
+
+    <div class="col-xs-12">    
+        <form class="formular-form" id="decizie_personal_cu_atributii" method="post" {{ form_enctype(form) }}>
+            {{ form_errors(form) }}
+            
+            {{ form_row(form.company) }}
+            
+            <section>
+                <h3>{{ 'Conducatorii locurilor de munca sunt:' | trans }}</h3>
+                <ul id="conducatorii-fields-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiConducatoriMunca.vars.prototype }) }}
+                    {% endfilter %}">
+                    {% for item in form.angajatiConducatoriMunca %}
+                        <li>
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.angajatiConducatoriMunca.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a class="costum" href="#" id="add-another-conducator">{{ 'Adauga un nou conducator' | trans }}</a>            
+                <script type="text/javascript">
+                    // keep track of how many conducatorii fields have been rendered
+                    var conducatoriiCount = '{{ form.angajatiConducatoriMunca|length }}';
+
+                    jQuery(document).ready(function () {
+
+                        var conducatoriiList = jQuery('#conducatorii-fields-list');
+
+                        // add a delete link to all of the existing speaker form li elements
+                        conducatoriiList.find('li').each(function (index) {
+                            addConducatorFormDeleteLink($(this));
+                        });
+
+                        jQuery('#add-another-conducator').click(function (e) {
+                            e.preventDefault();
+
+                            var conducatoriiList = jQuery('#conducatorii-fields-list');
+
+                            // grab the prototype template
+                            var newWidget = conducatoriiList.attr('data-prototype');
+                            // replace the "__name__" used in the id and name of the prototype
+                            // with a number that's unique to your companies
+                            newWidget = newWidget.replace(/__name__/g, conducatoriiCount);
+                            conducatoriiCount++;
+
+                            // create a new list element and add it to the list
+                            var newLi = jQuery('<li></li>').html(newWidget);
+                            newLi.appendTo(conducatoriiList);
+                            addConducatorFormDeleteLink(newLi);
+                        });
+                    });
+
+                    function addConducatorFormDeleteLink($conducatoriiFormLi) {
+                        var $removeFormA = $('<a href="#">{{ 'Sterge conducator'|trans }}</a>');
+                        $conducatoriiFormLi.append($removeFormA);
+
+                        $removeFormA.on('click', function (e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
+
+                            // remove the li for the conducatorii form
+                            $conducatoriiFormLi.remove();
+                        });
+                    }
+                </script>
+            </section>
+                        
+            <div class="clear-both"></div>            
+            
+            <section>
+                <h3>{{ 'Urmatorii angajati pot conduce autoturisme in interesul serviciului:' | trans }}</h3>
+                <ul id="autoturisme-fields-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiCondusAutoturisme.vars.prototype }) }}
+                    {% endfilter %}">
+                    {% for item in form.angajatiCondusAutoturisme %}
+                        <li>
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.angajatiCondusAutoturisme.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a class="costum" href="#" id="add-another-autoturism">{{ 'Adauga un nou conducator autoturism' | trans }}</a>
+                <script type="text/javascript">
+                    // keep track of how many autoturisme fields have been rendered
+                    var autoturismeCount = '{{ form.angajatiCondusAutoturisme|length }}';
+
+                    jQuery(document).ready(function () {
+
+                        var autoturismeList = jQuery('#autoturisme-fields-list');
+
+                        // add a delete link to all of the existing speaker form li elements
+                        autoturismeList.find('li').each(function (index) {
+                            addAutoturismFormDeleteLink($(this));
+                        });
+
+                        jQuery('#add-another-autoturism').click(function (e) {
+                            e.preventDefault();
+
+                            var autoturismeList = jQuery('#autoturisme-fields-list');
+
+                            // grab the prototype template
+                            var newWidget = autoturismeList.attr('data-prototype');
+                            // replace the "__name__" used in the id and name of the prototype
+                            // with a number that's unique to your companies
+                            newWidget = newWidget.replace(/__name__/g, autoturismeCount);
+                            autoturismeCount++;
+
+                            // create a new list element and add it to the list
+                            var newLi = jQuery('<li></li>').html(newWidget);
+                            newLi.appendTo(autoturismeList);
+                            addAutoturismFormDeleteLink(newLi);
+                        });
+                    });
+
+                    function addAutoturismFormDeleteLink($autoturismeFormLi) {
+                        var $removeFormA = $('<a href="#">{{ 'Sterge conducator autoturism'|trans }}</a>');
+                        $autoturismeFormLi.append($removeFormA);
+
+                        $removeFormA.on('click', function (e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
+
+                            // remove the li for the autoturisme form
+                            $autoturismeFormLi.remove();
+                        });
+                    }
+                </script>
+            </section>
+                        
+            <div class="clear-both"></div>
+                        
+            <section>
+                <h3>{{ 'Urmatorii angajati sunt responsabili cu acordarea primului ajutor:' | trans }}</h3>
+                <ul id="primAjutor-fields-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiPrimAjutor.vars.prototype }) }}
+                    {% endfilter %}">
+                    {% for item in form.angajatiPrimAjutor %}
+                        <li>
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.angajatiPrimAjutor.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a class="costum" href="#" id="add-another-primAjutor">{{ 'Adauga un nou angajat responsabil cu acordarea primului ajutor' | trans }}</a>
+                <script type="text/javascript">
+                    // keep track of how many primAjutor fields have been rendered
+                    var primAjutorCount = '{{ form.angajatiPrimAjutor|length }}';
+
+                    jQuery(document).ready(function () {
+
+                        var primAjutorList = jQuery('#primAjutor-fields-list');
+
+                        // add a delete link to all of the existing speaker form li elements
+                        primAjutorList.find('li').each(function (index) {
+                            addPrimAjutorFormDeleteLink($(this));
+                        });
+
+                        jQuery('#add-another-primAjutor').click(function (e) {
+                            e.preventDefault();
+
+                            var primAjutorList = jQuery('#primAjutor-fields-list');
+
+                            // grab the prototype template
+                            var newWidget = primAjutorList.attr('data-prototype');
+                            // replace the "__name__" used in the id and name of the prototype
+                            // with a number that's unique to your companies
+                            newWidget = newWidget.replace(/__name__/g, primAjutorCount);
+                            primAjutorCount++;
+
+                            // create a new list element and add it to the list
+                            var newLi = jQuery('<li></li>').html(newWidget);
+                            newLi.appendTo(primAjutorList);
+                            addPrimAjutorFormDeleteLink(newLi);
+                        });
+                    });
+
+                    function addPrimAjutorFormDeleteLink($primAjutorFormLi) {
+                        var $removeFormA = $('<a href="#">{{ 'Sterge angajat ce acorda prim ajutor'|trans }}</a>');
+                        $primAjutorFormLi.append($removeFormA);
+
+                        $removeFormA.on('click', function (e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
+
+                            // remove the li for the primAjutor form
+                            $primAjutorFormLi.remove();
+                        });
+                    }
+                </script>
+            </section>
+                        
+            <div class="clear-both"></div>
+            
+            <section>
+                <h3>{{ 'Urmatorii angajati sunt responsabili cu:' | trans }}</h3>
+                {% for item in form.angajatiResponsabili %}
+                    {{ form_row(item.name) }}
+                    {{ item.function.vars.value }}
+                {% endfor %}
+            </section>
+            
+            <div class="hidden">{{ form_rest(form) }}</div>
+
+            <div class="craue_formflow_buttons">
+                <button type="button" onclick="onDeciziePersonalCuAtributiiSubmit();" class="craue_formflow_button_last">
+                    {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+            </div>
+        </form>
+    </div>
+                    
+    <script type="text/javascript">
+        function onDeciziePersonalCuAtributiiSubmit() {
+            jQuery('#conducatorii-fields-list li input, #autoturisme-fields-list li input, #primAjutor-fields-list li input').each(function () {
+                jQuery(this).rules("add", {
+                    required: true,
+                    messages: {
+                        required: 'Acest camp este obligatoriu'
+                    }
+                });
+            });
+            jQuery('#decizie_personal_cu_atributii').submit();
+        }
+    </script>
+{% endblock %}

@@ -10,7 +10,7 @@ $(document).ready(function () {
         $("#register_noEmployees option:selected").text($("#EmployeesNr").val());
     }
     $(function () {
-        $('select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare').selectmenu({
+        $('select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare, select.operatia').selectmenu({
             width: 500,
             menuWidth: 500
         });
@@ -88,7 +88,12 @@ function SubmitRegister() {
     }
 }
 
+function SubmitRegisterOrder() {
+    $("#RegisterForm").submit();
+}
+
 $("#register_cui").bind('input propertychange', function () {
+    $("#validCuiCustomError").hide();
     $("#ValidCui").hide();
     var cuiText = $("#register_cui").val();
 
@@ -119,6 +124,7 @@ $("#register_cui").bind('input propertychange', function () {
 });
 
 $("#register_iban").bind('input propertychange', function () {
+    $("#validIbanCustomError").hide();
     $("#ValidIban").hide();
     var ibanText = $("#register_iban").val();
     var link = 'http://openapi.ro/api/validate/iban/' + ibanText + '.json';
@@ -180,10 +186,21 @@ function disableCheckedCheckedbox(cb) {
     }, 5000);
 }
 
-function isCheckedx(cb, id, no) {
+function isCheckedx(cb, id, no, isRegister) {
     var checkedOffice = $("#" + id + " input:checked").length;
+    if (isRegister) {
+        var value = $(cb).attr("name").replace("domains", "").replace("[","").replace("]","");
+        if ($(cb).prop('checked')) {
+            $("#register_order_type_registerDomainIds").val($("#register_order_type_registerDomainIds").val() + "," + value);
+        } else {
+            $("#register_order_type_registerDomainIds").val($("#register_order_type_registerDomainIds").val().replace("," + value, ""));
+        }
+    }
     if (checkedOffice > no) {
         disableCheckedCheckedbox(cb);
+        if (isRegister) {
+            $("#register_order_type_registerDomainIds").val($("#register_order_type_registerDomainIds").val().replace("," + value, ""));
+        }
     }
 }
 
@@ -415,18 +432,20 @@ $('#documentConfirmModalYes').click(function () {
     });
 });
 
-function VideoConfirmPopup(message, path, videoId, videoPath) {
+function VideoConfirmPopup(message, path, videoId, videoPath, flowplayerPath) {
     $('#videoConfirmModalBody').text(message);
     $('#videoConfirmModal').modal();
     $('#videoConfirmModalPath').val(path);
     $('#videoConfirmModalId').val(videoId);
     $('#videoConfirmModalDownload').val(videoPath);
+    $('#videoConfirmModalFlowplayer').val(flowplayerPath);
 }
 
 $('#videoConfirmModalYes').click(function () {
     var path = $('#videoConfirmModalPath').val();
     var videoId = $('#videoConfirmModalId').val();
     var videoPath = $('#videoConfirmModalDownload').val();
+    var flowplayerPath = $('#videoConfirmModalFlowplayer').val();
     $.ajax({
         type: "POST",
         url: path,
@@ -434,7 +453,7 @@ $('#videoConfirmModalYes').click(function () {
         dataType: 'json',
         success: function (response) {
             if (response.success) {
-                var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><video width="480" height="320" controls><source src="' + videoPath + '" type="video/mp4" /><object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="480" height="320" ><param name="movie" value="flowplayer-3.2.2.swf"><param name="allowfullscreen" value="true"><param name="flashvars" value="config={\'clip\':{\'url\':\'' + videoPath + '\',\'autoPlay\':false}}"></object></video></div></div></div></div>';
+                var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><video width="480" height="320" controls><source src="' + videoPath + '" type="video/mp4" /><object id="flowplayer" data="' + flowplayerPath + '" type="application/x-shockwave-flash" width="480" height="320" ><param name="movie" value="' + flowplayerPath + '"><param name="allowfullscreen" value="true"><param name="flashvars" value="config={\'clip\':{\'url\':\'' + videoPath + '\',\'autoPlay\':false}}"></object></video></div></div></div></div>';
                 
                 $('#showLink' + videoId).attr("href", "javascript:;").attr("onclick", "showVideoModal" + videoId + "();");
                 $('#showLink' + videoId).append(html);
@@ -524,12 +543,10 @@ function SubmitFreeAccount(url) {
         var email = $("#FreeUserName").val();
         var domainSlug = '';
         if ($("#domainSlug").is('select')) {
-            console.log(1);
             domainSlug = $("#domainSlug option:selected").val();
         } else {
             domainSlug = $("#domainSlug").val();
         }
-        console.log(domainSlug);
         if (name == "") {
             $("#FreeManagerNameValid").show();
             isValid = false;
@@ -560,7 +577,7 @@ function SubmitFreeAccount(url) {
                         $("#FreeAccountExist").show();
                     }
                 }
-            })
+            });
         }
     } else {
         $("#FreeAccountText").show();

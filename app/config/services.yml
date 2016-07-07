@@ -64,6 +64,11 @@ services:
         arguments: [~, AppBundle\Entity\Formular, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: sonata_media }
+    admin.document_generated:
+        class: AppBundle\Admin\DocumentGeneratedAdmin
+        arguments: [~, AppBundle\Entity\CreditsUsage, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: admin_label.document-generated, group: sonata_media }
 
     app.mailer:
         class:     AppBundle\Service\MailerService
@@ -90,12 +95,36 @@ services:
             - [setContainer, ['@service_container']]
         tags:
             - { name: form.type, alias: 'container_aware' }
+    app.sonata_security_roles:
+        class: AppBundle\Form\Type\AppSecurityRolesType
+        tags:
+            - { name: form.type, alias: 'app_sonata_security_roles' }
+        arguments: [@sonata.user.editable_role_builder]
     
-    app.form.flow.egd:
+    app.form.flow.Evidenta_Gestiunii_Deseurilor:
         class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
+    app.form.flow.Convocator_CSSM:
+        class: AppBundle\Form\Flow\DocumentForm\ConvocatorCSSMFlow
+        parent: craue.form.flow
+        scope: request
+        arguments: [@doctrine.orm.entity_manager]
+    app.form.flow.Decizie_Componenta_CSSM:
+        class: AppBundle\Form\Flow\DocumentForm\DecizieComponentaCSSMFlow
+        parent: craue.form.flow
+        scope: request
+        arguments: [@doctrine.orm.entity_manager]
+    app.form.flow.Decizie_Personal_Cu_Atributii:
+        class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributiiFlow
+        parent: craue.form.flow
+        scope: request
+        arguments: [@doctrine.orm.entity_manager]
+    app.form.flow.register:
+        class: AppBundle\Form\Flow\RegisterFlow
+        parent: craue.form.flow
+        scope: request
 
 
     sonata.media.provider.video:
