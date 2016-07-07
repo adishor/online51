@@ -44,8 +44,8 @@
             success: function (response) {
                 if (response.success) {
                     $('#totalUserCredits').text(response.credits);
-                    var url = '{{ path('formular_show' , {'slug': creditsUsage.formular.slug, 'hash': 'hash' }) }}';
-                    window.location.href = url.replace("hash", response.formHash);
+                    var url = '{{ path('formular_show' , {'slug': creditsUsage.formular.slug, 'creditsUsageId': 'creditsUsageId' }) }}';
+                    window.location.href = url.replace("creditsUsageId", response.creditsUsageId);
                 } else {
                     $('#formularError').addClass('color-red');
                     $('#formularError').text(response.message);

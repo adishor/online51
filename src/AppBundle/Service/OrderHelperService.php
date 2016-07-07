@@ -20,7 +20,6 @@ use AppBundle\Entity\CreditsUsage;
 
 class OrderHelperService
 {
-
     protected $entityManager;
     protected $translator;
     protected $tokenStorage;
@@ -44,9 +43,9 @@ class OrderHelperService
         $this->invoiceName = $invoiceName;
     }
 
-    public function addSubscription($subscriptionId, $billingData, $fileProvider, $domains = null)
+    public function addSubscription($subscriptionId, $billingData, $fileProvider, $domains = null, $userId = null)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = ($userId) ? $this->entityManager->getRepository('ApplicationSonataUserBundle:User')->find($userId) : $this->tokenStorage->getToken()->getUser();
         $order = new Order();
 
         $subscription = $this->entityManager->getRepository('AppBundle:Subscription')->find($subscriptionId);
@@ -266,13 +265,15 @@ class OrderHelperService
         return $validDomains;
     }
 
-    public function createDemoOrder($demoUser, $domain, $validDays, $defaultDemoCredits)
+    public function createDemoOrder($demoUser, $domains, $validDays, $defaultDemoCredits)
     {
         $order = new Order();
 
         $order->setUser($demoUser);
         $order->setCreditValue($defaultDemoCredits);
-        $order->addDomain($domain);
+        foreach ($domains as $domain) {
+            $order->addDomain($domain);
+        }
         $order->setPrice('0');
         $order->setValabilityDays($validDays);
         $startDate = new \DateTime();
@@ -283,7 +284,7 @@ class OrderHelperService
         $order->setMentions($this->translator->trans('order.demo-account'));
         $order->setActive(true);
         $order->setFirstActive(true);
-        $order->setDomainAmount(1);
+        $order->setDomainAmount(count($domains));
         $demoUser->setCreditsTotal($defaultDemoCredits);
         $this->entityManager->persist($order);
         $this->entityManager->flush();

@@ -37,6 +37,7 @@ assert:
         same: '*Parola si *Confirmarea Parolei nu coincid.'
     unique:
         email: 'Acest email exista la alt cont, va rugam introduceti alt email.'
+        name: 'Numele trebuie sa fie unic. Mai exista o inregistrare cu acest nume.'
     min-domains: 'Domeniile alese nu pot fi mai putine decat numarul de domenii.'
     valability-formular: 'Daca ati setat campul "Valabil pana la luna", nu puteti seta si numarul de zile'
     valability-formular-null: 'Este necesar sa setati unul din campurile "Nr de zile valide" sau "Valabil pana la luna"'

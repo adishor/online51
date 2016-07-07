@@ -54,13 +54,6 @@ class RegisterType extends AbstractType
               'context' => 'default',
               'required' => false,
           ))
-          ->add('captcha', 'captcha', array(
-              'width' => 200,
-              'height' => 40,
-              'length' => 6,
-              'reload' => true,
-              'as_url' => true,
-          ))
         ;
     }
 
@@ -70,8 +63,7 @@ class RegisterType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Application\Sonata\UserBundle\Entity\User',
-            'validation_groups' => array('CustomRegistration')
+            'data_class' => 'Application\Sonata\UserBundle\Entity\User'
         ));
     }
 

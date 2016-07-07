@@ -32,7 +32,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity()
- * @UniqueEntity("email", message="assert.unique.email", groups={"CustomRegistration"})
+ * @UniqueEntity("email", message="assert.unique.email", groups={"flow_register_flow_step1"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class User extends BaseUser
@@ -58,7 +58,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="user.required.name", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
+     * @Assert\NotBlank(message="user.required.name", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column()
      */
     protected $name;
@@ -66,7 +66,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.company", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column()
      */
     protected $company;
@@ -81,7 +81,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.bank", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.bank", groups={"flow_register_flow_step1", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $bank;
@@ -89,7 +89,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.bank-account", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.bank-account", groups={"flow_register_flow_step1", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $iban;
@@ -97,7 +97,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company-id", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.company-id", groups={"flow_register_flow_step1", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $cui;
@@ -105,8 +105,8 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company-number", groups={"CustomRegistration", "ChangeInfo"})
-     * @Assert\Regex(pattern="/(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})/", message="assert.valid.orc", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.company-number", groups={"flow_register_flow_step1", "ChangeInfo"})
+     * @Assert\Regex(pattern="/(J|F|C){1}[0-9]{2}\/[0-9]+\/(19|20)([0-9]{2})/", message="assert.valid.orc", groups={"flow_register_flow_step1", "ChangeInfo"})
      * @ORM\Column(name="no_registration_orc", nullable=true)
      */
     protected $noRegistrationORC;
@@ -136,7 +136,7 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.address", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.address", groups={"flow_register_flow_step1", "ChangeInfo"})
      * @ORM\Column(nullable=true)
      */
     protected $address;
@@ -144,7 +144,7 @@ class User extends BaseUser
     /**
      *
      * @var integer
-     * @Assert\NotBlank(message="assert.required.function", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.function", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $function;
@@ -152,24 +152,24 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="user.required.email", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
-     * @Assert\Email(message="assert.valid.email", groups={"CustomRegistration", "AdminRegistration", "AdminProfile", "ChangeInfo"})
+     * @Assert\NotBlank(message="user.required.email", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
+     * @Assert\Email(message="assert.valid.email", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
      */
     protected $email;
 
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.phone", groups={"CustomRegistration", "ChangeInfo"})
-     * @Assert\Regex(pattern="/^07([0-9]{8})$/", message="assert.valid.phone", groups={"CustomRegistration", "ChangeInfo"})
+     * @Assert\NotBlank(message="assert.required.phone", groups={"flow_register_flow_step1", "ChangeInfo"})
+     * @Assert\Regex(pattern="/^07([0-9]{8})$/", message="assert.valid.phone", groups={"flow_register_flow_step1", "ChangeInfo"})
      */
     protected $phone;
 
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.password", groups={"CustomRegistration", "resetPassword"})
-     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"CustomRegistration", "ChangePassword", "resetPassword"})
+     * @Assert\NotBlank(message="assert.required.password", groups={"flow_register_flow_step1", "resetPassword"})
+     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"flow_register_flow_step1", "ChangePassword", "resetPassword"})
      */
     protected $password;
 
@@ -240,7 +240,7 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
-    private $demoAccount;
+    protected $demoAccount;
 
     /**
      *
@@ -248,7 +248,7 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      *
@@ -256,7 +256,10 @@ class User extends BaseUser
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $deletedAt;
+    protected $deletedAt;
+
+    protected $registerSubscriptionId;
+    protected $registerDomainIds;
 
     public function __construct()
     {
@@ -774,7 +777,6 @@ class User extends BaseUser
         return $this->modifiedSubscriptions;
     }
 
-
     /**
      * Set image
      *
@@ -814,10 +816,31 @@ class User extends BaseUser
     /**
      * Get demoAccount
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDemoAccount()
     {
         return $this->demoAccount;
     }
+
+    public function getRegisterSubscriptionId()
+    {
+        return $this->registerSubscriptionId;
+    }
+
+    public function getRegisterDomainIds()
+    {
+        return $this->registerDomainIds;
+    }
+
+    public function setRegisterSubscriptionId($registerSubscriptionId)
+    {
+        $this->registerSubscriptionId = $registerSubscriptionId;
+    }
+
+    public function setRegisterDomainIds($registerDomainIds)
+    {
+        $this->registerDomainIds = $registerDomainIds;
+    }
+
 }

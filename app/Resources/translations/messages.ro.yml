@@ -1,6 +1,7 @@
 ## YAML Template.
 register:
     title: 'Inregistrare'
+    subscription: 'Pentru finalizarea inregistrarii este necesar sa comandati un abonament'
 form:
     label:
         name: '*Nume si prenume'
@@ -54,7 +55,6 @@ form:
         field: 'Campul este obligatoriu.'
     required-autocomplete:
         field: Unul din aceste campuri este obligatoriu
-        multiple-completed: Completati doar unul din cele 2 campuri
     placeholder:
         username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
@@ -136,9 +136,9 @@ domain:
         no-credits-used: Nu s-au consumat credite
 formular-documents:
     title: Vizualizare/Creare documente
-    navigation: Documentele mele
     company: Firma
-    type: Tip document
+    name: Nume
+    type: Tip
     configuration: Configuratia
     generated: Generat
     generated-yes: DA
@@ -150,6 +150,7 @@ formular-documents:
     edit: Continuare editare document
     download: Descarca document
     no-documents: Nu aveti documente pentru vizualizat
+    access-denied: Acces interzis.
     access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
     reset-filter: 'Resetati filtrul'
     new-documents: Creare document nou pe baza acestuia, pentru anul urmator
@@ -237,7 +238,7 @@ mail:
         connect: 'Te poti conecta la platforma Online 51 cu urmatoarele date:'
         username: 'Utilizatorul: %email%'
         password: 'Parola: %password%'
-        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul %domain%, pana in %date%.'
+        order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul/domeniile %domain%, pana in %date%.'
 
 
 
@@ -266,6 +267,7 @@ login:
     failed: 'User sau parola invalida!'
     close-password: 'Inchide resetare parola.'
     credit-status: 'Situatie credite'
+    my-documents: 'Documentele mele'
     activate-account: 'Activati cont'
     administration: 'Administrare'
     button:
@@ -278,7 +280,6 @@ login:
 json-response:
     not-email: 'Email invalid.'
     no-user: 'Acest email nu este alocat.'
-    no-demo-domain: 'Acest domeniu nu poate fi gratuit.'
     not-enabled-user: 'Acest email nu este alocat unui utilizator activ.'
     enabled-user: 'Acest email este alocat deja unui utilizator activ.'
     existing-user: 'Acest email este alocat deja unui utilizator existent.'
@@ -293,7 +294,7 @@ change-password:
 change-info:
     title: 'Schimbare date cont'
     activate-account: 'Activeaza cont'
-    activate-account-information: 'Pentru a va activa contul bifati casuta alaturata, introduceti si verificati toate datele si apasati butonul salveaza.'
+    activate-account-information: 'Pentru a va activa contul, completati formularul de mai jos cu toate datele.'
     save: Salveaza
     back: Inapoi
 credit-usage:
@@ -394,6 +395,7 @@ modal:
     config-form-add-confirm:
         title: 'Confirma deblocare formular'
         body: 'Sunteti sigur ca doriti sa deblocati %title% pentru configuratia aleasa? Atentie veti consuma %credits% %plural%!'
+        body-no-config: 'Sunteti sigur ca doriti sa deblocati %title%? Atentie veti consuma %credits% %plural%!'
         credit:  'credit'
         credits:  'credite'
     config-form-add-uniqueness-on-form:
@@ -469,7 +471,9 @@ document-form:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
     text:
-        egd: ' cu tip deseu waste-type si operatia operation pentru anul year; '
+        egd: ' <span>Tip deseu: <b>waste-type</b>; Operatia: <b>operation</b>; Anul: <b>year</b>; </span>'
+        egd-operatia-unselect: neselectat
+        ccssm: '<span>Ziua: <b>day</b>; Ora: <b>hour</b>; </span>'
     report:
         egd:
             notify-sent: 'Mesaj de notificare trimis catre '
@@ -534,6 +538,7 @@ admin_label:
     formular: 'Formulare'
     area: 'Zone'
     video: 'Video'
+    document-generated: 'Fisiere generate'
 Subscription List: Lista Abonamente
 Subscription Delete: Stergere Abonamente
 Domain List: Lista Domenii
@@ -612,3 +617,7 @@ sonata:
     media:
         provider:
             file: Fisier
+
+#formulars
+Company: Firma
+Meeting date: Ziua si ora intalnirii

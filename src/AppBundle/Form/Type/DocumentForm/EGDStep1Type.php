@@ -42,7 +42,6 @@ class EGDStep1Type extends AbstractType
           ->add('unitateMasura', TextType::class)
           ->add('stocareTip', ChoiceType::class, array('choices' => $stocareTip))
           ->add('tratareMod', ChoiceType::class, array('choices' => $tratareMod))
-          ->add('tratareScop', ChoiceType::class, array('choices' => $tratareScop))
           ->add('transportMijloc', ChoiceType::class, array('choices' => $transportMijloc))
           ->add('transportDestinatie', ChoiceType::class, array('choices' => $transportDestinatie))
           ->add('operatiaDeValorificare', ChoiceType::class, array('choices' => $operatieValorificare))

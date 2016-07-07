@@ -19,7 +19,9 @@ class EGD1GenerareDeseuriType extends AbstractType
           ->add('cantitateDeseuGenerate', NumberType::class)
           ->add('cantitateDeseuValorificata', NumberType::class)
           ->add('cantitateDeseuEliminata', NumberType::class)
-          ->add('cantitateDeseuInStoc', NumberType::class)
+          ->add('cantitateDeseuInStoc', NumberType::class, array(
+              'read_only' => true
+          ))
         ;
     }
 

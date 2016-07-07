@@ -1,0 +1,38 @@
+<div id="formularError{{ formular.id }}" class="document-info"></div>
+<script type="text/javascript">
+    jQuery("#{{ formular.slug }}").on('click', function(){
+        {% if isUserException %}
+            AjaxCheckSubmitFormConfig_{{ formular.slug }}();
+        {% else %}
+            $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body-no-config'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
+            $('#configFormConfirmModalFormularSlug').val('{{ formular.slug }}');
+            $('#configFormAddConfirmModal').modal();
+        {% endif %}
+    });
+    
+    $('#configFormAddConfirmModalYes').click(function () {
+        if ($('#configFormConfirmModalFormularSlug').val() == '{{ formular.slug }}') {
+            $('#configFormAddConfirmModal').modal('toggle');
+            AjaxCheckSubmitFormConfig_{{ formular.slug }}();
+        }
+    });
+            
+    function AjaxCheckSubmitFormConfig_{{ formular.slug }}() {
+        $.ajax({
+            type: "POST",
+            url: '{{ path('unlock_formular') }}',
+            data: { 'formularId': {{ formular.id }} },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    $('#totalUserCredits').text(response.credits);
+                    var url = '{{ path('formular_show' , {'slug': formular.slug, 'creditsUsageId': 'creditsUsageId' }) }}';
+                    window.location.href = url.replace("creditsUsageId", response.creditsUsageId); 
+                } else {
+                    $('#formularError' + {{ formular.id }}).addClass('color-red');
+                    $('#formularError' + {{ formular.id }}).text(response.message);
+                }
+            }
+        });
+    }
+</script>

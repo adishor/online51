@@ -45,15 +45,13 @@
                 <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level2" data-valmsg-replace="true" ></span>
             </div>
             <div class="multipleSelectLevel3">
-                <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3"></select>
+                <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3" onChange="loadSub3Item('{{ key }}', jQuery(this).find('option:selected').val());"></select>
                 <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level3" data-valmsg-replace="true" ></span>
             </div>
 
             <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
-            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}"/>
+            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" onChange="loadAutocomplete('{{ key }}')"/>
             <span class="field-validation-valid" data-valmsg-for="autocomplete_{{ key }}" data-valmsg-replace="true" ></span>
-
-            <span class="field-validation-error" id="autocomplete-generic-error-{{ key }}"></span>
             
         {% endif %}    
     {% endfor %}
@@ -69,6 +67,7 @@
     items = {{ uniqueValues|json_encode|raw }};
     function loadSubItem(key, subKey) {
         if (subKey !== '') {
+            $("#autocomplete_" + key).prop('disabled', 'true').addClass('disabled').val(subKey);
             if ('values' in items[key][subKey]) {
                 var objLength = Object.keys(items[key][subKey]['values']).length;
                 if (objLength > 0) {               
@@ -87,6 +86,7 @@
                 }
             }    
         } else {
+            $("#autocomplete_" + key).removeAttr('disabled').removeClass('disabled').val("");
             $('#' + key + '_level2').html("");
             $('#' + key + '_level2').selectmenu();
             $('#' + key + '_level3').html("");
@@ -100,6 +100,7 @@
     
     function loadSub2Item(key, sub2Key) {
         if (sub2Key !== '') {
+            $("#autocomplete_" + key).val(sub2Key);
             var keys = sub2Key.split(" "); 
             var objLength = Object.keys(items[key][keys[0]]['values'][keys[1]]['values']).length;
             if (objLength > 0) {               
@@ -117,7 +118,55 @@
                 $('#' + key + '_level2').next().next().css('display', 'none');
                 $('.multipleSelectLevel3').css('display', 'block');
             }
+        } else {
+            $("#autocomplete_" + key).val(jQuery("#" + key).val());
         }
+    }
+    
+    function loadSub3Item(key, sub3Key) {
+        if (sub3Key !== '') {
+            $("#autocomplete_" + key).val(sub3Key);
+        } else {
+            $("#autocomplete_" + key).val(jQuery("#" + key + "_level2").val());
+        }
+    }
+    
+    function loadAutocomplete(key) {
+        value = $("#autocomplete_" + key).val();
+        if (value.length == 8 || value.length == 9) {
+            jQuery("#" + key).selectmenu("enable");
+            jQuery("#" + key + "_level2").selectmenu("enable");
+            jQuery("#" + key + "_level3").selectmenu("enable");
+            options = value.split(" ");
+            var valueSelected = '';
+            for (var i=0; i<options.length; i++) {
+                valueSelected = valueSelected + ((valueSelected) ? " ":"") + options[i];
+                level = (i>0) ? "_level" + (i+1) : "";
+                jQuery("#" + key + level).selectmenu("value", valueSelected);
+                jQuery("#" + key + level).selectmenu("disable");
+            }
+            $("#autocomplete_" + key).removeClass("disabled").removeAttr("disabled");
+        } else {
+            jQuery("#" + key).selectmenu("enable").selectmenu("value","");
+            jQuery("#" + key + "_level2").selectmenu("enable").selectmenu("value","");
+            jQuery("#" + key + "_level3").selectmenu("enable").selectmenu("value","");
+        }
+        
+        jQuery(".ui-autocomplete li a").click(function(){
+            jQuery("#" + key).selectmenu("enable");
+            jQuery("#" + key + "_level2").selectmenu("enable");
+            jQuery("#" + key + "_level3").selectmenu("enable");
+            value = jQuery(this).html();
+            options = value.split(" ");
+            var valueSelected = '';
+            for (var i=0; i<options.length; i++) {
+                valueSelected = valueSelected + ((valueSelected) ? " ":"") + options[i];
+                level = (i>0) ? "_level" + (i+1) : "";
+                jQuery("#" + key + level).selectmenu("value", valueSelected);
+                jQuery("#" + key + level).selectmenu("disable");
+            }
+            $("#autocomplete_" + key).removeClass("disabled").removeAttr("disabled");
+        });
     }
     
     var data = {};
@@ -125,18 +174,7 @@
         $.each(items, function(index, value) {
             $("#" + index).valid();
             if ( $("#autocomplete_" + index).length) {
-                //check if both select and autocomplete have values
-                if ($("#" + index).val() && $("#autocomplete_" + index).val()) {
-                    $("#autocomplete-generic-error-" + index).css('display', 'block').html('{{ 'form.required-autocomplete.multiple-completed' | trans }}');
-                } else {
-                    $("#autocomplete-generic-error-" + index).html("");
-                }
-
-                if ($("#" + index + "_level3").length) {
-                    if ($("#" + index + "_level3").val() == null || $("#" + index + "_level3").val() == '') {
-                        $("#autocomplete_" + index).valid();
-                    }
-                }
+                $("#autocomplete_" + index).valid();
             }
 
             data[index] = $("#" + index).val();
@@ -182,7 +220,7 @@
         
         if (errorNo === 0) {
             {% if isUserException or isDraft %}
-                AjaxCheckSubmitFormConfig(); 
+                AjaxCheckSubmitFormConfig_{{ formular.slug }}(); 
             {% else %}
                 $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
                 $('#configFormAddConfirmModal').modal();
@@ -216,10 +254,10 @@
     
     $('#configFormAddConfirmModalYes').click(function () {
         $('#configFormAddConfirmModal').modal('toggle');
-        AjaxCheckSubmitFormConfig();
+        AjaxCheckSubmitFormConfig_{{ formular.slug }}();
     });
     
-    function AjaxCheckSubmitFormConfig() {
+    function AjaxCheckSubmitFormConfig_{{ formular.slug }}() {
         $.ajax({
             type: "POST",
             url: '{{ path('unlock_formular') }}',
@@ -228,8 +266,8 @@
             success: function (response) {
                 if (response.success) {
                     $('#totalUserCredits').text(response.credits);
-                    var url = '{{ path('formular_show' , {'slug': formular.slug, 'hash': 'hash' }) }}';
-                    window.location.href = url.replace("hash", response.formHash); 
+                    var url = '{{ path('formular_show' , {'slug': formular.slug, 'creditsUsageId': 'creditsUsageId' }) }}';
+                    window.location.href = url.replace("creditsUsageId", response.creditsUsageId); 
                 } else {
                     $('#formularError' + {{ formular.id }}).addClass('color-red');
                     $('#formularError' + {{ formular.id }}).text(response.message);
@@ -258,7 +296,7 @@
                 autocompleteItems.push(keySubitemArray[keySubitem]);
             }
         }
-
+        
         return autocompleteItems;
     }
     

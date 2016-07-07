@@ -42,15 +42,22 @@
     <div class="col-xs-10">    
         <form class="formular-form" id="evidenta_gestiunii_deseurilor" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
-
-            {% if flow.getCurrentStepNumber() == 1 %}
+            
+            {% if creditsUsage.isFormConfigFinished %}
+                {% if flow.getCurrentStepNumber() == 1 %}
+                    {{ form_row(form.operatia, {'attr': {'class': 'operatia max-width-500'  } }) }}
+                {% endif %}
+            {% endif %}
+            
+            {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 2 : 1) %}
                 {{ form_row(form.agentEconomic) }}
-                <div class="col-xs-6">
+                <div class="col-xs-6 no-margin-left">
                     {{ form_row(form.an) }}
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6 no-margin-right">
                     {{ form_row(form.tipDeseuCod) }}
                 </div>
+                <div class="clear-both"></div>
                 {{ form_row(form.tipDeseu, {'attr': {'class': 'width-100-percent height-100-px text-justify'} }) }}
                 {{ form_row(form.stareFizica, 
                     {'attr': {'data-val': 'true',
@@ -64,7 +71,6 @@
                 <span class="field-validation-valid" data-valmsg-for="{{ form.unitateMasura.vars.full_name }}" data-valmsg-replace="true" ></span>
                 {{ form_row(form.stocareTip, {'attr': {'class': 'stocareTip max-width-500'  } }) }}
                 {{ form_row(form.tratareMod, {'attr': {'class': 'tratareMod max-width-500'} }) }}
-                {{ form_row(form.tratareScop, {'attr': {'class': 'tratareScop max-width-500'} }) }}
                 {{ form_row(form.transportMijloc, {'attr': {'class': 'transportMijloc max-width-500'} }) }}
                 {{ form_row(form.transportDestinatie, {'attr': {'class': 'transportDestinatia max-width-500'} }) }}
                 {% if formConfig.operatia is defined and formConfig.operatia == 3 %}
@@ -85,10 +91,17 @@
                     {% endif %}
                 </label>
                 <p>{{ 'Va rugam introduceti in ordinea cronologica a lunilor agentii economici' | trans }}</p>
-                <ul id="company-fields-list" data-prototype="{{ form_widget(form.EGDCompany.vars.prototype)|e }}">
+                <ul id="company-fields-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('document_form/prototype_company.html.twig', { 'form': form.EGDCompany.vars.prototype }) }}
+                    {% endfilter %}">
                     {% for item in form.EGDCompany %}
                         <li>
-                            {{ form_row(item.name) }}
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.EGDCompany.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                             {{ form_row(item.startMonth) }}
                         </li>
                     {% endfor %}
@@ -144,7 +157,7 @@
                 {% endif %}
             {% endif %}
 
-            {% if flow.getCurrentStepNumber() == 2 %}
+            {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 3 : 2) %}
                 <h3>{{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}</h3>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
@@ -165,12 +178,12 @@
                         {% endif %}
                         <th class="text-center">{{ 'ramasa in stoc:' | trans }}</th>
                     </tr>
-                    {% for item in form.EGD1GenerareDeseuri %}
+                    {% for key,item in form.EGD1GenerareDeseuri %}
                         <tr>
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ form_widget(item.luna) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuGenerate, 
-                                    {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate', 
+                                    {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate EGD1CantitateDeseuGenerate' ~ key, 
                                     'data-val': 'true',
                                     'data-val-regex': 'Nu este valoare pozitiva' | trans,
                                     'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
@@ -179,7 +192,7 @@
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuGenerate.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>
                             {% if formConfig.operatia == 3 %}
-                            <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata', 
+                            <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata EGD1CantitateDeseuValorificata' ~ key, 
                                     'data-val': 'true',
                                     'data-val-regex': 'Nu este valoare pozitiva' | trans,
                                     'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
@@ -187,25 +200,19 @@
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>
+                            <td class="EGD1CantitateDeseuInStocValorificata{{ key }} text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] }}</td>
                             {% endif %}
                             {% if formConfig.operatia == 4 %}
-                            <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata', 
+                            <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata EGD1CantitateDeseuEliminata' ~ key, 
                                     'data-val': 'true',
                                     'data-val-regex': 'Nu este valoare pozitiva' | trans,
                                     'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
                                     ) 
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
-                            </td>
+                            </td>      
+                            <td class="EGD1CantitateDeseuInStocEliminata{{ key }} text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key] }}</td>
                             {% endif %}
-                            <td>{{ form_widget(item.cantitateDeseuInStoc, {'attr': {'class': 'text-right EGD1CantitateDeseuInStoc', 
-                                    'data-val': 'true',
-                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
-                                    ) 
-                                }}
-                                <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuInStoc.vars.full_name }}" data-valmsg-replace="true" ></span>
-                            </td>
                         </tr>
                     {% endfor %}
                     <tr>
@@ -223,7 +230,7 @@
                 </table> 
             {% endif %}
 
-            {% if flow.getCurrentStepNumber() == 3 %}
+            {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 4 : 3) %}
                 <h3>{{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}</h3>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
@@ -286,7 +293,8 @@
                 </table>
             {% endif %}
 
-            {% if flow.getCurrentStepNumber() == 4 and form.EGD3ValorificareDeseuri is defined %}
+            {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 5 : 4) 
+                    and form.EGD3ValorificareDeseuri is defined %}
                 <h3>{{ 'CAPITOLUL 3' | trans}}<br/>{{'Valorificarea deseurilor' | trans}}</h3>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
@@ -322,7 +330,8 @@
                 </table>
             {% endif %}
 
-            {% if flow.getCurrentStepNumber() == 4 and form.EGD4EliminareDeseuri is defined %}
+            {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 5 : 4) 
+                    and form.EGD4EliminareDeseuri is defined %}
                 <h3>{{ 'CAPITOLUL 4' | trans}}<br/>{{'Eliminarea deseurilor' | trans}}</h3>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
@@ -377,6 +386,26 @@
                     jQuery('#{{ key }}').text(sum{{ key }});
                 });            
             {% endfor %}
+            
+            {% if form.EGD1GenerareDeseuri is defined %}
+                {% for key in form.EGD1GenerareDeseuri|keys %}
+                    jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
+                        jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
+                    });
+                    jQuery('.EGD1CantitateDeseuValorificata{{ key }}').change(function(){
+                        jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
+                    });
+                {% endfor %}
+
+                {% for key in form.EGD1GenerareDeseuri|keys %}
+                    jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
+                        jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
+                    });
+                    jQuery('.EGD1CantitateDeseuEliminata{{ key }}').change(function(){
+                        jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
+                    });
+                {% endfor %}
+            {% endif %}
             
             jQuery('.craue_formflow_button_last').click(function () {
                 var errorNo = 0;

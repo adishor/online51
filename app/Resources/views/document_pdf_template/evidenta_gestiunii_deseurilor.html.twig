@@ -34,14 +34,19 @@
                     <th class="text-center">{{ 'pdf-doc-egd.eliminated'|trans }}</th>
                     <th class="text-center">{{ 'pdf-doc-egd.in-stock'|trans }}</th>
                 </tr>
-                {% for item in data.EGD1GenerareDeseuri %}
+                {% for key, item in data.EGD1GenerareDeseuri %}
                     <tr>
                         <td class="width-35-px">{{ loop.index }}</td>
                         <td class="width-105-px">{{ item.luna }}</td>
                         <td class="text-right">{{ item.cantitateDeseuGenerate }}</td>
                         <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
                         <td class="text-right">{{ item.cantitateDeseuEliminata }}</td>
-                        <td class="text-right">{{ item.cantitateDeseuInStoc }}</td>
+                        {% if data.operatia == 3 %}
+                            <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] }}</td>
+                        {% endif %}
+                        {% if data.operatia == 4 %}
+                            <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key] }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 <tr>

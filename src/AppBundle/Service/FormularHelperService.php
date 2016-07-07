@@ -28,6 +28,8 @@ class FormularHelperService
         $EGD1CantitateDeseuValorificataTotal = 0;
         $EGD1CantitateDeseuEliminataTotal = 0;
         $EGD1CantitateDeseuInStocTotal = 0;
+        $EGD1CantitateDeseuInStocValorificata = [];
+        $EGD1CantitateDeseuInStocEliminata = [];
         $EGD2StocareCantitateTotal = 0;
         $EGD2TratareCantitateTotal = 0;
         $EGD3CantitateDeseuValorificataTotal = 0;
@@ -41,11 +43,15 @@ class FormularHelperService
             $EGD2TratareCantitateTotal += $EGD2[$key]->getTratareCantitate();
             $EGD3CantitateDeseuValorificataTotal += $EGD3[$key]->getCantitateDeseuValorificata();
             $EGD4CantitateDeseuEliminataTotal += $EGD4[$key]->getCantitateDeseuEliminata();
+            $EGD1CantitateDeseuInStocValorificata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuValorificata();
+            $EGD1CantitateDeseuInStocEliminata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuEliminata();
         }
         $EGDTotals['EGD1CantitateDeseuGenerateTotal'] = $EGD1CantitateDeseuGenerateTotal;
         $EGDTotals['EGD1CantitateDeseuValorificataTotal'] = $EGD1CantitateDeseuValorificataTotal;
         $EGDTotals['EGD1CantitateDeseuEliminataTotal'] = $EGD1CantitateDeseuEliminataTotal;
         $EGDTotals['EGD1CantitateDeseuInStocTotal'] = $EGD1CantitateDeseuInStocTotal;
+        $EGDTotals['EGD1CantitateDeseuInStocValorificata'] = $EGD1CantitateDeseuInStocValorificata;
+        $EGDTotals['EGD1CantitateDeseuInStocEliminata'] = $EGD1CantitateDeseuInStocEliminata;
         $EGDTotals['EGD2StocareCantitateTotal'] = $EGD2StocareCantitateTotal;
         $EGDTotals['EGD2TratareCantitateTotal'] = $EGD2TratareCantitateTotal;
         $EGDTotals['EGD3CantitateDeseuValorificataTotal'] = $EGD3CantitateDeseuValorificataTotal;
@@ -67,8 +73,19 @@ class FormularHelperService
         return $this->translator->trans('document-form.text.egd', array(
               'waste-type' => $waste,
               'year' => $formConfig->an,
-              'operation' => $this->operatiaEGD[$formConfig->operatia],
+              'operation' => (isset($formConfig->operatia)) ? $this->operatiaEGD[$formConfig->operatia] : $this->translator->trans('document-form.text.egd-operatia-unselect'),
         ));
+    }
+
+    public function getFormTextConvocatorCSSM($EncodedFormConfig, $short = false)
+    {
+
+        $formConfig = json_decode($EncodedFormConfig);
+
+        return ($formConfig) ? $this->translator->trans('document-form.text.ccssm', array(
+              'day' => $formConfig->data,
+              'hour' => $formConfig->ora,
+        )) : null;
     }
 
 }
