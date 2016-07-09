@@ -4,6 +4,7 @@ parameters:
 #    parameter_name: value
 
 services:
+#    admin
     admin.subscription:
         class: AppBundle\Admin\SubscriptionAdmin
         arguments: [~, AppBundle\Entity\Subscription, AppBundle:Admin\Subscription]
@@ -69,7 +70,25 @@ services:
         arguments: [~, AppBundle\Entity\CreditsUsage, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.document-generated, group: sonata_media }
+    app.sonata_security_roles:
+        class: AppBundle\Form\Type\AppSecurityRolesType
+        tags:
+            - { name: form.type, alias: 'app_sonata_security_roles' }
+        arguments: [@sonata.user.editable_role_builder]
+    sonata.media.provider.video:
+        class: AppBundle\Provider\VideoFileProvider
+        arguments: 
+            - sonata.media.provider.video
+            - @sonata.media.filesystem.local
+            - @sonata.media.cdn.server
+            - @sonata.media.generator.default
+            - @sonata.media.thumbnail.format
+            - ['mp4']
+            - ['video/mp4']
+        tags:
+            - { name: sonata.media.provider }
 
+#    website
     app.mailer:
         class:     AppBundle\Service\MailerService
         arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%, %report_email%]
@@ -79,9 +98,6 @@ services:
     app.order_helper:
         class:     AppBundle\Service\OrderHelperService
         arguments: [@doctrine.orm.entity_manager, @translator, @security.token_storage, @session, @app.mailer, @knp_snappy.pdf, '@templating', %invoice_dir%, %invoice_name%]
-    app.formular_helper:
-        class:     AppBundle\Service\FormularHelperService
-        arguments: ['@translator', %tip_deseu%, %operatia%]
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false
@@ -95,12 +111,13 @@ services:
             - [setContainer, ['@service_container']]
         tags:
             - { name: form.type, alias: 'container_aware' }
-    app.sonata_security_roles:
-        class: AppBundle\Form\Type\AppSecurityRolesType
+    app.twig.extension.json_decode:
+        class: AppBundle\Twig\Extension\VarsExtension
         tags:
-            - { name: form.type, alias: 'app_sonata_security_roles' }
-        arguments: [@sonata.user.editable_role_builder]
+            - { name: twig.extension }
+        arguments: ['@service_container']
     
+#    flows
     app.form.flow.Evidenta_Gestiunii_Deseurilor:
         class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow
         parent: craue.form.flow
@@ -125,23 +142,20 @@ services:
         class: AppBundle\Form\Flow\RegisterFlow
         parent: craue.form.flow
         scope: request
-
-
-    sonata.media.provider.video:
-        class: AppBundle\Provider\VideoFileProvider
-        arguments: 
-            - sonata.media.provider.video
-            - @sonata.media.filesystem.local
-            - @sonata.media.cdn.server
-            - @sonata.media.generator.default
-            - @sonata.media.thumbnail.format
-            - ['mp4']
-            - ['video/mp4']
-        tags:
-            - { name: sonata.media.provider }
-            
-    app.twig.extension.json_decode:
-        class: AppBundle\Twig\Extension\VarsExtension
-        tags:
-            - { name: twig.extension }
-        arguments: ['@service_container']
+        
+#    formular class
+    app.formular.generic:
+        class: AppBundle\Service\DocumentForm\FormularGeneric
+        arguments: [@doctrine.orm.entity_manager, @jms_serializer, "%kernel.root_dir%"]
+    app.formular.Evidenta_Gestiunii_Deseurilor:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularEvidentaGestiuniiDeseurilor
+    app.formular.Convocator_CSSM:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularConvocatorCSSM
+    app.formular.Decizie_Componenta_CSSM:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDecizieComponentaCSSM
+    app.formular.Decizie_Personal_Cu_Atributii:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii
