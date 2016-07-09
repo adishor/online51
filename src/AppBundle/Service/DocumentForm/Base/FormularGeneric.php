@@ -46,7 +46,7 @@ class FormularGeneric
             throw new Exception('Please set a value for name variable using setName function.');
         }
 
-        return "AppBundle\\Entity\\DocumentForm\\" . $this->name;
+        return "AppBundle\\Entity\\DocumentForm\\" . $this->name . "\\" . $this->name;
     }
 
     public function checkValidity($user, $creditsUsage)

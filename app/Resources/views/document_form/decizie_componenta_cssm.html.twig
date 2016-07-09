@@ -49,7 +49,7 @@
                 <h3>{{ 'Reprezentati ai lucratorilor:' | trans }}</h3>
                 <ul id="membrii-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.membrii.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.membrii.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.membrii %}
                         <li>

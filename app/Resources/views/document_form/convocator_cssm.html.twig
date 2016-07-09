@@ -35,7 +35,7 @@
                 <h3>{{ 'Ordinea de zi a intrunirii este:' | trans }}</h3>
                 <ul id="puncte-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_punct_ordine_zi.html.twig', { 'form': form.puncteOrdineIntrunire.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_punct_ordine_zi.html.twig', { 'form': form.puncteOrdineIntrunire.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.puncteOrdineIntrunire %}
                         <li>
@@ -111,7 +111,7 @@
                 <h3>{{ 'Membrii CSSM, reprezentati ai lucratorilor:' | trans }}</h3>
                 <ul id="membrii-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.membrii.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.membrii.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.membrii %}
                         <li>

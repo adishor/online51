@@ -76,7 +76,9 @@ class FormularController extends Controller
     {
         if ($flow->isValid($form)) {
             $flow->saveCurrentStepData($form);
-            $formularService->processHandleForm($creditsUsage, $flow, $formData);
+            if (method_exists($formularService, 'processHandleForm')) {
+                $formularService->processHandleForm($creditsUsage, $flow, $formData);
+            }
             $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
@@ -136,7 +138,7 @@ class FormularController extends Controller
     public function configFormularUniquenessAction(Formular $formular, Request $request)
     {
         $name = str_replace("_", "", $formular->getSlug());
-        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
+        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name . "\\" . $name;
 
         $uniqueValues = [];
 
@@ -165,7 +167,7 @@ class FormularController extends Controller
                 }
             }
 
-            return $this->render('document_form/config_form_uniqueness.html.twig', array(
+            return $this->render('document_form/config/config_form_uniqueness.html.twig', array(
                   'uniqueValues' => $uniqueValues,
                   'formular' => $formular,
                   'isUserException' => $this->get('app.user_helper')->getIsUserException(),
@@ -173,7 +175,7 @@ class FormularController extends Controller
             ));
         }
 
-        return $this->render('document_form/no_config_form_uniqueness.html.twig', array(
+        return $this->render('document_form/config/no_config_form_uniqueness.html.twig', array(
               'formular' => $formular,
               'isUserException' => $this->get('app.user_helper')->getIsUserException(),
         ));

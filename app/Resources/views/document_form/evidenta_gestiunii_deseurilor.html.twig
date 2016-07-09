@@ -9,7 +9,7 @@
     
 {% block modal %}
     {% if not creditsUsage.isFormConfigFinished %}
-        {% include "document_form/config_form_add_uniqueness_on_form_modal.html.twig" %}
+        {% include "document_form/config/config_form_add_uniqueness_on_form_modal.html.twig" %}
     {% endif %}
 {% endblock %}
 
@@ -33,7 +33,7 @@
     <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori. Verificati si celelalte capitole!' | trans }}</h4>
 
     {% if not creditsUsage.isFormConfigFinished %}
-        {% include "document_form/config_form_uniqueness_on_form_egd.html.twig" with {'creditsUsage': creditsUsage, 'isUserException': isUserException } %}
+        {% include "document_form/config/config_form_uniqueness_on_form_egd.html.twig" with {'creditsUsage': creditsUsage, 'isUserException': isUserException } %}
     {% endif %}
 
     <div class="col-xs-2">
@@ -93,7 +93,7 @@
                 <p>{{ 'Va rugam introduceti in ordinea cronologica a lunilor agentii economici' | trans }}</p>
                 <ul id="company-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_company.html.twig', { 'form': form.EGDCompany.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_company.html.twig', { 'form': form.EGDCompany.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.EGDCompany %}
                         <li>

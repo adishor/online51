@@ -136,8 +136,9 @@ class CreditsUsageController extends Controller
 
         $userHelper->updateValidUserCredits();
 
-        $name = str_replace("_", "", $formular->getSlug());
-        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
+        $formularService = $this->get("app.formular." . $formular->getSlug());
+        $formularService->setName($formular->getSlug());
+        $entity = $formularService->getEntity();
         $isDraft = ($discounted) ? $discountedIsDraft : !$entity::$oneStepFormConfig;
         if ($isDraft) {
             $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');

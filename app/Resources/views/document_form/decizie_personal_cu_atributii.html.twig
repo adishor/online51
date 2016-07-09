@@ -31,7 +31,7 @@
                 <h3>{{ 'Conducatorii locurilor de munca sunt:' | trans }}</h3>
                 <ul id="conducatorii-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiConducatoriMunca.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.angajatiConducatoriMunca.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.angajatiConducatoriMunca %}
                         <li>
@@ -97,7 +97,7 @@
                 <h3>{{ 'Urmatorii angajati pot conduce autoturisme in interesul serviciului:' | trans }}</h3>
                 <ul id="autoturisme-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiCondusAutoturisme.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.angajatiCondusAutoturisme.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.angajatiCondusAutoturisme %}
                         <li>
@@ -163,7 +163,7 @@
                 <h3>{{ 'Urmatorii angajati sunt responsabili cu acordarea primului ajutor:' | trans }}</h3>
                 <ul id="primAjutor-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiPrimAjutor.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.angajatiPrimAjutor.vars.prototype }) }}
                     {% endfilter %}">
                     {% for item in form.angajatiPrimAjutor %}
                         <li>
