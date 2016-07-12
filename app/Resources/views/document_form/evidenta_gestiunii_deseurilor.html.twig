@@ -107,7 +107,8 @@
                     {% endfor %}
                 </ul>
                 {% if creditsUsage.isFormConfigFinished %}
-                    <a href="#" id="add-another-company">{{ 'Adauga o firma' }}</a>            
+                    <a href="#" id="add-another-company">{{ 'Adauga o firma' | trans }}</a>
+                    <div class="color-red no-display" id="#error-no-company">{{ 'Adaugati cel putin 1 firma' | trans }}</div>
                     <script type="text/javascript">
                         // keep track of how many company fields have been rendered
                         var companyCount = '{{ form.EGDCompany|length }}';
@@ -118,13 +119,12 @@
                                 
                             // add a delete link to all of the existing speaker form li elements
                             companyList.find('li').each(function(index) {
-                                if (index+1 == companyCount) {
-                                    addCompanyFormDeleteLink($(this));
-                                }
+                                addCompanyFormDeleteLink($(this));
                             });
                             
                             jQuery('#add-another-company').click(function(e) {
                                 e.preventDefault();
+                                jQuery('.no-display').hide();
 
                                 var companyList = jQuery('#company-fields-list');
                                 
@@ -138,6 +138,7 @@
                                 // create a new list element and add it to the list
                                 var newLi = jQuery('<li></li>').html(newWidget);
                                 newLi.appendTo(companyList);
+                                addCompanyFormDeleteLink(newLi);
                             });
                         })
                         
@@ -200,7 +201,7 @@
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>
-                            <td class="EGD1CantitateDeseuInStocValorificata{{ key }} text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] }}</td>
+                            <td class="EGD1CantitateDeseuInStocValorificata{{ key }} text-right calcul-valorificata">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] }}</td>
                             {% endif %}
                             {% if formConfig.operatia == 4 %}
                             <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata EGD1CantitateDeseuEliminata' ~ key, 
@@ -211,7 +212,7 @@
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>      
-                            <td class="EGD1CantitateDeseuInStocEliminata{{ key }} text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key] }}</td>
+                            <td class="EGD1CantitateDeseuInStocEliminata{{ key }} text-right calcul-eliminata">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key] }}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}
@@ -369,7 +370,7 @@
 
             <div class="hidden">{{ form_rest(form) }}</div>
 
-            {% include 'CraueFormFlowBundle:FormFlow:buttons.html.twig' %}
+            {% include 'document_form/base/form_flow_buttons.html.twig' %}
         </form>
     </div>
     <script type="text/javascript">
@@ -383,28 +384,72 @@
                             sum{{ key }} += parseFloat(jQuery(this).val().replace(',', '.'));
                         }
                     });
+                    console.log('{{ key }}');
                     jQuery('#{{ key }}').text(sum{{ key }});
                 });            
             {% endfor %}
             
             {% if form.EGD1GenerareDeseuri is defined %}
-                {% for key in form.EGD1GenerareDeseuri|keys %}
-                    jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
-                        jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
-                    });
-                    jQuery('.EGD1CantitateDeseuValorificata{{ key }}').change(function(){
-                        jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
-                    });
-                {% endfor %}
+                {% if formConfig.operatia == 3 %}
+                    {% for key in form.EGD1GenerareDeseuri|keys %}
+                        jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
+                            jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
+                            calculTotalValorificata();
+                        });
+                        jQuery('.EGD1CantitateDeseuValorificata{{ key }}').change(function(){
+                            jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
+                            calculTotalValorificata();
+                        });
+                    {% endfor %}
+                    function calculTotalValorificata() {
+                        var total = 0;
+                        jQuery('.calcul-valorificata').each(function(){
+                            console.log(jQuery(this).text());
+                            total += parseFloat(jQuery(this).text());
+                        });   
+                        jQuery('#EGD1CantitateDeseuInStocTotal').text(total);
+                    }
+                {% endif %}
 
-                {% for key in form.EGD1GenerareDeseuri|keys %}
-                    jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
-                        jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
-                    });
-                    jQuery('.EGD1CantitateDeseuEliminata{{ key }}').change(function(){
-                        jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
-                    });
-                {% endfor %}
+                {% if formConfig.operatia == 4 %}
+                    {% for key in form.EGD1GenerareDeseuri|keys %}
+                        jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
+                            jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
+                            calculTotalEliminata();
+                        });
+                        jQuery('.EGD1CantitateDeseuEliminata{{ key }}').change(function(){
+                            jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
+                            calculTotalEliminata();
+                        });
+                    {% endfor %}
+                    function calculTotalEliminata() {
+                        var total = 0;
+                        jQuery('.calcul-eliminata').each(function(){
+                            total += parseFloat(jQuery(this).text());
+                        });
+                        jQuery('#EGD1CantitateDeseuInStocTotal').text(total);
+                    }
+                {% endif %}
+            {% endif %}
+                
+            {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 2 : 1) %}
+                jQuery('.craue_formflow_button_last').click(function () {
+                    if (!jQuery("#company-fields-list li").length) {
+                        jQuery('.no-display').show();
+                        return false;
+                    }
+                    else {
+                        jQuery('.no-display').hide();
+                        jQuery('#company-fields-list li input').each(function () {
+                            jQuery(this).rules("add", {
+                                required: true,
+                                messages: {
+                                    required: 'Acest camp este obligatoriu'
+                                }
+                            });
+                        });
+                    }
+                });
             {% endif %}
             
             jQuery('.craue_formflow_button_last').click(function () {

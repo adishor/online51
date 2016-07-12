@@ -45,4 +45,9 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
         }
     }
 
+    public function processEndHandleForm(&$formData)
+    {
+        
+    }
+
 }

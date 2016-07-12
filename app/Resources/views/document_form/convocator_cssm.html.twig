@@ -47,7 +47,8 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <a class="costum" href="#" id="add-another-punct">{{ 'Adauga un nou punct pe ordinea de zi' | trans }}</a>   
+                <a class="costum" href="#" id="add-another-punct">{{ 'Adauga un nou punct pe ordinea de zi' | trans }}</a>
+                <div class="color-red no-display-punct" id="#error-no-punct">{{ 'Adaugati cel putin 1 punct' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many puncte fields have been rendered
                     var puncteCount = '{{ form.puncteOrdineIntrunire|length }}';
@@ -63,6 +64,7 @@
 
                         jQuery('#add-another-punct').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-punct').hide();
 
                             var puncteList = jQuery('#puncte-fields-list');
 
@@ -123,7 +125,8 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru CSSM' | trans }}</a>            
+                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru CSSM' | trans }}</a>
+                <div class="color-red no-display-membru" id="#error-no-membru">{{ 'Adaugati cel putin 1 membru' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many membrii fields have been rendered
                     var membriiCount = '{{ form.membrii|length }}';
@@ -139,6 +142,7 @@
 
                         jQuery('#add-another-membru').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-membru').hide();
 
                             var membriiList = jQuery('#membrii-fields-list');
 
@@ -182,6 +186,9 @@
                 <button type="button" onclick="onConvocatorCSSMSubmit();" class="craue_formflow_button_last">
                     {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
                 </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
             </div>
         </form>
     </div>
@@ -193,18 +200,43 @@
                     jQuery('#convocator_cssm_type_meetingDate_date_year').val() &&
                     jQuery('#convocator_cssm_type_meetingDate_time_hour').val())) {
                 jQuery('#error-meetingDate').removeClass('field-validation-valid').addClass('field-validation-error');
+                return false;
             } else {
                 jQuery('#error-meetingDate').removeClass('field-validation-error').addClass('field-validation-valid');
             }
 
-            jQuery('#membrii-fields-list li input, #puncte-fields-list li input').each(function () {
-                jQuery(this).rules("add", {
-                    required: true,
-                    messages: {
-                        required: 'Acest camp este obligatoriu'
-                    }
+            if (!jQuery("#membrii-fields-list li").length) {
+                jQuery('.no-display-membru').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-membru').hide();
+                jQuery('#membrii-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
                 });
-            });
+            }
+            
+            if (!jQuery("#puncte-fields-list li").length) {
+                jQuery('.no-display-punct').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-punct').hide();
+                jQuery('#puncte-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
             jQuery('#convocator_cssm').submit();
         }
     </script>

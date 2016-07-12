@@ -72,17 +72,21 @@ class FormularController extends Controller
         ));
     }
 
-    public function handleForm($formularService, $creditsUsage, &$flow, &$form, $formData)
+    public function handleForm($formularService, $creditsUsage, &$flow, &$form, &$formData)
     {
         if ($flow->isValid($form)) {
             $flow->saveCurrentStepData($form);
             if (method_exists($formularService, 'processHandleForm')) {
                 $formularService->processHandleForm($creditsUsage, $flow, $formData);
             }
+            $nextStep = $flow->nextStep();
+            if (!$nextStep && method_exists($formularService, 'processEndHandleForm')) {
+                $formularService->processEndHandleForm($formData);
+            }
             $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
-            if ($flow->nextStep()) {
+            if ($nextStep || $this->get('request')->request->has('btnSave')) {
                 // form for the next step
                 $form = $flow->createForm();
                 $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
@@ -197,73 +201,6 @@ class FormularController extends Controller
         }
 
         return new Response();
-    }
-
-    /**
-     * @Route("/unique_configuration_on_form_egd", name="unique_configuration_on_form_egd")
-     */
-    public function applyUniqueConfigurationOnFormEvidentaGestiuniiDeseurilor(Request $request)
-    {
-        $configOperatia = $request->request->get('configOperatia');
-        if ($configOperatia > 0) {
-            $user = $this->getUser();
-            $userHelper = $this->get('app.user_helper');
-
-            $creditsUsageId = $request->request->get('creditUsageId');
-            $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditsUsageId);
-
-            $formConfig = $this->getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($creditsUsage->getFormConfig());
-            $formConfig['tip_deseu'] = $formConfig['tip_deseu_cod'];
-            unset($formConfig['tip_deseu_cod']);
-            $formConfig['operatia'] = $configOperatia;
-            $formHash = md5(json_encode($this->getUser()->getId()) . json_encode($formConfig));
-
-            if (true === $userHelper->isValidUserFormular($user->getId(), $creditsUsage->getFormular()->getId(), $formConfig)) {
-                if (!$userHelper->getIsUserException()) {
-                    $this->get('session')->getFlashBag()->add('formular-info', 'domain.formular.already-unlocked');
-                    $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
-                }
-                $response = new Response(json_encode(array(
-                      'success' => true,
-                      'credits' => $user->getCreditsTotal(),
-                      'formHash' => $formHash
-                )));
-
-                return $response;
-            }
-            if (!$userHelper->getIsUserException()) {
-                if (($user->getCreditsTotal() - $creditsUsage->getCredit() < 0) || (null === $user->getCreditsTotal())) {
-                    $response = new Response(json_encode(array(
-                          'success' => false,
-                          'message' => $this->get('translator')->trans('domain.formular.no-credits')
-                    )));
-
-                    return $response;
-                }
-            }
-
-            $userHelper->updateValidUserCredits();
-
-            $creditsUsage->setFormConfig(json_encode($formConfig));
-            $creditsUsage->setIsFormConfigFinished(TRUE);
-            $creditsUsage->setFormHash($formHash);
-            $user->setCreditsTotal($user->getCreditsTotal() - $creditsUsage->getCredit());
-            $user->setLastCreditUpdate(new \DateTime());
-            $this->getDoctrine()->getManager()->flush();
-
-            $response = new Response(json_encode(array(
-                  'success' => true,
-                  'credits' => $user->getCreditsTotal(),
-                  'formHash' => $formHash
-            )));
-
-            return $response;
-        }
-
-        return new Response(json_encode(array(
-              'success' => false,
-              'message' => $this->get('translator')->trans('modal.config-form-add-uniqueness-on-form.error')
-          )), 200);
     }
 
 }

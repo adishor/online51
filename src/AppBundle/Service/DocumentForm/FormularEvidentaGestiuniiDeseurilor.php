@@ -59,7 +59,7 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
             'variables' => array(
                 'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu'],
                 'year' => $formConfigValue['an'],
-                'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'document-form.text.egd-operatia-unselect'
+                'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'neselectat'
             )
         );
     }
@@ -114,13 +114,18 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
             $EGD1CantitateDeseuGenerateTotal += $EGD1[$key]->getCantitateDeseuGenerate();
             $EGD1CantitateDeseuValorificataTotal += $EGD1[$key]->getCantitateDeseuValorificata();
             $EGD1CantitateDeseuEliminataTotal += $EGD1[$key]->getCantitateDeseuEliminata();
-            $EGD1CantitateDeseuInStocTotal += $EGD1[$key]->getCantitateDeseuInStoc();
             $EGD2StocareCantitateTotal += $EGD2[$key]->getStocareCantitate();
             $EGD2TratareCantitateTotal += $EGD2[$key]->getTratareCantitate();
             $EGD3CantitateDeseuValorificataTotal += $EGD3[$key]->getCantitateDeseuValorificata();
             $EGD4CantitateDeseuEliminataTotal += $EGD4[$key]->getCantitateDeseuEliminata();
             $EGD1CantitateDeseuInStocValorificata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuValorificata();
             $EGD1CantitateDeseuInStocEliminata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuEliminata();
+        }
+        if ($formData->getOperatia() == 3) {
+            $EGD1CantitateDeseuInStocTotal = $EGD1CantitateDeseuGenerateTotal - $EGD1CantitateDeseuValorificataTotal;
+        }
+        if ($formData->getOperatia() == 4) {
+            $EGD1CantitateDeseuInStocTotal = $EGD1CantitateDeseuGenerateTotal - $EGD1CantitateDeseuEliminataTotal;
         }
         $EGDTotals['EGD1CantitateDeseuGenerateTotal'] = $EGD1CantitateDeseuGenerateTotal;
         $EGDTotals['EGD1CantitateDeseuValorificataTotal'] = $EGD1CantitateDeseuValorificataTotal;
@@ -149,19 +154,6 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
             foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
                 $item->setTratareScop(str_replace(array(3, 4), array('V', 'E'), $formData->getOperatia()));
                 $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
-            }
-
-            if ($formData->getOperatia() == 3) {
-                foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
-                    $item->setCantitateDeseuEliminata(0);
-                    $formData->getEGD1GenerareDeseuri()[$key] = $item;
-                }
-            }
-            if ($formData->getOperatia() == 4) {
-                foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
-                    $item->setCantitateDeseuValorificata(0);
-                    $formData->getEGD1GenerareDeseuri()[$key] = $item;
-                }
             }
         }
 
@@ -199,6 +191,22 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
                     }
                     $formData->getEGD4EliminareDeseuri()[$key] = $item;
                 }
+            }
+        }
+    }
+
+    public function processEndHandleForm(&$formData)
+    {
+        if ($formData->getOperatia() == 3) {
+            foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+                $item->setCantitateDeseuEliminata(0);
+                $formData->getEGD1GenerareDeseuri()[$key] = $item;
+            }
+        }
+        if ($formData->getOperatia() == 4) {
+            foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+                $item->setCantitateDeseuValorificata(0);
+                $formData->getEGD1GenerareDeseuri()[$key] = $item;
             }
         }
     }

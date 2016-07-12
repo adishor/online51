@@ -2103,3 +2103,11 @@ input[readonly] {
     margin-right: 0;
     padding-right: 0 !important;
 }
+
+.formular-form textarea {
+    width: 100%;
+}
+
+.no-display, .no-display-membru, .no-display-punct, .no-display-autoturism, .no-display-conducator, .no-display-primAjutor {
+    display: none;
+}

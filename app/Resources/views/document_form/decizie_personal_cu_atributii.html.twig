@@ -43,7 +43,8 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <a class="costum" href="#" id="add-another-conducator">{{ 'Adauga un nou conducator' | trans }}</a>            
+                <a class="costum" href="#" id="add-another-conducator">{{ 'Adauga un nou conducator' | trans }}</a>
+                <div class="color-red no-display-conducator" id="#error-no-conducator">{{ 'Adaugati cel putin 1 conducator' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many conducatorii fields have been rendered
                     var conducatoriiCount = '{{ form.angajatiConducatoriMunca|length }}';
@@ -59,6 +60,7 @@
 
                         jQuery('#add-another-conducator').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-conducator').hide();
 
                             var conducatoriiList = jQuery('#conducatorii-fields-list');
 
@@ -110,6 +112,7 @@
                     {% endfor %}
                 </ul>
                 <a class="costum" href="#" id="add-another-autoturism">{{ 'Adauga un nou conducator autoturism' | trans }}</a>
+                <div class="color-red no-display-autoturism" id="#error-no-autoturism">{{ 'Adaugati cel putin 1 conducator autoturism' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many autoturisme fields have been rendered
                     var autoturismeCount = '{{ form.angajatiCondusAutoturisme|length }}';
@@ -125,6 +128,7 @@
 
                         jQuery('#add-another-autoturism').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-autoturism').hide();
 
                             var autoturismeList = jQuery('#autoturisme-fields-list');
 
@@ -176,6 +180,7 @@
                     {% endfor %}
                 </ul>
                 <a class="costum" href="#" id="add-another-primAjutor">{{ 'Adauga un nou angajat responsabil cu acordarea primului ajutor' | trans }}</a>
+                <div class="color-red no-display-primAjutor" id="#error-no-primAjutor">{{ 'Adaugati cel putin 1 angajat responsabil cu acordarea primului ajutor' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many primAjutor fields have been rendered
                     var primAjutorCount = '{{ form.angajatiPrimAjutor|length }}';
@@ -191,6 +196,7 @@
 
                         jQuery('#add-another-primAjutor').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-primAjutor').hide();
 
                             var primAjutorList = jQuery('#primAjutor-fields-list');
 
@@ -239,20 +245,63 @@
                 <button type="button" onclick="onDeciziePersonalCuAtributiiSubmit();" class="craue_formflow_button_last">
                     {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
                 </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
             </div>
         </form>
     </div>
                     
     <script type="text/javascript">
         function onDeciziePersonalCuAtributiiSubmit() {
-            jQuery('#conducatorii-fields-list li input, #autoturisme-fields-list li input, #primAjutor-fields-list li input').each(function () {
-                jQuery(this).rules("add", {
-                    required: true,
-                    messages: {
-                        required: 'Acest camp este obligatoriu'
-                    }
+            if (!jQuery("#conducatorii-fields-list li").length) {
+                jQuery('.no-display-conducator').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-conducator').hide();
+                jQuery('#conducatorii-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
                 });
-            });
+            }
+            
+            if (!jQuery("#autoturisme-fields-list li input").length) {
+                jQuery('.no-display-autoturism').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-autoturism').hide();
+                jQuery('#autoturisme-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
+            if (!jQuery("#primAjutor-fields-list li input").length) {
+                jQuery('.no-display-primAjutor').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-primAjutor').hide();
+                jQuery('#primAjutor-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
             jQuery('#decizie_personal_cu_atributii').submit();
         }
     </script>

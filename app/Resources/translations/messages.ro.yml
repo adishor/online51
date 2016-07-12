@@ -153,7 +153,7 @@ formular-documents:
     access-denied: Acces interzis.
     access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
     reset-filter: 'Resetati filtrul'
-    new-documents: Creare document nou pe baza acestuia, pentru anul urmator
+    new-documents: Creare document nou pe baza acestuia
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
