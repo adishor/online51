@@ -112,16 +112,17 @@ class CreditsUsageController extends Controller
         }
 
         $formularId = $creditUsage->getFormular()->getId();
+        $formularData = $creditUsage->getFormData();
         $formularConfig = (json_decode($creditUsage->getFormConfig())) ? get_object_vars(json_decode($creditUsage->getFormConfig())) : null;
         if (isset($formularConfig['an'])) {
             $formularConfig['an'] = $formularConfig['an'] + 1;
         }
         $discountedIsDraft = !$creditUsage->getIsFormConfigFinished();
 
-        return $this->processFormularAction($formularId, $formularConfig, true, $discountedIsDraft);
+        return $this->processFormularAction($formularId, $formularConfig, true, $discountedIsDraft, $formularData);
     }
 
-    public function processFormularAction($formularId, $formularConfig, $discounted = false, $discountedIsDraft = false)
+    public function processFormularAction($formularId, $formularConfig, $discounted = false, $discountedIsDraft = false, $formularData = NULL)
     {
         $user = $this->getUser();
         $userHelper = $this->get('app.user_helper');
@@ -144,7 +145,7 @@ class CreditsUsageController extends Controller
             $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
         }
 
-        $creditsUsageId = $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted);
+        $creditsUsageId = $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted, $formularData);
 
         $response = new Response(json_encode(array(
               'success' => true,

@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
 use AppBundle\Entity\DocumentForm\Common\Person;
-use AppBundle\Entity\DocumentForm\ConvocatorCSSM\ConvocatorCSSMPunct;
+use AppBundle\Entity\DocumentForm\Common\ConvocatorCSSMPunct;
 
 class ConvocatorCSSM
 {
@@ -71,46 +71,59 @@ class ConvocatorCSSM
      * @Type("string")
      * @Assert\NotBlank()
      */
-    protected $secretar;
+    protected $secretary;
 
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\DocumentForm\ConvocatorCSSM\ConvocatorCSSMPunct>")
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\ConvocatorCSSMPunct>")
+     * @Assert\Count(min="1")
      */
-    protected $puncteOrdineIntrunire;
+    protected $meetingPoints;
 
     /**
      *
      * @var type
      * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
+     * @Assert\Count(min="1")
      */
-    protected $membrii;
+    protected $members;
 
     /**
      * @var type
      * @Type("string")
      * @Assert\NotBlank()
      */
-    protected $medic;
+    protected $doctor;
 
     public function __construct()
     {
-        $this->puncteOrdineIntrunire = new ArrayCollection();
+        $this->meetingPoints = new ArrayCollection();
         $x = new ConvocatorCSSMPunct();
-        $x->setPunctOrdineZi('');
+        $x->setMeetingPoint();
+        $x->setMeetingPointSummary();
 
-        $puncteOrdineIntrunire = [$x, $x, $x];
-        $this->puncteOrdineIntrunire = $puncteOrdineIntrunire;
+        $meetingPoints = [$x, $x, $x];
+        $this->meetingPoints = $meetingPoints;
 
 
-        $this->membrii = new ArrayCollection();
+        $this->members = new ArrayCollection();
         $y = new Person();
         $y->setName('');
         $y->setFunction('');
 
-        $membrii = [$y, $y, $y];
-        $this->membrii = $membrii;
+        $members = [$y, $y, $y];
+        $this->members = $members;
+    }
+
+    public function getMeetingDate()
+    {
+        return $this->meetingDate;
+    }
+
+    public function getMeetingHour()
+    {
+        return $this->meetingHour;
     }
 
     public function getCompany()
@@ -133,24 +146,34 @@ class ConvocatorCSSM
         return $this->administrator;
     }
 
-    public function getSecretar()
+    public function getSecretary()
     {
-        return $this->secretar;
+        return $this->secretary;
     }
 
-    public function getMeetingDate()
+    public function getMeetingPoints()
     {
-        return $this->meetingDate;
+        return $this->meetingPoints;
     }
 
-    public function getMeetingHour()
+    public function getMembers()
     {
-        return $this->meetingHour;
+        return $this->members;
     }
 
-    public function getMedic()
+    public function getDoctor()
     {
-        return $this->medic;
+        return $this->doctor;
+    }
+
+    public function setMeetingDate($meetingDate)
+    {
+        $this->meetingDate = $meetingDate;
+    }
+
+    public function setMeetingHour($meetingHour)
+    {
+        $this->meetingHour = $meetingHour;
     }
 
     public function setCompany($company)
@@ -173,44 +196,24 @@ class ConvocatorCSSM
         $this->administrator = $administrator;
     }
 
-    public function setSecretar($secretar)
+    public function setSecretary($secretary)
     {
-        $this->secretar = $secretar;
+        $this->secretary = $secretary;
     }
 
-    public function setMeetingDate($meetingDate)
+    public function setMeetingPoints($meetingPoints)
     {
-        $this->meetingDate = $meetingDate;
+        $this->meetingPoints = $meetingPoints;
     }
 
-    public function setMeetingHour($meetingHour)
+    public function setMembers($members)
     {
-        $this->meetingHour = $meetingHour;
+        $this->members = $members;
     }
 
-    public function setMedic($medic)
+    public function setDoctor($doctor)
     {
-        $this->medic = $medic;
-    }
-
-    public function getPuncteOrdineIntrunire()
-    {
-        return $this->puncteOrdineIntrunire;
-    }
-
-    public function getMembrii()
-    {
-        return $this->membrii;
-    }
-
-    public function setPuncteOrdineIntrunire($puncteOrdineIntrunire)
-    {
-        $this->puncteOrdineIntrunire = $puncteOrdineIntrunire;
-    }
-
-    public function setMembrii($membrii)
-    {
-        $this->membrii = $membrii;
+        $this->doctor = $doctor;
     }
 
 }

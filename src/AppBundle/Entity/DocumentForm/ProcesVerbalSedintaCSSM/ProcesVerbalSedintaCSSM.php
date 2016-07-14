@@ -1,13 +1,14 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\DecizieComponentaCSSM;
+namespace AppBundle\Entity\DocumentForm\ProcesVerbalSedintaCSSM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
 use AppBundle\Entity\DocumentForm\Common\Person;
+use AppBundle\Entity\DocumentForm\Common\ConvocatorCSSMPunct;
 
-class DecizieComponentaCSSM
+class ProcesVerbalSedintaCSSM
 {
     /**
      * @var array
@@ -23,6 +24,14 @@ class DecizieComponentaCSSM
 
     /**
      * @var type
+     * @Type("DateTime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime()
+     */
+    protected $meetingDate;
+
+    /**
+     * @var type
      * @Type("string")
      * @Assert\NotBlank()
      */
@@ -33,7 +42,14 @@ class DecizieComponentaCSSM
      * @Type("string")
      * @Assert\NotBlank()
      */
-    protected $administrator;
+    protected $companyCity;
+
+    /**
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $room;
 
     /**
      * @var type
@@ -64,15 +80,36 @@ class DecizieComponentaCSSM
      */
     protected $doctor;
 
+    /**
+     *
+     * @var type
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\ConvocatorCSSMPunct>")
+     * @Assert\Count(min="1")
+     */
+    protected $meetingPoints;
+
     public function __construct()
     {
-        $this->members = new ArrayCollection();
+        $x = new ConvocatorCSSMPunct();
+        $x->setMeetingPoint('');
+        $x->setMeetingPointSummary('');
+
+        $this->meetingPoints = new ArrayCollection();
+        $meetingPoints = [$x, $x, $x];
+        $this->meetingPoints = $meetingPoints;
+
         $y = new Person();
         $y->setName('');
         $y->setFunction('');
 
+        $this->members = new ArrayCollection();
         $members = [$y, $y];
         $this->members = $members;
+    }
+
+    public function getMeetingDate()
+    {
+        return $this->meetingDate;
     }
 
     public function getCompany()
@@ -80,9 +117,14 @@ class DecizieComponentaCSSM
         return $this->company;
     }
 
-    public function getAdministrator()
+    public function getCompanyCity()
     {
-        return $this->administrator;
+        return $this->companyCity;
+    }
+
+    public function getRoom()
+    {
+        return $this->room;
     }
 
     public function getPresident()
@@ -105,14 +147,29 @@ class DecizieComponentaCSSM
         return $this->doctor;
     }
 
+    public function getMeetingPoints()
+    {
+        return $this->meetingPoints;
+    }
+
+    public function setMeetingDate($meetingDate)
+    {
+        $this->meetingDate = $meetingDate;
+    }
+
     public function setCompany($company)
     {
         $this->company = $company;
     }
 
-    public function setAdministrator($administrator)
+    public function setCompanyCity($companyCity)
     {
-        $this->administrator = $administrator;
+        $this->companyCity = $companyCity;
+    }
+
+    public function setRoom($room)
+    {
+        $this->room = $room;
     }
 
     public function setPresident($president)
@@ -133,6 +190,11 @@ class DecizieComponentaCSSM
     public function setDoctor($doctor)
     {
         $this->doctor = $doctor;
+    }
+
+    public function setMeetingPoints($meetingPoints)
+    {
+        $this->meetingPoints = $meetingPoints;
     }
 
 }

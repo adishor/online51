@@ -384,7 +384,6 @@
                             sum{{ key }} += parseFloat(jQuery(this).val().replace(',', '.'));
                         }
                     });
-                    console.log('{{ key }}');
                     jQuery('#{{ key }}').text(sum{{ key }});
                 });            
             {% endfor %}
@@ -404,7 +403,6 @@
                     function calculTotalValorificata() {
                         var total = 0;
                         jQuery('.calcul-valorificata').each(function(){
-                            console.log(jQuery(this).text());
                             total += parseFloat(jQuery(this).text());
                         });   
                         jQuery('#EGD1CantitateDeseuInStocTotal').text(total);

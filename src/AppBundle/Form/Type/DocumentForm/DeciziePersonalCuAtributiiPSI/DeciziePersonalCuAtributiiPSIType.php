@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Type\DocumentForm\DeciziePersonalCuAtributii;
+namespace AppBundle\Form\Type\DocumentForm\DeciziePersonalCuAtributiiPSI;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use AppBundle\Form\Type\DocumentForm\Common\PersonType;
 
-class DeciziePersonalCuAtributiiType extends AbstractType
+class DeciziePersonalCuAtributiiPSIType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -20,25 +20,14 @@ class DeciziePersonalCuAtributiiType extends AbstractType
           ->add('company', TextType::class, array(
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
-          ->add('workersLeaders', CollectionType::class, array(
+          ->add('administrator', TextType::class)
+          ->add('workersAttributions', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,
               'allow_delete' => true,
               'prototype' => true
           ))
-          ->add('workersCarsDriven', CollectionType::class, array(
-              'entry_type' => PersonType::class,
-              'allow_add' => true,
-              'allow_delete' => true,
-              'prototype' => true
-          ))
-          ->add('workersFirstAid', CollectionType::class, array(
-              'entry_type' => PersonType::class,
-              'allow_add' => true,
-              'allow_delete' => true,
-              'prototype' => true
-          ))
-          ->add('workersResponsible', CollectionType::class, array(
+          ->add('interventionTeam', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,
               'allow_delete' => true,
@@ -49,7 +38,7 @@ class DeciziePersonalCuAtributiiType extends AbstractType
 
     public function getName()
     {
-        return 'decizie_personal_cu_atributii_type';
+        return 'decizie_personal_cu_atributii_psi_type';
     }
 
     public function getParent()

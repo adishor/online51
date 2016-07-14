@@ -32,29 +32,33 @@ class DeciziePersonalCuAtributii
      *
      * @var type
      * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
+     * @Assert\Count(min="1")
      */
-    protected $angajatiConducatoriMunca;
+    protected $workersLeaders;
 
     /**
      *
      * @var type
      * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
+     * @Assert\Count(min="1")
      */
-    protected $angajatiCondusAutoturisme;
+    protected $workersCarsDriven;
 
     /**
      *
      * @var type
      * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
+     * @Assert\Count(min="1")
      */
-    protected $angajatiPrimAjutor;
+    protected $workersFirstAid;
 
     /**
      *
      * @var type
      * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
+     * @Assert\Count(min="1")
      */
-    protected $angajatiResponsabili;
+    protected $workersResponsible;
 
     public function __construct()
     {
@@ -62,29 +66,27 @@ class DeciziePersonalCuAtributii
         $x->setName('');
         $x->setFunction('');
 
-        $this->angajatiConducatoriMunca = new ArrayCollection();
-        $angajatiConducatoriMunca = [$x, $x, $x];
-        $this->angajatiConducatoriMunca = $angajatiConducatoriMunca;
+        $this->workersLeaders = new ArrayCollection();
+        $workersLeaders = [$x, $x, $x];
+        $this->workersLeaders = $workersLeaders;
 
-        $this->angajatiCondusAutoturisme = new ArrayCollection();
-        $angajatiCondusAutoturisme = [$x, $x, $x];
-        $this->angajatiCondusAutoturisme = $angajatiCondusAutoturisme;
+        $this->workersCarsDriven = new ArrayCollection();
+        $workersCarsDriven = [$x, $x, $x];
+        $this->workersCarsDriven = $workersCarsDriven;
 
-        $this->angajatiPrimAjutor = new ArrayCollection();
-        $angajatiPrimAjutor = [$x];
-        $this->angajatiPrimAjutor = $angajatiPrimAjutor;
+        $this->workersFirstAid = new ArrayCollection();
+        $workersFirstAid = [$x];
+        $this->workersFirstAid = $workersFirstAid;
 
-        $this->angajatiResponsabili = new ArrayCollection();
-
+        $this->workersResponsible = new ArrayCollection();
         $y = new Person();
         $y->setName('');
-        $y->setFunction('utilizarea liftului pentru marfuri');
-
+        $y->setFunction('formular.decizie-personal-cu-atributii.use-elevator');
         $z = new Person();
         $z->setName('');
-        $z->setFunction('mentenanta echipamentelor, deservirea compresorului');
-        $angajatiResponsabili = [$y, $z];
-        $this->angajatiResponsabili = $angajatiResponsabili;
+        $z->setFunction('formular.decizie-personal-cu-atributii.maintenance');
+        $workersResponsible = [$y, $z];
+        $this->workersResponsible = $workersResponsible;
     }
 
     public function getCompany()
@@ -92,49 +94,49 @@ class DeciziePersonalCuAtributii
         return $this->company;
     }
 
+    public function getWorkersLeaders()
+    {
+        return $this->workersLeaders;
+    }
+
+    public function getWorkersCarsDriven()
+    {
+        return $this->workersCarsDriven;
+    }
+
+    public function getWorkersFirstAid()
+    {
+        return $this->workersFirstAid;
+    }
+
+    public function getWorkersResponsible()
+    {
+        return $this->workersResponsible;
+    }
+
     public function setCompany($company)
     {
         $this->company = $company;
     }
 
-    public function getAngajatiConducatoriMunca()
+    public function setWorkersLeaders($workersLeaders)
     {
-        return $this->angajatiConducatoriMunca;
+        $this->workersLeaders = $workersLeaders;
     }
 
-    public function getAngajatiCondusAutoturisme()
+    public function setWorkersCarsDriven($workersCarsDriven)
     {
-        return $this->angajatiCondusAutoturisme;
+        $this->workersCarsDriven = $workersCarsDriven;
     }
 
-    public function getAngajatiPrimAjutor()
+    public function setWorkersFirstAid($workersFirstAid)
     {
-        return $this->angajatiPrimAjutor;
+        $this->workersFirstAid = $workersFirstAid;
     }
 
-    public function getAngajatiResponsabili()
+    public function setWorkersResponsible($workersResponsible)
     {
-        return $this->angajatiResponsabili;
-    }
-
-    public function setAngajatiConducatoriMunca($angajatiConducatoriMunca)
-    {
-        $this->angajatiConducatoriMunca = $angajatiConducatoriMunca;
-    }
-
-    public function setAngajatiCondusAutoturisme($angajatiCondusAutoturisme)
-    {
-        $this->angajatiCondusAutoturisme = $angajatiCondusAutoturisme;
-    }
-
-    public function setAngajatiPrimAjutor($angajatiPrimAjutor)
-    {
-        $this->angajatiPrimAjutor = $angajatiPrimAjutor;
-    }
-
-    public function setAngajatiResponsabili($angajatiResponsabili)
-    {
-        $this->angajatiResponsabili = $angajatiResponsabili;
+        $this->workersResponsible = $workersResponsible;
     }
 
 }

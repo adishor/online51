@@ -621,3 +621,37 @@ sonata:
 #formulars
 Company: Firma
 Meeting date: Ziua si ora intalnirii
+formular:
+    decizie-organizare-activitate-ssm:
+        service-chief: sef serviciu
+    decizie-personal-cu-atributii:
+        use-elevator: utilizarea liftului pentru marfuri
+        maintenance: mentenanta echipamentelor, deservirea compresorului
+    decizie-personal-cu-atributii-psi:
+        educate: instruirea PSI-SU la locul de munca si periodic
+        compressor: deservirea compresoarelor, instalatiilor de aer comprimat
+        heating: deservirea si supravegherea instalatiei de incalzire
+        waste: depozitarea si colectarea deseurilor
+        leads-intervention: Conduce intervenţia
+        notify-the-administrator-society: Anunta administratorul societatii
+        notify-emergency-dispatch: Anunta Dispeceratul de urgenta
+        pause-energy-and-gas: Intrerupe energia si gazele
+        act-with-extinguishers: Actioneaza cu stingatoarele
+        act-with-hydrants: Actioneaza cu hidrantii
+        ensures-evacuation: Asigura evacuarea persoanelor
+        ensures-evacuation-of-property: Asigura evacuarea bunurilor
+    proces-verbal-control:
+        aspect1: Exista documentele specifice de aparare impotriva incendiilor?
+        aspect2: Sunt reglementate lucrul cu loc deschis, fumatul, depozitarea si evacuarea deseurilor si reziduurilor combustibile, lucrarile premergatoare pe timpul sezonului rece, perioadelor caniculare si secetoase?
+        aspect3: Sunt respectate dispozitiile administratorului?
+        aspect4: Sunt respectate reglementarile privind fumatul?
+        aspect5: Sunt asigurate cai de acces, de evacuare si de interventie? Sunt semnalizate?
+        aspect6: Exista o tematica si un program de instruire PSI/SU? Sunt respectate? Cand a fost efectuata ultima instruire? Care a fost tematica de instruire?
+        aspect7: Exista o planificare a exercitiilor si simularilor pentru pregatirea in vederea unor situatii de urgenta? Care este periodicitatea exercitiilor si simularilor pentru situatii de urgenta? Cand au fost efectuate?
+        aspect8: Sunt efectuate instruirile periodice PSI/SU? De catre cine? La ce interval de timp?
+        aspect9: Este verificata insusirea cunostintelor acumulate in urma instruirilor? Cum?
+        aspect10: Planul de evacuare este intocmit, actualizat si afisat?
+        aspect11: Persoanele din echipa de interventie isi cunosc sarcinile care le revin in caz de situatii de urgenta?
+        aspect12: Instalatiile de detectare, alarmare si stingere a incendiilor sunt in numar suficient? Sunt verificate si intretinute la termenele stabilite?
+        aspect13: Este asigurat accesul usor la hidranti si stingatoare? Semnalizarea este corespunzatoare?
+        aspect14: Locul si modul de depozitare al buteliilor GPL sau al substantelor inflamabile corespund normelor PSI?

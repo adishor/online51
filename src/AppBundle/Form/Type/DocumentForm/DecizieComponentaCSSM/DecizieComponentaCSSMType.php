@@ -21,15 +21,15 @@ class DecizieComponentaCSSMType extends AbstractType
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
           ->add('administrator', TextType::class)
-          ->add('presedinte', TextType::class)
-          ->add('secretar', TextType::class)
-          ->add('membrii', CollectionType::class, array(
+          ->add('president', TextType::class)
+          ->add('secretary', TextType::class)
+          ->add('members', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,
               'allow_delete' => true,
               'prototype' => true
           ))
-          ->add('medic', TextType::class);
+          ->add('doctor', TextType::class);
     }
 
     public function getName()

@@ -159,3 +159,22 @@ services:
     app.formular.Decizie_Personal_Cu_Atributii:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii
+    app.formular.Decizie_Comisie_Cercetare_Accidente:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDecizieComisieCercetareAccidente
+    app.formular.Decizie_Organizare_Activitate_SSM:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDecizieOrganizareActivitateSSM
+    app.formular.Proces_Verbal_Sedinta_CSSM:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularProcesVerbalSedintaCSSM
+    app.formular.Proces_Verbal_Control:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularProcesVerbalControl
+    app.formular.Permis_De_Lucru_Cu_Foc:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularPermisDeLucruCuFoc
+    app.formular.Decizie_Personal_Cu_Atributii_PSI:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributiiPSI
+    
