@@ -89,7 +89,6 @@ class FormularController extends Controller
             if ($nextStep || $this->get('request')->request->has('btnSave')) {
                 // form for the next step
                 $form = $flow->createForm();
-                $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
             } else {
                 // flow finished
                 $flow->reset(); // remove step data from the session
@@ -188,14 +187,14 @@ class FormularController extends Controller
     /**
      * @Route("/shortFormConfigurationText/{creditUsageId}", name="short_form_configuration_text")
      */
-    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId)
+    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId, $short = true)
     {
         $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
 
         if ($creditsUsage->getFormConfig() && $creditsUsage->getFormConfig() != 'null') {
             $formularService = $this->get('app.formular.' . $creditsUsage->getFormular()->getSlug());
             $formularService->setName($creditsUsage->getFormular()->getSlug());
-            $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig(), true);
+            $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig(), $short);
 
             return new Response($this->get('translator')->trans($text['message'], $text['variables']));
         }

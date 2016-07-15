@@ -71,7 +71,7 @@ class DecizieComponentaCSSM
         $y->setName('');
         $y->setFunction('');
 
-        $members = [$y, $y];
+        $members = [$y];
         $this->members = $members;
     }
 

@@ -57,7 +57,7 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
         return array(
             'message' => 'document-form.text.egd',
             'variables' => array(
-                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu'],
+                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "; " . $formConfigValue['tip_deseu'],
                 'year' => $formConfigValue['an'],
                 'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'neselectat'
             )

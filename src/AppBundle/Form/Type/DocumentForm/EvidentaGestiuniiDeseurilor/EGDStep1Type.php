@@ -19,7 +19,8 @@ class EGDStep1Type extends AbstractType
 
         $stocareTip = $container->getParameter('tip_stocare');
         $tratareMod = $container->getParameter('mod_tratare');
-        $tratareScop = $container->getParameter('scop_tratare');
+        $stareFizica = $container->getParameter('stare_fizica');
+        $unitateMasura = $container->getParameter('unitate_masura');
         $transportMijloc = $container->getParameter('mijloc_transport');
         $transportDestinatie = $container->getParameter('destinatia');
         $operatieValorificare = $container->getParameter('operatia_valorificare_deseu');
@@ -38,8 +39,8 @@ class EGDStep1Type extends AbstractType
           ->add('tipDeseuCod', TextType::class, array(
               'read_only' => TRUE
           ))
-          ->add('stareFizica', TextType::class)
-          ->add('unitateMasura', TextType::class)
+          ->add('stareFizica', ChoiceType::class, array('choices' => $stareFizica))
+          ->add('unitateMasura', ChoiceType::class, array('choices' => $unitateMasura))
           ->add('stocareTip', ChoiceType::class, array('choices' => $stocareTip))
           ->add('tratareMod', ChoiceType::class, array('choices' => $tratareMod))
           ->add('transportMijloc', ChoiceType::class, array('choices' => $transportMijloc))

@@ -58,7 +58,7 @@ class FormularExpireNotificationCommand extends ContainerAwareCommand
                     $formularService = $container->get('app.formular.' . $form->getSlug());
                     $formularService->setName($form->getSlug());
                     foreach ($form->getFormularCreditsUsage() as $creditsUsage) {
-                        $now = new \DateTime('2017-03-30');
+                        $now = new \DateTime('');
                         if ($creditsUsage->getExpireDate()->diff($now->add($days))->days === 0) {
                             $formText = '';
                             if (method_exists($formularService, 'getTextForFormConfig')) {

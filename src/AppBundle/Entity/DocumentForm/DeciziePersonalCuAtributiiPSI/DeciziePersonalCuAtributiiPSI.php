@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
 use AppBundle\Entity\DocumentForm\Common\Person;
 
-class DeciziePersonalCuAtributii
+class DeciziePersonalCuAtributiiPSI
 {
     /**
      * @var array

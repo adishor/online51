@@ -22,6 +22,10 @@ class ConvocatorCSSMType extends AbstractType
           ->add('company', TextType::class, array(
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
+//          ->add('companyCounty', null, array(
+//              'empty_value' => 'Selectati judetul'
+//          ))
+//          ->add('companyCity')
           ->add('meetingDate', DateTimeType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua', 'hour' => 'Ora'

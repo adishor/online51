@@ -67,11 +67,11 @@ class DeciziePersonalCuAtributii
         $x->setFunction('');
 
         $this->workersLeaders = new ArrayCollection();
-        $workersLeaders = [$x, $x, $x];
+        $workersLeaders = [$x];
         $this->workersLeaders = $workersLeaders;
 
         $this->workersCarsDriven = new ArrayCollection();
-        $workersCarsDriven = [$x, $x, $x];
+        $workersCarsDriven = [$x];
         $this->workersCarsDriven = $workersCarsDriven;
 
         $this->workersFirstAid = new ArrayCollection();

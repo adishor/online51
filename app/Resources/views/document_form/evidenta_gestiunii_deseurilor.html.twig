@@ -35,6 +35,10 @@
     {% if not creditsUsage.isFormConfigFinished %}
         {% include "document_form/config/config_form_uniqueness_on_form_egd.html.twig" with {'creditsUsage': creditsUsage, 'isUserException': isUserException } %}
     {% endif %}
+    
+    <div class="panel"><div class="panel-body">
+        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : creditsUsage.id, 'short' : false })) }}
+    </div></div>
 
     <div class="col-xs-2">
         {% include 'CraueFormFlowBundle:FormFlow:stepList.html.twig' %}
@@ -51,24 +55,8 @@
             
             {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 2 : 1) %}
                 {{ form_row(form.agentEconomic) }}
-                <div class="col-xs-6 no-margin-left">
-                    {{ form_row(form.an) }}
-                </div>
-                <div class="col-xs-6 no-margin-right">
-                    {{ form_row(form.tipDeseuCod) }}
-                </div>
-                <div class="clear-both"></div>
-                {{ form_row(form.tipDeseu, {'attr': {'class': 'width-100-percent height-100-px text-justify'} }) }}
-                {{ form_row(form.stareFizica, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-                <span class="field-validation-valid" data-valmsg-for="{{ form.stareFizica.vars.full_name }}" data-valmsg-replace="true" ></span>
-                {{ form_row(form.unitateMasura, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-                <span class="field-validation-valid" data-valmsg-for="{{ form.unitateMasura.vars.full_name }}" data-valmsg-replace="true" ></span>
+                {{ form_row(form.stareFizica, {'attr': {'class': 'stareFizica max-width-500'  } }) }}
+                {{ form_row(form.unitateMasura, {'attr': {'class': 'unitateMasura max-width-500'  } }) }}
                 {{ form_row(form.stocareTip, {'attr': {'class': 'stocareTip max-width-500'  } }) }}
                 {{ form_row(form.tratareMod, {'attr': {'class': 'tratareMod max-width-500'} }) }}
                 {{ form_row(form.transportMijloc, {'attr': {'class': 'transportMijloc max-width-500'} }) }}
@@ -470,7 +458,7 @@
                 jQuery('.flash-message').hide();
             });
                             
-            // add autocomplete options for stare_fizica
+            {#// add autocomplete options for stare_fizica
             $("#egd_step1_stareFizica").autocomplete({
                 source: function(req, responseFn) {
                 var re = $.ui.autocomplete.escapeRegex(req.term);
@@ -492,7 +480,7 @@
                     });
                     responseFn(a);
                 }
-            }); 
+            }); #}
             
             {% if not creditsUsage.isFormConfigFinished %}
                 jQuery("#evidenta_gestiunii_deseurilor input, #evidenta_gestiunii_deseurilor select, #evidenta_gestiunii_deseurilor textarea, #evidenta_gestiunii_deseurilor button").each(function(){

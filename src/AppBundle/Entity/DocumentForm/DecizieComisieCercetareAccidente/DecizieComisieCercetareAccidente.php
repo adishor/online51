@@ -37,7 +37,7 @@ class DecizieComisieCercetareAccidente
 
     /**
      * @var type
-     * @Type("AppBundle\Entity\DocumentForm\Common\Person")
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      * @Assert\NotBlank()
      */
     protected $undersigned;
@@ -88,15 +88,27 @@ class DecizieComisieCercetareAccidente
      */
     protected $startingActivity;
 
+    /**
+     * @var type
+     * @Type("DateTime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime()
+     */
+    protected $endingActivity;
+
     public function __construct()
     {
-        $this->members = new ArrayCollection();
         $y = new Person();
         $y->setName('');
         $y->setFunction('');
 
-        $members = [$y, $y, $y];
+        $this->members = new ArrayCollection();
+        $members = [$y];
         $this->members = $members;
+
+        $this->undersigned = new ArrayCollection();
+        $undersigned = [$y];
+        $this->undersigned = $undersigned;
     }
 
     public function getCompany()
@@ -144,6 +156,11 @@ class DecizieComisieCercetareAccidente
         return $this->startingActivity;
     }
 
+    public function getEndingActivity()
+    {
+        return $this->endingActivity;
+    }
+
     public function setCompany($company)
     {
         $this->company = $company;
@@ -187,6 +204,11 @@ class DecizieComisieCercetareAccidente
     public function setStartingActivity($startingActivity)
     {
         $this->startingActivity = $startingActivity;
+    }
+
+    public function setEndingActivity($endingActivity)
+    {
+        $this->endingActivity = $endingActivity;
     }
 
 }

@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Type;
 use AppBundle\Entity\DocumentForm\Common\Person;
 use AppBundle\Entity\DocumentForm\ProcesVerbalControl\ProcesVerbalControlQuestion;
 
-class ConvocatorCSSM
+class ProcesVerbalControl
 {
     /**
      * @var array

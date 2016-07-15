@@ -1,0 +1,65 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-60-px"></div>
+            <p class="text-right"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-20-px"></div>
+            <h3 class="text-center"><b>{{ 'DECIZIE' | trans}}</b></h3>
+            <div class="height-20-px"></div>
+            <p><span class="text-indent"></span>{{ 'Subsemnatul ' | trans }} {{ data.undersigned.0.name }}, {{ ' in calitate de ' | trans }} {{ data.undersigned.0.function }} {{ ' la ' | trans }} {{ data.company }}, {{ 'decid:' | trans }}</p>
+            <div class="height-60-px"></div>
+            <ol>
+                <li>
+                    <p>{{ 'Pentru cercetarea evenimentului ce a avut loc in data de ' | trans }} {{ data.accidentDate | date("d/m/Y") }}, {{ 'in jurul orei ' | trans }} {{ data.accidentHour }} {{ ' la ' | trans }} {{ data.company }}, {{ ' cu sediul social in ' | trans }} {{ data.companyAddress }}, {{ ' se numeste comisia formata din:' | trans }}
+                    </p>
+                    <div class="height-40-px"></div>
+                    <ul>
+                    {% for item in data.members %}
+                        {% if item.name %}
+                            <li>{{ 'Dl/Dna ' | trans }} {{ item.name }} {{ ' in calitate de ' | trans }} {{ item.function }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                    <div class="height-40-px"></div>
+                </li>
+                <li><p>{{ 'Comisia mai sus numita va efectua cercetarea evenimentului produs in ' | trans }} {{ data.accidentDescription }}, {{ ' in vederea stabilirii imprejurarilor si a cauzelor care au condus la producerea acestuia, a raspunderilor si a masurilor ce se impun a fi luate pentru prevenirea producerii altor cazuri similare, conform prevederilor Legii 319/2006 si HG 1425/2006, cu modificarile ulterioare.' | trans }}</p></li>
+                <li><p>{{ 'Activitatea comisiei va incepe azi ' | trans }} {{ data.startingActivity | date("d/m/Y") }}. {{ 'Cercetarea evenimentului se va incheia in cel mult 10 zile lucratoare de la data producerii, adica cel mult pana in ' }} {{ data.endingActivity | date("d/m/Y") }}.</p></li>
+                <li><p>{{ 'Comisia numită va duce la îndeplinire prevederile prezentei decizii.' | trans }}</p></li>
+            </ol>
+            <div class="height-40-px"></div>
+            <p>{{ data.company }}</p>
+            <p>{{ 'Dl/Dna' | trans }} {{ data.administrator }} - {{ 'Administrator' | trans }}</p>
+            <p>...........................................</p>
+            <div class="height-40-px"></div>
+            <div class="col-xs-6 no-margin-left">
+                <p>{{ 'Am luat la cunostiinta' | trans }},</p>
+                <div class="height-40-px"></div>
+                {% for membru in data.members %}
+                    {% if membru.name %}
+                        <p>{{ 'Dl/Dna ' | trans }} {{ membru.name }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col-xs-6 no-margin-right">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <p>{{ 'Semnatura' | trans }}</p>
+                    <div class="height-40-px"></div>
+                    {% for membru in data.members %}
+                        {% if membru.name %}
+                            <p>...........................................................</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</body>

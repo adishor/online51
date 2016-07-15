@@ -24,12 +24,12 @@
                 <p><span class="text-small-indent"></span>{{ '<b>1.</b> &nbsp;&nbsp; Componenta CSSM constituita la ' | trans | raw }} {{ data.company }} {{ ' este urmatoarea:' | trans }}</p>
                 <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp; Reprezentantii din partea angajatorului sunt urmatorii: ' | trans | raw }}</p>
                 <ul>
-                    <li>{{ 'Dl/Dna ' | trans }} {{ data.presedinte }} {{ ' - angajator - presedinte CSSM (sau reprezentant legal)' | trans }}</li>
-                    <li>{{ 'Dl/Dna ' | trans }} {{ data.secretar }} {{ ' - lucrator desemnat - secretar CSSM' | trans }}</li>
+                    <li>{{ 'Dl/Dna ' | trans }} {{ data.president }} {{ ' - angajator - presedinte CSSM (sau reprezentant legal)' | trans }}</li>
+                    <li>{{ 'Dl/Dna ' | trans }} {{ data.secretary }} {{ ' - lucrator desemnat - secretar CSSM' | trans }}</li>
                 </ul>
                 <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp; Conform hotararii angajatilor, reprezentantii lucratorilor sunt urmatorii: ' | trans | raw }}</p>
                 <ul>
-                    {% for item in data.membrii %}
+                    {% for item in data.members %}
                         {% if item.name %}
                             <li>{{ 'Dl/Dna ' | trans }} {{ item.name }} {{ ' - reprezentant al lucratorilor - membru' | trans }}</li>
                         {% endif %}
@@ -37,7 +37,7 @@
                 </ul>
                 <p><span class="text-small-indent"></span>{{ '- &nbsp;&nbsp; Medic de Medicina Muncii ' | trans | raw }}</p>
                 <ul>
-                    <li>{{ 'Dl/Dna ' | trans }} {{ data.medic }}</li>
+                    <li>{{ 'Dl/Dna ' | trans }} {{ data.doctor }}</li>
                 </ul>
                 <div class="height-20-px"></div>
                 <p><span class="text-small-indent"></span>{{ '<b>2.</b> &nbsp;&nbsp; Prezenta decizie va fi adusa la cunostiinta tuturor lucratorilor.' | trans | raw }} </p>
@@ -50,14 +50,14 @@
             <div class="col-xs-6 no-margin-left">
                 <p>{{ 'Am luat la cunostinta,' | trans }}</p>
                 <div class="height-20-px"></div>
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.presedinte }}</p>
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.secretar }}</p>
-                {% for item in data.membrii %}
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.president }}</p>
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.secretary }}</p>
+                {% for item in data.members %}
                     {% if item.name %}
                         <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
                     {% endif %}
                 {% endfor %}
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.medic }}</p>
+                <p>{{ 'Dl/Dna ' | trans }} {{ data.doctor }}</p>
             </div>
             <div class="col-xs-6 no-margin-right">
                 <p>{{ 'Semnatura' | trans }}</p>
@@ -66,7 +66,7 @@
                 <div class="col-xs-8">
                     <p>..............................................</p>
                     <p>..............................................</p>
-                    {% for item in data.membrii %}
+                    {% for item in data.members %}
                         {% if item.name %}
                             <p>..............................................</p>
                         {% endif %}

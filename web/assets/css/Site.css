@@ -2074,7 +2074,7 @@ li.craue_formflow_current_step {
     width: 500px;
 }
 
-#convocator_cssm_type_meetingDate_date {
+#convocator_cssm_type_meetingDate_date, #decizie_comisie_cercetare_accidente_type_accidentDate_date {
     float:left;
 }
 
@@ -2106,6 +2106,7 @@ input[readonly] {
 
 .formular-form textarea {
     width: 100%;
+    margin: 0;
 }
 
 .no-display, .no-display-membru, .no-display-punct, .no-display-autoturism, .no-display-conducator, .no-display-primAjutor {

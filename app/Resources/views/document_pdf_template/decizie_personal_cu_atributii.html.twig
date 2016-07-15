@@ -24,7 +24,7 @@
                 <p><b>3.1&nbsp;&nbsp;</b>{{ 'Conducatorii locurilor de munca sunt:' | trans }}</p>
                 <div class="section-group3">
                     <ul>
-                    {% for item in data.angajatiConducatoriMunca %}
+                    {% for item in data.workersLeaders %}
                         {% if item.name %}
                             <li>{{ 'Dl/Dna ' | trans }} {{ item.name }}</li>
                         {% endif %}
@@ -35,7 +35,7 @@
                 <p><b>3.2&nbsp;&nbsp;</b>{{ 'Urmatorii angajati pot conduce autoturisme in interesul serviciului:' | trans }}</p>
                 <div class="section-group3">
                     <ul>
-                    {% for item in data.angajatiCondusAutoturisme %}
+                    {% for item in data.workersCarsDriven %}
                         {% if item.name %}
                             <li>{{ 'Dl/Dna ' | trans }} {{ item.name }}</li>
                         {% endif %}
@@ -45,7 +45,7 @@
                 <p><b>3.3&nbsp;&nbsp;</b>{{ 'Urmatorii angajati sunt responsabili cu acordarea primului ajutor:' | trans }}</p>
                 <div class="section-group3">
                     <ul>
-                    {% for item in data.angajatiPrimAjutor %}
+                    {% for item in data.workersFirstAid %}
                         {% if item.name %}
                             <li>{{ 'Dl/Dna ' | trans }} {{ item.name }}</li>
                         {% endif %}
@@ -55,8 +55,8 @@
                 <p><b>3.4&nbsp;&nbsp;</b>{{ 'Urmatorii angajati sunt responsabili cu:' | trans }}</p>
                 <div class="section-group3">
                     <ul>
-                    {% for item in data.angajatiResponsabili %}
-                        <li>{{ 'Dl/Dna ' | trans }} {{ item.name ? item.name : "..............................." }} - {{ item.function }}</li>
+                    {% for item in data.workersResponsible %}
+                        <li>{{ 'Dl/Dna ' | trans }} {{ item.name ? item.name : "..............................." }} - {{ item.function | trans }}</li>
                     {% endfor %}
                     </ul>                    
                 </div>
@@ -74,22 +74,22 @@
                     <p><span class="text-indent"></span>{{ 'Am luat la cunostinta' | trans }}</p>
                     <div class="col-xs-6 no-margin-left">
                         <p>{{ 'Nume, Prenume' | trans }}</p>
-                        {% for item in data.angajatiConducatoriMunca %}
+                        {% for item in data.workersLeaders %}
                             {% if item.name %}
                                 <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
                             {% endif %}
                         {% endfor %}
-                        {% for item in data.angajatiCondusAutoturisme %}
+                        {% for item in data.workersCarsDriven %}
                             {% if item.name %}
                                 <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
                             {% endif %}
                         {% endfor %}
-                        {% for item in data.angajatiPrimAjutor %}
+                        {% for item in data.workersFirstAid %}
                             {% if item.name %}
                                 <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
                             {% endif %}
                         {% endfor %}
-                        {% for item in data.angajatiResponsabili %}
+                        {% for item in data.workersResponsible %}
                             {% if item.name %}
                                 <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
                             {% endif %}
@@ -97,22 +97,22 @@
                     </div>
                     <div class="col-xs-6 no-margin-right">
                         <p>{{ 'Semnatura' | trans }}</p>
-                        {% for item in data.angajatiConducatoriMunca %}
+                        {% for item in data.workersLeaders %}
                             {% if item.name %}
                                 <p>........................................</p>
                             {% endif %}
                         {% endfor %}
-                        {% for item in data.angajatiCondusAutoturisme %}
+                        {% for item in data.workersCarsDriven %}
                             {% if item.name %}
                                 <p>........................................</p>
                             {% endif %}
                         {% endfor %}
-                        {% for item in data.angajatiPrimAjutor %}
+                        {% for item in data.workersFirstAid %}
                             {% if item.name %}
                                 <p>........................................</p>
                             {% endif %}
                         {% endfor %}
-                        {% for item in data.angajatiResponsabili %}
+                        {% for item in data.workersResponsible %}
                             {% if item.name %}
                                 <p>........................................</p>
                             {% endif %}

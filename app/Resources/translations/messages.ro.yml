@@ -471,7 +471,7 @@ document-form:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
     text:
-        egd: ' <span>Tip deseu: <b>waste-type</b>; Operatia: <b>operation</b>; Anul: <b>year</b>; </span>'
+        egd: ' <span><b>Tip deseu:</b> waste-type; <b>Operatia:</b> operation; <b>Anul:</b> year; </span>'
         egd-operatia-unselect: neselectat
         ccssm: '<span>Ziua: <b>day</b>; Ora: <b>hour</b>; </span>'
     report:
@@ -621,6 +621,11 @@ sonata:
 #formulars
 Company: Firma
 Meeting date: Ziua si ora intalnirii
+Meeting point: Punct pe ordinea de zi
+Secretary: Secretar
+Doctor: Medic
+President: Presedinte
+
 formular:
     decizie-organizare-activitate-ssm:
         service-chief: sef serviciu

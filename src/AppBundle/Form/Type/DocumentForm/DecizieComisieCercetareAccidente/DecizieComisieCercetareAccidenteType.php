@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use AppBundle\Form\Type\DocumentForm\Common\PersonType;
 
 class DecizieComisieCercetareAccidenteType extends AbstractType
@@ -38,12 +39,15 @@ class DecizieComisieCercetareAccidenteType extends AbstractType
               'allow_delete' => true,
               'prototype' => true
           ))
-          ->add('startingActivity', DateTimeType::class, array(
+          ->add('startingActivity', DateType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
               ),
-              'with_minutes' => FALSE,
-              'with_seconds' => FALSE
+          ))
+          ->add('endingActivity', DateType::class, array(
+              'placeholder' => array(
+                  'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
+              ),
           ))
           ->add('administrator', TextType::class);
     }

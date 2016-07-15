@@ -100,10 +100,10 @@ class ConvocatorCSSM
     {
         $this->meetingPoints = new ArrayCollection();
         $x = new ConvocatorCSSMPunct();
-        $x->setMeetingPoint();
-        $x->setMeetingPointSummary();
+        $x->setMeetingPoint('');
+        $x->setMeetingPointSummary('');
 
-        $meetingPoints = [$x, $x, $x];
+        $meetingPoints = [$x];
         $this->meetingPoints = $meetingPoints;
 
 
@@ -112,7 +112,7 @@ class ConvocatorCSSM
         $y->setName('');
         $y->setFunction('');
 
-        $members = [$y, $y, $y];
+        $members = [$y];
         $this->members = $members;
     }
 
