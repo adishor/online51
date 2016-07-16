@@ -1,0 +1,111 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-20-px"></div>
+            <p class="text-right"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-40-px"></div>
+            <h3 class="text-center"><b>{{ 'DECIZIE' | trans}}</b></h3>
+            <p class="text-center">{{ 'privind organizarea activitatilor de prevenire si protectie' | trans }}<br/> {{ 'in domeniul sanatatii si securitatii in munca' | trans }}</p>
+            <div class="height-20-px"></div>
+            <p><span class="text-indent"></span>{{ 'Ţinând seama de prevederile Legii 319/2006 si HG 1425/2006 Normele Metodologice de aplicare a Legii 319/2006, modificata prin HG 955/2010, administratorul societatii decide următoarele:' | trans }}</p>
+            <div class="height-40-px"></div>
+            <ol>
+                <li>{{ 'Prin prezenta Decizie se stabilesc responsabilitatile si modul de organizare a activitatii de prevenire si protectie in domeniul sanatatii si securitatii in munca, in' | trans }} {{ data.company }}</li>
+                <li>{{ 'In' | trans }} {{ data.company }}, {{ ' organizarea activitatilor de prevenire si protectie se realizeaza:' | trans }}
+                    <p>-&nbsp;&nbsp;&nbsp;{{ 'prin desemnarea D-lui/D-nei' | trans }} {{ data.designedWorkerForPreventionProtection }} {{ 'ca lucrator desemnat pentru a se ocupa de activitatile de prevenire si protectie' | trans }}</p>
+                    <p>-&nbsp;&nbsp;&nbsp;{{ 'prin infintarea unui serviciu intern de prevenire si protectie format din:' | trans }}</p>
+                    <div class="section-group2">
+                        {% for item in data.membersForPreventionProtectionService %}
+                            {% if item.name %}
+                                <p>{{ item.name }}
+                                    {% if item.function %}
+                                        - {{ item.function | trans }}
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p>-&nbsp;&nbsp;&nbsp;{{ 'prin apelarea la servicii externe de prevenire şi protecţie.' | trans }}</p>
+                    <p>{{ 'si prin desemnarea de responsabilitati pentru personalul propriu.' | trans }}</p>
+                </li>
+                <li><div>{{ 'Pentru punerea in aplicare, controlul si supravegherea masurilor de prevenire si protectie la nivelul locurilor de munca se desemneaza urmatorii conducatori ai locurilor de munca:' | trans }}</div>
+                    <div class="section-group4">
+                        <div class="col-xs-6">
+                            <p><span class="text-indent"></span>{{ 'Nume,prenume' | trans }}</p>
+                            <ul>
+                                {% for item in data.leaders %}
+                                    {% if item.name %}
+                                        <li><p>{{ 'Dl/Dna' | trans }} {{ item.name }}</p></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-xs-6">
+                            <p><span class="text-indent"></span>{{ 'Loc de munca' | trans }}</p>
+                                {% for item in data.leaders %}
+                                    {% if item.name %}
+                                        <p>{{ item.function }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>                
+                </li>
+                <li>{{ 'Conducatorii locurilor de munca isi asuma responsabilitatea instruirii la locul de munca si a celei periodice conform tematicii si programarii instruirilor aprobate de angajator.' | trans }}</li>
+                <li>{{ 'Conducatorilor locurilor de munca li se vor pune la dispozitie pe baza de PV de predare-primire, cate o copie a tematicii, a programului de instruire si a instructiunilor specifice in functie de activitatile desfasurate de lucratorii din subordine.' | trans }}</li>
+                <li>{{ 'In cuprinsul Regulamentului Intern si a Fiselor postului angajatilor, vor fi stabilite obligatii si raspunderi in domeniul sanatatii si securitatii muncii, in conformitate cu prevederile Legii 319/2006 si ale HG 1425/2006, cu modificarile si completarile ulterioare si conform cu anexa prezentei decizii.' | trans }}</li>
+                <li>{{ 'Persoana cu atributii de Personal si Resurse Umane va completa fisele posturilor tuturor angajatiilor, cu obligatiile privind securitatea si sanatatea in munca.' | trans }}</li>
+                <li>{{ 'Dispozitiile prezentei Decizii vor fi duse la indeplinire de persoanele desemnate in cuprinsul acesteia.' | trans }}</li>
+                <li>{{ 'Obligatiile personalului angajat privind sanatatea si securitatea in munca fac parte din obligatiile de serviciu.' | trans }}</li>
+            </ol>
+            <div class="height-40-px"></div>
+            <p><span class="text-indent"></span>{{ 'Administrator' | trans }} {{ data.administrator }} ...........................................</p>
+            <div class="height-40-px"></div>
+            <p><span class="text-indent"></span>{{ 'Am luat la cunostinta despre obligatiile pe care le am in calitate de conducator al locului de munca.' | trans }}</p>
+            <p><span class="text-indent"></span>{{ 'Mi-am insusit prevederile cuprinse in Instructiunea specifica pentru conducatorii locurilor de munca.' | trans }}</p>
+            <p><span class="text-indent"></span>{{ 'Am primit Instructiunile specifice SSM referitoare la activitatile lucratorilor din subordinea mea, tematica si programul de instruire, aprobate de angajator.' | trans }}</p>
+            <div class="height-40-px"></div>
+            <div class="section-group5">
+                <div class="col-xs-6">
+                    <p><span class="text-indent"></span>{{ 'Nume,prenume' | trans }}</p>
+                    <ul>
+                        <li><p>{{ 'Dl/Dna' | trans }} {{ data.designedWorkerForPreventionProtection }}</p></li>
+                        {% for item in data.membersForPreventionProtectionService %}
+                            {% if item.name %}
+                                <li><p>{{ 'Dl/Dna' | trans }} {{ item.name }}</p></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% for item in data.leaders %}
+                            {% if item.name %}
+                                <li><p>{{ 'Dl/Dna' | trans }} {{ item.name }}</p></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-xs-6">
+                    <p><span class="text-indent"></span>{{ 'Semnatura' | trans }}</p>
+                    <p>.............................................</p>
+                    {% for item in data.membersForPreventionProtectionService %}
+                        {% if item.name %}
+                            <p>.............................................</p>
+                        {% endif %}
+                    {% endfor %}
+                    {% for item in data.leaders %}
+                        {% if item.name %}
+                            <p>.............................................</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</body>
+        

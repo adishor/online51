@@ -27,15 +27,217 @@
             
             {{ form_row(form.company) }}
             
+            {{ form_row(form.designedWorkerForPreventionProtection, 
+                    { 'label': 'Lucrator desemnat pentru a se ocupa de activitatile de prevenire si protectie',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.designedWorkerForPreventionProtection.vars.full_name }}" data-valmsg-replace="true" ></span>
             
+            <section>
+                <h3>{{ 'Serviciu intern de prevenire si protectie format din:' | trans }}</h3>
+                <ul id="membrii-fields-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.membersForPreventionProtectionService.vars.prototype }) }}
+                    {% endfilter %}">
+                    {% for item in form.membersForPreventionProtectionService %}
+                        <li>
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            {% if item.function.vars.value %}
+                                {{ item.function.vars.value | trans }}<br/>
+                            {% endif %}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.membersForPreventionProtectionService.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru' | trans }}</a>
+                <div class="color-red no-display-membru" id="#error-no-membru">{{ 'Adaugati cel putin 1 membru' | trans }}</div>
+                <script type="text/javascript">
+                    // keep track of how many membrii fields have been rendered
+                    var membriiCount = '{{ form.membersForPreventionProtectionService|length }}';
+
+                    jQuery(document).ready(function () {
+
+                        var membriiList = jQuery('#membrii-fields-list');
+
+                        // add a delete link to all of the existing speaker form li elements
+                        membriiList.find('li').each(function (index) {
+                            addMembruFormDeleteLink($(this));
+                        });
+
+                        jQuery('#add-another-membru').click(function (e) {
+                            e.preventDefault();
+                            jQuery('.no-display-membru').hide();
+
+                            var membriiList = jQuery('#membrii-fields-list');
+
+                            // grab the prototype template
+                            var newWidget = membriiList.attr('data-prototype');
+                            // replace the "__name__" used in the id and name of the prototype
+                            // with a number that's unique to your companies
+                            newWidget = newWidget.replace(/__name__/g, membriiCount);
+                            membriiCount++;
+
+                            // create a new list element and add it to the list
+                            var newLi = jQuery('<li></li>').html(newWidget);
+                            newLi.appendTo(membriiList);
+                            addMembruFormDeleteLink(newLi);
+                        });
+                    });
+
+                    function addMembruFormDeleteLink($membriiFormLi) {
+                        var $removeFormA = $('<a href="#">{{ 'Sterge membru'|trans }}</a>');
+                        $membriiFormLi.append($removeFormA);
+
+                        $removeFormA.on('click', function (e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
+
+                            // remove the li for the membrii form
+                            $membriiFormLi.remove();
+                        });
+                    }
+                </script>
+            </section>
+            <div class="clear-both"></div>
+            
+            <section>
+                <h3>{{ 'Conducatori ai locurilor de munca:' | trans }}</h3>
+                <ul id="lideri-fields-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('document_form/base/prototype_person_full.html.twig', { 'form': form.leaders.vars.prototype, 'functionLabel': 'Loc de munca' }) }}
+                    {% endfilter %}">
+                    {% for item in form.leaders %}
+                        <li>
+                            <div class="col-xs-6 no-margin-left">
+                                {{ form_row(item.name, 
+                                    { 'label': 'Dl/Dna',
+                                    'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.leaders.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-6 no-margin-right">
+                                {{ form_row(item.function, 
+                                { 'label': 'Loc de munca',
+                                'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.leaders.vars.full_name }}[{{ loop.index0 }}][function]" data-valmsg-replace="true" ></span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a class="costum" href="#" id="add-another-lider">{{ 'Adauga un nou conducator' | trans }}</a>
+                <div class="color-red no-display-lider" id="#error-no-lider">{{ 'Adaugati cel putin 1 conducator' | trans }}</div>
+                <script type="text/javascript">
+                    // keep track of how many lideri fields have been rendered
+                    var lideriCount = '{{ form.leaders|length }}';
+
+                    jQuery(document).ready(function () {
+
+                        var lideriList = jQuery('#lideri-fields-list');
+
+                        // add a delete link to all of the existing speaker form li elements
+                        lideriList.find('li').each(function (index) {
+                            addLiderFormDeleteLink($(this));
+                        });
+
+                        jQuery('#add-another-lider').click(function (e) {
+                            e.preventDefault();
+                            jQuery('.no-display-lider').hide();
+
+                            var lideriList = jQuery('#lideri-fields-list');
+
+                            // grab the prototype template
+                            var newWidget = lideriList.attr('data-prototype');
+                            // replace the "__name__" used in the id and name of the prototype
+                            // with a number that's unique to your companies
+                            newWidget = newWidget.replace(/__name__/g, lideriCount);
+                            lideriCount++;
+
+                            // create a new list element and add it to the list
+                            var newLi = jQuery('<li></li>').html(newWidget);
+                            newLi.appendTo(lideriList);
+                            addLiderFormDeleteLink(newLi);
+                        });
+                    });
+
+                    function addLiderFormDeleteLink($lideriFormLi) {
+                        var $removeFormA = $('<a href="#">{{ 'Sterge conducator'|trans }}</a>');
+                        $lideriFormLi.append($removeFormA);
+
+                        $removeFormA.on('click', function (e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
+
+                            // remove the li for the lideri form
+                            $lideriFormLi.remove();
+                        });
+                    }
+                </script>
+            </section>
+            <div class="clear-both"></div>
             
             {{ form_row(form.administrator, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                     } } ) }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            <div class="hidden">{{ form_rest(form) }}</div>
+            <div class="craue_formflow_buttons">
+                <button type="button" onclick="onDecizieOrganizareActivitateSSMSubmit();" class="craue_formflow_button_last">
+                    {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+            </div>
+            
         </form>
     </div>
+                    
+    <script type="text/javascript">
+        function onDecizieOrganizareActivitateSSMSubmit() {
+            if (!jQuery("#membrii-fields-list li").length) {
+                jQuery('.no-display-membru').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-membru').hide();
+                jQuery('#membrii-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
+            if (!jQuery("#lideri-fields-list li").length) {
+                jQuery('.no-display-lider').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-lider').hide();
+                jQuery('#lideri-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
+            jQuery('#decizie_organizare_activitate_ssm').submit();
+        }
+    </script>
 {% endblock %}
             
             

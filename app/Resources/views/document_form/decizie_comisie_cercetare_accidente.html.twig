@@ -52,7 +52,7 @@
                 <h3>{{ 'Comisie cercetare eveniment:' | trans }}</h3>
                 <ul id="membrii-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/base/prototype_person_full.html.twig', { 'form': form.members.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person_full.html.twig', { 'form': form.members.vars.prototype, 'functionLabel': 'in calitate de' }) }}
                     {% endfilter %}">
                     {% for item in form.members %}
                         <li>

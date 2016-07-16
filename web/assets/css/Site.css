@@ -2109,6 +2109,6 @@ input[readonly] {
     margin: 0;
 }
 
-.no-display, .no-display-membru, .no-display-punct, .no-display-autoturism, .no-display-conducator, .no-display-primAjutor {
+.no-display, .no-display-membru, .no-display-punct, .no-display-autoturism, .no-display-conducator, .no-display-primAjutor, .no-display-lider {
     display: none;
 }

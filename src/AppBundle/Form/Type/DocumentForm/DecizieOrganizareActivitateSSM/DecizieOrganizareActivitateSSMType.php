@@ -21,6 +21,7 @@ class DecizieOrganizareActivitateSSMType extends AbstractType
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
           ->add('administrator', TextType::class)
+          ->add('designedWorkerForPreventionProtection', TextType::class)
           ->add('membersForPreventionProtectionService', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,

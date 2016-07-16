@@ -68,11 +68,11 @@ class DecizieOrganizareActivitateSSM
         $y->setName('');
         $y->setFunction('');
 
-        $membersForPreventionProtectionService = [$x, $y, $y];
+        $membersForPreventionProtectionService = [$x, $y];
         $this->membersForPreventionProtectionService = $membersForPreventionProtectionService;
 
         $this->leaders = new ArrayCollection();
-        $leaders = [$y, $y, $y];
+        $leaders = [$y];
         $this->leaders = $leaders;
     }
 

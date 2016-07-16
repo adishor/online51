@@ -1,0 +1,104 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-20-px"></div>
+            <p class="text-right"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-20-px"></div>
+            <h3 class="text-center"><b>{{ 'DECIZIE' | trans}}</b></h3>
+            <div class="height-40-px"></div>
+            <p><span class="text-indent"></span>{{ 'Tinand seama de prevederile Legii 307 /2006 privind apararea impotriva incendiilor si Ordinului 163/2007 pentru aprobarea Normelor generale de apărare împotriva incendiilor, administratorul societatii emite următoarea decizie:' | trans }}</p>
+            <div class="height-20-px"></div>
+            <table class="list-bold">
+                <tr>
+                    <td><p>{{ '<b>1.&nbsp;</b>' | trans | raw }}</p></td>
+                    <td><p>{{ 'Pentru indeplinirea atributiilor in domeniul apararii impotriva incendiilor ale cadrului tehnic PSI, se incheie contract de prestari servicii cu persoane fizice sau juridice autorizate' | trans }}.</p></td>
+                </tr>
+            </table>
+            <div class="height-20-px"></div>
+            <table class="list-bold">
+                <tr>
+                    <td><p>{{ '<b>2.&nbsp;</b>' | trans | raw }}</p></td>
+                    <td><p>{{ 'Prin prezenta Decizie se stabilesc urmatoarele atributii de serviciu pentru personalul propriu, dupa cum urmeaza:' | trans }}</p></td>
+                </tr>
+            </table>
+            <div class="section-group3">
+                <ul>
+                {% for item in data.workersAttributions %}
+                    <li>{{ 'Dl/Dna ' | trans }} {{ item.name ? item.name : "..............................." }} - {{ item.function | trans }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="height-20-px"></div>
+            <table class="list-bold">
+                <tr>
+                    <td><p>{{ '<b>3.&nbsp;</b>' | trans | raw }}</p></td>
+                    <td><p>{{ 'Se desemneaza urmatoarele persoane care fac parte din echipa de interventie, cu urmatoarele atributiuni:' | trans }}</p></td>
+                </tr>
+            </table>
+            <div class="section-group3">
+                <ul>
+                {% for item in data.interventionTeam %}
+                    <li>{{ 'Dl/Dna ' | trans }} {{ item.name ? item.name : "..............................." }} - {{ item.function | trans }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="height-20-px"></div>
+            <table class="list-bold">
+                <tr>
+                    <td><p>{{ '<b>4.&nbsp;</b>' | trans | raw }}</p></td>
+                    <td><p>{{ 'Persoanele nominalizate detin pregatirea necesara desfasurarii activitatilor respective si au fost instruite din punct de vedere SSM, PSI, SU' | trans }}.</p></td>
+                </tr>
+            </table>
+            <table class="list-bold">
+                <tr>
+                    <td><p>{{ '<b>5.&nbsp;</b>' | trans | raw }}</p></td>
+                    <td><p>{{ 'In cuprinsul Regulamentului Intern si a Fiselor postului angajatilor, vor fi stabilite obligatii si raspunderi in domeniul SSM, PSI, SU, in conformitate cu activitatile desfasurate si cu prevederile legislatiei' | trans }}.</p></td>
+                </tr>
+            </table>
+            <div class="height-40-px"></div>
+            <p>{{ 'Dl/Dna' | trans }} {{ data.administrator }} - Administrator</p>
+            <p><span class="text-indent"></span>........................................</p>
+            <div class="height-40-px"></div>
+            <div class="col-xs-6 no-margin-left">
+                <p>{{ 'Am luat la cunostinta,' | trans }}</p>
+                {% for item in data.workersAttributions %}
+                    {% if item.name %}
+                        <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                    {% endif %}
+                {% endfor %}
+                {% for item in data.interventionTeam %}
+                    {% if item.name %}
+                        <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col-xs-6 no-margin-right">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <p>{{ 'Semnatura' | trans }}</p>
+                    {% for item in data.workersAttributions %}
+                        {% if item.name %}
+                            <p>........................................</p>
+                        {% endif %}
+                    {% endfor %}
+                    {% for item in data.interventionTeam %}
+                        {% if item.name %}
+                            <p>........................................</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</body>
+            
+            
+            
