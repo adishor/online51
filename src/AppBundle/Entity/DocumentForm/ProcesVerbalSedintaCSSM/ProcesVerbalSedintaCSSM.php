@@ -95,7 +95,7 @@ class ProcesVerbalSedintaCSSM
         $x->setMeetingPointSummary('');
 
         $this->meetingPoints = new ArrayCollection();
-        $meetingPoints = [$x, $x, $x];
+        $meetingPoints = [$x];
         $this->meetingPoints = $meetingPoints;
 
         $y = new Person();
@@ -103,7 +103,7 @@ class ProcesVerbalSedintaCSSM
         $y->setFunction('');
 
         $this->members = new ArrayCollection();
-        $members = [$y, $y];
+        $members = [$y];
         $this->members = $members;
     }
 

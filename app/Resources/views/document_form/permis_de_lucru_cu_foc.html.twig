@@ -1,1 +1,247 @@
-{# empty Twig template #}
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@CraueFormFlowBundle/Resources/assets/css/buttons.css' %}
+    <link type="text/css" rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block ccontainer %}
+
+    <h2 class="title">{{ 'Proces Verbal Control' | trans }}</h2>
+
+    {% for flash_message in app.session.flashbag.get('form-success') %}
+        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashbag.get('form-error') %}
+        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
+    {% endfor %}
+
+    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
+
+    <div class="col-xs-12">    
+        <form class="formular-form" id="permis_de_lucru_cu_foc" method="post" {{ form_enctype(form) }}>
+            {{ form_errors(form) }}
+
+            {{ form_row(form.company) }}
+            
+            {{ form_row(form.personWithWorkPermitForFire, 
+                    { 'label': 'Prezentul permis de lucru cu foc se elibereaza pentru',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.personWithWorkPermitForFire.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.helpPersonForWorkWithFire, 
+                    { 'label': 'Acesta va fi ajutat de',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.helpPersonForWorkWithFire.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.executeWork, 
+                    { 'label': 'care urmeaza sa execute',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.executeWork.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.useForWork, 
+                    { 'label': 'folosind',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.useForWork.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.forWork, 
+                    { 'label': 'la (in)',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.forWork.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.startWorkDate, {'label': 'Lucrarile incep la data si ora'}) }}
+            <span class="field-validation-valid" id="error-startWorkDate">{{ 'Completati toate detaliile referitor la data si ora' | trans }}</span>
+            
+            {{ form_row(form.endWorkDate, {'label': 'Lucrarile se termin la data si ora'}) }}
+            <span class="field-validation-valid" id="error-endWorkDate">{{ 'Completati toate detaliile referitor la data si ora' | trans }}</span>
+            
+            {{ form_row(form.measure1ProtectionRadiusOfMeters, 
+                    { 'label': 'Se vor indeparta sau proteja materialele combustibile din zona de executare a lucrarilor pe o raza de si din apropierea acesteia (se va trece doar valoarea in metri)',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure1ProtectionRadiusOfMeters.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure1, 
+                    { 'label': 'Se vor lua urmatoarele masuri pentru indepartarea sau protejarea materialele combustibile din zona de executare a lucrarilor si din apropierea acesteia:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure1.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure2, 
+                    { 'label': 'Se vor lua urmatoarele masuri pentru golirea, izolarea, spalarea, aerisirea conductelor, utilajelor sau instalatiilor:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure2.vars.full_name }}" data-valmsg-replace="true" ></span>
+
+            {{ form_row(form.measure3, 
+                    { 'label': 'Ventilarea spatiilor in care se executa lucrarile se realizeaza astfel:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure3.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure5No, 
+                    { 'label': 'Inceperea lucrarilor cu foc s-a facut in baza buletinului de analiza numarul:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure5No.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure5Date, {'label': 'Data buletinului de analiza'}) }}
+            <span class="field-validation-valid" id="error-measure5Date">{{ 'Completati toate detaliile referitor la data' | trans }}</span>
+            
+            {{ form_row(form.measure5ReleasedBy, 
+                    { 'label': 'Buletinul de analiza a fost eliberat de:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure5ReleasedBy.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure6, 
+                    { 'label': 'Se vor lua urmatoarele masuri pentru respectarea normelor de aparare impotriva incendiilor:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure6.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure7, 
+                    { 'label': 'In zona de lucru se asigura urmatoarele mijloace de stingere a incendiilor:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure7.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure9SurveillanceBy, 
+                    { 'label': 'Pe timpul lucrarilor se asigura supravegherea acestora de catre:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure9SurveillanceBy.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure11AssuredBy, 
+                    { 'label': 'Controlul masurilor de aparare impotriva incendiilor se asigura de catre:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure11AssuredBy.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure12SurveillanceBy, 
+                    { 'label': 'Supravegherea lucrarilor cu foc se asigura de catre:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure12SurveillanceBy.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure13AnnoucementAt, 
+                    { 'label': 'Incendiul sau orice alt eveniment se anunta la',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure13AnnoucementAt.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure13AnnoucementTrought, 
+                    { 'label': 'Incendiul sau orice alt eveniment se anunta prin',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure13AnnoucementTrought.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure14, 
+                    { 'label': 'Alte masuri specifice de aparare impotriva incendiului:',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure14.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure15Issuer, 
+                    { 'label': 'Responsabili - Emitentul',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure15Issuer.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure15ChiefSector, 
+                    { 'label': 'Responsabili - Seful sectorului in care se executa lucrarile',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure15Issuer.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure15Workers, 
+                    { 'label': 'Responsabili - Executantii lucrarilor cu foc',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure15Workers.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.measure15Emergency, 
+                    { 'label': 'Responsabili - Serviciul public voluntar/privat pentru situatii de urgenta',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.measure15Emergency.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            <div class="hidden">{{ form_rest(form) }}</div>
+            <div class="craue_formflow_buttons">
+                <button type="button" onclick="onPermisDeLucruCuFocSubmit();" class="craue_formflow_button_last">
+                    {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function onPermisDeLucruCuFocSubmit() {
+            
+            if (!(jQuery('#permis_de_lucru_cu_foc_type_startWorkDate_date_day').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_startWorkDate_date_month').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_startWorkDate_date_year').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_startWorkDate_time_hour'))) {
+                jQuery('#error-startWorkDate').removeClass('field-validation-valid').addClass('field-validation-error');
+                return false;
+            } else {
+                jQuery('#error-startWorkDate').removeClass('field-validation-error').addClass('field-validation-valid');
+            }
+            
+            if (!(jQuery('#permis_de_lucru_cu_foc_type_endWorkDate_date_day').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_endWorkDate_date_month').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_endWorkDate_date_year').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_endWorkDate_time_hour'))) {
+                jQuery('#error-endWorkDate').removeClass('field-validation-valid').addClass('field-validation-error');
+                return false;
+            } else {
+                jQuery('#error-endWorkDate').removeClass('field-validation-error').addClass('field-validation-valid');
+            }
+            
+            if (!(jQuery('#permis_de_lucru_cu_foc_type_measure5Date_day').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_measure5Date_month').val() &&
+                    jQuery('#permis_de_lucru_cu_foc_type_measure5Date_year').val())) {
+                jQuery('#error-measure5Date').removeClass('field-validation-valid').addClass('field-validation-error');
+                return false;
+            } else {
+                jQuery('#error-measure5Date').removeClass('field-validation-error').addClass('field-validation-valid');
+            }
+                        
+            jQuery('#permis_de_lucru_cu_foc').submit();
+        }
+    </script>
+{% endblock %}

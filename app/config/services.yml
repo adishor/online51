@@ -168,6 +168,11 @@ services:
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
+    app.form.flow.Decizie_Personal_Cu_Atributii_2:
+        class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributii2Flow
+        parent: craue.form.flow
+        scope: request
+        arguments: [@doctrine.orm.entity_manager]
     app.form.flow.register:
         class: AppBundle\Form\Flow\RegisterFlow
         parent: craue.form.flow
@@ -207,4 +212,7 @@ services:
     app.formular.Decizie_Personal_Cu_Atributii_PSI:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributiiPSI
+    app.formular.Decizie_Personal_Cu_Atributii_2:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii2
     

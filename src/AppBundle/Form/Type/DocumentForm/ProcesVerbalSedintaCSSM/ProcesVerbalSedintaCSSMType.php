@@ -5,7 +5,7 @@ namespace AppBundle\Form\Type\DocumentForm\ProcesVerbalSedintaCSSM;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use AppBundle\Form\Type\DocumentForm\Common\PersonType;
 use AppBundle\Form\Type\DocumentForm\Common\ConvocatorCSSMPunctType;
@@ -23,12 +23,10 @@ class ProcesVerbalSedintaCSSMType extends AbstractType
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
           ->add('room', TextType::class)
-          ->add('meetingDate', DateTimeType::class, array(
+          ->add('meetingDate', DateType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
-              ),
-              'with_minutes' => FALSE,
-              'with_seconds' => FALSE
+              )
           ))
           ->add('president', TextType::class)
           ->add('secretary', TextType::class)

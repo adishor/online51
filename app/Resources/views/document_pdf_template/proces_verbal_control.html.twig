@@ -1,0 +1,62 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-20-px"></div>
+            <p class="text-right"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-40-px"></div>
+            <h3 class="text-center"><b>{{ 'PROCES VERBAL DE CONTROL' | trans}}</b></h3>
+            <div class="height-40-px"></div>
+            <p><span class="text-indent"></span>{{ 'Incheiat astazi, cu prilejul controlului privind apararea impotriva incendiilor si protectia civila, executat potrivit prevederilor Legii nr. 307/2006 privind apararea impotriva incendiilor si Legii nr. 481/2004 privind protectia civila, modificata si completata.' | trans }}</p>
+            <p><span class="text-indent"></span>{{ 'Control desfasurat in data de ' | trans }} {{ data.controlDate | date("d/m/Y") }} {{ ' de catre ' | trans }} {{ data.controlBy }}.</p>
+            <div class="height-20-px"></div>
+            <p>{{ 'Participanti' | trans }}</p>
+            {% for item in data.participants %}
+                {% if item.name %}
+                    <p>{{ item.name }}</p>
+                {% endif %}
+            {% endfor %}
+            <div class="height-40-px"></div>
+            <p><b>{{ '1 - Analiza organizarii apararii impotriva incendiilor/activitatii de protectie civila' | trans }}</b></p>
+            <div class="height-20-px"></div>
+            <table class="pdf-table">
+                <tr>
+                    <th class="width-35-px">{{ 'Nr. crt.' | trans }}</th>
+                    <th class="width-300-percent">{{ 'Aspect urmarit' | trans }}</th>
+                    <th>{{ 'DA' | trans }}</th>
+                    <th>{{ 'NU' | trans }}</th>
+                    <th>{{ 'Partial' | trans }}</th>
+                    <th>{{ 'Nu e cazul' | trans }}</th>
+                    <th>{{ 'Observatii' | trans }}</th>
+                </tr>
+                {% for item in data.organizationalQuestions %}
+                    <tr>
+                        <td class="width-35-px">{{ loop.index }}.</td>
+                        <td class="width-300-percent">{{ item.question | trans }}</td>
+                        <td class="text-center">{{ (item.answer == 'DA') ? 'X' : '' }}</td>
+                        <td class="text-center">{{ (item.answer == 'NU') ? 'X' : '' }}</td>
+                        <td class="text-center">{{ (item.answer == 'Partial') ? 'X' : '' }}</td>
+                        <td class="text-center">{{ (item.answer == 'Nu e cazul') ? 'X' : '' }}</td>
+                        <td>{{ item.observations }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="height-20-px"></div>
+            <p><b>{{ '2 - Constatari:' | trans }}</b></p>
+            <p>{{ data.findings }}</p>
+            <div class="height-20-px"></div>
+            <p><b>{{ '3 - Masuri propuse:' | trans }}</b></p>
+            <p>{{ data.proposedMeasures }}</p>
+            <div class="height-40-px"></div>
+            <p>{{ 'Dl/Dna' | trans }} {{ data.administrator }} {{ ' - Administrator' | trans }}</p>
+            <p><span class="text-indent"></span>.........................................</p>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</body>

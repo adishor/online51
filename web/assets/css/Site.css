@@ -360,7 +360,7 @@ td button {
     display: none;
 }
 
-input.input-validation-error {
+input.input-validation-error, textarea.input-validation-error {
     border: 1px solid #e80c4d;
 }
 
@@ -2074,7 +2074,7 @@ li.craue_formflow_current_step {
     width: 500px;
 }
 
-#convocator_cssm_type_meetingDate_date, #decizie_comisie_cercetare_accidente_type_accidentDate_date {
+#convocator_cssm_type_meetingDate_date, #decizie_comisie_cercetare_accidente_type_accidentDate_date, #permis_de_lucru_cu_foc_type_startWorkDate_date, #permis_de_lucru_cu_foc_type_endWorkDate_date {
     float:left;
 }
 
@@ -2111,4 +2111,18 @@ input[readonly] {
 
 .no-display, .no-display-membru, .no-display-punct, .no-display-autoturism, .no-display-conducator, .no-display-primAjutor, .no-display-lider {
     display: none;
+}
+
+.formular-radio-inline {
+    margin-top:10px;
+}
+
+.formular-radio-inline input[type="radio"] {
+    width: 20px;
+    float:left;
+}
+
+.formular-radio-inline label {
+    margin: 0;
+    float:left; 
 }

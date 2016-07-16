@@ -5,6 +5,8 @@ namespace AppBundle\Form\Type\DocumentForm\ProcesVerbalControl;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use AppBundle\Form\Type\DocumentForm\Common\PersonType;
 use AppBundle\Form\Type\DocumentForm\ProcesVerbalControl\ProcesVerbalControlQuestionType;
@@ -21,12 +23,10 @@ class ProcesVerbalControlType extends AbstractType
           ->add('company', TextType::class, array(
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
-          ->add('controlDate', DateTimeType::class, array(
+          ->add('controlDate', DateType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
-              ),
-              'with_minutes' => FALSE,
-              'with_seconds' => FALSE
+              )
           ))
           ->add('controlBy', TextType::class)
           ->add('participants', CollectionType::class, array(

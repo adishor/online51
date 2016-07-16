@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class PermisDeLucruCuFocType extends AbstractType
 {
@@ -19,7 +21,6 @@ class PermisDeLucruCuFocType extends AbstractType
           ->add('company', TextType::class, array(
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
           ))
-          ->add('administrator', TextType::class)
           ->add('personWithWorkPermitForFire', TextType::class)
           ->add('helpPersonForWorkWithFire', TextType::class)
           ->add('executeWork', TextType::class)
@@ -44,12 +45,10 @@ class PermisDeLucruCuFocType extends AbstractType
           ->add('measure2', TextareaType::class)
           ->add('measure3', TextareaType::class)
           ->add('measure5No', TextType::class)
-          ->add('measure5Date', DateTimeType::class, array(
+          ->add('measure5Date', DateType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
-              ),
-              'with_minutes' => FALSE,
-              'with_seconds' => FALSE
+              )
           ))
           ->add('measure5ReleasedBy', TextType::class)
           ->add('measure6', TextareaType::class)

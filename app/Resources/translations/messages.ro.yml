@@ -645,7 +645,13 @@ formular:
         act-with-hydrants: Actioneaza cu hidrantii
         ensures-evacuation: Asigura evacuarea persoanelor
         ensures-evacuation-of-property: Asigura evacuarea bunurilor
-    proces-verbal-control:
+    decizie-personal-cu-atributii-2:
+        rsvti: responsabil RSVTI
+        compressor: deservire compresoare, instalatie de aer comprimat
+        container: depozitare recipiente cu oxigen, substante periculoase
+        auto: conducatori auto, stivuitoristi, electricieni, sudori
+        firstAid: responsabil cu acordarea primului ajutor
+    proces-verbal-control: 
         aspect1: Exista documentele specifice de aparare impotriva incendiilor?
         aspect2: Sunt reglementate lucrul cu loc deschis, fumatul, depozitarea si evacuarea deseurilor si reziduurilor combustibile, lucrarile premergatoare pe timpul sezonului rece, perioadelor caniculare si secetoase?
         aspect3: Sunt respectate dispozitiile administratorului?

@@ -453,7 +453,7 @@ class PermisDeLucruCuFoc
         return $this->company;
     }
 
-    public function setCompany(type $company)
+    public function setCompany($company)
     {
         $this->company = $company;
     }
