@@ -228,7 +228,7 @@ class UserHelperService
         $this->entityManager->flush();
     }
 
-    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted)
+    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted, $formularData)
     {
         $creditsUsage = new CreditsUsage();
         $creditsUsage->setUser($user);
@@ -253,6 +253,7 @@ class UserHelperService
         $creditsUsage->setCredit((!$this->getIsUserException()) ? $creditValue : 0);
         $creditsUsage->setUsageType(CreditsUsage::TYPE_FORMULAR);
         $creditsUsage->setFormConfig(json_encode($formularConfig));
+        $creditsUsage->setFormData($formularData);
         $creditsUsage->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
         $creditsUsage->setIsFormConfigFinished(!$isDraft);
         $this->entityManager->persist($creditsUsage);

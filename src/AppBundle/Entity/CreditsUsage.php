@@ -34,6 +34,14 @@ class CreditsUsage
 
     /**
      *
+     * @var string
+     *
+     * @ORM\Column()
+     */
+    protected $title;
+
+    /**
+     *
      * @var integer
      *
      * @ORM\Column(type="integer")
@@ -555,6 +563,16 @@ class CreditsUsage
     public function getMedia()
     {
         return $this->media;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 
     /**

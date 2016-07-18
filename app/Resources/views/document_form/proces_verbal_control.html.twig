@@ -1,0 +1,203 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@CraueFormFlowBundle/Resources/assets/css/buttons.css' %}
+    <link type="text/css" rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block ccontainer %}
+
+    <h2 class="title">{{ 'Proces Verbal Control' | trans }}</h2>
+
+    {% for flash_message in app.session.flashbag.get('form-success') %}
+        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashbag.get('form-error') %}
+        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
+    {% endfor %}
+
+    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
+
+    <div class="col-xs-12">    
+        <form class="formular-form" id="proces_verbal_control" method="post" {{ form_enctype(form) }}>
+            {{ form_errors(form) }}
+
+            {{ form_row(form.company) }}
+            
+            {{ form_row(form.controlDate, {'label': 'Control desfasurat in data de'}) }}
+            <span class="field-validation-valid" id="error-controlDate">{{ 'Completati toate detaliile referitor la data' | trans }}</span>        
+            
+            {{ form_row(form.controlBy, 
+                    { 'label': 'Control desfasurat de catre',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.controlBy.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            <section>
+                <h3>{{ 'Participanti:' | trans }}</h3>
+                <ul id="membrii-fields-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.participants.vars.prototype }) }}
+                    {% endfilter %}">
+                    {% for item in form.participants %}
+                        <li>
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.participants.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou participant' | trans }}</a>
+                <div class="color-red no-display-membru" id="#error-no-membru">{{ 'Adaugati cel putin 1 participant' | trans }}</div>
+                <script type="text/javascript">
+                    // keep track of how many membrii fields have been rendered
+                    var membriiCount = '{{ form.participants|length }}';
+
+                    jQuery(document).ready(function () {
+
+                        var membriiList = jQuery('#membrii-fields-list');
+
+                        // add a delete link to all of the existing speaker form li elements
+                        membriiList.find('li').each(function (index) {
+                            addMembruFormDeleteLink($(this));
+                        });
+
+                        jQuery('#add-another-membru').click(function (e) {
+                            e.preventDefault();
+                            jQuery('.no-display-membru').hide();
+
+                            var membriiList = jQuery('#membrii-fields-list');
+
+                            // grab the prototype template
+                            var newWidget = membriiList.attr('data-prototype');
+                            // replace the "__name__" used in the id and name of the prototype
+                            // with a number that's unique to your companies
+                            newWidget = newWidget.replace(/__name__/g, membriiCount);
+                            membriiCount++;
+
+                            // create a new list element and add it to the list
+                            var newLi = jQuery('<li></li>').html(newWidget);
+                            newLi.appendTo(membriiList);
+                            addMembruFormDeleteLink(newLi);
+                        });
+                    });
+
+                    function addMembruFormDeleteLink($membriiFormLi) {
+                        var $removeFormA = $('<a href="#">{{ 'Sterge participant'|trans }}</a>');
+                        $membriiFormLi.append($removeFormA);
+
+                        $removeFormA.on('click', function (e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
+
+                            // remove the li for the membrii form
+                            $membriiFormLi.remove();
+                        });
+                    }
+                </script>
+            </section>
+            <div class="clear-both"></div>
+            
+            <section>
+                <h3>{{ 'Analiza organizarii apararii impotriva incendiilor/activitatii de protectie civila:' | trans }}</h3>
+                <ul>
+                    {% for item in form.organizationalQuestions %}
+                        <li>
+                            {% if item.question.vars.value %}
+                                <b>{{ item.question.vars.value | trans }}</b><br/>
+                            {% endif %}
+                            <div class="formular-radio-inline">
+                                {{ form_row(item.answer, 
+                                    { 'label': 'Raspuns',
+                                    'attr': {
+                                    'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.organizationalQuestions.vars.full_name }}[{{ loop.index0 }}][answer]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="clear-both"></div>
+                            {{ form_row(item.observations) }}
+                            <hr/>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+            
+            {{ form_row(form.findings, 
+                    { 'label': 'Constatari',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.findings.vars.full_name }}" data-valmsg-replace="true" ></span>
+                
+            {{ form_row(form.proposedMeasures, 
+                    { 'label': 'Masuri propuse',
+                    'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.proposedMeasures.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.administrator, 
+                    {'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            <div class="hidden">{{ form_rest(form) }}</div>
+            <div class="craue_formflow_buttons">
+                <button type="button" onclick="onProcesVerbalControlSubmit();" class="craue_formflow_button_last">
+                    {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function onProcesVerbalControlSubmit() {
+            if (!(jQuery('#proces_verbal_control_type_controlDate_day').val() &&
+                    jQuery('#proces_verbal_control_type_controlDate_month').val() &&
+                    jQuery('#proces_verbal_control_type_controlDate_year').val())) {
+                jQuery('#error-controlDate').removeClass('field-validation-valid').addClass('field-validation-error');
+                return false;
+            } else {
+                jQuery('#error-controlDate').removeClass('field-validation-error').addClass('field-validation-valid');
+            }
+            
+            if (!jQuery("#membrii-fields-list li").length) {
+                jQuery('.no-display-membru').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-membru').hide();
+                jQuery('#membrii-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
+            jQuery('.formular-radio-inline input').each(function () {
+                jQuery(this).rules("add", {
+                    required: true,
+                    messages: {
+                        required: 'Acest camp este obligatoriu'
+                    }
+                });
+            });
+                        
+            jQuery('#proces_verbal_control').submit();
+        }
+    </script>
+{% endblock %}

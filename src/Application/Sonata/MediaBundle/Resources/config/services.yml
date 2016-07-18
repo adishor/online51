@@ -18,7 +18,7 @@ services:
     sonata.media.admin.media:
         class: %sonata.media.admin.media.class%
         tags:
-            - { name: sonata.admin, manager_type: orm, show_in_dashboard: false, label_catalogue: %sonata.media.admin.media.translation_domain% , label: media, group: sonata_media, label_translator_strategy: sonata.admin.label.strategy.underscore }
+            - { name: sonata.admin, manager_type: orm, show_in_dashboard: true, label_catalogue: %sonata.media.admin.media.translation_domain% , label: media, group: sonata_media, label_translator_strategy: sonata.admin.label.strategy.underscore }
         arguments:
             - ~
             - %sonata.media.admin.media.entity%
@@ -27,4 +27,4 @@ services:
         calls:
             - [setModelManager, ["@sonata.media.admin.media.manager"]]
             - [setTranslationDomain, [%sonata.media.admin.media.translation_domain%]]
-            - [setTemplates, [{ list: SonataMediaBundle:MediaAdmin:list.html.twig, base_list_field: sonata/media_base_list_field.html.twig , edit: SonataAdminBundle:CRUD:edit.html.twig }]]
+            - [setTemplates, [{ list: ApplicationSonataMediaBundle:MediaAdmin:list.html.twig, base_list_field: sonata/media_base_list_field.html.twig , edit: SonataAdminBundle:CRUD:edit.html.twig }]]

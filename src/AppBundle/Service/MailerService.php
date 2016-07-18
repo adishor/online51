@@ -137,7 +137,7 @@ class MailerService
     {
         $user = $creditsUsage->getUser();
 
-        $formExpireNotificationBody = $this->templating->render('document_form/form_expire_notification_body.html.twig', array(
+        $formExpireNotificationBody = $this->templating->render('document_form/base/form_expire_notification_body.html.twig', array(
             'name' => $user->getName(),
             'formName' => $creditsUsage->getFormular()->getName(),
             'formText' => $formText,
@@ -152,7 +152,7 @@ class MailerService
     {
         $subject = $this->translator->trans('mail.form-expire-report.subject') . ' ' . date("d-m-Y", time());
 
-        $formExpireReportBody = $this->templating->render('document_form/form_expire_report_body.html.twig', array(
+        $formExpireReportBody = $this->templating->render('document_form/base/form_expire_report_body.html.twig', array(
             'reportString' => $reportString,
           ), 'text/html');
 

@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="media">
                 <source>media</source>
-                <target>Fisiere</target>
+                <target>Fisiere generate</target>
             </trans-unit>
             <trans-unit id="gallery">
                 <source>gallery</source>
@@ -32,7 +32,7 @@
             </trans-unit>
             <trans-unit id="breadcrumb.link_media_list">
                 <source>breadcrumb.link_media_list</source>
-                <target>Fisiere</target>
+                <target>Fisiere generate</target>
             </trans-unit>
             <trans-unit id="breadcrumb.link_media_edit">
                 <source>breadcrumb.link_media_edit</source>

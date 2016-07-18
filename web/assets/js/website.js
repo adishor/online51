@@ -10,7 +10,7 @@ $(document).ready(function () {
         $("#register_noEmployees option:selected").text($("#EmployeesNr").val());
     }
     $(function () {
-        $('select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare, select.operatia').selectmenu({
+        $('select.stareFizica, select.unitateMasura, select.stocareTip, select.tratareMod, select.tratareScop, select.transportMijloc, select.transportDestinatia, select.operatiaDeValorificare, select.operatiaDeEliminare, select.operatia').selectmenu({
             width: 500,
             menuWidth: 500
         });

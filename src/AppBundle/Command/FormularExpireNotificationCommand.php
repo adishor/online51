@@ -15,7 +15,7 @@ class FormularExpireNotificationCommand extends ContainerAwareCommand
         $this
           ->setName('notify:form-expire')
           ->setDescription('Send notification to users when forms expire.')
-          ->addArgument('slug', InputArgument::OPTIONAL, 'What form/forms do you want to include? (slug/ slug1, slug2 / null = all)'
+          ->addArgument('slug', InputArgument::OPTIONAL, 'What form/forms do you want to include? (slug1,slug2 or nothing for all)'
         );
     }
 
@@ -54,11 +54,17 @@ class FormularExpireNotificationCommand extends ContainerAwareCommand
             foreach (explode(',', $form->getNotifyDays()) as $notifyDays) {
                 if (is_numeric($notifyDays)) {
                     $days = new \DateInterval('P' . trim($notifyDays) . 'D');
-                    $formHelperGetFormTextMethod = 'getFormText' . str_replace("_", "", $form->getSlug());
+
+                    $formularService = $container->get('app.formular.' . $form->getSlug());
+                    $formularService->setName($form->getSlug());
                     foreach ($form->getFormularCreditsUsage() as $creditsUsage) {
                         $now = new \DateTime('');
                         if ($creditsUsage->getExpireDate()->diff($now->add($days))->days === 0) {
-                            $formText = $container->get('app.formular_helper')->$formHelperGetFormTextMethod($creditsUsage->getFormConfig());
+                            $formText = '';
+                            if (method_exists($formularService, 'getTextForFormConfig')) {
+                                $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig());
+                                $formText = $container->get('translator')->trans($text['message'], $text['variables']);
+                            }
 
                             $container->get('app.mailer')->sendFormExpireNotificationMessage($creditsUsage, $formText);
 

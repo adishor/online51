@@ -3,7 +3,7 @@
 namespace AppBundle\Form\Flow\DocumentForm;
 
 use Craue\FormFlowBundle\Form\FormFlow;
-use AppBundle\Form\Type\DocumentForm\ConvocatorCSSMType;
+use AppBundle\Form\Type\DocumentForm\ConvocatorCSSM\ConvocatorCSSMType;
 use Doctrine\ORM\EntityManager;
 
 class ConvocatorCSSMFlow extends FormFlow

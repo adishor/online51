@@ -1,0 +1,13 @@
+{{ form_row(form.meetingPoint, 
+    { 'label': 'Punct pe ordinea de zi',
+    'attr': {'data-val': 'true',
+    'data-val-required': 'Acest camp este obligatoriu' | trans,
+    } } ) }}
+<span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[meetingPoint]" data-valmsg-replace="true" ></span>
+{{ form_row(form.meetingPointSummary, 
+    { 'label': 'Concluzii dezbatere punct pe ordinea de zi',
+    'attr': {'data-val': 'true',
+    'data-val-required': 'Acest camp este obligatoriu' | trans,
+    } } ) }}
+<span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[meetingPointSummary]" data-valmsg-replace="true" ></span>
+

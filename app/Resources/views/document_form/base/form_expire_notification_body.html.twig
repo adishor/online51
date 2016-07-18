@@ -1,0 +1,22 @@
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <p>
+        {{ 'mail.name'|trans({"%name%" : name})| raw }}
+    </p>
+    
+    <p>
+        {{ 'mail.form-expire-notification.message'|trans
+            ({"formName" : formName, 
+            "formText" : formText, 
+            "expireDate" : expireDate|localizeddate('medium', 'none', locale ) 
+        }) | raw }}
+    </p>
+    <p>
+        {{ 'mail.form-expire-notification.message2'|trans|raw }}
+    </p>
+    <p>
+        {{ 'mail.team'|trans|raw }}
+    </p>
+</body>

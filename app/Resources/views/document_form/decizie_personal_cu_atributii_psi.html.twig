@@ -1,0 +1,90 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@CraueFormFlowBundle/Resources/assets/css/buttons.css' %}
+    <link type="text/css" rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block ccontainer %}
+
+    <h2 class="title">{{ 'Decizie personal cu atributii PSI' | trans }}</h2>
+
+    {% for flash_message in app.session.flashbag.get('form-success') %}
+        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashbag.get('form-error') %}
+        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
+    {% endfor %}
+
+    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
+
+    <div class="col-xs-12">    
+        <form class="formular-form" id="decizie_personal_cu_atributii_psi" method="post" {{ form_enctype(form) }}>
+            {{ form_errors(form) }}
+            
+            {{ form_row(form.company) }}
+            
+            {{ form_row(form.administrator, 
+                    { 'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            <section>
+                <h3>{{ 'Se stabilesc urmatoarele atributii de serviciu pentru personalul propriu, dupa cum urmeaza:' | trans }}</h3>
+                <ul>
+                    {% for item in form.workersAttributions %}
+                        <li>
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            {% if item.function.vars.value %}
+                                {{ item.function.vars.value | trans }}<br/>
+                            {% endif %}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersAttributions.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+                
+            <section>
+                <h3>{{ 'Urmatoarele persoane fac parte din echipa de interventie cu urmatoarele atributiuni:' | trans }}</h3>
+                <ul>
+                    {% for item in form.interventionTeam %}
+                        <li>
+                            {{ form_row(item.name, 
+                                {'attr': {'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                } } ) }}
+                            {% if item.function.vars.value %}
+                                {{ item.function.vars.value | trans }}<br/>
+                            {% endif %}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.interventionTeam.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+                
+            <div class="hidden">{{ form_rest(form) }}</div>
+            <div class="craue_formflow_buttons">
+                <button type="button" onclick="onDeciziePersonalCuAtributiiPSISubmit();" class="craue_formflow_button_last">
+                    {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+            </div>
+            
+        </form>
+    </div>
+                    
+    <script type="text/javascript">
+        function onDeciziePersonalCuAtributiiPSISubmit() {       
+            jQuery('#decizie_personal_cu_atributii_psi').submit();
+        }
+    </script>
+{% endblock %}

@@ -33,38 +33,39 @@
                     } } ) }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
 
-            {{ form_row(form.presedinte, 
+            {{ form_row(form.president, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                     } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.presedinte.vars.full_name }}" data-valmsg-replace="true" ></span>
+            <span class="field-validation-valid" data-valmsg-for="{{ form.president.vars.full_name }}" data-valmsg-replace="true" ></span>
             
-            {{ form_row(form.secretar, 
+            {{ form_row(form.secretary, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                     } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.secretar.vars.full_name }}" data-valmsg-replace="true" ></span>
+            <span class="field-validation-valid" data-valmsg-for="{{ form.secretary.vars.full_name }}" data-valmsg-replace="true" ></span>
             
             <section>
                 <h3>{{ 'Reprezentati ai lucratorilor:' | trans }}</h3>
                 <ul id="membrii-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.membrii.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.members.vars.prototype }) }}
                     {% endfilter %}">
-                    {% for item in form.membrii %}
+                    {% for item in form.members %}
                         <li>
                             {{ form_row(item.name, 
                                 {'attr': {'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.membrii.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.members.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                         </li>
                     {% endfor %}
                 </ul>
-                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru - reprezentant al lucratorilor' | trans }}</a>            
+                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru - reprezentant al lucratorilor' | trans }}</a>
+                <div class="color-red no-display-membru" id="#error-no-membru">{{ 'Adaugati cel putin 1 membru' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many membrii fields have been rendered
-                    var membriiCount = '{{ form.membrii|length }}';
+                    var membriiCount = '{{ form.members|length }}';
 
                     jQuery(document).ready(function () {
 
@@ -77,6 +78,7 @@
 
                         jQuery('#add-another-membru').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-membru').hide();
 
                             var membriiList = jQuery('#membrii-fields-list');
 
@@ -109,16 +111,19 @@
                 </script>
             </section>
             
-            {{ form_row(form.medic, 
+            {{ form_row(form.doctor, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                     } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.medic.vars.full_name }}" data-valmsg-replace="true" ></span>
+            <span class="field-validation-valid" data-valmsg-for="{{ form.doctor.vars.full_name }}" data-valmsg-replace="true" ></span>
 
             <div class="hidden">{{ form_rest(form) }}</div>
             <div class="craue_formflow_buttons">
                 <button type="button" onclick="onDecizieComponentaCSSMSubmit();" class="craue_formflow_button_last">
                     {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
                 </button>
             </div>
         </form>
@@ -126,14 +131,21 @@
                     
     <script type="text/javascript">
         function onDecizieComponentaCSSMSubmit() {
-            jQuery('#membrii-fields-list li input').each(function () {
-                jQuery(this).rules("add", {
-                    required: true,
-                    messages: {
-                        required: 'Acest camp este obligatoriu'
-                    }
+            if (!jQuery("#membrii-fields-list li").length) {
+                jQuery('.no-display-membru').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-membru').hide();
+                jQuery('#membrii-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
                 });
-            });
+            }
             jQuery('#decizie_componenta_cssm').submit();
         }
     </script>

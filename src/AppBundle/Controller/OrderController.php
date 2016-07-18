@@ -78,10 +78,11 @@ class OrderController extends Controller
 
         $formularDocuments = $creditUsageRepository->findAllUserFormularDocuments($userId, ($request->query->get('mediaId') ? $request->query->get('mediaId') : null));
         foreach ($formularDocuments as $index => $doc) {
-            $name = str_replace("_", "", $doc['fslug']);
-            $formHelperGetFormTextMethod = 'getFormText' . $name;
-            if (method_exists($this->container->get('app.formular_helper'), $formHelperGetFormTextMethod)) {
-                $formularDocuments[$index]['formConfig'] = $this->container->get('app.formular_helper')->$formHelperGetFormTextMethod($doc['formConfig'], true);
+            $formularService = $this->get('app.formular.' . $doc['fslug']);
+            $formularService->setName($doc['fslug']);
+            if (method_exists($formularService, 'getTextForFormConfig') && $doc['formConfig'] != 'null') {
+                $text = $formularService->getTextForFormConfig($doc['formConfig'], true);
+                $formularDocuments[$index]['formConfig'] = $this->get('translator')->trans($text['message'], $text['variables']);
             }
             $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
         }
@@ -106,6 +107,14 @@ class OrderController extends Controller
               'videoType' => CreditsUsage::TYPE_VIDEO,
             )
         );
+    }
+
+    /**
+     * @Route("/information/valid-documents/update-title", name="update_title_valid_document")
+     */
+    public function updateValidDocumentTitleAction(Request $request)
+    {
+        return;
     }
 
     /**
