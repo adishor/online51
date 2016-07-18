@@ -22,4 +22,17 @@ class CreditsUsageController extends Controller
         return new Response(json_encode($creditValue), 200);
     }
 
+    public function getVideoCreditValueAction(Request $request)
+    {
+        $creditValue = '';
+
+        $videoId = $request->request->get('videoId');
+        $video = $this->getDoctrine()->getRepository('AppBundle:Video')->find($videoId);
+        if ($video) {
+            $creditValue = $video->getCreditValue();
+        }
+
+        return new Response(json_encode($creditValue), 200);
+    }
+
 }
