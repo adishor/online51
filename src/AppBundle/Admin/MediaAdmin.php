@@ -91,4 +91,14 @@ class MediaAdmin extends SonataMediaAdmin
         $collection->remove('show');
     }
 
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+
+        $query->andWhere($query->getRootAliases()[0] . '.mediaType IN (:types)')
+          ->setParameter('types', array(Media::FORM_GENERATED_TYPE, Media::INVOICE_TYPE));
+
+        return $query;
+    }
+
 }

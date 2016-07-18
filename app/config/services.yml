@@ -65,13 +65,6 @@ services:
         arguments: [~, AppBundle\Entity\Formular, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: sonata_media }
-    admin.document_generated:
-        class: AppBundle\Admin\DocumentGeneratedAdmin
-        arguments: [~, Application\Sonata\MediaBundle\Entity\Media, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.document-generated, group: sonata_media }
-        calls:
-            - [ setTemplate, [list, ApplicationSonataMediaBundle:MediaAdmin:list.html.twig]]
     app.sonata_security_roles:
         class: AppBundle\Form\Type\AppSecurityRolesType
         tags:

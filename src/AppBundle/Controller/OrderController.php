@@ -110,6 +110,14 @@ class OrderController extends Controller
     }
 
     /**
+     * @Route("/information/valid-documents/update-title", name="update_title_valid_document")
+     */
+    public function updateValidDocumentTitleAction(Request $request)
+    {
+        return;
+    }
+
+    /**
      * @Route("/information/credit-usage", name="show_credit_usage")
      */
     public function showCreditUsageAction(Request $request)
