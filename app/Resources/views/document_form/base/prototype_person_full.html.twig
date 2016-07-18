@@ -1,0 +1,16 @@
+<div class="col-xs-6 no-margin-left">
+    {{ form_row(form.name, 
+        { 'label': 'Dl/Dna',
+        'attr': {'data-val': 'true',
+        'data-val-required': 'Acest camp este obligatoriu' | trans,
+        } } ) }}
+    <span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[name]" data-valmsg-replace="true" ></span>
+</div>
+<div class="col-xs-6 no-margin-right">
+    {{ form_row(form.function, 
+        { 'label': functionLabel,
+        'attr': {'data-val': 'true',
+        'data-val-required': 'Acest camp este obligatoriu' | trans,
+        } } ) }}
+    <span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[function]" data-valmsg-replace="true" ></span>
+</div>

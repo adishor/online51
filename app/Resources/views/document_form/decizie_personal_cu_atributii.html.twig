@@ -31,22 +31,23 @@
                 <h3>{{ 'Conducatorii locurilor de munca sunt:' | trans }}</h3>
                 <ul id="conducatorii-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiConducatoriMunca.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.workersLeaders.vars.prototype }) }}
                     {% endfilter %}">
-                    {% for item in form.angajatiConducatoriMunca %}
+                    {% for item in form.workersLeaders %}
                         <li>
                             {{ form_row(item.name, 
                                 {'attr': {'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.angajatiConducatoriMunca.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersLeaders.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                         </li>
                     {% endfor %}
                 </ul>
-                <a class="costum" href="#" id="add-another-conducator">{{ 'Adauga un nou conducator' | trans }}</a>            
+                <a class="costum" href="#" id="add-another-conducator">{{ 'Adauga un nou conducator' | trans }}</a>
+                <div class="color-red no-display-conducator" id="#error-no-conducator">{{ 'Adaugati cel putin 1 conducator' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many conducatorii fields have been rendered
-                    var conducatoriiCount = '{{ form.angajatiConducatoriMunca|length }}';
+                    var conducatoriiCount = '{{ form.workersLeaders|length }}';
 
                     jQuery(document).ready(function () {
 
@@ -59,6 +60,7 @@
 
                         jQuery('#add-another-conducator').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-conducator').hide();
 
                             var conducatoriiList = jQuery('#conducatorii-fields-list');
 
@@ -97,22 +99,23 @@
                 <h3>{{ 'Urmatorii angajati pot conduce autoturisme in interesul serviciului:' | trans }}</h3>
                 <ul id="autoturisme-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiCondusAutoturisme.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.workersCarsDriven.vars.prototype }) }}
                     {% endfilter %}">
-                    {% for item in form.angajatiCondusAutoturisme %}
+                    {% for item in form.workersCarsDriven %}
                         <li>
                             {{ form_row(item.name, 
                                 {'attr': {'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.angajatiCondusAutoturisme.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersCarsDriven.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                         </li>
                     {% endfor %}
                 </ul>
                 <a class="costum" href="#" id="add-another-autoturism">{{ 'Adauga un nou conducator autoturism' | trans }}</a>
+                <div class="color-red no-display-autoturism" id="#error-no-autoturism">{{ 'Adaugati cel putin 1 conducator autoturism' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many autoturisme fields have been rendered
-                    var autoturismeCount = '{{ form.angajatiCondusAutoturisme|length }}';
+                    var autoturismeCount = '{{ form.workersCarsDriven|length }}';
 
                     jQuery(document).ready(function () {
 
@@ -125,6 +128,7 @@
 
                         jQuery('#add-another-autoturism').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-autoturism').hide();
 
                             var autoturismeList = jQuery('#autoturisme-fields-list');
 
@@ -163,22 +167,23 @@
                 <h3>{{ 'Urmatorii angajati sunt responsabili cu acordarea primului ajutor:' | trans }}</h3>
                 <ul id="primAjutor-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.angajatiPrimAjutor.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.workersFirstAid.vars.prototype }) }}
                     {% endfilter %}">
-                    {% for item in form.angajatiPrimAjutor %}
+                    {% for item in form.workersFirstAid %}
                         <li>
                             {{ form_row(item.name, 
                                 {'attr': {'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.angajatiPrimAjutor.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersFirstAid.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                         </li>
                     {% endfor %}
                 </ul>
                 <a class="costum" href="#" id="add-another-primAjutor">{{ 'Adauga un nou angajat responsabil cu acordarea primului ajutor' | trans }}</a>
+                <div class="color-red no-display-primAjutor" id="#error-no-primAjutor">{{ 'Adaugati cel putin 1 angajat responsabil cu acordarea primului ajutor' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many primAjutor fields have been rendered
-                    var primAjutorCount = '{{ form.angajatiPrimAjutor|length }}';
+                    var primAjutorCount = '{{ form.workersFirstAid|length }}';
 
                     jQuery(document).ready(function () {
 
@@ -191,6 +196,7 @@
 
                         jQuery('#add-another-primAjutor').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-primAjutor').hide();
 
                             var primAjutorList = jQuery('#primAjutor-fields-list');
 
@@ -227,9 +233,9 @@
             
             <section>
                 <h3>{{ 'Urmatorii angajati sunt responsabili cu:' | trans }}</h3>
-                {% for item in form.angajatiResponsabili %}
+                {% for item in form.workersResponsible %}
                     {{ form_row(item.name) }}
-                    {{ item.function.vars.value }}
+                    {{ item.function.vars.value | trans }}
                 {% endfor %}
             </section>
             
@@ -239,20 +245,63 @@
                 <button type="button" onclick="onDeciziePersonalCuAtributiiSubmit();" class="craue_formflow_button_last">
                     {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
                 </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
             </div>
         </form>
     </div>
                     
     <script type="text/javascript">
         function onDeciziePersonalCuAtributiiSubmit() {
-            jQuery('#conducatorii-fields-list li input, #autoturisme-fields-list li input, #primAjutor-fields-list li input').each(function () {
-                jQuery(this).rules("add", {
-                    required: true,
-                    messages: {
-                        required: 'Acest camp este obligatoriu'
-                    }
+            if (!jQuery("#conducatorii-fields-list li").length) {
+                jQuery('.no-display-conducator').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-conducator').hide();
+                jQuery('#conducatorii-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
                 });
-            });
+            }
+            
+            if (!jQuery("#autoturisme-fields-list li input").length) {
+                jQuery('.no-display-autoturism').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-autoturism').hide();
+                jQuery('#autoturisme-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
+            if (!jQuery("#primAjutor-fields-list li input").length) {
+                jQuery('.no-display-primAjutor').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-primAjutor').hide();
+                jQuery('#primAjutor-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
             jQuery('#decizie_personal_cu_atributii').submit();
         }
     </script>

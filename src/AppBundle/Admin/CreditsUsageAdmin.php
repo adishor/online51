@@ -97,8 +97,8 @@ class CreditsUsageAdmin extends Admin
           ->add('_action', null, array(
               'actions' => array(
                   'edit' => array(),
-              ))
-        );
+            )))
+        ;
     }
 
     protected function configureShowFields(ShowMapper $show)
@@ -136,6 +136,14 @@ class CreditsUsageAdmin extends Admin
             $object->setUsageType(\AppBundle\Entity\CreditsUsage::TYPE_DOCUMENT);
             $object->setMedia($object->getDocument()->getMedia());
         }
+
+        if ($object->getVideo()) {
+            $expireDate = new \DateTime();
+            $expireDate->add(new \DateInterval('P' . $object->getVideo()->getValabilityDays() . 'D'));
+            $object->setExpireDate($expireDate);
+            $object->setUsageType(\AppBundle\Entity\CreditsUsage::TYPE_VIDEO);
+            $object->setMedia($object->getVideo()->getMedia());
+        }
     }
 
     public function getFilterParameters()
@@ -155,6 +163,7 @@ class CreditsUsageAdmin extends Admin
     public function configureRoutes(RouteCollection $collection)
     {
         $collection->add('getDocumentCreditValue', 'getDocumentCreditValue');
+        $collection->add('getVideoCreditValue', 'getVideoCreditValue');
     }
 
 }

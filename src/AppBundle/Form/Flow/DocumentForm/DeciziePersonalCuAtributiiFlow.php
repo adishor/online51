@@ -3,7 +3,7 @@
 namespace AppBundle\Form\Flow\DocumentForm;
 
 use Craue\FormFlowBundle\Form\FormFlow;
-use AppBundle\Form\Type\DocumentForm\DeciziePersonalCuAtributiiType;
+use AppBundle\Form\Type\DocumentForm\DeciziePersonalCuAtributii\DeciziePersonalCuAtributiiType;
 use Doctrine\ORM\EntityManager;
 
 class DeciziePersonalCuAtributiiFlow extends FormFlow

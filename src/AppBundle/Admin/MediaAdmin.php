@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use Application\Sonata\MediaBundle\Entity\Media;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 class MediaAdmin extends SonataMediaAdmin
 {
@@ -22,8 +23,6 @@ class MediaAdmin extends SonataMediaAdmin
           ->add('name')
           ->add('mediaType', null, array(), 'choice', array(
               'choices' => array(
-                  Media::DOCUMENT_TYPE => $this->getTranslator()->trans('media-type.document'),
-                  Media::IMAGE_TYPE => $this->getTranslator()->trans('media-type.image'),
                   Media::INVOICE_TYPE => $this->getTranslator()->trans('media-type.invoice'),
                   Media::FORM_GENERATED_TYPE => $this->getTranslator()->trans('media-type.form-generated')
             )))
@@ -32,7 +31,6 @@ class MediaAdmin extends SonataMediaAdmin
 
     protected function configureListFields(ListMapper $list)
     {
-
         $list->addIdentifier('name')
           ->add('mediaType')
           ->add('createdAt')
@@ -41,8 +39,6 @@ class MediaAdmin extends SonataMediaAdmin
 
     protected function configureShowFields(ShowMapper $show)
     {
-
-
         $show->add('name')
           ->add('deleted')
           ->add('deletedAt');
@@ -86,6 +82,23 @@ class MediaAdmin extends SonataMediaAdmin
         $em->flush();
 
         parent::postUpdate($object);
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('create');
+        $collection->remove('delete');
+        $collection->remove('show');
+    }
+
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+
+        $query->andWhere($query->getRootAliases()[0] . '.mediaType IN (:types)')
+          ->setParameter('types', array(Media::FORM_GENERATED_TYPE, Media::INVOICE_TYPE));
+
+        return $query;
     }
 
 }

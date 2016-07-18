@@ -38,7 +38,7 @@ body {
     page-break-after: always;
 }
 
-table, tr, td, th, tbody, thead, tfoot {
+tr, td, th, thead, tfoot {
     page-break-inside: avoid !important;
 }
 
@@ -76,12 +76,16 @@ table, tr, td, th, tbody, thead, tfoot {
     font-size: 18px;
 }
 
+.section-group {
+    margin-left: 30px;
+}
+
 .section-group p {
     margin: 10px 0 0 0;
 }
 
 .section-group ul {
-    margin-left: 40px;
+    margin-left: 30px;
 }
 
 .no-margin-left {
@@ -109,4 +113,60 @@ table, tr, td, th, tbody, thead, tfoot {
 
 .section-group3 li {
     list-style-type: none;
+}
+
+.section-group4 {
+    margin-left: 30px;
+}
+
+.section-group5 {
+    margin-left: 60px;
+}
+
+.section-group4 ul, .section-group5 ul {
+    margin: 0 0 10px 0;
+    padding: 0;
+    list-style-type: bullet;
+}
+
+ol.section-group6 {
+    padding: 20px;
+}
+
+.list-bold {
+    font-size: 18px;
+    text-align: justify;
+    line-height: 24px;
+}
+
+.list-bold td {
+    vertical-align: top;
+}
+
+.clear-both {
+    clear: both;
+}
+
+table.pdf-table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.pdf-table th, .pdf-table td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.pdf-table th {
+    font-weight: normal;
+    text-align: center;
+}
+
+.width-35-px {
+    width: 35px;
+}
+
+.width-300-percent {
+    width: 300px;
 }

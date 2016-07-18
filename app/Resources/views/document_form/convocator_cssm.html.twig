@@ -35,22 +35,23 @@
                 <h3>{{ 'Ordinea de zi a intrunirii este:' | trans }}</h3>
                 <ul id="puncte-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_punct_ordine_zi.html.twig', { 'form': form.puncteOrdineIntrunire.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_punct_ordine_zi.html.twig', { 'form': form.meetingPoints.vars.prototype }) }}
                     {% endfilter %}">
-                    {% for item in form.puncteOrdineIntrunire %}
+                    {% for item in form.meetingPoints %}
                         <li>
-                            {{ form_row(item.punctOrdineZi, 
+                            {{ form_row(item.meetingPoint, 
                                 {'attr': {'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.puncteOrdineIntrunire.vars.full_name }}[{{ loop.index0 }}][punctOrdineZi]" data-valmsg-replace="true" ></span>
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.meetingPoints.vars.full_name }}[{{ loop.index0 }}][meetingPoint]" data-valmsg-replace="true" ></span>
                         </li>
                     {% endfor %}
                 </ul>
-                <a class="costum" href="#" id="add-another-punct">{{ 'Adauga un nou punct pe ordinea de zi' | trans }}</a>   
+                <a class="costum" href="#" id="add-another-punct">{{ 'Adauga un nou punct pe ordinea de zi' | trans }}</a>
+                <div class="color-red no-display-punct" id="#error-no-punct">{{ 'Adaugati cel putin 1 punct' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many puncte fields have been rendered
-                    var puncteCount = '{{ form.puncteOrdineIntrunire|length }}';
+                    var puncteCount = '{{ form.meetingPoints|length }}';
 
                     jQuery(document).ready(function () {
 
@@ -63,6 +64,7 @@
 
                         jQuery('#add-another-punct').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-punct').hide();
 
                             var puncteList = jQuery('#puncte-fields-list');
 
@@ -94,6 +96,7 @@
                     }
                 </script>
             </section>
+            <div class="clear-both"></div>
 
             {{ form_row(form.administrator, 
                     {'attr': {'data-val': 'true',
@@ -101,32 +104,33 @@
                     } } ) }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
 
-            {{ form_row(form.secretar, 
+            {{ form_row(form.secretary, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                     } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.secretar.vars.full_name }}" data-valmsg-replace="true" ></span>
+            <span class="field-validation-valid" data-valmsg-for="{{ form.secretary.vars.full_name }}" data-valmsg-replace="true" ></span>
 
             <section>
                 <h3>{{ 'Membrii CSSM, reprezentati ai lucratorilor:' | trans }}</h3>
                 <ul id="membrii-fields-list" data-prototype="
                     {% filter escape %}
-                        {{ include('document_form/prototype_person.html.twig', { 'form': form.membrii.vars.prototype }) }}
+                        {{ include('document_form/base/prototype_person.html.twig', { 'form': form.members.vars.prototype }) }}
                     {% endfilter %}">
-                    {% for item in form.membrii %}
+                    {% for item in form.members %}
                         <li>
                             {{ form_row(item.name, 
                                 {'attr': {'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.membrii.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.members.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                         </li>
                     {% endfor %}
                 </ul>
-                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru CSSM' | trans }}</a>            
+                <a class="costum" href="#" id="add-another-membru">{{ 'Adauga un nou membru CSSM' | trans }}</a>
+                <div class="color-red no-display-membru" id="#error-no-membru">{{ 'Adaugati cel putin 1 membru' | trans }}</div>
                 <script type="text/javascript">
                     // keep track of how many membrii fields have been rendered
-                    var membriiCount = '{{ form.membrii|length }}';
+                    var membriiCount = '{{ form.members|length }}';
 
                     jQuery(document).ready(function () {
 
@@ -139,6 +143,7 @@
 
                         jQuery('#add-another-membru').click(function (e) {
                             e.preventDefault();
+                            jQuery('.no-display-membru').hide();
 
                             var membriiList = jQuery('#membrii-fields-list');
 
@@ -170,17 +175,21 @@
                     }
                 </script>
             </section>
+            <div class="clear-both"></div>
 
-            {{ form_row(form.medic, 
+            {{ form_row(form.doctor, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                     } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.medic.vars.full_name }}" data-valmsg-replace="true" ></span>
+            <span class="field-validation-valid" data-valmsg-for="{{ form.doctor.vars.full_name }}" data-valmsg-replace="true" ></span>
 
             <div class="hidden">{{ form_rest(form) }}</div>
             <div class="craue_formflow_buttons">
                 <button type="button" onclick="onConvocatorCSSMSubmit();" class="craue_formflow_button_last">
                     {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+                </button>
+                <button type="submit" name="btnSave" class="cancel" formnovalidate="formnovalidate">
+                    {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
                 </button>
             </div>
         </form>
@@ -193,18 +202,43 @@
                     jQuery('#convocator_cssm_type_meetingDate_date_year').val() &&
                     jQuery('#convocator_cssm_type_meetingDate_time_hour').val())) {
                 jQuery('#error-meetingDate').removeClass('field-validation-valid').addClass('field-validation-error');
+                return false;
             } else {
                 jQuery('#error-meetingDate').removeClass('field-validation-error').addClass('field-validation-valid');
             }
 
-            jQuery('#membrii-fields-list li input, #puncte-fields-list li input').each(function () {
-                jQuery(this).rules("add", {
-                    required: true,
-                    messages: {
-                        required: 'Acest camp este obligatoriu'
-                    }
+            if (!jQuery("#membrii-fields-list li").length) {
+                jQuery('.no-display-membru').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-membru').hide();
+                jQuery('#membrii-fields-list li input').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
                 });
-            });
+            }
+            
+            if (!jQuery("#puncte-fields-list li").length) {
+                jQuery('.no-display-punct').show();
+                return false;
+            }
+            else {
+                jQuery('.no-display-punct').hide();
+                jQuery('#puncte-fields-list li textarea').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Acest camp este obligatoriu'
+                        }
+                    });
+                });
+            }
+            
             jQuery('#convocator_cssm').submit();
         }
     </script>

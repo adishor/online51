@@ -1,0 +1,103 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-60-px"></div>
+            <h3 class="text-center"><b>{{ 'PROCES VERBAL DE CONTROL' | trans}}</b></h3>
+            <p class="text-center"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-40-px"></div>
+            <table class="pdf-table text-justify">
+                <tr><td colspan="3">
+                    <p><span class="text-small-indent"></span>{{ 'Se elibereaza prezentul permis de lucru cu foc doamnei/domnului' | trans }} {{ data.personWithWorkPermitForFire }}, {{ ' ajutat de doamna/domnul ' | trans }} {{ data.helpPersonForWorkWithFire }}, {{ ' care urmeaza sa execute ' | trans }} {{ data.executeWork }} {{ ' folosind ' | trans }} {{ data.useForWork }} {{ ' la(in) ' | trans }} {{ data.forWork }}. {{ 'Lucrarile incep la data de ' | trans }} {{ data.startWorkDate | date("d/m/Y") }} {{ ' ora ' | trans }} {{ data.startWorkDate | date("H") }}, {{ ' si se incheie la data de ' | trans }} {{ data.endWorkDate | date("d/m/Y") }} {{ ' ora ' | trans }} {{ data.endWorkDate | date("H") }}.</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p>{{ 'Premergator, pe timpul si la terminarea lucrarilor cu foc se vor lua urmatoarele masuri:' | trans }}</p>
+                    <p><b>1.</b> {{ 'Indepartarea sau protejarea materialelor combustibile din zona de executare a lucrarilor si din apropierea acesteia, pe o raza de ' | trans }} {{ data.measure1ProtectionRadiusOfMeters }} {{ 'metri, astfel:' | trans }}</p>
+                    <p>{{ data.measure1 }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>2.</b> {{ 'Golirea, izolarea, spalarea, aerisirea conductelor, utilajelor sau instalatiilor, prin: ' | trans }}</p>
+                    <p>{{ data.measure2 }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>3.</b> {{ 'Ventilarea spatiilor in care se executa lucrarile se realizeaza astfel: ' | trans }}</p>
+                    <p>{{ data.measure3 }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>4.</b> {{ 'Verificarea zonei de lucru si a vecinatatilor acesteia, inlaturarea surselor de aprindere si a conditiilor care favorizeaza producerea incendiilor si a exploziilor, protejarea antifoc a materialelor din zona' | trans }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>5.</b> {{ 'Inceperea lucrarilor cu foc s-a facut in baza buletinului de analiza nr. ' | trans }} {{ data.measure5No }} {{ ' din ' | trans }} {{ data.measure5Date | date("d/m/Y") }} {{ ' eliberat de ' | trans }} {{ data.measure5ReleasedBy }} {{ ' (acolo unde este cazul)' | trans }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>6.</b> {{ 'Respectarea normelor de aparare impotriva incendiilor, specifice tehnologiei de lucru: ' | trans }}</p>
+                    <p>{{ data.measure6 }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>7.</b> {{ 'In zona de lucru se asigura urmatoarele mijloace de stingere a incendiilor:' | trans }}</p>
+                    <p>{{ data.measure7 }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>8.</b> {{ 'Lucrarile cu foc deschis nu se executa daca sunt conditii de vant' | trans }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>9.</b> {{ 'Pe timpul lucrarilor se asigura supravegherea acestora de catre:' | trans }}</p>
+                    <p>{{ 'Dl/Dna' | trans }} {{ data.measure9SurveillanceBy }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>10.</b> {{ 'Seful serviciului public voluntar/privat pentru situatii de urgenta este anuntat despre inceperea, intreruperea si incheierea lucrarii.' | trans }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>11.</b> {{ 'In zona de lucru se asigura urmatoarele mijloace de stingere a incendiilor:' | trans }}</p>
+                    <p>{{ 'Dl/Dna' | trans }} {{ data.measure11AssuredBy }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>12.</b> {{ 'In zona de lucru se asigura urmatoarele mijloace de stingere a incendiilor:' | trans }}</p>
+                    <p>{{ 'Dl/Dna' | trans }} {{ data.measure12SurveillanceBy }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>13.</b> {{ 'Incendiul sau orice alt eveniment se anunta la ' | trans }} {{ data.measure13AnnoucementAt }}, {{ ' prin ' | trans }} {{ data.measure13AnnoucementTrought }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>14.</b> {{ 'Alte masuri specifice de aparare impotriva incendiului:' | trans }}</p>
+                    <p>{{ data.measure14 }}</p>
+                </td></tr>
+                <tr><td colspan="3">
+                    <p><b>15.</b> {{ 'Personalul de executie, control si supraveghere a fost instruit asupra masurilor de aparare  impotriva incendiului.' | trans }}</p>
+                </td></tr>
+                <tr>
+                    <td class="text-center">{{ 'Responsabili' | trans }}</td>
+                    <td class="text-center">{{ 'Numele si prenumele' | trans }}</td>
+                    <td class="text-center">{{ 'Semnatura' | trans }}</td>
+                </tr>
+                <tr>
+                    <td class="col-xs-6">{{ 'Emitentul' | trans }}</td>
+                    <td class="col-xs-3">{{ data.measure15Issuer }}</td>
+                    <td class="col-xs-3"></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-6">{{ 'Seful sectorului in care se executa lucrarile' | trans }}</td>
+                    <td class="col-xs-3">{{ data.measure15ChiefSector }}</td>
+                    <td class="col-xs-3"></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-6">{{ 'Executantii lucrarilor cu foc' | trans }}</td>
+                    <td class="col-xs-3">{{ data.measure15Workers }}</td>
+                    <td class="col-xs-3"></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-6">{{ 'Serviciul public voluntar/privat pentru situatii de urgenta' | trans }}</td>
+                    <td class="col-xs-3">{{ data.measure15Emergency }}</td>
+                    <td class="col-xs-3"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</body>

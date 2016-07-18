@@ -3,15 +3,15 @@
 namespace AppBundle\Form\Flow\DocumentForm;
 
 use Craue\FormFlowBundle\Form\FormFlow;
-use AppBundle\Form\Type\DocumentForm\EGDStep0Type;
-use AppBundle\Form\Type\DocumentForm\EGDStep1Type;
-use AppBundle\Form\Type\DocumentForm\EGDStep2Type;
-use AppBundle\Form\Type\DocumentForm\EGDStep3Type;
-use AppBundle\Form\Type\DocumentForm\EGDStep4Type;
-use AppBundle\Form\Type\DocumentForm\EGDStep5Type;
+use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep0Type;
+use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep1Type;
+use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep2Type;
+use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep3Type;
+use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep4Type;
+use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep5Type;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor;
+use AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor\EvidentaGestiuniiDeseurilor;
 
 class EvidentaGestiuniiDeseurilorFlow extends FormFlow
 {

@@ -3,7 +3,7 @@
 namespace AppBundle\Form\Flow\DocumentForm;
 
 use Craue\FormFlowBundle\Form\FormFlow;
-use AppBundle\Form\Type\DocumentForm\DecizieComponentaCSSMType;
+use AppBundle\Form\Type\DocumentForm\DecizieComponentaCSSM\DecizieComponentaCSSMType;
 use Doctrine\ORM\EntityManager;
 
 class DecizieComponentaCSSMFlow extends FormFlow

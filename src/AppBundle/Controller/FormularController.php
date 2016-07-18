@@ -26,32 +26,22 @@ class FormularController extends Controller
     {
 
         $user = $this->getUser();
-        if (null === $user) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
-        }
-        if ($creditsUsage->getUser()->getId() !== $user->getId()) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
-        }
-        if (null === $creditsUsage->getFormular()) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
-        }
-        if (null !== $creditsUsage->getMedia()) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('formular-documents.access-denied'));
-        }
+        $formularService = $this->get('app.formular.' . $formular->getSlug());
+        $formularService->setName($formular->getSlug());
 
-        $name = str_replace("_", "", $formular->getSlug());
-        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
-        $applyUniqueConfigurationMethod = 'applyUniqueConfiguration' . $name;
-        $applyFormCustomizationMethod = 'applyFormCustomization' . $name;
-        $calculateExtraTemplateDataMethod = 'calculateExtraTemplateData' . $name;
+        if ($mesage = $formularService->checkValidity($user, $creditsUsage)) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans($mesage));
+        }
 
         if (empty($creditsUsage->getFormData())) {
+            $entity = $formularService->getEntity();
             $formData = new $entity();
-            if (method_exists($this, $applyUniqueConfigurationMethod)) {
-                $this->$applyUniqueConfigurationMethod($creditsUsage, $formData, $user);
+            if (method_exists($formularService, 'applyDefaultFormData')) {
+                $formularService->applyDefaultFormData($creditsUsage, $formData, $user);
             }
         } else {
-            $formData = $this->get('jms_serializer')->deserialize($creditsUsage->getFormData(), $entity, 'json');
+            $formData = $this->get('jms_serializer')
+              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
         }
 
         $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
@@ -62,17 +52,16 @@ class FormularController extends Controller
 
         // form of the current step
         $form = $flow->createForm();
-        if (method_exists($this, $applyFormCustomizationMethod)) {
-            $this->$applyFormCustomizationMethod($flow, $form, $creditsUsage);
+        if (method_exists($formularService, 'applyFormCustomization')) {
+            $formularService->applyFormCustomization($flow, $form, $creditsUsage);
         }
 
-        $response = $this->handleForm($creditsUsage, $name, $flow, $form, $formData, $formular->getSlug());
+        $response = $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData);
         if ($response) {
             return $this->redirect($this->generateUrl('show_valid_documents') . '?mediaId=' . $response);
         }
 
-        $formTemplateData = (method_exists($this, $calculateExtraTemplateDataMethod)) ?
-          $this->$calculateExtraTemplateDataMethod($formData) : [];
+        $formTemplateData = (method_exists($formularService, 'calculateExtraTemplateData')) ? $formularService->calculateExtraTemplateData($formData) : null;
 
         return $this->render('document_form/' . strtolower($formular->getSlug()) . ".html.twig", array(
               'form' => $form->createView(),
@@ -80,37 +69,31 @@ class FormularController extends Controller
               'creditsUsage' => $creditsUsage,
               'formTemplateData' => $formTemplateData,
               'isUserException' => $this->get('app.user_helper')->getIsUserException(),
-            )
-        );
+        ));
     }
 
-    public function handleForm($creditsUsage, $name, &$flow, &$form, $formData, $slug)
+    public function handleForm($formularService, $creditsUsage, &$flow, &$form, &$formData)
     {
         if ($flow->isValid($form)) {
             $flow->saveCurrentStepData($form);
-
-            $handleFormMethod = 'handleForm' . $name;
-            if (method_exists($this, $handleFormMethod)) {
-                $this->$handleFormMethod($creditsUsage, $flow, $formData);
+            if (method_exists($formularService, 'processHandleForm')) {
+                $formularService->processHandleForm($creditsUsage, $flow, $formData);
             }
-
+            $nextStep = $flow->nextStep();
+            if (!$nextStep && method_exists($formularService, 'processEndHandleForm')) {
+                $formularService->processEndHandleForm($formData);
+            }
             $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
-            if ($flow->nextStep()) {
+            if ($nextStep || $this->get('request')->request->has('btnSave')) {
                 // form for the next step
                 $form = $flow->createForm();
-                $this->get('session')->getFlashBag()->set('form-success', 'success.form-saved');
             } else {
                 // flow finished
                 $flow->reset(); // remove step data from the session
 
-                $calculateExtraTemplateDataMethod = 'calculateExtraTemplateData' . $name;
-                $formTemplateData = (method_exists($this, $calculateExtraTemplateDataMethod)) ?
-                  $this->$calculateExtraTemplateDataMethod($formData) : [];
-                $generateDocumentTemplate = 'document_pdf_template/' . strtolower($slug) . ".html.twig";
-                $generateDocumentDirectory = $this->getParameter('generated_documents_dir') . strtolower($slug) . '/';
-                $media = $this->generateDocument($name, $creditsUsage, $generateDocumentDirectory, $generateDocumentTemplate, $formData, $formTemplateData);
+                $media = $this->generateDocument($formularService, $creditsUsage, $formData);
                 $creditsUsage->setMedia($media);
                 $this->getDoctrine()->getManager()->flush();
 
@@ -123,6 +106,34 @@ class FormularController extends Controller
         }
     }
 
+    public function generateDocument($formularService, $creditsUsage, $formData)
+    {
+
+        $filename = $formularService->getName() . $creditsUsage->getId() . '.pdf';
+        $filePath = $this->getParameter('generated_documents_dir') . strtolower($formularService->getSlug()) . '/' . $filename;
+        $formTemplateData = (method_exists($formularService, 'calculateExtraTemplateData')) ? $formularService->calculateExtraTemplateData($formData) : null;
+        $fileBody = $this->renderView('document_pdf_template/' . strtolower($formularService->getSlug()) . ".html.twig", array(
+            'data' => $formData,
+            'templateData' => $formTemplateData,
+            'formConfig' => json_decode($creditsUsage->getFormConfig())
+        ));
+        $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
+
+        $file = new UploadedFile($filePath, $filename);
+        $media = new Media();
+        $media->setBinaryContent($file);
+        $media->setName($filename);
+        $media->setProviderName('sonata.media.provider.file');
+        $media->setContext('default');
+        $media->setMediaType($media::FORM_GENERATED_TYPE);
+        $this->getDoctrine()->getManager()->persist($media);
+        $this->getDoctrine()->getManager()->flush();
+        $fs = new Filesystem();
+        $fs->remove($filePath);
+
+        return $media;
+    }
+
     /**
      * @Route("/configFormular/{slug}", name="formular_config")
      * @ParamConverter("formular")
@@ -130,7 +141,7 @@ class FormularController extends Controller
     public function configFormularUniquenessAction(Formular $formular, Request $request)
     {
         $name = str_replace("_", "", $formular->getSlug());
-        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name;
+        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name . "\\" . $name;
 
         $uniqueValues = [];
 
@@ -159,7 +170,7 @@ class FormularController extends Controller
                 }
             }
 
-            return $this->render('document_form/config_form_uniqueness.html.twig', array(
+            return $this->render('document_form/config/config_form_uniqueness.html.twig', array(
                   'uniqueValues' => $uniqueValues,
                   'formular' => $formular,
                   'isUserException' => $this->get('app.user_helper')->getIsUserException(),
@@ -167,7 +178,7 @@ class FormularController extends Controller
             ));
         }
 
-        return $this->render('document_form/no_config_form_uniqueness.html.twig', array(
+        return $this->render('document_form/config/no_config_form_uniqueness.html.twig', array(
               'formular' => $formular,
               'isUserException' => $this->get('app.user_helper')->getIsUserException(),
         ));
@@ -176,273 +187,19 @@ class FormularController extends Controller
     /**
      * @Route("/shortFormConfigurationText/{creditUsageId}", name="short_form_configuration_text")
      */
-    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId)
+    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId, $short = true)
     {
         $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
 
-        $name = str_replace("_", "", $creditsUsage->getFormular()->getSlug());
-        $function = "getFormText" . $name;
-        if (method_exists($this->get('app.formular_helper'), $function)) {
-            return new Response($this->get('app.formular_helper')->$function($creditsUsage->getFormConfig(), true));
+        if ($creditsUsage->getFormConfig() && $creditsUsage->getFormConfig() != 'null') {
+            $formularService = $this->get('app.formular.' . $creditsUsage->getFormular()->getSlug());
+            $formularService->setName($creditsUsage->getFormular()->getSlug());
+            $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig(), $short);
+
+            return new Response($this->get('translator')->trans($text['message'], $text['variables']));
         }
 
         return new Response();
-    }
-
-    public function generateDocument($name, $creditsUsage, $fileDirectory, $template, $formData, $formTemplateData)
-    {
-        $filename = $name . $creditsUsage->getId() . '.pdf';
-        $filePath = $fileDirectory . $filename;
-        $fileBody = $this->renderView($template, array('data' => $formData, 'templateData' => $formTemplateData, 'formConfig' => json_decode($creditsUsage->getFormConfig())));
-        $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
-
-        $file = new UploadedFile($filePath, $filename);
-        $media = new Media();
-        $media->setBinaryContent($file);
-        $media->setName($filename);
-        $media->setProviderName('sonata.media.provider.file');
-        $media->setContext('default');
-        $media->setMediaType($media::FORM_GENERATED_TYPE);
-        $this->getDoctrine()->getManager()->persist($media);
-        $this->getDoctrine()->getManager()->flush();
-        $fs = new Filesystem();
-        $fs->remove($filePath);
-
-        return $media;
-    }
-
-    public function applyUniqueConfigurationEvidentaGestiuniiDeseurilor($creditsUsage, $formData, $user)
-    {
-        $formConfigValue = $this->getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($creditsUsage->getFormConfig());
-
-        $formData->setAgentEconomic($user->getCompany());
-        $formData->setAn($formConfigValue['an']);
-        $formData->setTipDeseu($formConfigValue['tip_deseu']);
-        $formData->setTipDeseuCod($formConfigValue['tip_deseu_cod']);
-        $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
-        $this->getDoctrine()->getManager()->flush();
-    }
-
-    public function applyUniqueConfigurationConvocatorCSSM($creditsUsage, $formData, $user)
-    {
-        $formData->setCompany($user->getCompany());
-        $formData->setCompanyCity($user->getCity());
-        $formData->setCompanyCounty($user->getCounty());
-        $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
-        $this->getDoctrine()->getManager()->flush();
-    }
-
-    public function applyUniqueConfigurationDecizieComponentaCSSM($creditsUsage, $formData, $user)
-    {
-        $formData->setCompany($user->getCompany());
-        $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
-        $this->getDoctrine()->getManager()->flush();
-    }
-
-    public function applyUniqueConfigurationDeciziePersonalCuAtributii($creditsUsage, $formData, $user)
-    {
-        $formData->setCompany($user->getCompany());
-        $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
-        $this->getDoctrine()->getManager()->flush();
-    }
-
-    public function applyFormCustomizationEvidentaGestiuniiDeseurilor($flow, $form, $creditsUsage)
-    {
-        if ($flow->getCurrentStep() == 1) {
-            $formConfig = json_decode($creditsUsage->getFormConfig());
-            if (isset($formConfig->operatia)) {
-                if ($formConfig->operatia === '3') {
-                    $form->remove('operatiaDeEliminare');
-                }
-                if ($formConfig->operatia === '4') {
-                    $form->remove('operatiaDeValorificare');
-                }
-            }
-        }
-    }
-
-    public function handleFormEvidentaGestiuniiDeseurilor($creditsUsage, $flow, &$formData)
-    {
-        if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
-            $formConfig = $this->getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($creditsUsage->getFormConfig());
-            $formConfig['tip_deseu'] = $formConfig['tip_deseu_cod'];
-            unset($formConfig['tip_deseu_cod']);
-            $formConfig['operatia'] = $formData->getOperatia();
-            $creditsUsage->setFormConfig(json_encode($formConfig));
-
-            foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
-                $item->setTratareScop(str_replace(array(3, 4), array('V', 'E'), $formData->getOperatia()));
-                $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
-            }
-
-            if ($formData->getOperatia() == 3) {
-                foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
-                    $item->setCantitateDeseuEliminata(0);
-                    $formData->getEGD1GenerareDeseuri()[$key] = $item;
-                }
-            }
-            if ($formData->getOperatia() == 4) {
-                foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
-                    $item->setCantitateDeseuValorificata(0);
-                    $formData->getEGD1GenerareDeseuri()[$key] = $item;
-                }
-            }
-        }
-
-        if ($flow->getCurrentStep() == ($creditsUsage->getIsFormConfigFinished() ? 2 : 1)) {
-            foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
-                $item->setStocareTip($formData->getStocareTip());
-                $item->setTratareMod($formData->getTratareMod());
-                $item->setTratareScop($formData->getTratareScop());
-                $item->setTransportMijloc($formData->getTransportMijloc());
-                $item->setTransportDestinatie($formData->getTransportDestinatie());
-                $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
-            }
-
-            if ($formData->getOperatiaDeValorificare()) {
-                foreach ($formData->getEGD3ValorificareDeseuri() as $key => $item) {
-                    $item->setOperatiaDeValorificare($formData->getOperatiaDeValorificare());
-                    $item->setAgentEconomicValorificare(NULL);
-                    foreach ($formData->getEGDCompany() as $company) {
-                        if ($key + 1 >= $company->getStartMonth()) {
-                            $item->setAgentEconomicValorificare($company->getName());
-                        }
-                    }
-                    $formData->getEGD3ValorificareDeseuri()[$key] = $item;
-                }
-            }
-
-            if ($formData->getOperatiaDeEliminare()) {
-                foreach ($formData->getEGD4EliminareDeseuri() as $key => $item) {
-                    $item->setOperatiaDeEliminare($formData->getOperatiaDeEliminare());
-                    $item->setAgentEconomicEliminare(NULL);
-                    foreach ($formData->getEGDCompany() as $company) {
-                        if ($key + 1 >= $company->getStartMonth()) {
-                            $item->setAgentEconomicEliminare($company->getName());
-                        }
-                    }
-                    $formData->getEGD4EliminareDeseuri()[$key] = $item;
-                }
-            }
-        }
-    }
-
-    public function handleFormConvocatorCSSM($creditsUsage, $flow, &$formData)
-    {
-        if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
-            $hour = $formData->getMeetingDate()->format('H');
-
-            $formConfig['data'] = $formData->getMeetingDate()->format('d/m/Y');
-            $formConfig['ora'] = $hour;
-            $creditsUsage->setFormConfig(json_encode($formConfig));
-
-            $formData->setMeetingHour($hour);
-        }
-    }
-
-    public function calculateExtraTemplateDataEvidentaGestiuniiDeseurilor($formData)
-    {
-        $formTemplateData = array();
-
-        $EGDTotals = $this->get('app.formular_helper')->CalculateEvidentaGestiuniiDeseurilorTotals($formData);
-        $formTemplateData['EGDTotals'] = $EGDTotals;
-
-        return $formTemplateData;
-    }
-
-    public function getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($formConfig)
-    {
-        $formConfigValue = [];
-
-        $formConfig = json_decode($formConfig);
-        foreach ($formConfig as $key => $config) {
-            switch ($key) {
-                case 'an':
-                    $formConfigValue[$key] = $config;
-                    break;
-                case 'tip_deseu':
-                    $deseuCodes = explode(" ", $config);
-
-                    $tipDeseuArray = $this->getParameter('tip_deseu');
-                    $formConfigValue[$key] = $tipDeseuArray[$deseuCodes[0]]['name'] . "; " .
-                      $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "; " .
-                      $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['values'][$deseuCodes[2]];
-                    $formConfigValue[$key . "_cod"] = $config;
-                    break;
-                case 'operatia':
-                    $formConfigValue[$key] = $this->getParameter('operatia')[$config];
-                    break;
-            }
-        }
-
-        return $formConfigValue;
-    }
-
-    /**
-     * @Route("/unique_configuration_on_form_egd", name="unique_configuration_on_form_egd")
-     */
-    public function applyUniqueConfigurationOnFormEvidentaGestiuniiDeseurilor(Request $request)
-    {
-        $configOperatia = $request->request->get('configOperatia');
-        if ($configOperatia > 0) {
-            $user = $this->getUser();
-            $userHelper = $this->get('app.user_helper');
-
-            $creditsUsageId = $request->request->get('creditUsageId');
-            $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditsUsageId);
-
-            $formConfig = $this->getValuesForFormConfigOptionsEvidentaGestiuniiDeseurilor($creditsUsage->getFormConfig());
-            $formConfig['tip_deseu'] = $formConfig['tip_deseu_cod'];
-            unset($formConfig['tip_deseu_cod']);
-            $formConfig['operatia'] = $configOperatia;
-            $formHash = md5(json_encode($this->getUser()->getId()) . json_encode($formConfig));
-
-            if (true === $userHelper->isValidUserFormular($user->getId(), $creditsUsage->getFormular()->getId(), $formConfig)) {
-                if (!$userHelper->getIsUserException()) {
-                    $this->get('session')->getFlashBag()->add('formular-info', 'domain.formular.already-unlocked');
-                    $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
-                }
-                $response = new Response(json_encode(array(
-                      'success' => true,
-                      'credits' => $user->getCreditsTotal(),
-                      'formHash' => $formHash
-                )));
-
-                return $response;
-            }
-            if (!$userHelper->getIsUserException()) {
-                if (($user->getCreditsTotal() - $creditsUsage->getCredit() < 0) || (null === $user->getCreditsTotal())) {
-                    $response = new Response(json_encode(array(
-                          'success' => false,
-                          'message' => $this->get('translator')->trans('domain.formular.no-credits')
-                    )));
-
-                    return $response;
-                }
-            }
-
-            $userHelper->updateValidUserCredits();
-
-            $creditsUsage->setFormConfig(json_encode($formConfig));
-            $creditsUsage->setIsFormConfigFinished(TRUE);
-            $creditsUsage->setFormHash($formHash);
-            $user->setCreditsTotal($user->getCreditsTotal() - $creditsUsage->getCredit());
-            $user->setLastCreditUpdate(new \DateTime());
-            $this->getDoctrine()->getManager()->flush();
-
-            $response = new Response(json_encode(array(
-                  'success' => true,
-                  'credits' => $user->getCreditsTotal(),
-                  'formHash' => $formHash
-            )));
-
-            return $response;
-        }
-
-        return new Response(json_encode(array(
-              'success' => false,
-              'message' => $this->get('translator')->trans('modal.config-form-add-uniqueness-on-form.error')
-          )), 200);
     }
 
 }

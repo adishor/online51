@@ -78,6 +78,11 @@
             {% if not (object.deleted) %}
                 document.change(); // Manual trigger to update creditValue in Document load.
             {% endif %}
+            var video = $("#{{ admin.uniqId }}_video");
+            video.change(updateCreditValueForVideo()); // Bind the function to updateCreditValue
+            {% if not (object.deleted) %}
+                video.change(); // Manual trigger to update creditValue in Document load.
+            {% endif %}
                 
             function updateCreditValue() {
                 return function () {
@@ -86,9 +91,26 @@
                     var url = '{{ admin.generateUrl('getDocumentCreditValue') }}';
                     $.post(url, { documentId: documentId }, function(data){
                         $("#{{ admin.uniqId }}_credit").val(data).prop("readonly", false);
+                        $("#{{ admin.uniqId }}_video").removeAttr("disabled");
                         if (data !== '') {
-                            console.log('here');
                            $("#{{ admin.uniqId }}_credit").prop("readonly", true); 
+                           $("#{{ admin.uniqId }}_video").prop("disabled", true);
+                        }
+                    },"json");
+                };
+            }
+            
+            function updateCreditValueForVideo() {
+                return function () {
+                    var videoId = $("#{{ admin.uniqId }}_video option:selected").val();
+
+                    var url = '{{ admin.generateUrl('getVideoCreditValue') }}';
+                    $.post(url, { videoId: videoId }, function(data){
+                        $("#{{ admin.uniqId }}_credit").val(data).prop("readonly", false);
+                        $("#{{ admin.uniqId }}_document").removeAttr("disabled");
+                        if (data !== '') {
+                           $("#{{ admin.uniqId }}_credit").prop("readonly", true); 
+                           $("#{{ admin.uniqId }}_document").prop("disabled", true);
                         }
                     },"json");
                 };

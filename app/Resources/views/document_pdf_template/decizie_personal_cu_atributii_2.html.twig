@@ -1,0 +1,62 @@
+<head>
+    <link href="{{ absolute_url(asset('assets/css/PdfGeneratedDocuments.css')) }}" rel="stylesheet" type="text/css" />
+    <link href="{{ absolute_url(asset('assets/css/Bootstrap-3.2.0/css/bootstrap.min.css')) }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="row page font-size-18">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10">
+            <p>{{ data.company }}</p>
+            <div class="height-20-px"></div>
+            <p class="text-right"><b>{{ 'Nr.' | trans }}</b> .............. / ..................................</p>
+            <div class="height-20-px"></div>
+            <h3 class="text-center"><b>{{ 'DECIZIE' | trans}}</b></h3>
+            <div class="height-40-px"></div>
+            <p><span class="text-indent"></span>{{ 'Tinand seama de prevederile Legii 319/2006 si HG 1425/2006 Normele Metodologice de aplicare a Legii 319/2006, modificata prin HG 955/2010, administratorul societatii decide urmatoarele:' | trans }}</p>
+            <div class="height-20-px"></div>
+            <ol class="section-group6">
+                <li>{{ 'Prin prezenta Decizie se stabilesc urmatoarele atributii de serviciu dupa cum urmeaza:' | trans }}
+                    <div class="section-group4">
+                        <ul>
+                        {% for item in data.workersAttributions %}
+                            <li>{{ 'Dl/Dna ' | trans }} {{ item.name ? item.name : "..............................." }} - {{ item.function | trans }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+                <li>{{ 'Persoanele nominalizate detin actele care atesta pregatirea profesionala necesara desfasurarii activitatilor respective si au fost instruite din punct de vedere al securitatii si sanatatii in munca.' | trans }}</li>
+                <li>{{ 'Copiile dupa autorizari sau alte acte valabile care atesta pregatirea in domeniile de la punctele anterioare se vor anexa in dosarul de personal al fiecarui angajat.' | trans }}</li>
+                <li>{{ 'Persoana cu atributii de Personal si Resurse Umane va completa fisele posturilor angajatiilor nominalizati cu atributiilor obligatiile privind securitatea si sanatatea in munca.' | trans }}</li>
+            </ol>
+            <div class="height-40-px"></div>
+            <p>{{ 'Dl/Dna' | trans }} {{ data.administrator }}</p>
+            <p>{{ 'Administrator' | trans }}</p>
+            <p>........................................</p>
+            <div class="height-40-px"></div>
+            <div class="col-xs-6 no-margin-left">
+                <p>{{ 'Am luat la cunostinta,' | trans }}</p>
+                {% for item in data.workersAttributions %}
+                    {% if item.name %}
+                        <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col-xs-6 no-margin-right">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <p>{{ 'Semnatura' | trans }}</p>
+                    {% for item in data.workersAttributions %}
+                        {% if item.name %}
+                            <p>........................................</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</body>
+            
+            
+            
