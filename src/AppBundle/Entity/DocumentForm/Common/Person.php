@@ -12,6 +12,13 @@ class Person
      * @Type("string")
      * @Assert\NotBlank()
      */
+    private $gender;
+
+    /**
+     * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
     private $name;
 
     /**
@@ -19,6 +26,16 @@ class Person
      * @Type("string")
      */
     private $function;
+
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    }
 
     public function getName()
     {

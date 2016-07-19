@@ -1,6 +1,13 @@
-{{ form_row(form.name, 
-    {'attr': {'data-val': 'true',
-    'data-val-required': 'Acest camp este obligatoriu' | trans,
-    } } ) }}
-<span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[name]" data-valmsg-replace="true" ></span>
-
+<div class="col-xs-1">
+    {{ form_row(form.gender, 
+        {'attr': {'data-val': 'true',
+        'data-val-required': ' ' | trans,
+        } } ) }}
+</div>
+<div class="col-xs-11">
+    {{ form_row(form.name, 
+        {'attr': {'data-val': 'true',
+        'data-val-required': 'Acest camp este obligatoriu' | trans,
+        } } ) }}
+    <span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[name]" data-valmsg-replace="true" ></span>
+</div>

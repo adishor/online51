@@ -360,7 +360,7 @@ td button {
     display: none;
 }
 
-input.input-validation-error, textarea.input-validation-error {
+input.input-validation-error, textarea.input-validation-error, select.input-validation-error {
     border: 1px solid #e80c4d;
 }
 
