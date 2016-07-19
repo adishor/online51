@@ -173,4 +173,16 @@ class MailerService
         $this->sendMessage($demoUser->getEmail(), $subject, $demoAccountMessageBody);
     }
 
+    public function sendAdminCreatedAccountMessage($user, $password)
+    {
+        $subject = $this->translator->trans('mail.free-account.subject');
+
+        $createAdminUserMessageBody = $this->templating->render('user/create_admin_account_message_body.html.twig', array(
+          'name' => $user->getName(),
+          'username' => $user->getUsername(),
+          'password' => $password,
+        ), 'text/html');
+
+        $this->sendMessage($user->getEmail(), $subject, $createAdminUserMessageBody);
+    }
 }

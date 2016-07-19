@@ -239,7 +239,10 @@ mail:
         username: 'Utilizatorul: %email%'
         password: 'Parola: %password%'
         order: 'Ai primit %credits% credite pe care le poti utiliza in domeniul/domeniile %domain%, pana in %date%.'
-
+    create-admin-account:
+        message: 'V-a fost creat un cont pe online51. Pentru acces, va rugam sa folositi urmatoarele credentiale:'
+        username: 'Username: %username%'
+        password: 'Parola: %password%'
 
 
 
@@ -626,6 +629,7 @@ Meeting point: Punct pe ordinea de zi
 Secretary: Secretar
 Doctor: Medic
 President: Presedinte
+Gender: Dl/Dna
 
 formular:
     decizie-organizare-activitate-ssm:

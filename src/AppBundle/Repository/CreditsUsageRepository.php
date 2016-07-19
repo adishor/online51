@@ -19,7 +19,7 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('u.company, d.id as id, d.name, m.id as mid, '
-            . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+            . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage ', 'cu')
           ->join('AppBundle:Document', 'd', 'WITH', 'cu.document = d')
@@ -58,7 +58,7 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('u.company, v.id as id, v.name, m.id as mid, m as media, '
-            . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, '
+            . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage ', 'cu')
           ->join('AppBundle:Video', 'v', 'WITH', 'cu.video = v')
@@ -97,7 +97,7 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('u.company, f.id as id, f.name, f.slug, f.discountedCreditValue, m.id as mid, '
-            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.id as cuid, '
+            . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.id as cuid, cu.title, '
             . 'cu.formConfig, cu.formHash, cu.isFormConfigFinished, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage', 'cu')
@@ -129,7 +129,7 @@ class CreditsUsageRepository extends EntityRepository
           ->createQueryBuilder()
           ->select('d.id as documentId, v.id as videoId, f.id as formularId, m.id as mediaId, '
             . 'd.name as documentName, v.name as videoName, f.name as formularName, '
-            . 'cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate, cu.usageType, cu.id as cuid')
+            . 'cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate, cu.usageType, cu.id as cuid, cu.title')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->leftJoin('cu.document', 'd')
           ->leftJoin('cu.video', 'v')
@@ -152,7 +152,7 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('u.company, f.name, f.slug as fslug, f.discountedCreditValue, m.id as mid, '
-            . 'cu.id as cuid, cu.formConfig, cu.formHash, cu.isFormConfigFinished, cu.usageType, cu.expireDate as date, '
+            . 'cu.id as cuid, cu.formConfig, cu.formHash, cu.isFormConfigFinished, cu.usageType, cu.expireDate as date, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('cu.formular', 'f')

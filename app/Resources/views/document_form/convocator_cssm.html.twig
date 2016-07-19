@@ -97,18 +97,48 @@
                 </script>
             </section>
             <div class="clear-both"></div>
+ 
+            <section>
+                <h3>{{ 'Administrator' | trans }}</h3>
+                {% for item in form.administrator %}
+                    <div class="col-xs-1">
+                        {{ form_row(item.gender, 
+                            {'attr': {'data-val': 'true',
+                            'data-val-required': ' ',
+                            } } ) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                    </div>
+                    <div class="col-xs-11">
+                        {{ form_row(item.name, 
+                            {'attr': {'data-val': 'true',
+                            'data-val-required': 'Acest camp este obligatoriu' | trans,
+                            } } ) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                    </div>
+                    <div class="clear-both"></div>
+                {% endfor %}
+            </section>
 
-            {{ form_row(form.administrator, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
-
-            {{ form_row(form.secretary, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.secretary.vars.full_name }}" data-valmsg-replace="true" ></span>
+            <section>
+                <h3>{{ 'Secretar' | trans }}</h3>
+                {% for item in form.secretary %}
+                    <div class="col-xs-1">
+                        {{ form_row(item.gender, 
+                            {'attr': {'data-val': 'true',
+                            'data-val-required': ' ',
+                            } } ) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.secretary.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                    </div>
+                    <div class="col-xs-11">
+                        {{ form_row(item.name, 
+                            {'attr': {'data-val': 'true',
+                            'data-val-required': 'Acest camp este obligatoriu' | trans,
+                            } } ) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.secretary.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                    </div>
+                    <div class="clear-both"></div>
+                {% endfor %}
+            </section>
 
             <section>
                 <h3>{{ 'Membrii CSSM, reprezentati ai lucratorilor:' | trans }}</h3>
@@ -118,11 +148,20 @@
                     {% endfilter %}">
                     {% for item in form.members %}
                         <li>
-                            {{ form_row(item.name, 
-                                {'attr': {'data-val': 'true',
-                                'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.members.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <div class="col-xs-1">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.members.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-11">
+                                {{ form_row(item.name, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.members.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -177,11 +216,26 @@
             </section>
             <div class="clear-both"></div>
 
-            {{ form_row(form.doctor, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.doctor.vars.full_name }}" data-valmsg-replace="true" ></span>
+            <section>
+                <h3>{{ 'Doctor' | trans }}</h3>
+                {% for item in form.doctor %}
+                    <div class="col-xs-1">
+                        {{ form_row(item.gender, 
+                            {'attr': {'data-val': 'true',
+                            'data-val-required': ' ',
+                            } } ) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.doctor.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                    </div>
+                    <div class="col-xs-11">
+                        {{ form_row(item.name, 
+                            {'attr': {'data-val': 'true',
+                            'data-val-required': 'Acest camp este obligatoriu' | trans,
+                            } } ) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.doctor.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                    </div>
+                    <div class="clear-both"></div>
+                {% endfor %}
+            </section>
 
             <div class="hidden">{{ form_rest(form) }}</div>
             <div class="craue_formflow_buttons">
@@ -219,6 +273,11 @@
                         messages: {
                             required: 'Acest camp este obligatoriu'
                         }
+                    });
+                });
+                jQuery('#membrii-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
                     });
                 });
             }

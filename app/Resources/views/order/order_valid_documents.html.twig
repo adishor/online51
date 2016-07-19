@@ -42,7 +42,7 @@
                     {% endif %}
                     {% set defaultDomain = doc.domain %}
                     <h2 class="subtitle">{{ doc.domain }}</h2>
-                    <table cellspacing="0" cellpadding="0" border="0" id="overview" class="display users documents clearfix dataTable" aria-describedby="overview_info">
+                    <table cellspacing="0" cellpadding="0" border="0" id="overview" class="display users documents clearfix dataTable valid-documents" aria-describedby="overview_info">
                         <thead>
                             <tr role="row">
                                 <th>{{ 'formular-documents.company' | trans }}</th>
@@ -57,12 +57,25 @@
                 {% endif %}                 
                         <tr class="{{ (loop.index % 2) ? "odd" : "even" }}">
                             <td class="">{{ doc.company }}</td>
-                            <td class="">{{ doc.name }}<br/>
-                            <span class="small">
+                            <td class="">
+                                {% set title = (doc.title is defined and doc.title is not empty) ? doc.title : doc.name %}
+                                <span>{{ title }}</span>
+                                <a onclick="EditDocument(this);">
+                                    <img src="{{ asset('assets/images/edit.png') }}">
+                                </a>
+                                <span class="edit-valid-doc">
+                                    <a onclick="ConfirmEditDocument(this, '{{ doc.cuid }}');">
+                                        <img src="{{ asset('assets/images/OK.png') }}">
+                                    </a>
+                                    <a onclick="CancelEditDocument(this, '{{ title }}');">
+                                        <img src="{{ asset('assets/images/Close.png') }}">
+                                    </a>
+                                </span>
+                                <br/>
+                                <p class="errorUpdateTitle" id="errorUpdateTitle{{ doc.cuid }}"></p>
                             {% if doc.usageType == formularType and doc.formConfig != 'null' %}
-                                {{ doc.formConfig | raw }}
+                                <span class="small">{{ doc.formConfig | raw }}</span>
                             {% endif %}
-                            </span>
                             </td>
                             <td class="">{{ doc.usageType }}</td>
                             <td class="">{{ doc.date|date('d-m-Y') }}</td>
@@ -169,6 +182,41 @@
                     }
                 }
             });
+        }
+        
+        function EditDocument(elem) 
+        {
+            jQuery(elem).prev().html("<input class='valid-doc-title' type='text' value='" + jQuery(elem).prev().html() + "'>");
+            jQuery(elem).next().show();
+            jQuery(elem).hide();
+        }
+        
+        function ConfirmEditDocument(elem, creditUsageId)
+        {
+           var title = jQuery(elem).parent().prev().prev().children().val();
+           $.ajax({
+                type: "POST",
+                url: '{{ path("update_title_document") }}',
+                data: { 'creditUsageId': creditUsageId, 'title': title },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        jQuery(elem).parent().prev().prev().html(title);
+                        jQuery(elem).parent().prev().show();
+                        jQuery(elem).parent().hide();
+                    } else {
+                        $('#errorUpdateTitle' + creditUsageId).addClass('color-red');
+                        $('#errorUpdateTitle' + creditUsageId).text(response.message);
+                    }
+                }
+            });
+        }
+        
+        function CancelEditDocument(elem, text)
+        {
+            jQuery(elem).parent().prev().prev().html(text);
+            jQuery(elem).parent().prev().show();
+            jQuery(elem).parent().hide();
         }
     </script>
 {% endblock %}

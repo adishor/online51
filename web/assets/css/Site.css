@@ -360,7 +360,7 @@ td button {
     display: none;
 }
 
-input.input-validation-error, textarea.input-validation-error {
+input.input-validation-error, textarea.input-validation-error, select.input-validation-error {
     border: 1px solid #e80c4d;
 }
 
@@ -2125,4 +2125,50 @@ input[readonly] {
 .formular-radio-inline label {
     margin: 0;
     float:left; 
+}
+
+.valid-documents img {
+    max-width: 12px;
+    margin: 0 5px;
+}
+
+.valid-documents a:hover {
+    text-decoration: none;
+}
+
+#DownloadsDocImg, #EditDocImg {
+    max-width: 16px;
+}
+
+.valid-doc-title {
+    width: 300px;
+}
+
+.edit-valid-doc {
+    display:none;
+}
+
+.errorUpdateTitle {
+    display: none;
+}
+
+#loading {
+    display: block;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    text-align: center;   
+    z-index: 99;
+    opacity:0.3;
+    filter:alpha(opacity=30); /* For IE8 and earlier */
+    background-color: #000;
+}
+
+#loading img {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    z-index: 100;
 }

@@ -46,6 +46,12 @@ class EvidentaGestiuniiDeseurilor
     /**
      * @var type
      * @Type("string")
+     */
+    protected $currentStep = 0;
+
+    /**
+     * @var type
+     * @Type("string")
      * @Assert\NotBlank()
      */
     protected $operatia;
@@ -398,6 +404,16 @@ class EvidentaGestiuniiDeseurilor
     public function setOperatia($operatia)
     {
         $this->operatia = $operatia;
+    }
+
+    public function getCurrentStep()
+    {
+        return $this->currentStep;
+    }
+
+    public function setCurrentStep($currentStep)
+    {
+        $this->currentStep = $currentStep;
     }
 
 }

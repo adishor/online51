@@ -616,6 +616,14 @@ $("#FreeUserName").bind('input propertychange', function () {
     }
 });
 
+$(document).ajaxStart(function() {
+  $("#loading").show();
+});
+
+$(document).ajaxStop(function() {
+  $("#loading").hide();
+});
+
 
 
 // Js not currently used.
