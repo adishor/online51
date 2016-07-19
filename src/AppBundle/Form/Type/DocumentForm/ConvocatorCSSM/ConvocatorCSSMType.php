@@ -18,6 +18,9 @@ class ConvocatorCSSMType extends AbstractType
         $container = $options['container'];
         $user = $container->get('security.context')->getToken()->getUser();
 
+        $date = new \DateTime();
+        $year = $date->format('Y');
+
         $builder
           ->add('company', TextType::class, array(
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
@@ -30,8 +33,15 @@ class ConvocatorCSSMType extends AbstractType
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua', 'hour' => 'Ora'
               ),
-              'with_minutes' => FALSE,
-              'with_seconds' => FALSE
+              'with_seconds' => FALSE,
+              'years' => array(
+                  $year => $year,
+                  $year + 1 => $year + 1,
+                  $year + 2 => $year + 2,
+                  $year + 3 => $year + 3,
+                  $year + 4 => $year + 4,
+                  $year + 5 => $year + 5
+              )
           ))
           ->add('meetingPoints', CollectionType::class, array(
               'entry_type' => ConvocatorCSSMPunctType::class,
