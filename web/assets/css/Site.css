@@ -2126,3 +2126,28 @@ input[readonly] {
     margin: 0;
     float:left; 
 }
+
+.valid-documents img {
+    max-width: 12px;
+    margin: 0 5px;
+}
+
+.valid-documents a:hover {
+    text-decoration: none;
+}
+
+#DownloadsDocImg, #EditDocImg {
+    max-width: 16px;
+}
+
+.valid-doc-title {
+    width: 300px;
+}
+
+.edit-valid-doc {
+    display:none;
+}
+
+.errorUpdateTitle {
+    display: none;
+}

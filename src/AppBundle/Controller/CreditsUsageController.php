@@ -159,4 +159,35 @@ class CreditsUsageController extends Controller
         return $response;
     }
 
+    /**
+     * @Route("/update-title", name="update_title_document")
+     */
+    public function updateDocumentTitleAction(Request $request)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
+        $creditUsageId = $request->request->get('creditUsageId');
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
+        if ($creditsUsage->getUser()->getId() != $user->getId()) {
+            return new Response(json_encode(array(
+                  'success' => false,
+                  'message' => $this->get('translator')->trans('invalid.data')
+            )));
+        }
+
+        $title = $request->request->get('title');
+        $creditsUsage->setTitle($title);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($creditsUsage);
+        $em->flush();
+
+        return new Response(json_encode(array(
+              'success' => true
+        )));
+    }
+
 }

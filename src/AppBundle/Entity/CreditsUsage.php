@@ -36,7 +36,7 @@ class CreditsUsage
      *
      * @var string
      *
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     protected $title;
 
