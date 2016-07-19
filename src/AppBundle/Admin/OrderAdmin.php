@@ -46,43 +46,43 @@ class OrderAdmin extends Admin
           ->where('d.deleted = 0');
 
         $form->add('user', null, array(
-              'query_builder' => $queryUser,
-              'disabled' => $disabledUser
-          ))
+          'query_builder' => $queryUser,
+          'disabled' => $disabledUser
+        ))
           ->add('subscription', 'sonata_type_model', array(
-              'query' => $querySubscription,
-              'empty_value' => 'subscription.no_subscription',
-              'required' => false,
-              'btn_add' => false,
-              'disabled' => $disabled
+            'query' => $querySubscription,
+            'empty_value' => 'subscription.no_subscription',
+            'required' => false,
+            'btn_add' => false,
+            'disabled' => $disabled
           ))
           ->add('creditValue', null, array(
-              'disabled' => $disabled
+            'disabled' => $disabled
           ))
           ->add('valabilityDays', null, array(
-              'disabled' => $disabled
+            'disabled' => $disabled
           ))
           ->add('price', null, array(
-              'required' => false,
-              'disabled' => $disabled
+            'required' => false,
+            'disabled' => $disabled
           ))
           ->add('domainAmount', 'hidden', array(
-              'disabled' => $disabled
+            'disabled' => $disabled
           ))
           ->add('domains', 'sonata_type_model', array(
-              'query' => $queryDomain,
-              'expanded' => true,
-              'multiple' => true,
-              'btn_add' => false,
-              'disabled' => $disabled
+            'query' => $queryDomain,
+            'expanded' => true,
+            'multiple' => true,
+            'btn_add' => false,
+            'disabled' => $disabled
           ))
           ->add('mentions', null, array(
-              'required' => true,
-              'disabled' => $disabledActive
+            'required' => true,
+            'disabled' => $disabledActive
           ))
           ->add('active', null, array(
-              'disabled' => $disabledActive
-        ));
+            'disabled' => $disabledActive
+          ));
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter)
@@ -97,7 +97,7 @@ class OrderAdmin extends Admin
     protected function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('id')
-          ->add('active')
+          ->add('active', null, array('editable' => true))
           ->add('startDate')
           ->add('endingDate')
           ->add('creditValue')
@@ -113,9 +113,9 @@ class OrderAdmin extends Admin
           ->add('deleted')
           ->add('_action', null, array(
               'actions' => array(
-                  'edit' => array(),
+                'edit' => array(),
               ))
-        );
+          );
     }
 
     protected function configureShowFields(ShowMapper $show)
@@ -135,7 +135,7 @@ class OrderAdmin extends Admin
           ->add('approvedBy')
           ->add('approvedDate')
           ->add('invoice', null, array(
-              'template' => 'sonata/order_base_show_field.html.twig',
+            'template' => 'sonata/order_base_show_field.html.twig',
           ))
           ->add('deleted')
           ->add('deletedAt');
@@ -146,6 +146,7 @@ class OrderAdmin extends Admin
         if ($name == "edit") {
             return 'sonata/base_edit.html.twig';
         }
+
         return parent::getTemplate($name);
     }
 
@@ -178,6 +179,7 @@ class OrderAdmin extends Admin
     {
         $em = $this->configurationPool->getContainer()->get('Doctrine')->getManager();
         $user = $this->configurationPool->getContainer()->get('security.context')->getToken()->getUser();
+
         if ($object->getActive() && !$object->getFirstActive()) {
             $this->configurationPool->getContainer()->get('app.mailer')->sendOrderConfirmationMessage($object);
 
@@ -193,6 +195,7 @@ class OrderAdmin extends Admin
         } else {
             $object->setMentions($this->configurationPool->getContainer()->get('translator')->trans('order.modified-by-administrator'));
         }
+
         $object->setLastModifiedBy($user);
 
         if ($object->getActive() && !$this->isActivated) {
@@ -259,8 +262,8 @@ class OrderAdmin extends Admin
 
         if (!array_key_exists("deleted", $parameters)) {
             $parameters['deleted'] = array(
-                'type' => EqualType::TYPE_IS_EQUAL,
-                'value' => BooleanType::TYPE_NO
+              'type' => EqualType::TYPE_IS_EQUAL,
+              'value' => BooleanType::TYPE_NO
             );
         }
 

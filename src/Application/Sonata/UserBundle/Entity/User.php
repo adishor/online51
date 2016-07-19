@@ -176,15 +176,15 @@ class User extends BaseUser
     /**
      *
      * @var string
-     * @Assert\Length(min=6, minMessage="assert.password.length", groups={"AdminRegistration", "AdminProfile"})
-     * @Assert\NotBlank(message="assert.required.password", groups={"AdminRegistration"})
+     * @Assert\Length(min=6, minMessage="assert.password.length")
+     * @Assert\NotBlank(message="assert.required.password")
      */
     protected $plainPassword;
 
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.username", groups={"AdminRegistration", "AdminProfile"})
+     * @Assert\NotBlank(message="assert.required.username")
      */
     protected $username;
 

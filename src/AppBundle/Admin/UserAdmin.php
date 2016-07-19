@@ -2,6 +2,7 @@
 
 namespace AppBundle\Admin;
 
+use AppBundle\Helper\UserHelper;
 use Sonata\UserBundle\Admin\Model\UserAdmin as SonataUserAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -54,11 +55,11 @@ class UserAdmin extends SonataUserAdmin
           ->with('General', array('class' => 'col-md-6'))->end()
           ->with('Company', array('class' => 'col-md-6'))->end()
           ->end()
-          ->tab('Security')
-          ->with('Status', array('class' => 'col-md-4'))->end()
-          ->with('Groups', array('class' => 'col-md-4'))->end()
-          ->with('Roles', array('class' => 'col-md-4'))->end()
-          ->end()
+//          ->tab('Security')
+//          ->with('Status', array('class' => 'col-md-4'))->end()
+//          ->with('Groups', array('class' => 'col-md-4'))->end()
+//          ->with('Roles', array('class' => 'col-md-4'))->end()
+//          ->end()
         ;
 
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
@@ -66,9 +67,9 @@ class UserAdmin extends SonataUserAdmin
         $formMapper
           ->tab('User')
           ->with('General')
-          ->add('username', null, array(
-              'disabled' => $disabled
-          ))
+//          ->add('username', null, array(
+//              'disabled' => $disabled
+//          ))
           ->add('email', null, array(
               'disabled' => $disabled
           ))
@@ -91,11 +92,11 @@ class UserAdmin extends SonataUserAdmin
               'required' => false,
               'disabled' => $disabled
           ))
-          ->add('creditsTotal', null, array(
-              'required' => false,
-              'read_only' => true,
-              'disabled' => $disabled
-          ))
+//          ->add('creditsTotal', null, array(
+//              'required' => false,
+//              'read_only' => true,
+//              'disabled' => $disabled
+//          ))
           ->end()
           ->with('Company')
           ->add('function', 'choice', array(
@@ -110,16 +111,16 @@ class UserAdmin extends SonataUserAdmin
           ->add('company', null, array(
               'disabled' => $disabled
           ))
-          ->add('image', 'sonata_type_model', array(
-              'query' => $queryImage,
-              'required' => false,
-              'empty_value' => 'No Image',
-            ), array(
-              'link_parameters' => array(
-                  'context' => 'default',
-                  'provider' => 'sonata.media.provider.image',
-              )
-          ))
+//          ->add('image', 'sonata_type_model', array(
+//              'query' => $queryImage,
+//              'required' => false,
+//              'empty_value' => 'No Image',
+//            ), array(
+//              'link_parameters' => array(
+//                  'context' => 'default',
+//                  'provider' => 'sonata.media.provider.image',
+//              )
+//          ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(
                   User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
@@ -152,37 +153,38 @@ class UserAdmin extends SonataUserAdmin
           ))
           ->end()
           ->end()
-          ->tab('Security')
-          ->with('Status')
-          ->add('locked', null, array('required' => false))
-          ->add('expired', null, array('required' => false))
-          ->add('enabled', null, array('required' => false))
-          ->add('credentialsExpired', null, array('required' => false))
-          ->end()
-          ->with('Groups')
-          ->add('groups', 'sonata_type_model', array(
-              'required' => false,
-              'expanded' => true,
-              'multiple' => true,
-          ))
-          ->end()
-          ->with('Roles')
-          ->add('realRoles', 'app_sonata_security_roles', array(
-              'label' => 'form.label_roles',
-              'expanded' => true,
-              'multiple' => true,
-              'required' => false,
-          ))
-          ->end()
-          ->end()
+//          ->tab('Security')
+//          ->with('Status')
+//          ->add('locked', null, array('required' => false))
+//          ->add('expired', null, array('required' => false))
+//          ->add('enabled', null, array('required' => false))
+//          ->add('credentialsExpired', null, array('required' => false))
+//          ->end()
+//          ->with('Groups')
+//          ->add('groups', 'sonata_type_model', array(
+//              'required' => false,
+//              'expanded' => true,
+//              'multiple' => true,
+//          ))
+//          ->end()
+//          ->with('Roles')
+//          ->add('realRoles', 'app_sonata_security_roles', array(
+//              'label' => 'form.label_roles',
+//              'expanded' => true,
+//              'multiple' => true,
+//              'required' => false,
+//          ))
+//          ->end()
+//          ->end()
         ;
     }
 
     public function getTemplate($name)
     {
         if ($name == "edit") {
-            return 'sonata/base_edit.html.twig';
+            return 'sonata/user/edit.html.twig';
         }
+
         return parent::getTemplate($name);
     }
 
@@ -268,6 +270,25 @@ class UserAdmin extends SonataUserAdmin
         }
 
         return $parameters;
+    }
+
+
+    public function prePersist($object)
+    {
+        if (!$object instanceof User) {
+            throw new \Exception("Wrong type of instance given.");
+        }
+
+        $object->setUsername($object->getEmail());
+
+        $generatedPassword = UserHelper::generateRandomPassword();
+
+        $object->setPlainPassword($generatedPassword);
+        $object->addRole(User::ROLE_DEFAULT);
+        $object->setEnabled(true);
+
+        $this->configurationPool->getContainer()->get('app.mailer')->sendAdminCreatedAccountMessage($object, $generatedPassword);
+
     }
 
     public function preRemove($object)
