@@ -28,6 +28,10 @@
     </head>
     <body>
         {% block body %}
+            
+            <div id="loading" style="display: none;">
+                <img title="Loader" alt="Loader" src="{{ asset('assets/images/ajax-loader.gif') }}"/>
+            </div>
 
             {% block modal %}
             {% endblock modal %}

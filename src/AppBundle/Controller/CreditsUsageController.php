@@ -171,7 +171,7 @@ class CreditsUsageController extends Controller
 
         $creditUsageId = $request->request->get('creditUsageId');
         $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
-        if ($creditsUsage->getUser()->getId() != $user->getId()) {
+        if ((!$creditsUsage) || ($creditsUsage->getUser()->getId() != $user->getId())) {
             return new Response(json_encode(array(
                   'success' => false,
                   'message' => $this->get('translator')->trans('invalid.data')
