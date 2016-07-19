@@ -33,22 +33,43 @@ class FormularController extends Controller
             throw new AccessDeniedHttpException($this->get('translator')->trans($mesage));
         }
 
+        $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
+
+        $creditsUsageId = $request->get('creditsUsageId');
+        if ($creditsUsageId != $request->getSession()->get('currentFormular')) {
+            $flow->reset();
+            $request->getSession()->set('currentFormular', $creditsUsageId);
+            $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), false);
+        }
+
         if (empty($creditsUsage->getFormData())) {
             $entity = $formularService->getEntity();
             $formData = new $entity();
             if (method_exists($formularService, 'applyDefaultFormData')) {
                 $formularService->applyDefaultFormData($creditsUsage, $formData, $user);
             }
+            $flow->bind($formData);
         } else {
             $formData = $this->get('jms_serializer')
               ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+            $flow->bind($formData);
+            if (method_exists($formData, 'getCurrentStep')) {
+                $currentStep = $formData->getCurrentStep();
+                if (!$currentStep) {
+                    $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
+                } else {
+                    if (!$request->getSession()->get('currentStepLoad' . $creditsUsage->getId()) && $currentStep > 1) {
+                        while ($currentStep) {
+                            $form = $flow->createForm();
+                            $flow->saveCurrentStepData($form);
+                            $flow->nextStep();
+                            $currentStep--;
+                        }
+                        $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
+                    }
+                }
+            }
         }
-
-        $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
-        if ($request->getMethod() == 'GET' && null === $request->query->get('step')) {
-            $flow->reset();
-        }
-        $flow->bind($formData);
 
         // form of the current step
         $form = $flow->createForm();
