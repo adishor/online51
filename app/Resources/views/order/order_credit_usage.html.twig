@@ -28,13 +28,13 @@
                                 <td>{{ document.mentions }}</td>
                                 <td>
                                     {% if document.documentId is not null %}
-                                        {{ document.documentName }}
+                                        {{ (document.title is defined and document.title is not empty) ? document.title : document.documentName }}
                                     {% endif %}
                                     {% if document.videoId is not null %}
-                                        {{ document.videoName }}
+                                        {{ (document.title is defined and document.title is not empty) ? document.title : document.videoName }}
                                     {% endif %}
                                     {% if document.formularId is not null %}
-                                        {{ document.formularName }}
+                                        {{ (document.title is defined and document.title is not empty) ? document.title : document.formularName }}
                                     {% endif %}
                                     {% if document.usageType == formularType %}
                                         {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}

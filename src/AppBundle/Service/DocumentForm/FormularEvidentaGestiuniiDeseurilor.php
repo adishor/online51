@@ -144,6 +144,10 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
 
     public function processHandleForm($creditsUsage, $flow, &$formData)
     {
+        if ($formData->getCurrentStep() < $flow->getCurrentStep()) {
+            $formData->setCurrentStep($flow->getCurrentStep());
+        }
+
         if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
             $formConfig = $this->getValuesForFormConfig($creditsUsage->getFormConfig());
             $formConfig['tip_deseu'] = $formConfig['tip_deseu_cod'];

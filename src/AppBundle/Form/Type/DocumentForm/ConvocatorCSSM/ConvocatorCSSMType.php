@@ -39,15 +39,22 @@ class ConvocatorCSSMType extends AbstractType
               'allow_delete' => true,
               'prototype' => true
           ))
-          ->add('administrator', TextType::class)
-          ->add('secretary', TextType::class)
+          ->add('administrator', CollectionType::class, array(
+              'entry_type' => PersonType::class,
+          ))
+          ->add('secretary', CollectionType::class, array(
+              'entry_type' => PersonType::class,
+          ))
           ->add('members', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,
               'allow_delete' => true,
               'prototype' => true
           ))
-          ->add('doctor', TextType::class);
+          ->add('doctor', CollectionType::class, array(
+              'entry_type' => PersonType::class,
+          ))
+        ;
     }
 
     public function getName()

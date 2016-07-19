@@ -24,7 +24,9 @@
             {% endfor %}
             <div class="height-120-px"></div>
             <div class="col-xs-6 no-margin-left">
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.administrator }}</p>
+                {% for administrator in data.administrator %}
+                    <p>{{ administrator.gender | trans }} {{ administrator.name }}</p>
+                {% endfor %}
                 <p>{{ 'Administrator - Presedinte CSSM' | trans }}</p>
                 <p>.........................................</p>
                 <div class="height-40-px"></div>
@@ -32,15 +34,19 @@
                 <p>{{ 'Membrii CSSM, reprezentanti ai lucratorilor:' | trans }}</p>
                 {% for membru in data.members %}
                     {% if membru.name %}
-                        <p>{{ 'Dl/Dna ' | trans }} {{ membru.name }}</p>
+                        <p>{{ membru.gender | trans }} {{ membru.name }}</p>
                     {% endif %}
                 {% endfor %}
                 <div class="height-60-px"></div>
                 <p>{{ 'Medic de medicina muncii' | trans }}</p>
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.doctor }}</p>
+                {% for doctor in data.doctor %}
+                    <p>{{ doctor.gender | trans }} {{ doctor.name }}</p>
+                {% endfor %}
             </div>
             <div class="col-xs-6 no-margin-right">
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.secretary }}</p>
+                {% for secretary in data.secretary %}
+                    <p>{{ secretary.gender | trans }} {{ secretary.name }}</p>
+                {% endfor %}
                 <p>{{ 'Secretar CSSM' | trans }}</p>
                 <p>.........................................</p>
                 <div class="height-60-px"></div>

@@ -61,15 +61,13 @@ class ConvocatorCSSM
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $administrator;
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $secretary;
 
@@ -91,8 +89,7 @@ class ConvocatorCSSM
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $doctor;
 
@@ -109,11 +106,24 @@ class ConvocatorCSSM
 
         $this->members = new ArrayCollection();
         $y = new Person();
+        $y->setGender('');
         $y->setName('');
         $y->setFunction('');
 
         $members = [$y];
         $this->members = $members;
+
+        $this->administrator = new ArrayCollection();
+        $this->secretary = new ArrayCollection();
+        $this->doctor = new ArrayCollection();
+
+        $administrator = [$y];
+        $secretary = [$y];
+        $doctor = [$y];
+
+        $this->administrator = $administrator;
+        $this->secretary = $secretary;
+        $this->doctor = $doctor;
     }
 
     public function getMeetingDate()

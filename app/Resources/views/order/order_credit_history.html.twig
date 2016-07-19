@@ -27,13 +27,16 @@
                                 <td>{{ loop.index }}</td>
                                 <td>
                                     {% if item.documentId is defined and item.documentId is not null %}
-                                        {{ item.subject|trans }}:<br/> {{ item.documentName|trans }}
+                                        {{ item.subject|trans }}:<br/> 
+                                        {{ (item.title is defined and item.title is not empty) ? item.title : item.documentName|trans }}
                                     {% endif %}
                                     {% if item.formularId is defined and item.formularId is not null %}
-                                        {{ item.subject|trans }}:<br/> {{ item.formularName|trans }}
+                                        {{ item.subject|trans }}:<br/>
+                                        {{ (item.title is defined and item.title is not empty) ? item.title : item.formularName|trans }}
                                     {% endif %}
                                     {% if item.id is defined and item.id is not null %}
-                                        {{ item.subject|trans }}:<br/> {{ item.name|trans }}
+                                        {{ item.subject|trans }}:<br/>
+                                        {{ (item.title is defined and item.title is not empty) ? item.title : item.name|trans }}
                                     {% endif %}
                                     {% if item.usageType is defined and item.usageType == formularType %}
                                         {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : item.cuid })) }}
