@@ -11,15 +11,7 @@
 
     <h2 class="title">{{ 'Convocator CSSM' | trans }}</h2>
 
-    {% for flash_message in app.session.flashbag.get('form-success') %}
-        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
-    {% endfor %}
-
-    {% for flash_message in app.session.flashbag.get('form-error') %}
-        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
-    {% endfor %}
-
-    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
+    {% include "document_form/base/errors.html.twig" %}
 
     <div class="col-xs-12">    
         <form class="formular-form" id="convocator_cssm" method="post" {{ form_enctype(form) }}>
@@ -98,47 +90,8 @@
             </section>
             <div class="clear-both"></div>
  
-            <section>
-                <h3>{{ 'Administrator' | trans }}</h3>
-                {% for item in form.administrator %}
-                    <div class="col-xs-1">
-                        {{ form_row(item.gender, 
-                            {'attr': {'data-val': 'true',
-                            'data-val-required': ' ',
-                            } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
-                    </div>
-                    <div class="col-xs-11">
-                        {{ form_row(item.name, 
-                            {'attr': {'data-val': 'true',
-                            'data-val-required': 'Acest camp este obligatoriu' | trans,
-                            } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
-                    </div>
-                    <div class="clear-both"></div>
-                {% endfor %}
-            </section>
-
-            <section>
-                <h3>{{ 'Secretar' | trans }}</h3>
-                {% for item in form.secretary %}
-                    <div class="col-xs-1">
-                        {{ form_row(item.gender, 
-                            {'attr': {'data-val': 'true',
-                            'data-val-required': ' ',
-                            } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.secretary.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
-                    </div>
-                    <div class="col-xs-11">
-                        {{ form_row(item.name, 
-                            {'attr': {'data-val': 'true',
-                            'data-val-required': 'Acest camp este obligatoriu' | trans,
-                            } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.secretary.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
-                    </div>
-                    <div class="clear-both"></div>
-                {% endfor %}
-            </section>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Administrator', 'persons': form.administrator } %}
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Secretar', 'persons': form.secretary } %}
 
             <section>
                 <h3>{{ 'Membrii CSSM, reprezentati ai lucratorilor:' | trans }}</h3>
@@ -148,7 +101,7 @@
                     {% endfilter %}">
                     {% for item in form.members %}
                         <li>
-                            <div class="col-xs-1">
+                            <div class="col-xs-1 no-margin-left">
                                 {{ form_row(item.gender, 
                                     {'attr': {'data-val': 'true',
                                     'data-val-required': ' ',
@@ -162,6 +115,7 @@
                                     } } ) }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ form.members.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                             </div>
+                            <div class="clear-both"></div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -216,26 +170,7 @@
             </section>
             <div class="clear-both"></div>
 
-            <section>
-                <h3>{{ 'Doctor' | trans }}</h3>
-                {% for item in form.doctor %}
-                    <div class="col-xs-1">
-                        {{ form_row(item.gender, 
-                            {'attr': {'data-val': 'true',
-                            'data-val-required': ' ',
-                            } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.doctor.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
-                    </div>
-                    <div class="col-xs-11">
-                        {{ form_row(item.name, 
-                            {'attr': {'data-val': 'true',
-                            'data-val-required': 'Acest camp este obligatoriu' | trans,
-                            } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.doctor.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
-                    </div>
-                    <div class="clear-both"></div>
-                {% endfor %}
-            </section>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Medic', 'persons': form.doctor } %}
 
             <div class="hidden">{{ form_rest(form) }}</div>
             <div class="craue_formflow_buttons">

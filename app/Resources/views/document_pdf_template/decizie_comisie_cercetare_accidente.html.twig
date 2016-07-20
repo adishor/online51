@@ -23,7 +23,7 @@
                     <ul>
                     {% for item in data.members %}
                         {% if item.name %}
-                            <li>{{ 'Dl/Dna ' | trans }} {{ item.name }} {{ ' in calitate de ' | trans }} {{ item.function }}</li>
+                            <li>{{ item.gender | trans }} {{ item.name }} {{ ' in calitate de ' | trans }} {{ item.function }}</li>
                         {% endif %}
                     {% endfor %}
                     </ul>
@@ -35,7 +35,9 @@
             </ol>
             <div class="height-40-px"></div>
             <p>{{ data.company }}</p>
-            <p>{{ 'Dl/Dna' | trans }} {{ data.administrator }} - {{ 'Administrator' | trans }}</p>
+            {% for administrator in data.administrator %}
+                <p>{{ administrator.gender | trans }} {{ administrator.name }} - {{ 'Administrator' | trans }}</p>
+            {% endfor %}
             <p>...........................................</p>
             <div class="height-40-px"></div>
             <div class="col-xs-6 no-margin-left">
@@ -43,7 +45,7 @@
                 <div class="height-40-px"></div>
                 {% for membru in data.members %}
                     {% if membru.name %}
-                        <p>{{ 'Dl/Dna ' | trans }} {{ membru.name }}</p>
+                        <p>{{ membru.gender | trans }} {{ membru.name }}</p>
                     {% endif %}
                 {% endfor %}
             </div>

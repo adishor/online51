@@ -35,7 +35,7 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
     public function processHandleForm($creditsUsage, $flow, &$formData)
     {
         if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
-            $hour = $formData->getMeetingDate()->format('H');
+            $hour = $formData->getMeetingDate()->format('H:i');
 
             $formConfig['data'] = $formData->getMeetingDate()->format('d/m/Y');
             $formConfig['ora'] = $hour;
@@ -47,7 +47,7 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
 
     public function processEndHandleForm(&$formData)
     {
-        
+
     }
 
 }

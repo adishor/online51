@@ -18,6 +18,17 @@ class DecizieComisieCercetareAccidenteType extends AbstractType
         $container = $options['container'];
         $user = $container->get('security.context')->getToken()->getUser();
 
+        $date = new \DateTime();
+        $year = $date->format('Y');
+        $years = array(
+            $year => $year,
+            $year + 1 => $year + 1,
+            $year + 2 => $year + 2,
+            $year + 3 => $year + 3,
+            $year + 4 => $year + 4,
+            $year + 5 => $year + 5
+        );
+
         $builder
           ->add('company', TextType::class, array(
               'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
@@ -29,8 +40,8 @@ class DecizieComisieCercetareAccidenteType extends AbstractType
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua', 'hour' => 'Ora'
               ),
-              'with_minutes' => FALSE,
-              'with_seconds' => FALSE
+              'with_seconds' => FALSE,
+              'years' => $years
           ))
           ->add('accidentDescription', TextType::class)
           ->add('members', CollectionType::class, array(
@@ -43,13 +54,17 @@ class DecizieComisieCercetareAccidenteType extends AbstractType
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
               ),
+              'years' => $years
           ))
           ->add('endingActivity', DateType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
               ),
+              'years' => $years
           ))
-          ->add('administrator', TextType::class);
+          ->add('administrator', CollectionType::class, array(
+              'entry_type' => PersonType::class
+        ));
     }
 
     public function getName()

@@ -1,0 +1,9 @@
+{% for flash_message in app.session.flashbag.get('form-success') %}
+    <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
+{% endfor %}
+
+{% for flash_message in app.session.flashbag.get('form-error') %}
+    <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
+{% endfor %}
+
+<h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
