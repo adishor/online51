@@ -73,25 +73,27 @@ class UserAdmin extends SonataUserAdmin
           ->add('email', null, array(
               'disabled' => $disabled
           ))
-          ->add('name', null, array(
-              'disabled' => $disabled
-          ))
+          ->add('profile', 'sonata_type_admin', array(), array('edit' => 'inline'))
+//          ->add('profile', 'sonata_type_model', array('inline'))
+//          ->add('name', null, array(
+//              'disabled' => $disabled
+//          ))
           ->add('phone', null, array(
               'required' => false,
               'disabled' => $disabled
           ))
-          ->add('county', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
-          ->add('city', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
-          ->add('address', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
+//          ->add('county', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
+//          ->add('city', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
+//          ->add('address', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
 //          ->add('creditsTotal', null, array(
 //              'required' => false,
 //              'read_only' => true,
@@ -99,18 +101,18 @@ class UserAdmin extends SonataUserAdmin
 //          ))
           ->end()
           ->with('Company')
-          ->add('function', 'choice', array(
-              'choices' => array(
-                  User::FUNCTION_EXTERN_JOB => 'user.function.extern_job',
-                  User::FUNCTION_INTERN_JOB => 'user.function.intern_job',
-                  User::FUNCTION_APPOINTED_WORKER => 'user.function.appointed_worker',
-                  User::FUNCTION_ADMINISTRATOR => 'user.function.administrator'
-              ),
-              'disabled' => $disabled
-          ))
-          ->add('company', null, array(
-              'disabled' => $disabled
-          ))
+//          ->add('function', 'choice', array(
+//              'choices' => array(
+//                  User::FUNCTION_EXTERN_JOB => 'user.function.extern_job',
+//                  User::FUNCTION_INTERN_JOB => 'user.function.intern_job',
+//                  User::FUNCTION_APPOINTED_WORKER => 'user.function.appointed_worker',
+//                  User::FUNCTION_ADMINISTRATOR => 'user.function.administrator'
+//              ),
+//              'disabled' => $disabled
+//          ))
+//          ->add('company', null, array(
+//              'disabled' => $disabled
+//          ))
 //          ->add('image', 'sonata_type_model', array(
 //              'query' => $queryImage,
 //              'required' => false,
@@ -121,36 +123,36 @@ class UserAdmin extends SonataUserAdmin
 //                  'provider' => 'sonata.media.provider.image',
 //              )
 //          ))
-          ->add('noEmployees', 'choice', array(
-              'choices' => array(
-                  User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
-                  User::NO_EMPLOYEES_10_49 => 'user.employees.10_49',
-                  User::NO_EMPLOYEES_OVER_50 => 'user.employees.over_50'
-              ),
-              'empty_value' => 'user_employees_empty',
-              'required' => false,
-              'disabled' => $disabled
-          ))
-          ->add('cui', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
-          ->add('bank', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
-          ->add('iban', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
-          ->add('noRegistrationORC', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
-          ->add('noCertifiedEmpowerment', null, array(
-              'required' => false,
-              'disabled' => $disabled
-          ))
+//          ->add('noEmployees', 'choice', array(
+//              'choices' => array(
+//                  User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
+//                  User::NO_EMPLOYEES_10_49 => 'user.employees.10_49',
+//                  User::NO_EMPLOYEES_OVER_50 => 'user.employees.over_50'
+//              ),
+//              'empty_value' => 'user_employees_empty',
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
+//          ->add('cui', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
+//          ->add('bank', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
+//          ->add('iban', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
+//          ->add('noRegistrationORC', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
+//          ->add('noCertifiedEmpowerment', null, array(
+//              'required' => false,
+//              'disabled' => $disabled
+//          ))
           ->end()
           ->end()
 //          ->tab('Security')

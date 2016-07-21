@@ -5,6 +5,11 @@ parameters:
 
 services:
 #    admin
+    admin.profile:
+        class: AppBundle\Admin\ProfileAdmin
+        arguments: [~, AppBundle\Entity\Profile, AppBundle:Admin\Profile]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: admin_label.profile, group: admin_group_data }
     admin.subscription:
         class: AppBundle\Admin\SubscriptionAdmin
         arguments: [~, AppBundle\Entity\Subscription, AppBundle:Admin\Subscription]

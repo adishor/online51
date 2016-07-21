@@ -45,14 +45,9 @@
                     var city = $("#{{ admin.uniqId }}_city");
                     city.empty();
 
-                    {% if object.county is not null %}
-                    if ( countyId != {{ object.county.id }} ) {
-                        //empty city value
-                        jQuery(city.prev().find('a > :first-child')).html('');
-                    }
-                    {% else %}
+
                     jQuery(city.prev().find('a > :first-child')).html('');
-                    {% endif %}
+
 
                     var locale = '{{ app.request.get('_locale') }}';
                     var objectId = '{{ admin.id(object) }}';

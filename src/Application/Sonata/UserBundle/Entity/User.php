@@ -134,8 +134,7 @@ class User extends BaseUser
     protected $deletedAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="\AppBundle\Entity\Profile", inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="\AppBundle\Entity\Profile", mappedBy="user")
      */
     protected $profile;
 
@@ -148,7 +147,7 @@ class User extends BaseUser
         parent::__construct();
 
         $this->deleted = FALSE;
-        $this->profile = new ArrayCollection();
+//        $this->profile = new ArrayCollection();
     }
 
     /**

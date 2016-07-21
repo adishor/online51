@@ -166,8 +166,10 @@ class Profile
      */
     protected $deletedAt;
 
+
     /**
-     * @ORM\OneToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", mappedBy="profile")
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", inversedBy="profile", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
 
