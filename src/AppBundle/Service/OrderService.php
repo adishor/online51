@@ -17,8 +17,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Entity\CreditsUsage;
+use AppBundle\Helper\OrderHelper;
 
-class OrderHelperService
+class OrderService
 {
     protected $entityManager;
     protected $translator;
@@ -43,6 +44,16 @@ class OrderHelperService
         $this->invoiceName = $invoiceName;
     }
 
+    public function getCreditHistory($userId)
+    {
+
+        $unlockedDocuments = OrderHelper::addInfoToUnlockedDocuments($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserDocuments($userId));
+        $allHistoryOrders = OrderHelper::addInfoToHistoryOrders($this->entityManager->getRepository('AppBundle:Order')->findAllHistoryOrders($userId));
+        $allExpiredCredits = OrderHelper::addInfoToExpiredCredits($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserExpiredCredit($userId));
+
+        return OrderHelper::prepareCreditHistory($allHistoryOrders, $unlockedDocuments, $allExpiredCredits);
+    }
+
     public function addSubscription($subscriptionId, $billingData, $fileProvider, $domains = null, $userId = null)
     {
         $user = ($userId) ? $this->entityManager->getRepository('ApplicationSonataUserBundle:User')->find($userId) : $this->tokenStorage->getToken()->getUser();
@@ -58,7 +69,6 @@ class OrderHelperService
         } else {
             if (null === $domains) {
                 $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
-
                 return false;
             }
         }
@@ -66,7 +76,6 @@ class OrderHelperService
         if (null !== $domains) {
             if (count($domains) !== $subscription->getDomainAmount()) {
                 $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
-
                 return false;
             }
             foreach ($domains as $key => $value) {
@@ -180,17 +189,6 @@ class OrderHelperService
         $this->session->getFlashBag()->add('order-success', 'success.order-remove');
     }
 
-    public function addInfoToUnlockedDocuments($unlockedDocuments)
-    {
-        foreach ($unlockedDocuments as $key => $document) {
-            $unlockedDocuments[$key]['subject'] = 'order.' . $document['usageType'];
-            $unlockedDocuments[$key]['orderId'] = '';
-            $unlockedDocuments[$key]['sign'] = '-';
-        }
-
-        return $unlockedDocuments;
-    }
-
     public function getMediaObjects($unlockedDocuments)
     {
         $mediaObjects = [];
@@ -201,56 +199,6 @@ class OrderHelperService
         }
 
         return $mediaObjects;
-    }
-
-    public function addInfoToHistoryOrders($allHistoryOrders)
-    {
-        foreach ($allHistoryOrders as $key => $order) {
-            if ($order['name'] !== null) {
-                $allHistoryOrders[$key]['subject'] = 'order.subscription';
-                $allHistoryOrders[$key]['orderId'] = $order['id'];
-            } else {
-                $allHistoryOrders[$key]['subject'] = 'order.credits';
-                $allHistoryOrders[$key]['orderId'] = '';
-                $allHistoryOrders[$key]['name'] = 'order.credits-bonus';
-            }
-            $allHistoryOrders[$key]['sign'] = '+';
-        }
-
-        return $allHistoryOrders;
-    }
-
-    public function addInfoToExpiredCredits($allExpiredCredits)
-    {
-        foreach ($allExpiredCredits as $key => $credit) {
-            $allExpiredCredits[$key]['subject'] = 'order.credits';
-            $allExpiredCredits[$key]['name'] = 'order.credits-expired';
-            $allExpiredCredits[$key]['sign'] = '-';
-        }
-
-        return $allExpiredCredits;
-    }
-
-    public function prepareCreditHistory($allHistoryOrders, $unlockedDocuments, $allExpiredCredits)
-    {
-        $creditHistoryItems = array_merge($allHistoryOrders, $unlockedDocuments, $allExpiredCredits);
-        $expireDates = [];
-        foreach ($creditHistoryItems as $key => $value) {
-            $expireDates[$key] = $value['unlockDate'];
-        }
-        array_multisort($expireDates, SORT_DESC, $creditHistoryItems);
-
-        return $creditHistoryItems;
-    }
-
-    public function getCreditHistory($userId)
-    {
-
-        $unlockedDocuments = $this->addInfoToUnlockedDocuments($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserDocuments($userId));
-        $allHistoryOrders = $this->addInfoToHistoryOrders($this->entityManager->getRepository('AppBundle:Order')->findAllHistoryOrders($userId));
-        $allExpiredCredits = $this->addInfoToExpiredCredits($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserExpiredCredit($userId));
-
-        return $this->prepareCreditHistory($allHistoryOrders, $unlockedDocuments, $allExpiredCredits);
     }
 
     public function getTotalValidDomains($subscription)

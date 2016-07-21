@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Application\Sonata\MediaBundle\Entity\Media;
+use AppBundle\Helper\UserHelper;
 
 class UserController extends Controller
 {
@@ -33,10 +34,10 @@ class UserController extends Controller
             if ($flow->getCurrentStep() == 1) {
                 if ($form->isSubmitted()) {
                     if ($form->get('cui')->getData()) {
-                        $registerErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
+                        $registerErrors['cui'] = UserHelper::checkCUI($form->get('cui')->getData());
                     }
                     if ($form->get('iban')->getData()) {
-                        $registerErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
+                        $registerErrors['iban'] = UserHelper::checkIBAN($form->get('iban')->getData());
                     }
 
                     //save media in session
@@ -75,10 +76,10 @@ class UserController extends Controller
                         $register->setConfirmationToken($tokenGenerator->generateToken());
                     }
                     $this->container->get('app.mailer')->sendActivationMessage($register);
-                    $userId = $this->get('app.user_helper')->addUserToDatabase($register);
+                    $userId = $this->get('app.user')->addUserToDatabase($register);
 
                     if ($userId) {
-                        $this->get('app.order_helper')->addSubscription($register->getRegisterSubscriptionId(), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), count($domainKeys) ? $domainKeys : null, $userId);
+                        $this->get('app.order')->addSubscription($register->getRegisterSubscriptionId(), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), count($domainKeys) ? $domainKeys : null, $userId);
                     }
 
                     return $this->render('user/register-success.html.twig');
@@ -184,7 +185,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->get('app.user_helper')->changePassword($reset, $user);
+            $this->get('app.user')->changePassword($reset, $user);
             $this->addFlash('successful-reset', 'success.reset');
             $user->setConfirmationToken(null);
             $user->setPasswordRequestedAt(null);
@@ -229,9 +230,9 @@ class UserController extends Controller
         $form->add('oldPassword', 'password', array('mapped' => false));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && ($this->get('app.user_helper')->checkOldPassword($form->get('oldPassword')->getData(), $user))) {
+        if ($form->isSubmitted() && $form->isValid() && ($this->get('app.user')->checkOldPassword($form->get('oldPassword')->getData(), $user))) {
             $this->addFlash('successful-change', 'success.change');
-            $this->get('app.user_helper')->changePassword($change, $user);
+            $this->get('app.user')->changePassword($change, $user);
             return $this->redirect($this->generateUrl('homepage'));
         }
         return $this->render('user/change_password.html.twig', array(
@@ -253,10 +254,10 @@ class UserController extends Controller
         $changeInfoErrors = array();
         if ($form->isSubmitted()) {
             if ($form->get('cui')->getData()) {
-                $changeInfoErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
+                $changeInfoErrors['cui'] = UserHelper::checkCUI($form->get('cui')->getData());
             }
             if ($form->get('iban')->getData()) {
-                $changeInfoErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
+                $changeInfoErrors['iban'] = UserHelper::checkIBAN($form->get('iban')->getData());
             }
         }
         if ($form->isSubmitted() && $form->isValid() && !in_array(false, $changeInfoErrors)) {
@@ -356,9 +357,9 @@ class UserController extends Controller
             $domains = array($this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug));
         }
 
-        $demoPassword = $this->get('app.user_helper')->generateDemoPassword();
-        $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword);
-        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domains, $this->getParameter('demo_account_valid_days'), $this->getParameter('default_demo_domain_credits'));
+        $demoPassword = UserHelper::generateRandomPassword();
+        $demoUser = $this->get('app.user')->createDemoAccount($email, $name, $demoPassword);
+        $demoOrder = $this->get('app.order')->createDemoOrder($demoUser, $domains, $this->getParameter('demo_account_valid_days'), $this->getParameter('default_demo_domain_credits'));
         $this->get('app.mailer')->sendDemoAccountMessage($demoUser, $demoPassword, $demoOrder);
 
         return new Response(json_encode($errors), 200);

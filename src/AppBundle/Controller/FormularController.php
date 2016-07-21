@@ -29,6 +29,10 @@ class FormularController extends Controller
         $formularService = $this->get('app.formular.' . $formular->getSlug());
         $formularService->setName($formular->getSlug());
 
+        if (null === $user) {
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
         if ($mesage = $formularService->checkValidity($user, $creditsUsage)) {
             throw new AccessDeniedHttpException($this->get('translator')->trans($mesage));
         }
@@ -89,7 +93,7 @@ class FormularController extends Controller
               'flow' => $flow,
               'creditsUsage' => $creditsUsage,
               'formTemplateData' => $formTemplateData,
-              'isUserException' => $this->get('app.user_helper')->getIsUserException(),
+              'isUserException' => $this->get('app.user')->getIsUserException(),
         ));
     }
 
@@ -194,14 +198,14 @@ class FormularController extends Controller
             return $this->render('document_form/config/config_form_uniqueness.html.twig', array(
                   'uniqueValues' => $uniqueValues,
                   'formular' => $formular,
-                  'isUserException' => $this->get('app.user_helper')->getIsUserException(),
+                  'isUserException' => $this->get('app.user')->getIsUserException(),
                   'isDraft' => !$entity::$oneStepFormConfig,
             ));
         }
 
         return $this->render('document_form/config/no_config_form_uniqueness.html.twig', array(
               'formular' => $formular,
-              'isUserException' => $this->get('app.user_helper')->getIsUserException(),
+              'isUserException' => $this->get('app.user')->getIsUserException(),
         ));
     }
 
