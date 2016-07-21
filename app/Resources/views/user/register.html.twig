@@ -25,28 +25,28 @@
                 <div class="col-xs-6">
                     {#          name#}
                     <div class="editor-label text-small" id="lblManager">
-                        {{ form_label(form.name, 'form.label.name'|trans) }}
+                        {{ form_label(form.profile.0.name, 'form.label.name'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.name, {'attr':
+                        {{ form_widget(form.profile.0.name, {'attr':
                     { 'data-val': 'true',
                       'data-val-required': 'form.required.name'|trans
                     } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.name.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.name) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.name.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.name) }}
                     </div>
                     {#          function#}
                     <div>
-                        {{ form_label(form.function, 'form.label.function'|trans) }}
-                        {{ form_widget(form.function, {'attr':
+                        {{ form_label(form.profile.0.function, 'form.label.function'|trans) }}
+                        {{ form_widget(form.profile.0.function, {'attr':
                     { 'data-val': 'true',
                       'data-val-number': 'form.valid.number.function'|trans,
                       'data-val-required': 'form.required.function'|trans,
                       'onchange': 'ShowHideItems()'
                   } })
                         }}
-                        {{ form_errors(form.function) }}
+                        {{ form_errors(form.profile.0.function) }}
                     </div>
                     {#          email#}
                     <div class="editor-label">
@@ -95,39 +95,39 @@
                     </div>
                     {#          companie#}
                     <div class="editor-label">
-                        {{ form_label(form.company, 'form.label.company'|trans) }}
+                        {{ form_label(form.profile.0.company, 'form.label.company'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.company, {'attr':
+                        {{ form_widget(form.profile.0.company, {'attr':
                   { 'data-val': 'true',
                     'data-val-required': 'form.required.company'|trans
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.company) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.company.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.company) }}
                     </div>
                     {#          cui#}
                     <div class="editor-label">
-                        {{ form_label(form.cui, 'form.label.company-id'|trans) }}
+                        {{ form_label(form.profile.0.cui, 'form.label.company-id'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.cui, {'attr':
+                        {{ form_widget(form.profile.0.cui, {'attr':
                   { 'data-val': 'true',
                     'data-val-required': 'form.required.company-id'|trans,
                     'placeholder': 'form.placeholder.company-id'|trans
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.cui) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.cui.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.cui) }}
                         {% if registerErrors.cui is defined and registerErrors.cui == false %} <span id="validCuiCustomError" class="field-validation-error" >{{ 'form.valid.company-id'|trans }}</span> {% endif%}
                         <p class="color-red" id ="ValidCui" hidden="hidden"> {{ 'form.valid.company-id'|trans }} </p>
                     </div>
                     {#          numar inregistrare orc#}
                     <div class="editor-label">
-                        {{ form_label(form.noRegistrationORC, 'form.label.company-number'|trans) }}
+                        {{ form_label(form.profile.0.noRegistrationORC, 'form.label.company-number'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.noRegistrationORC, {'attr':
+                        {{ form_widget(form.profile.0.noRegistrationORC, {'attr':
                   { 'data-val': 'true',
                     'data-val-required': 'form.required.company-number'|trans,
                     'placeholder': 'form.placeholder.company-number'|trans,
@@ -135,59 +135,59 @@
                     'data-val-regex': 'form.valid.orc'|trans,
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.noRegistrationORC) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.noRegistrationORC.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.noRegistrationORC) }}
                     </div>
                     {#          numar de angajati#}
                     <div>
-                        {{ form_label(form.noEmployees, 'form.label.employees'|trans, {'label_attr': {'id': 'lblEmployeesNr'} }) }}
-                        {{ form_widget(form.noEmployees, {'attr':
+                        {{ form_label(form.profile.0.noEmployees, 'form.label.employees'|trans, {'label_attr': {'id': 'lblEmployeesNr'} }) }}
+                        {{ form_widget(form.profile.0.noEmployees, {'attr':
                   { 'data-val': 'true',
                     'data-val-number': 'form.valid.number.employees'|trans,
                     'onchange': 'EmployeesNrChanged()',
                     'class': 'form-control shortdropdown'
                   } })
                         }}
-                        {{ form_errors(form.noEmployees) }}
+                        {{ form_errors(form.profile.0.noEmployees) }}
                     </div>
                     {#          numar certificat de abilitare#}
                     <div class="editor-label" id="lblCertificateNumber">
-                        {{ form_label(form.noCertifiedEmpowerment, 'form.label.certificate'|trans) }}
+                        {{ form_label(form.profile.0.noCertifiedEmpowerment, 'form.label.certificate'|trans) }}
                     </div>
                     <div class="editor-field" id="tbCertificateNumber">
-                        {{ form_widget(form.noCertifiedEmpowerment) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.noCertifiedEmpowerment) }}
+                        {{ form_widget(form.profile.0.noCertifiedEmpowerment) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.noCertifiedEmpowerment) }}
                     </div>
                 </div>
                 <div class="col-xs-6">
                     {#          iban#}
                     <div class="editor-label">
-                        {{ form_label(form.iban, 'form.label.bank-account'|trans) }}
+                        {{ form_label(form.profile.0.iban, 'form.label.bank-account'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.iban, {'attr':
+                        {{ form_widget(form.profile.0.iban, {'attr':
                   { 'data-val': 'true',
                     'data-val-required': 'form.required.bank-account'|trans
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.iban) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.iban.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.iban) }}
                         {% if registerErrors.iban is defined and registerErrors.iban == false %} <span id="validIbanCustomError" class="field-validation-error" >{{ 'form.valid.bank-account'|trans }}</span> {% endif%}
                         <p class="color-red" id ="ValidIban" hidden="hidden"> {{ 'form.valid.bank-account'|trans }} </p>
                     </div>
                     {#          banca#}
                     <div class="editor-label">
-                        {{ form_label(form.bank, 'form.label.bank'|trans) }}
+                        {{ form_label(form.profile.0.bank, 'form.label.bank'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.bank, {'attr':
+                        {{ form_widget(form.profile.0.bank, {'attr':
                   { 'data-val': 'true',
                     'data-val-required': 'form.required.bank'|trans
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.bank) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.bank.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.bank) }}
                     </div>
                     {#          telefon#}
                     <div class="editor-label">
@@ -206,8 +206,8 @@
                     </div>
                     {#          judet#}
                     <div>
-                        {{ form_label(form.county, 'form.label.county'|trans) }}
-                        {{ form_widget(form.county, {'attr':
+                        {{ form_label(form.profile.0.county, 'form.label.county'|trans) }}
+                        {{ form_widget(form.profile.0.county, {'attr':
                   { 'data-val': 'true',
                     'data-val-number': 'form.valid.number.county'|trans,
                     'data-val-required': 'form.required.county'|trans,
@@ -215,47 +215,47 @@
                     'onChange': 'getLocalities(null)'
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.county.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.county) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.county.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.county) }}
                     </div>
                     {#          localitati#}
                     <div id="LocalitiesDiv">
                         <div class="editor-label">
-                            {{ form_label(form.city, 'form.label.city'|trans) }}
+                            {{ form_label(form.profile.0.city, 'form.label.city'|trans) }}
                         </div>
                         <div class="editor-field">
-                            {{ form_widget(form.city, {'attr':
+                            {{ form_widget(form.profile.0.city, {'attr':
                     { 'data-val': 'true',
                       'data-val-required': 'form.required.city'|trans,
                       'data-val-number': 'form.valid.number.city'|trans,
                       'class': 'form-control shortdropdown'
                     } })
                             }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.city.vars.full_name }}" data-valmsg-replace="true" ></span>
-                            {{ form_errors(form.city) }}
+                            <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.city.vars.full_name }}" data-valmsg-replace="true" ></span>
+                            {{ form_errors(form.profile.0.city) }}
                         </div>
                     </div>
                     {#          adresa#}
                     <div class="editor-label">
-                        {{ form_label(form.address, 'form.label.address'|trans) }}
+                        {{ form_label(form.profile.0.address, 'form.label.address'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.address, {'attr':
+                        {{ form_widget(form.profile.0.address, {'attr':
                   { 'data-val': 'true',
                     'data-val-required': 'form.required.address'|trans
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.address.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.address) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.0.address.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.0.address) }}
                     </div>
                     {#          logo#}
                     <div class="editor-label">
-                        {{ form_label(form.image, 'form.label.logo'|trans) }}
+                        {{ form_label(form.profile.0.image, 'form.label.logo'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.image, {'required' : false })
+                        {{ form_widget(form.profile.0.image, {'required' : false })
                         }}
-                        {{ form_errors(form.image) }}
+                        {{ form_errors(form.profile.0.image) }}
                     </div>
                     {#          termeni si conditii#}
                     <div class="editor-label clearfix" >

@@ -152,7 +152,7 @@ function getLocalities(city) {
         url: ajax_localities,
         dataType: 'json',
         data: {
-            countyId: $('#register_county').val()
+            countyId: $('#register_profile_0_county').val()
         },
         success: function (cities) {
             var msg = '';
@@ -166,7 +166,7 @@ function getLocalities(city) {
                 msg = '<option value="">Selectati Localitatea</option>' + msg;
                 $('#LocalitiesDiv select').html(msg);
                 if (city) {
-                    $('#register_city option').each(function () {
+                    $('#register_profile_0_city option').each(function () {
                         if ($(this).text() == city) {
                             $(this).attr('selected', 'selected');
                         }

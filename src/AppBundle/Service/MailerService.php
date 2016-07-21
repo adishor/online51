@@ -95,7 +95,7 @@ class MailerService
     public function sendActivationMessage($user)
     {
         $confirmationBody = $this->templating->render('user/activate_account_email_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()[0]->getName(),
             'token' => $user->getConfirmationToken())
           , 'text/html');
 
@@ -107,7 +107,7 @@ class MailerService
         $user = $order->getUser();
 
         $orderBody = $this->templating->render('order/order_invoice_email_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()->getName(),
             'number' => $order->getId(),
             'subscription' => $order->getSubscription(),
             'domains' => $order->getDomains(),

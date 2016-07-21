@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Application\Sonata\UserBundle\Entity\User;
+use AppBundle\Entity\Profile;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -39,29 +40,33 @@ class UserService
         $user->setEnabled(false);
         $user->setExpired(false);
         $user->setLocked(false);
-        $user->setName($data->getName());
-        $user->setCompany($data->getCompany());
-        $user->setCui($data->getCui());
-        $user->setNoRegistrationORC($data->getNoRegistrationORC());
-        $user->setNoEmployees($data->getNoEmployees());
-        $user->setNoCertifiedEmpowerment($data->getNoCertifiedEmpowerment());
-        $user->setIban($data->getIban());
-        $user->setBank($data->getBank());
-        $user->setPhone($data->getPhone());
-        $user->setCounty($data->getCounty());
-        $user->setCity($data->getCity());
-        $user->setAddress($data->getAddress());
-        $mediaId = $this->session->get('tmpMedia');
-        if ($mediaId) {
-            $user->setImage($this->entityManager->getRepository('ApplicationSonataMediaBundle:Media')->find($mediaId));
-            $this->session->remove('tmpMedia');
-        }
-        $user->setFunction($data->getFunction());
         $user->setConfirmationToken($data->getConfirmationToken());
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPlainPassword($data->getPassword());
-//        $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
+        //$user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
         $user->setDeleted(false);
+
+        $profile = new Profile();
+        $profile->setName($data->getProfile()[0]->getName());
+        $profile->setCompany($data->getProfile()[0]->getCompany());
+        $profile->setPhone($data->getProfile()[0]->getPhone());
+        $profile->setCui($data->getProfile()[0]->getCui());
+        $profile->setNoRegistrationORC($data->getProfile()[0]->getNoRegistrationORC());
+        $profile->setNoEmployees($data->getProfile()[0]->getNoEmployees());
+        $profile->setNoCertifiedEmpowerment($data->getProfile()[0]->getNoCertifiedEmpowerment());
+        $profile->setIban($data->getProfile()[0]->getIban());
+        $profile->setBank($data->getProfile()[0]->getBank());
+        $profile->setCounty($data->getProfile()[0]->getCounty());
+        $profile->setCity($data->getProfile()[0]->getCity());
+        $profile->setAddress($data->getProfile()[0]->getAddress());
+        $mediaId = $this->session->get('tmpMedia');
+        if ($mediaId) {
+            $profile->setImage($this->entityManager->getRepository('ApplicationSonataMediaBundle:Media')->find($mediaId));
+            $this->session->remove('tmpMedia');
+        }
+        $profile->setFunction($data->getProfile()[0]->getFunction());
+        $user->setProfile($profile);
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

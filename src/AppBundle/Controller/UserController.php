@@ -4,9 +4,9 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Form\Type\RegisterType;
 use AppBundle\Form\Type\ResetPasswordType;
 use Application\Sonata\UserBundle\Entity\User;
+use AppBundle\Entity\Profile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,6 +23,8 @@ class UserController extends Controller
     public function showRegisterAction(Request $request)
     {
         $register = new User();
+        $profile = new Profile();
+        $register->getProfile()->add($profile);
         $flow = $this->get('app.form.flow.register'); // must match the flow's service id
         $flow->bind($register);
 
@@ -33,15 +35,15 @@ class UserController extends Controller
         if ($flow->isValid($form)) {
             if ($flow->getCurrentStep() == 1) {
                 if ($form->isSubmitted()) {
-                    if ($form->get('cui')->getData()) {
-                        $registerErrors['cui'] = UserHelper::checkCUI($form->get('cui')->getData());
+                    if ($form->getData()->getProfile()[0]->getCui()) {
+                        $registerErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()[0]->getCui());
                     }
-                    if ($form->get('iban')->getData()) {
-                        $registerErrors['iban'] = UserHelper::checkIBAN($form->get('iban')->getData());
+                    if ($form->getData()->getProfile()[0]->getIban()) {
+                        $registerErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()[0]->getIban());
                     }
 
                     //save media in session
-                    $media = $register->getImage();
+                    $media = $form->getData()->getProfile()[0]->getImage();
                     if ($media) {
                         $media->setMediaType(Media::IMAGE_TYPE);
                         $this->getDoctrine()->getManager()->persist($media);

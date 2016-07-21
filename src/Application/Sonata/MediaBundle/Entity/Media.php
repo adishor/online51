@@ -67,9 +67,9 @@ class Media extends BaseMedia
     private $ad;
 
     /**
-     * @var Application/Sonata/UserBundle/Entity/User
+     * @var AppBundle/Entity/Profile
      */
-    private $user;
+    private $profile;
 
     /**
      * @var string
@@ -281,26 +281,26 @@ class Media extends BaseMedia
     }
 
     /**
-     * Set user
+     * Set profile
      *
-     * @param \Application\Sonata\UserBundle\Entity\User $user
+     * @param \AppBundle\Entity\Profile $profile
      * @return Media
      */
-    public function setUser(\Application\Sonata\UserBundle\Entity\User $user = null)
+    public function setUser(\AppBundle\Entity\Profile $profile = null)
     {
-        $this->user = $user;
+        $this->profile = $profile;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get profile
      *
-     * @return \Application\Sonata\UserBundle\Entity\User
+     * @return \AppBundle\Entity\Profile
      */
-    public function getUser()
+    public function getProfile()
     {
-        return $this->user;
+        return $this->profile;
     }
 
     /**
