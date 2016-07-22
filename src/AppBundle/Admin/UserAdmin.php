@@ -8,10 +8,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Application\Sonata\UserBundle\Entity\User;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
-use Application\Sonata\MediaBundle\Entity\Media;
+use AppBundle\Entity\Profile;
 
 class UserAdmin extends SonataUserAdmin
 {
@@ -35,19 +34,7 @@ class UserAdmin extends SonataUserAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $queryImage = $this->modelManager
-          ->getEntityManager('ApplicationSonataMediaBundle:Media')
-          ->createQueryBuilder()
-          ->select('m')
-          ->from('ApplicationSonataMediaBundle:Media', 'm')
-          ->leftJoin('m.ad', 'a')
-          ->leftJoin('m.user', 'u')
-          ->where('m.deleted = 0')
-          ->andWhere('m.mediaType = :mediaType')
-          ->setParameter('mediaType', Media::IMAGE_TYPE)
-          ->andWhere('a.id is null')
-          ->andWhere('u.id is null or u.id = :userId')
-          ->setParameter('userId', $this->getSubject()->getId());
+
 
         // define group zoning
         $formMapper
@@ -55,129 +42,44 @@ class UserAdmin extends SonataUserAdmin
           ->with('General', array('class' => 'col-md-6'))->end()
           ->with('Company', array('class' => 'col-md-6'))->end()
           ->end()
-//          ->tab('Security')
-//          ->with('Status', array('class' => 'col-md-4'))->end()
-//          ->with('Groups', array('class' => 'col-md-4'))->end()
-//          ->with('Roles', array('class' => 'col-md-4'))->end()
-//          ->end()
         ;
 
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         $formMapper
           ->tab('User')
-          ->with('General')
-//          ->add('username', null, array(
-//              'disabled' => $disabled
-//          ))
+            ->with('General')
+          ->add('username', null, array(
+              'disabled' => $disabled
+          ))
           ->add('email', null, array(
               'disabled' => $disabled
           ))
-          ->add('profile', 'sonata_type_admin', array(), array('edit' => 'inline'))
-//          ->add('profile', 'sonata_type_model', array('inline'))
-//          ->add('name', null, array(
-//              'disabled' => $disabled
-//          ))
-          ->add('phone', null, array(
+          ->add('locked', null, array('required' => false))
+          ->add('expired', null, array('required' => false))
+          ->add('enabled', null, array('required' => false))
+          ->add('credentialsExpired', null, array('required' => false))
+          ->add('groups', 'sonata_type_model', array(
               'required' => false,
-              'disabled' => $disabled
+              'expanded' => true,
+              'multiple' => true,
           ))
-//          ->add('county', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('city', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('address', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('creditsTotal', null, array(
-//              'required' => false,
-//              'read_only' => true,
-//              'disabled' => $disabled
-//          ))
+          ->add('realRoles', 'app_sonata_security_roles', array(
+              'label' => 'form.label_roles',
+              'expanded' => true,
+              'multiple' => true,
+              'required' => false,
+          ))
           ->end()
           ->with('Company')
-//          ->add('function', 'choice', array(
-//              'choices' => array(
-//                  User::FUNCTION_EXTERN_JOB => 'user.function.extern_job',
-//                  User::FUNCTION_INTERN_JOB => 'user.function.intern_job',
-//                  User::FUNCTION_APPOINTED_WORKER => 'user.function.appointed_worker',
-//                  User::FUNCTION_ADMINISTRATOR => 'user.function.administrator'
-//              ),
-//              'disabled' => $disabled
-//          ))
-//          ->add('company', null, array(
-//              'disabled' => $disabled
-//          ))
-//          ->add('image', 'sonata_type_model', array(
-//              'query' => $queryImage,
-//              'required' => false,
-//              'empty_value' => 'No Image',
-//            ), array(
-//              'link_parameters' => array(
-//                  'context' => 'default',
-//                  'provider' => 'sonata.media.provider.image',
-//              )
-//          ))
-//          ->add('noEmployees', 'choice', array(
-//              'choices' => array(
-//                  User::NO_EMPLOYEES_0_9 => 'user.employees.0_9',
-//                  User::NO_EMPLOYEES_10_49 => 'user.employees.10_49',
-//                  User::NO_EMPLOYEES_OVER_50 => 'user.employees.over_50'
-//              ),
-//              'empty_value' => 'user_employees_empty',
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('cui', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('bank', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('iban', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('noRegistrationORC', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
-//          ->add('noCertifiedEmpowerment', null, array(
-//              'required' => false,
-//              'disabled' => $disabled
-//          ))
+          ->add('profile', 'sonata_type_admin', array(), array('edit' => 'inline'))
+          ->add('creditsTotal', null, array(
+              'required' => false,
+              'read_only' => true,
+              'disabled' => $disabled
+          ))
           ->end()
           ->end()
-//          ->tab('Security')
-//          ->with('Status')
-//          ->add('locked', null, array('required' => false))
-//          ->add('expired', null, array('required' => false))
-//          ->add('enabled', null, array('required' => false))
-//          ->add('credentialsExpired', null, array('required' => false))
-//          ->end()
-//          ->with('Groups')
-//          ->add('groups', 'sonata_type_model', array(
-//              'required' => false,
-//              'expanded' => true,
-//              'multiple' => true,
-//          ))
-//          ->end()
-//          ->with('Roles')
-//          ->add('realRoles', 'app_sonata_security_roles', array(
-//              'label' => 'form.label_roles',
-//              'expanded' => true,
-//              'multiple' => true,
-//              'required' => false,
-//          ))
-//          ->end()
-//          ->end()
         ;
     }
 
@@ -203,10 +105,10 @@ class UserAdmin extends SonataUserAdmin
           ->add('email')
           ->add('function', 'choice', array(
               'choices' => array(
-                  User::FUNCTION_EXTERN_JOB => $this->getTranslator()->trans('user.function.extern_job'),
-                  User::FUNCTION_INTERN_JOB => $this->getTranslator()->trans('user.function.intern_job'),
-                  User::FUNCTION_APPOINTED_WORKER => $this->getTranslator()->trans('user.function.appointed_worker'),
-                  User::FUNCTION_ADMINISTRATOR => $this->getTranslator()->trans('user.function.administrator')
+                  Profile::FUNCTION_EXTERN_JOB => $this->getTranslator()->trans('user.function.extern_job'),
+                  Profile::FUNCTION_INTERN_JOB => $this->getTranslator()->trans('user.function.intern_job'),
+                  Profile::FUNCTION_APPOINTED_WORKER => $this->getTranslator()->trans('user.function.appointed_worker'),
+                  Profile::FUNCTION_ADMINISTRATOR => $this->getTranslator()->trans('user.function.administrator')
               ),
           ))
           ->add('credits')
@@ -229,9 +131,9 @@ class UserAdmin extends SonataUserAdmin
           ))
           ->add('noEmployees', 'choice', array(
               'choices' => array(
-                  User::NO_EMPLOYEES_0_9 => $this->getTranslator()->trans('user.employees.0_9'),
-                  User::NO_EMPLOYEES_10_49 => $this->getTranslator()->trans('user.employees.10_49'),
-                  User::NO_EMPLOYEES_OVER_50 => $this->getTranslator()->trans('user.employees.over_50')
+                  Profile::NO_EMPLOYEES_0_9 => $this->getTranslator()->trans('user.employees.0_9'),
+                  Profile::NO_EMPLOYEES_10_49 => $this->getTranslator()->trans('user.employees.10_49'),
+                  Profile::NO_EMPLOYEES_OVER_50 => $this->getTranslator()->trans('user.employees.over_50')
             )))
           ->add('cui')
           ->add('bank')
@@ -274,7 +176,6 @@ class UserAdmin extends SonataUserAdmin
         return $parameters;
     }
 
-
     public function prePersist($object)
     {
         if (!$object instanceof User) {
@@ -290,7 +191,6 @@ class UserAdmin extends SonataUserAdmin
         $object->setEnabled(true);
 
         $this->configurationPool->getContainer()->get('app.mailer')->sendAdminCreatedAccountMessage($object, $generatedPassword);
-
     }
 
     public function preRemove($object)

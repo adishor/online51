@@ -95,7 +95,7 @@ class MailerService
     public function sendActivationMessage($user)
     {
         $confirmationBody = $this->templating->render('user/activate_account_email_body.html.twig', array(
-            'name' => $user->getProfile()[0]->getName(),
+            'name' => $user->getProfile()->getName(),
             'token' => $user->getConfirmationToken())
           , 'text/html');
 

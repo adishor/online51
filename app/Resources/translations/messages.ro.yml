@@ -542,6 +542,7 @@ admin_label:
     area: 'Zone'
     video: 'Video'
     document-generated: 'Fisiere generate'
+    profile: 'Profile'
 Subscription List: Lista Abonamente
 Subscription Delete: Stergere Abonamente
 Domain List: Lista Domenii
@@ -562,6 +563,8 @@ R O Area List: Lista zone
 R O Area Delete: Stergere zone
 Video List: Lista video
 Video Delete: Stergere video
+Profile List: Lista profile
+Profile Delete: Stergere profil
 Name: Nume
 Price: Pret
 Credit: Credit

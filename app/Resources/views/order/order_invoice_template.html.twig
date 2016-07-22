@@ -20,13 +20,13 @@
                 <div >{{ 'invoice.social-capital'|trans }}: <span class="text-bold">{{ billingData['social_capital'] }}</span></div>
             </div>
             <div class="col-xs-4 pull-right">
-                <div >{{ 'invoice.client'|trans }}: <span class="text-bold">{{ user.company }}</span></div>
-                <div >{{ 'invoice.company-code'|trans }}: <span class="text-bold">{{ user.cui }}</span></div>
-                <div >{{ 'invoice.company-registration-number'|trans }}: <span class="text-bold">{{ user.noRegistrationOrc }}</span></div>
-                <div >{{ 'invoice.headquarters'|trans }}: <span class="text-bold">{{ user.address }}, {{ user.city }}</span></div>
-                <div >{{ 'invoice.county'|trans }}: <span class="text-bold">{{ user.county }}</span></div>
-                <div >{{ 'invoice.iban'|trans }}: <span class="text-bold">{{ user.iban }}</span></div>
-                <div >{{ 'invoice.bank'|trans }}: <span class="text-bold">{{ user.bank }}</span></div>
+                <div >{{ 'invoice.client'|trans }}: <span class="text-bold">{{ user.profile.company }}</span></div>
+                <div >{{ 'invoice.company-code'|trans }}: <span class="text-bold">{{ user.profile.cui }}</span></div>
+                <div >{{ 'invoice.company-registration-number'|trans }}: <span class="text-bold">{{ user.profile.noRegistrationOrc }}</span></div>
+                <div >{{ 'invoice.headquarters'|trans }}: <span class="text-bold">{{ user.profile.address }}, {{ user.profile.city }}</span></div>
+                <div >{{ 'invoice.county'|trans }}: <span class="text-bold">{{ user.profile.county }}</span></div>
+                <div >{{ 'invoice.iban'|trans }}: <span class="text-bold">{{ user.profile.iban }}</span></div>
+                <div >{{ 'invoice.bank'|trans }}: <span class="text-bold">{{ user.profile.bank }}</span></div>
             </div>
         </div>
         <div class='row'>

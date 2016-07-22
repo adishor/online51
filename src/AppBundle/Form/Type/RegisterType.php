@@ -21,9 +21,7 @@ class RegisterType extends AbstractType
               'invalid_message' => 'assert.password.same',
           ))
           ->add('phone')
-          ->add('profile', CollectionType::class, array(
-              'entry_type' => ProfileType::class,
-          ))
+          ->add('profile', new ProfileType())
         ;
     }
 

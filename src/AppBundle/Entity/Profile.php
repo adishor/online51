@@ -137,7 +137,7 @@ class Profile
      *
      * @var \Application\Sonata\MediaBundle\Entity\Media
      *
-     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="profile", orphanRemoval=true, cascade={"persist"})
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     protected $image;
@@ -600,4 +600,10 @@ class Profile
     {
         return $this->user;
     }
+
+    public function __toString()
+    {
+        return ($this->getId() ? "Profil" . " #" . $this->getId() : 'Create new');
+    }
+
 }

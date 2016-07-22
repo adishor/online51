@@ -5,11 +5,6 @@ parameters:
 
 services:
 #    admin
-    admin.profile:
-        class: AppBundle\Admin\ProfileAdmin
-        arguments: [~, AppBundle\Entity\Profile, AppBundle:Admin\Profile]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.profile, group: admin_group_data }
     admin.subscription:
         class: AppBundle\Admin\SubscriptionAdmin
         arguments: [~, AppBundle\Entity\Subscription, AppBundle:Admin\Subscription]
@@ -70,6 +65,11 @@ services:
         arguments: [~, AppBundle\Entity\Formular, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: sonata_media }
+    admin.profile:
+        class: AppBundle\Admin\ProfileAdmin
+        arguments: [~, AppBundle\Entity\Profile, AppBundle:Admin\Profile]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: admin_label.profile, group: %sonata.user.admin.groupname% }
     app.sonata_security_roles:
         class: AppBundle\Form\Type\AppSecurityRolesType
         tags:

@@ -23,8 +23,6 @@ class UserController extends Controller
     public function showRegisterAction(Request $request)
     {
         $register = new User();
-        $profile = new Profile();
-        $register->getProfile()->add($profile);
         $flow = $this->get('app.form.flow.register'); // must match the flow's service id
         $flow->bind($register);
 
@@ -35,15 +33,15 @@ class UserController extends Controller
         if ($flow->isValid($form)) {
             if ($flow->getCurrentStep() == 1) {
                 if ($form->isSubmitted()) {
-                    if ($form->getData()->getProfile()[0]->getCui()) {
-                        $registerErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()[0]->getCui());
+                    if ($form->getData()->getProfile()->getCui()) {
+                        $registerErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()->getCui());
                     }
-                    if ($form->getData()->getProfile()[0]->getIban()) {
-                        $registerErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()[0]->getIban());
+                    if ($form->getData()->getProfile()->getIban()) {
+                        $registerErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()->getIban());
                     }
 
                     //save media in session
-                    $media = $form->getData()->getProfile()[0]->getImage();
+                    $media = $form->getData()->getProfile()->getImage();
                     if ($media) {
                         $media->setMediaType(Media::IMAGE_TYPE);
                         $this->getDoctrine()->getManager()->persist($media);

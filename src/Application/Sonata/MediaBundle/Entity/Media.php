@@ -286,7 +286,7 @@ class Media extends BaseMedia
      * @param \AppBundle\Entity\Profile $profile
      * @return Media
      */
-    public function setUser(\AppBundle\Entity\Profile $profile = null)
+    public function setProfile(\AppBundle\Entity\Profile $profile = null)
     {
         $this->profile = $profile;
 

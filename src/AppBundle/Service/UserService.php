@@ -46,25 +46,26 @@ class UserService
         //$user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($data->getPassword(), $user->getSalt()));
         $user->setDeleted(false);
 
+
         $profile = new Profile();
-        $profile->setName($data->getProfile()[0]->getName());
-        $profile->setCompany($data->getProfile()[0]->getCompany());
-        $profile->setPhone($data->getProfile()[0]->getPhone());
-        $profile->setCui($data->getProfile()[0]->getCui());
-        $profile->setNoRegistrationORC($data->getProfile()[0]->getNoRegistrationORC());
-        $profile->setNoEmployees($data->getProfile()[0]->getNoEmployees());
-        $profile->setNoCertifiedEmpowerment($data->getProfile()[0]->getNoCertifiedEmpowerment());
-        $profile->setIban($data->getProfile()[0]->getIban());
-        $profile->setBank($data->getProfile()[0]->getBank());
-        $profile->setCounty($data->getProfile()[0]->getCounty());
-        $profile->setCity($data->getProfile()[0]->getCity());
-        $profile->setAddress($data->getProfile()[0]->getAddress());
+        $profile->setName($data->getProfile()->getName());
+        $profile->setCompany($data->getProfile()->getCompany());
+        $profile->setPhone($data->getProfile()->getPhone());
+        $profile->setCui($data->getProfile()->getCui());
+        $profile->setNoRegistrationORC($data->getProfile()->getNoRegistrationORC());
+        $profile->setNoEmployees($data->getProfile()->getNoEmployees());
+        $profile->setNoCertifiedEmpowerment($data->getProfile()->getNoCertifiedEmpowerment());
+        $profile->setIban($data->getProfile()->getIban());
+        $profile->setBank($data->getProfile()->getBank());
+        $profile->setCounty($data->getProfile()->getCounty());
+        $profile->setCity($data->getProfile()->getCity());
+        $profile->setAddress($data->getProfile()->getAddress());
         $mediaId = $this->session->get('tmpMedia');
         if ($mediaId) {
             $profile->setImage($this->entityManager->getRepository('ApplicationSonataMediaBundle:Media')->find($mediaId));
             $this->session->remove('tmpMedia');
         }
-        $profile->setFunction($data->getProfile()[0]->getFunction());
+        $profile->setFunction($data->getProfile()->getFunction());
         $user->setProfile($profile);
 
         $this->entityManager->persist($user);
