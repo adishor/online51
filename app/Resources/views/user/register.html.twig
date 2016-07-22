@@ -191,18 +191,18 @@
                     </div>
                     {#          telefon#}
                     <div class="editor-label">
-                        {{ form_label(form.phone, 'form.label.phone'|trans) }}
+                        {{ form_label(form.profile.phone, 'form.label.phone'|trans) }}
                     </div>
                     <div class="editor-field">
-                        {{ form_widget(form.phone, {'attr':
+                        {{ form_widget(form.profile.phone, {'attr':
                   { 'data-val': 'true',
                     'data-val-regex': 'form.valid.phone'|trans,
                     'data-val-regex-pattern': '^(07|)\\d{8}$',
                     'data-val-required': 'form.required.phone'|trans
                   } })
                         }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
-                        {{ form_errors(form.phone) }}
+                        <span class="field-validation-valid" data-valmsg-for="{{ form.profile.phone.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        {{ form_errors(form.profile.phone) }}
                     </div>
                     {#          judet#}
                     <div>

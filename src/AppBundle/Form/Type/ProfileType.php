@@ -23,6 +23,7 @@ class ProfileType extends AbstractType
               )
           ))
           ->add('company')
+          ->add('phone')
           ->add('cui')
           ->add('noRegistrationORC')
           ->add('noEmployees', 'choice', array(

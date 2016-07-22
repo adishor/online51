@@ -100,20 +100,23 @@ class UserService
         $user->setEnabled(true);
         $user->setExpired(false);
         $user->setLocked(false);
-        $user->setName($name);
-        $user->setCompany('');
-        $user->setCui(NULL);
-        $user->setNoRegistrationORC(NULL);
-        $user->setNoCertifiedEmpowerment(NULL);
-        $user->setIban(NULL);
-        $user->setBank(NULL);
-        $user->setPhone(NULL);
-        $user->setAddress(NULL);
-        $user->setFunction('');
         $user->addRole(User::ROLE_DEFAULT);
         $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($demoPassword, $user->getSalt()));
-        $user->setDeleted(false);
-        $user->setDemoAccount(true);
+
+        $profile = new Profile();
+        $profile->setName($name);
+        $profile->setCompany('');
+        $profile->setCui(NULL);
+        $profile->setNoRegistrationORC(NULL);
+        $profile->setNoCertifiedEmpowerment(NULL);
+        $profile->setIban(NULL);
+        $profile->setBank(NULL);
+        $profile->setPhone(NULL);
+        $profile->setAddress(NULL);
+        $profile->setFunction('');
+        $profile->setDemoAccount(true);
+        $user->setProfile($profile);
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

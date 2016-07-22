@@ -11,8 +11,8 @@ class FormularDecizieComisieCercetareAccidente extends FormularGeneric implement
 
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getCompany());
-        $formData->setCompanyAddress($user->getAddress() . ", " . $user->getCity() . ", " . $user->getCounty());
+        $formData->setCompany($user->getProfile()->getCompany());
+        $formData->setCompanyAddress($user->getProfile()->getAddress() . ", " . $user->getProfile()->getCity() . ", " . $user->getProfile()->getCounty());
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }

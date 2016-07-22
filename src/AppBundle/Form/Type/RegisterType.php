@@ -20,7 +20,6 @@ class RegisterType extends AbstractType
               'required' => true,
               'invalid_message' => 'assert.password.same',
           ))
-          ->add('phone')
           ->add('profile', new ProfileType())
         ;
     }

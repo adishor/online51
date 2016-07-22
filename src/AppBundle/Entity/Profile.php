@@ -52,6 +52,7 @@ class Profile
      * @var string
      * @Assert\NotBlank(message="assert.required.phone", groups={"flow_register_flow_step1", "ChangeInfo"})
      * @Assert\Regex(pattern="/^07([0-9]{8})$/", message="assert.valid.phone", groups={"flow_register_flow_step1", "ChangeInfo"})
+     * @ORM\Column(nullable=true)
      */
     protected $phone;
 
@@ -182,7 +183,7 @@ class Profile
      * Set name
      *
      * @param string $name
-     * @return User
+     * @return Profile
      */
     public function setName($name)
     {
@@ -205,7 +206,7 @@ class Profile
      * Set company
      *
      * @param string $company
-     * @return User
+     * @return Profile
      */
     public function setCompany($company)
     {
@@ -238,7 +239,7 @@ class Profile
      * Set phone
      *
      * @param string $phone
-     * @return User
+     * @return Profile
      */
     public function setPhone($phone)
     {
@@ -249,7 +250,7 @@ class Profile
      * Set noEmployees
      *
      * @param string $noEmployees
-     * @return User
+     * @return Profile
      */
     public function setNoEmployees($noEmployees)
     {
@@ -272,7 +273,7 @@ class Profile
      * Set bank
      *
      * @param string $bank
-     * @return User
+     * @return Profile
      */
     public function setBank($bank)
     {
@@ -295,7 +296,7 @@ class Profile
      * Set iban
      *
      * @param string $iban
-     * @return User
+     * @return Profile
      */
     public function setIban($iban)
     {
@@ -318,7 +319,7 @@ class Profile
      * Set cui
      *
      * @param string $cui
-     * @return User
+     * @return Profile
      */
     public function setCui($cui)
     {
@@ -341,7 +342,7 @@ class Profile
      * Set noRegistrationORC
      *
      * @param string $noRegistrationORC
-     * @return User
+     * @return Profile
      */
     public function setNoRegistrationORC($noRegistrationORC)
     {
@@ -364,7 +365,7 @@ class Profile
      * Set noCertifiedEmpowerment
      *
      * @param string $noCertifiedEmpowerment
-     * @return User
+     * @return Profile
      */
     public function setNoCertifiedEmpowerment($noCertifiedEmpowerment)
     {
@@ -387,7 +388,7 @@ class Profile
      * Set county
      *
      * @param \AppBundle\Entity\ROCounty $county
-     * @return User
+     * @return Profile
      */
     public function setCounty(\AppBundle\Entity\ROCounty $county = null)
     {
@@ -410,7 +411,7 @@ class Profile
      * Set city
      *
      * @param \AppBundle\Entity\ROCity $city
-     * @return User
+     * @return Profile
      */
     public function setCity(\AppBundle\Entity\ROCity $city = null)
     {
@@ -433,7 +434,7 @@ class Profile
      * Set address
      *
      * @param string $address
-     * @return User
+     * @return Profile
      */
     public function setAddress($address)
     {
@@ -456,7 +457,7 @@ class Profile
      * Set function
      *
      * @param integer $function
-     * @return User
+     * @return Profile
      */
     public function setFunction($function)
     {
@@ -479,7 +480,7 @@ class Profile
      * Set image
      *
      * @param \Application\Sonata\MediaBundle\Entity\Media $image
-     * @return User
+     * @return Profile
      */
     public function setImage(\Application\Sonata\MediaBundle\Entity\Media $image = null)
     {
@@ -502,7 +503,7 @@ class Profile
      * Set demoAccount
      *
      * @param boolean $demoAccount
-     * @return User
+     * @return Profile
      */
     public function setDemoAccount($demoAccount)
     {

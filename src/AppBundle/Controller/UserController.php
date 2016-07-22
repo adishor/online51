@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Application\Sonata\MediaBundle\Entity\Media;
 use AppBundle\Helper\UserHelper;
+use AppBundle\Form\Type\RegisterType;
 
 class UserController extends Controller
 {
@@ -246,30 +247,31 @@ class UserController extends Controller
     public function changeInformationAction(Request $request)
     {
         $user = $this->getUser();
-        $form = $this->createForm(new registerType(), $user);
-        $form->remove('password')->remove('captcha');
+        $form = $this->createForm(new RegisterType(), $user);
+        $form->remove('password');
 
         $form->handleRequest($request);
 
         $changeInfoErrors = array();
         if ($form->isSubmitted()) {
-            if ($form->get('cui')->getData()) {
-                $changeInfoErrors['cui'] = UserHelper::checkCUI($form->get('cui')->getData());
+            if ($form->getData()->getProfile()->getCui()) {
+                $changeInfoErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()->getCui());
             }
-            if ($form->get('iban')->getData()) {
-                $changeInfoErrors['iban'] = UserHelper::checkIBAN($form->get('iban')->getData());
+            if ($form->getData()->getProfile()->getIban()) {
+                $changeInfoErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()->getIban());
             }
         }
+
         if ($form->isSubmitted() && $form->isValid() && !in_array(false, $changeInfoErrors)) {
 
-            if (null !== $user->getImage() && $user->getImage()->getProviderName() === 'sonata.media.provider.image') {
-                $media = $user->getImage();
+            if (null !== $user->getProfile()->getImage() && $user->getProfile()->getImage()->getProviderName() === 'sonata.media.provider.image') {
+                $media = $user->getProfile()->getImage();
                 $media->setMediaType(Media::IMAGE_TYPE);
-                $user->setImage($media);
+                $user->getProfile()->setImage($media);
             }
 
-            if ($user->getDemoAccount()) {
-                $user->setDemoAccount(FALSE);
+            if ($user->getProfile()->getDemoAccount()) {
+                $user->getProfile()->setDemoAccount(FALSE);
                 $this->container->get('fos_user.user_manager')->updateUser($user);
                 $this->addFlash('successful-account-activate', 'success.demo-activate');
 

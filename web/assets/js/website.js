@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    if ($('#register_county').val()) {
-        var city = $('#register_city option:selected').text();
+    if ($('#register_profile_county').val()) {
+        var city = $('#register_profile_city option:selected').text();
         getLocalities(city);
     } else {
         $("#LocalitiesDiv").hide();
