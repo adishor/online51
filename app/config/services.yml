@@ -69,7 +69,7 @@ services:
         class: AppBundle\Admin\ProfileAdmin
         arguments: [~, AppBundle\Entity\Profile, AppBundle:Admin\Profile]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: admin_label.profile, group: %sonata.user.admin.groupname% }
+            - { name: sonata.admin, manager_type: orm, label: admin_label.profile, group: %sonata.user.admin.groupname%, show_in_dashboard: false }
     app.sonata_security_roles:
         class: AppBundle\Form\Type\AppSecurityRolesType
         tags:

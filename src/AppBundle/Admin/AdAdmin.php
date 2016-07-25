@@ -20,7 +20,8 @@ class AdAdmin extends Admin
           ->select('m')
           ->from('ApplicationSonataMediaBundle:Media', 'm')
           ->leftJoin('m.ad', 'a')
-          ->leftJoin('m.user', 'u')
+          ->leftJoin('m.profile', 'p')
+          ->leftJoin('p.user', 'u')
           ->where('m.deleted = 0')
           ->andWhere('m.mediaType = :mediaType')
           ->setParameter('mediaType', Media::IMAGE_TYPE)
@@ -76,7 +77,7 @@ class AdAdmin extends Admin
           ->add('image', 'sonata_media_type', array(
               'provider' => 'sonata.media.provider.image',
               'context' => 'default',
-              'template' => 'sonata/ad_and_user_base_show_field.html.twig',
+              'template' => 'sonata/ad_base_show_field.html.twig',
           ))
           ->add('areas')
         ;

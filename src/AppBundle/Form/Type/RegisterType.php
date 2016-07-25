@@ -5,7 +5,6 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use AppBundle\Form\Type\ProfileType;
 
 class RegisterType extends AbstractType
@@ -30,7 +29,8 @@ class RegisterType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Application\Sonata\UserBundle\Entity\User'
+            'data_class' => 'Application\Sonata\UserBundle\Entity\User',
+            'validation_groups' => array("flow_register_flow_step1", "ChangeInfo")
         ));
     }
 

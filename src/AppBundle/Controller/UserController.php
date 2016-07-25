@@ -23,6 +23,11 @@ class UserController extends Controller
      */
     public function showRegisterAction(Request $request)
     {
+        if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // redirect authenticated users to homepage
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
         $register = new User();
         $flow = $this->get('app.form.flow.register'); // must match the flow's service id
         $flow->bind($register);
@@ -35,9 +40,11 @@ class UserController extends Controller
             if ($flow->getCurrentStep() == 1) {
                 if ($form->isSubmitted()) {
                     if ($form->getData()->getProfile()->getCui()) {
+                        var_dump($form->getData()->getProfile()->getCui());
                         $registerErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()->getCui());
                     }
                     if ($form->getData()->getProfile()->getIban()) {
+                        var_dump($form->getData()->getProfile()->getIban());
                         $registerErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()->getIban());
                     }
 
@@ -91,7 +98,7 @@ class UserController extends Controller
         return $this->render('user/register.html.twig', array(
               'form' => $form->createView(),
               'flow' => $flow,
-              'registerErrors' => null,
+              'registerErrors' => $registerErrors,
               'subscriptions' => $this->getDoctrine()->getManager()->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false))
         ));
     }

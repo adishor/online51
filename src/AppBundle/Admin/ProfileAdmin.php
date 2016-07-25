@@ -24,21 +24,29 @@ class ProfileAdmin extends Admin
             $subject = $this->getSubject();
         }
 
-        $queryImage = $this->modelManager
-          ->getEntityManager('ApplicationSonataMediaBundle:Media')
-          ->createQueryBuilder()
-          ->select('m')
-          ->from('ApplicationSonataMediaBundle:Media', 'm')
-          ->leftJoin('m.ad', 'a')
-          ->leftJoin('m.profile', 'p')
-          ->where('m.deleted = 0')
-          ->andWhere('m.mediaType = :mediaType')
-          ->setParameter('mediaType', Media::IMAGE_TYPE)
-          ->andWhere('a.id is null')
-          ->andWhere('p.id is null or p.id = :profileId')
-          ->setParameter('profileId', $subject->getId());
+        $imageOptions = array(
+            'required' => false,
+            'empty_value' => 'No Image'
+        );
 
-        $disabled = ($subject->getDeleted()) ? TRUE : FALSE;
+        if ($subject) {
+            $queryImage = $this->modelManager
+              ->getEntityManager('ApplicationSonataMediaBundle:Media')
+              ->createQueryBuilder()
+              ->select('m')
+              ->from('ApplicationSonataMediaBundle:Media', 'm')
+              ->leftJoin('m.ad', 'a')
+              ->leftJoin('m.profile', 'p')
+              ->where('m.deleted = 0')
+              ->andWhere('m.mediaType = :mediaType')
+              ->setParameter('mediaType', Media::IMAGE_TYPE)
+              ->andWhere('a.id is null')
+              ->andWhere('p.id is null or p.id = :profileId')
+              ->setParameter('profileId', $subject->getId());
+            $imageOptions['query'] = $queryImage;
+        }
+
+        $disabled = (null !== $subject && $subject->getDeleted()) ? TRUE : FALSE;
 
         $formMapper
           ->tab('User')
@@ -61,16 +69,13 @@ class ProfileAdmin extends Admin
               'required' => false,
               'disabled' => $disabled
           ))
-          ->add('image', 'sonata_type_model', array(
-              'query' => $queryImage,
-              'required' => false,
-              'empty_value' => 'No Image',
-            ), array(
+          ->add('image', 'sonata_type_model', $imageOptions, array(
               'link_parameters' => array(
                   'context' => 'default',
                   'provider' => 'sonata.media.provider.image',
-              )
-          ))
+              ))
+          )
+          ->add('phone')
           ->add('county', null, array(
               'required' => false,
               'disabled' => $disabled
@@ -89,7 +94,7 @@ class ProfileAdmin extends Admin
                   Profile::NO_EMPLOYEES_10_49 => 'user.employees.10_49',
                   Profile::NO_EMPLOYEES_OVER_50 => 'user.employees.over_50'
               ),
-              'empty_value' => 'user_employees_empty',
+              'empty_value' => 'user.employees.select_no',
               'required' => false,
               'disabled' => $disabled
           ))
@@ -129,13 +134,7 @@ class ProfileAdmin extends Admin
 
     protected function configureShowFields(ShowMapper $show)
     {
-        $show->add('name')
-          ->add('image', 'sonata_media_type', array(
-              'provider' => 'sonata.media.provider.image',
-              'context' => 'default',
-              'template' => 'sonata/ad_and_user_base_show_field.html.twig',
-          ))
-        ;
+        $show->add('name');
     }
 
 }

@@ -40,7 +40,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
         $profile = new Profile();
         $profile->setName('SuperAdmin');
         $profile->setCompany('PITECH+PLUS');
-        $profile->setFunction(User::FUNCTION_ADMINISTRATOR);
+        $profile->setFunction(Profile::FUNCTION_ADMINISTRATOR);
 
         $user->setProfile($profile);
         $manager->persist($user);

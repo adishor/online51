@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use AppBundle\Entity\Profile;
+use Application\Sonata\UserBundle\Entity\User;
 
 class UserAdmin extends SonataUserAdmin
 {
@@ -26,7 +27,6 @@ class UserAdmin extends SonataUserAdmin
         $options['validation_groups'] = (!$this->getSubject() || is_null($this->getSubject()->getId())) ? 'AdminRegistration' : 'AdminProfile';
 
         $formBuilder = $this->getFormContractor()->getFormBuilder($this->getUniqid(), $options);
-
         $this->defineFormBuilder($formBuilder);
 
         return $formBuilder;
@@ -34,8 +34,6 @@ class UserAdmin extends SonataUserAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-
-
         // define group zoning
         $formMapper
           ->tab('User')
@@ -48,7 +46,7 @@ class UserAdmin extends SonataUserAdmin
 
         $formMapper
           ->tab('User')
-            ->with('General')
+          ->with('General')
           ->add('username', null, array(
               'disabled' => $disabled
           ))
@@ -86,7 +84,7 @@ class UserAdmin extends SonataUserAdmin
     public function getTemplate($name)
     {
         if ($name == "edit") {
-            return 'sonata/user/edit.html.twig';
+            return 'sonata/base_edit.html.twig';
         }
 
         return parent::getTemplate($name);
@@ -103,43 +101,40 @@ class UserAdmin extends SonataUserAdmin
           ->tab('User')
           ->with('General')
           ->add('email')
-          ->add('function', 'choice', array(
+          ->end()
+          ->with('Profile')
+          ->add('profile.name')
+          ->add('profile.function', 'choice', array(
               'choices' => array(
                   Profile::FUNCTION_EXTERN_JOB => $this->getTranslator()->trans('user.function.extern_job'),
                   Profile::FUNCTION_INTERN_JOB => $this->getTranslator()->trans('user.function.intern_job'),
                   Profile::FUNCTION_APPOINTED_WORKER => $this->getTranslator()->trans('user.function.appointed_worker'),
                   Profile::FUNCTION_ADMINISTRATOR => $this->getTranslator()->trans('user.function.administrator')
-              ),
-          ))
-          ->add('credits')
-          ->end()
-          ->with('Profile')
-          ->add('name')
-          ->add('phone')
-          ->add('county')
-          ->add('city')
-          ->add('address')
-          ->add('deleted')
-          ->add('deletedAt')
-          ->end()
-          ->with('Company')
-          ->add('company')
-          ->add('image', 'sonata_media_type', array(
+            )))
+          ->add('profile.company')
+          ->add('profile.image', 'sonata_media_type', array(
               'provider' => 'sonata.media.provider.image',
               'context' => 'default',
-              'template' => 'sonata/ad_and_user_base_show_field.html.twig',
+              'template' => 'sonata/user_base_show_field.html.twig',
           ))
-          ->add('noEmployees', 'choice', array(
+          ->add('profile.phone')
+          ->add('profile.county')
+          ->add('profile.city')
+          ->add('profile.address')
+          ->add('profile.noEmployees', 'choice', array(
               'choices' => array(
                   Profile::NO_EMPLOYEES_0_9 => $this->getTranslator()->trans('user.employees.0_9'),
                   Profile::NO_EMPLOYEES_10_49 => $this->getTranslator()->trans('user.employees.10_49'),
                   Profile::NO_EMPLOYEES_OVER_50 => $this->getTranslator()->trans('user.employees.over_50')
             )))
-          ->add('cui')
-          ->add('bank')
-          ->add('iban')
-          ->add('noRegistrationORC')
-          ->add('noCertifiedEmpowerment')
+          ->add('profile.cui')
+          ->add('profile.bank')
+          ->add('profile.iban')
+          ->add('profile.noRegistrationORC')
+          ->add('profile.noCertifiedEmpowerment')
+          ->add('credits')
+          ->add('deleted')
+          ->add('deletedAt')
           ->end()
           ->end()
         ;

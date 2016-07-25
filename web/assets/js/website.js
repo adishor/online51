@@ -92,10 +92,10 @@ function SubmitRegisterOrder() {
     $("#RegisterForm").submit();
 }
 
-$("#register_cui").bind('input propertychange', function () {
+$("#register_cui, #register_profile_cui").bind('input propertychange', function () {
     $("#validCuiCustomError").hide();
     $("#ValidCui").hide();
-    var cuiText = $("#register_cui").val();
+    var cuiText = $(this).val();
 
     if (cuiText.toString().toLowerCase().indexOf("ro") >= 0) {
         cuiText = cuiText.toString().toLowerCase().replace("ro", "")
@@ -123,10 +123,10 @@ $("#register_cui").bind('input propertychange', function () {
     }
 });
 
-$("#register_iban").bind('input propertychange', function () {
+$("#register_iban, #register_profile_iban").bind('input propertychange', function () {
     $("#validIbanCustomError").hide();
     $("#ValidIban").hide();
-    var ibanText = $("#register_iban").val();
+    var ibanText = $(this).val();
     var link = 'http://openapi.ro/api/validate/iban/' + ibanText + '.json';
 
     $.ajax({
@@ -143,7 +143,7 @@ $("#register_iban").bind('input propertychange', function () {
         error: function (data) {
             alert("error");
         }
-    })
+    });
 });
 
 function getLocalities(city) {

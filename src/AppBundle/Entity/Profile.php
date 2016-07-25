@@ -34,16 +34,16 @@ class Profile
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="user.required.name", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
-     * @ORM\Column()
+     * @Assert\NotBlank(message="user.required.name", groups={"flow_register_flow_step1", "ChangeInfo"})
+     * @ORM\Column(nullable=true)
      */
     protected $name;
 
     /**
      *
      * @var string
-     * @Assert\NotBlank(message="assert.required.company", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
-     * @ORM\Column()
+     * @Assert\NotBlank(message="assert.required.company", groups={"flow_register_flow_step1", "ChangeInfo"})
+     * @ORM\Column(nullable=true)
      */
     protected $company;
 
@@ -129,8 +129,8 @@ class Profile
     /**
      *
      * @var integer
-     * @Assert\NotBlank(message="assert.required.function", groups={"flow_register_flow_step1", "AdminRegistration", "AdminProfile", "ChangeInfo"})
-     * @ORM\Column(type="integer", length=1, nullable=false)
+     * @Assert\NotBlank(message="assert.required.function", groups={"flow_register_flow_step1", "ChangeInfo"})
+     * @ORM\Column(type="integer", length=1, nullable=true)
      */
     protected $function;
 
