@@ -13,15 +13,14 @@ class DecizieOrganizareActivitateSSMType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $options['container'];
-        $user = $container->get('security.context')->getToken()->getUser();
-
         $builder
-          ->add('company', TextType::class, array(
-              'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
+          ->add('company', TextType::class)
+          ->add('administrator', CollectionType::class, array(
+              'entry_type' => PersonType::class
           ))
-          ->add('administrator', TextType::class)
-          ->add('designedWorkerForPreventionProtection', TextType::class)
+          ->add('designedWorkerForPreventionProtection', CollectionType::class, array(
+              'entry_type' => PersonType::class
+          ))
           ->add('membersForPreventionProtectionService', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,

@@ -13,7 +13,7 @@
             <div class="height-40-px"></div>
             <h3 class="text-center"><b>{{ 'DECIZIE privind componenta CSSM' | trans}}</b></h3>
             <div class="height-20-px"></div>
-            <p><span class="text-indent"></span>{{ 'Avand in vedere prevederile legii 319/2006 privind securitatea si sanatatea in munca si ale HG 1425/2006 Normele metodologice de aplicare a Legii 319/2006, cu modificarile ulterioare,' | trans }} {{ 'Dl/Dna ' | trans }} {{ data.administrator }} {{ ' in calitate de administrator la ' | trans }} {{ data.company }}, {{ 'decide:' | trans }}</p>
+            <p><span class="text-indent"></span>{{ 'Avand in vedere prevederile legii 319/2006 privind securitatea si sanatatea in munca si ale HG 1425/2006 Normele metodologice de aplicare a Legii 319/2006, cu modificarile ulterioare,' | trans }} {{ data.administrator.0.gender | trans }} {{ data.administrator.0.name }} {{ ' in calitate de administrator la ' | trans }} {{ data.company }}, {{ 'decide:' | trans }}</p>
             <div class="height-20-px"></div>
             <div class="section-group">
                 <table class="list-bold">
@@ -24,20 +24,26 @@
                 </table>
                 <p>{{ '- &nbsp; Reprezentantii din partea angajatorului sunt urmatorii: ' | trans | raw }}</p>
                 <ul>
-                    <li>{{ 'Dl/Dna ' | trans }} {{ data.president }} {{ ' - angajator - presedinte CSSM (sau reprezentant legal)' | trans }}</li>
-                    <li>{{ 'Dl/Dna ' | trans }} {{ data.secretary }} {{ ' - lucrator desemnat - secretar CSSM' | trans }}</li>
+                    {% for president in data.president %}
+                        <li>{{ president.gender | trans }} {{ president.name }}{{ ' - angajator - presedinte CSSM (sau reprezentant legal)' | trans }}</li>
+                    {% endfor %}
+                    {% for secretary in data.secretary %}
+                        <li>{{ secretary.gender | trans }} {{ secretary.name }}{{ ' - lucrator desemnat - secretar CSSM' | trans }}</li>
+                    {% endfor %}
                 </ul>
                 <p>{{ '- &nbsp; Conform hotararii angajatilor, reprezentantii lucratorilor sunt urmatorii: ' | trans | raw }}</p>
                 <ul>
                     {% for item in data.members %}
                         {% if item.name %}
-                            <li>{{ 'Dl/Dna ' | trans }} {{ item.name }} {{ ' - reprezentant al lucratorilor - membru' | trans }}</li>
+                            <li>{{ item.gender | trans }} {{ item.name }} {{ ' - reprezentant al lucratorilor - membru' | trans }}</li>
                         {% endif %}
                     {% endfor %}
                 </ul>
                 <p>{{ '- &nbsp; Medic de Medicina Muncii ' | trans | raw }}</p>
                 <ul>
-                    <li>{{ 'Dl/Dna ' | trans }} {{ data.doctor }}</li>
+                    {% for doctor in data.doctor %}
+                        <li>{{ doctor.gender | trans }} {{ doctor.name }}</li>
+                    {% endfor %}
                 </ul>
                 <table class="list-bold">
                     <tr>
@@ -59,14 +65,20 @@
             <div class="col-xs-6 no-margin-left">
                 <p>{{ 'Am luat la cunostinta,' | trans }}</p>
                 <div class="height-20-px"></div>
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.president }}</p>
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.secretary }}</p>
+                {% for president in data.president %}
+                    <p>{{ president.gender | trans }} {{ president.name }}</p>
+                {% endfor %}
+                {% for secretary in data.secretary %}
+                    <p>{{ secretary.gender | trans }} {{ secretary.name }}</p>
+                {% endfor %}
                 {% for item in data.members %}
                     {% if item.name %}
                         <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
                     {% endif %}
                 {% endfor %}
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.doctor }}</p>
+                {% for doctor in data.doctor %}
+                    <p>{{ doctor.gender | trans }} {{ doctor.name }}</p>
+                {% endfor %}
             </div>
             <div class="col-xs-6 no-margin-right">
                 <p><span class="text-indent"></span>{{ 'Semnatura' | trans }}</p>

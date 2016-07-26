@@ -18,7 +18,7 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('u.company, d.id as id, d.name, m.id as mid, '
+          ->select('p.company, d.id as id, d.name, m.id as mid, '
             . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage ', 'cu')
@@ -27,6 +27,7 @@ class CreditsUsageRepository extends EntityRepository
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'd.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->join('cu.user', 'u')
+          ->join('u.profile', 'p')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
@@ -57,7 +58,7 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('u.company, v.id as id, v.name, m.id as mid, m as media, '
+          ->select('p.company, v.id as id, v.name, m.id as mid, m as media, '
             . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage ', 'cu')
@@ -66,6 +67,7 @@ class CreditsUsageRepository extends EntityRepository
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'v.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->join('cu.user', 'u')
+          ->join('u.profile', 'p')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
@@ -96,7 +98,7 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('u.company, f.id as id, f.name, f.slug, f.discountedCreditValue, m.id as mid, '
+          ->select('p.company, f.id as id, f.name, f.slug, f.discountedCreditValue, m.id as mid, '
             . 'cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.id as cuid, cu.title, '
             . 'cu.formConfig, cu.formHash, cu.isFormConfigFinished, '
             . 'sd.name as subDomain, dom.name as domain')
@@ -106,6 +108,7 @@ class CreditsUsageRepository extends EntityRepository
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'f.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->join('cu.user', 'u')
+          ->join('u.profile', 'p')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
@@ -151,12 +154,13 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('u.company, f.name, f.slug as fslug, f.discountedCreditValue, m.id as mid, '
+          ->select('p.company, f.name, f.slug as fslug, f.discountedCreditValue, m.id as mid, '
             . 'cu.id as cuid, cu.formConfig, cu.formHash, cu.isFormConfigFinished, cu.usageType, cu.expireDate as date, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('cu.formular', 'f')
           ->join('cu.user', 'u')
+          ->join('u.profile', 'p')
           ->join('f.subdomain', 'sd')
           ->join('sd.domain', 'dom')
           ->leftJoin('cu.media', 'm')

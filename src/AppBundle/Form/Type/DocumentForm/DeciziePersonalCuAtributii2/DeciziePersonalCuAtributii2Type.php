@@ -18,7 +18,7 @@ class DeciziePersonalCuAtributii2Type extends AbstractType
 
         $builder
           ->add('company', TextType::class, array(
-              'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
+              'read_only' => $user->getProfile()->getDemoAccount() ? FALSE : TRUE,
           ))
           ->add('administrator', TextType::class)
           ->add('workersAttributions', CollectionType::class, array(

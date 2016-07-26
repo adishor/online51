@@ -11,39 +11,19 @@
 
     <h2 class="title">{{ 'Decizie comisie cercetare accidente' | trans }}</h2>
     
-    {% for flash_message in app.session.flashbag.get('form-success') %}
-        <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
-    {% endfor %}
-
-    {% for flash_message in app.session.flashbag.get('form-error') %}
-        <h4 class="color-red text-center first flash-message" >{{ flash_message|trans|raw }}</h4>
-    {% endfor %}
-
-    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori' | trans }}</h4>
+    {% include "document_form/base/errors.html.twig" %}
 
     <div class="col-xs-12">    
         <form class="formular-form" id="decizie_comisie_cercetare_accidente" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
 
-            {{ form_row(form.company) }}
+            {{ form_row(form.company, { 'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
             
-            {% for item in form.undersigned %}
-                <div class="col-xs-6 no-margin-left">
-                    {{ form_row(item.name, {'label':'Subsemnatul',
-                        'attr': {'data-val': 'true',
-                        'data-val-required': 'Acest camp este obligatoriu' | trans,
-                        } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.undersigned.vars.full_name }}[0][name]" data-valmsg-replace="true" ></span>
-                </div>
-                <div class="col-xs-6 no-margin-right">
-                    {{ form_row(item.function, {'label':'in calitate de',
-                        'attr': {'data-val': 'true',
-                        'data-val-required': 'Acest camp este obligatoriu' | trans,
-                        } } ) }}
-                        <span class="field-validation-valid" data-valmsg-for="{{ form.undersigned.vars.full_name }}[0][function]" data-valmsg-replace="true" ></span>
-                </div>
-            {% endfor %}
-            
+            {% include "document_form/base/person_generic_full.html.twig" with { 'title': 'Subsemnatul', 'persons': form.undersigned, 'functionLabel': 'in calitate de' } %}
+                     
             {{ form_row(form.accidentDate, {'label':'Pentru cercetarea evenimentului ce a avut loc in data de'}) }}
             <span class="field-validation-valid" id="error-accidentDate">{{ 'Completati toate detaliile referitor la data si ora' | trans }}</span>
             <div class="clear-both"></div>
@@ -56,15 +36,20 @@
                     {% endfilter %}">
                     {% for item in form.members %}
                         <li>
-                            <div class="col-xs-6 no-margin-left">
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    { 'attr': {'data-val': 'true',
+                                    'data-val-required': ' ' | trans,
+                                    } } ) }}
+                            </div>
+                            <div class="col-xs-6">
                                 {{ form_row(item.name, 
-                                    { 'label': 'Dl/Dna',
-                                    'attr': {'data-val': 'true',
+                                    { 'attr': {'data-val': 'true',
                                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                                     } } ) }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ form.members.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                             </div>
-                            <div class="col-xs-6 no-margin-right">
+                            <div class="col-xs-5 no-margin-right">
                                 {{ form_row(item.function, 
                                 { 'label': 'in calitate de',
                                 'attr': {'data-val': 'true',
@@ -139,11 +124,7 @@
             {{ form_row(form.endingActivity, {'label':'Cercetarea evenimentului se va incheia in cel mult 10 zile lucratoare de la data producerii, adica cel mult pana in'}) }}
             <span class="field-validation-valid" id="error-endingActivity">{{ 'Completati toate detaliile referitor la data' | trans }}</span>
             
-            {{ form_row(form.administrator, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Administrator', 'persons': form.administrator } %}
             
             <div class="hidden">{{ form_rest(form) }}</div>
             <div class="craue_formflow_buttons">
@@ -182,6 +163,11 @@
                         messages: {
                             required: 'Acest camp este obligatoriu'
                         }
+                    });
+                });
+                jQuery('#membrii-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
                     });
                 });
             }

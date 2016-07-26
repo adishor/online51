@@ -102,7 +102,7 @@ class OrderController extends Controller
 
         return $this->render('order/order_valid_documents.html.twig', array(
               'validDocuments' => $validDocuments,
-              'isUserException' => $this->get('app.user_helper')->getIsUserException(),
+              'isUserException' => $this->get('app.user')->getIsUserException(),
               'formularType' => CreditsUsage::TYPE_FORMULAR,
               'videoType' => CreditsUsage::TYPE_VIDEO,
             )
@@ -132,7 +132,7 @@ class OrderController extends Controller
         }
 
         return $this->render('order/order_credit_history.html.twig', array(
-              'creditHistoryItems' => $this->get('knp_paginator')->paginate($this->get('app.order_helper')->getCreditHistory($this->getUser()->getId()), $request->query->getInt('page-history', 1), $this->getParameter('pagination')['history'], array('pageParameterName' => 'page-history')),
+              'creditHistoryItems' => $this->get('knp_paginator')->paginate($this->get('app.order')->getCreditHistory($this->getUser()->getId()), $request->query->getInt('page-history', 1), $this->getParameter('pagination')['history'], array('pageParameterName' => 'page-history')),
               'formularType' => CreditsUsage::TYPE_FORMULAR
             )
         );
@@ -142,7 +142,7 @@ class OrderController extends Controller
     {
         $userId = $this->getUser()->getId();
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
-        $orderTotal = $this->get('app.order_helper')->getCreditTotal($userId);
+        $orderTotal = $this->get('app.order')->getCreditTotal($userId);
         $usedCreditsTotal = $creditUsageRepository->findTotalUsedCredits($userId);
         $expiredCreditsTotal = $creditUsageRepository->findTotalExpiredCredits($userId);
 
@@ -160,7 +160,7 @@ class OrderController extends Controller
     {
         $post = $request->request;
         if ($post->has('subscriptionId')) {
-            if (!$this->get('app.order_helper')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), $post->get('domains'))) {
+            if (!$this->get('app.order')->addSubscription($post->get('subscriptionId'), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), $post->get('domains'))) {
 
                 return $this->redirectToRoute('subscriptions');
             }
@@ -174,7 +174,7 @@ class OrderController extends Controller
      */
     public function removeOrderAction($orderId)
     {
-        $this->get('app.order_helper')->removeOrder($orderId);
+        $this->get('app.order')->removeOrder($orderId);
 
         return $this->redirect($this->generateUrl('show_pending_orders'));
     }

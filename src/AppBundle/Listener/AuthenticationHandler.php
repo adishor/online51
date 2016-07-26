@@ -12,13 +12,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use AppBundle\Service\UserHelperService;
+use AppBundle\Service\UserService;
+use AppBundle\Service\CreditsUsageService;
 
 class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
 {
     private $router;
     private $session;
-    protected $userHelper;
+    protected $userService;
+    protected $creditsUsageService;
 
     /**
      * Constructor
@@ -26,11 +28,12 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
      * @param 	RouterInterface $router
      * @param 	Session $session
      */
-    public function __construct(RouterInterface $router, Session $session, UserHelperService $userHelper)
+    public function __construct(RouterInterface $router, Session $session, UserService $userService, CreditsUsageService $creditsUsageService)
     {
         $this->router = $router;
         $this->session = $session;
-        $this->userHelper = $userHelper;
+        $this->userService = $userService;
+        $this->creditsUsageService = $creditsUsageService;
     }
 
     /**
@@ -44,11 +47,11 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     {
         // if AJAX login
         if ($request->isXmlHttpRequest()) {
-            $isAdmin = $this->userHelper->isUserAdmin();
+            $isAdmin = $this->userService->isUserAdmin();
             $array = array('success' => true, 'admin' => $isAdmin); // data to return via JSON
             $response = new Response(json_encode($array));
             $request->getSession()->getFlashBag()->add('successful-login', 'success.login');
-            $this->userHelper->updateValidUserCredits();
+            $this->creditsUsageService->updateValidUserCredits();
 
             return $response;
 

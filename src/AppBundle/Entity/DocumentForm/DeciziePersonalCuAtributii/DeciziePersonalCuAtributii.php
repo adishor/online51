@@ -63,6 +63,7 @@ class DeciziePersonalCuAtributii
     public function __construct()
     {
         $x = new Person();
+        $x->setGender('');
         $x->setName('');
         $x->setFunction('');
 
@@ -80,9 +81,11 @@ class DeciziePersonalCuAtributii
 
         $this->workersResponsible = new ArrayCollection();
         $y = new Person();
+        $y->setGender('');
         $y->setName('');
         $y->setFunction('formular.decizie-personal-cu-atributii.use-elevator');
         $z = new Person();
+        $z->setGender('');
         $z->setName('');
         $z->setFunction('formular.decizie-personal-cu-atributii.maintenance');
         $workersResponsible = [$y, $z];

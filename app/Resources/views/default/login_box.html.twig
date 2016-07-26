@@ -23,7 +23,7 @@
         {% if is_granted('ROLE_SUPER_ADMIN') %}
             <p class="last"><a href="{{ path('sonata_admin_dashboard') }}">{{ 'login.administration'|trans }}</a></p>
         {% endif %}
-        {% if app.user.demoAccount %}
+        {% if app.user.profile.demoAccount %}
             <p class="last"><a href="{{ path('change_info') }}">{{ 'login.activate-account'|trans }}</a></p>
         {% else %}
             <p class="last"><a href="{{ path('show_orders') }}">{{ 'login.credit-status'|trans }}</a></p>

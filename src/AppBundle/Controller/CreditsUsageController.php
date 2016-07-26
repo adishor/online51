@@ -20,12 +20,12 @@ class CreditsUsageController extends Controller
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
-        $userHelper = $this->get('app.user_helper');
-        $userHelper->updateValidUserCredits();
+        $creditsUsageService = $this->get('app.credits_usage');
+        $creditsUsageService->updateValidUserCredits();
         $documentId = $request->request->get('documentId');
         $document = $this->getDoctrine()->getManager()->getRepository('AppBundle:Document')->find($documentId);
 
-        if (true === $userHelper->isValidUserDocument($user->getId(), $documentId)) {
+        if (true === $creditsUsageService->isValidUserDocument($user->getId(), $documentId)) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.document.already-unlocked'));
         }
         if (($user->getCreditsTotal() - $document->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
@@ -34,7 +34,7 @@ class CreditsUsageController extends Controller
             return $response;
         }
 
-        $userHelper->createUnlockDocumentCreditUsage($user, $document);
+        $creditsUsageService->createUnlockDocumentCreditUsage($user, $document);
 
         $response = new Response(json_encode(array(
               'success' => true,
@@ -54,12 +54,12 @@ class CreditsUsageController extends Controller
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
-        $userHelper = $this->get('app.user_helper');
-        $userHelper->updateValidUserCredits();
+        $creditsUsageService = $this->get('app.credits_usage');
+        $creditsUsageService->updateValidUserCredits();
         $videoId = $request->request->get('videoId');
         $video = $this->getDoctrine()->getManager()->getRepository('AppBundle:Video')->find($videoId);
 
-        if (true === $userHelper->isValidUserVideo($user->getId(), $videoId)) {
+        if (true === $creditsUsageService->isValidUserVideo($user->getId(), $videoId)) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.video.already-unlocked'));
         }
         if (($user->getCreditsTotal() - $video->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
@@ -68,7 +68,7 @@ class CreditsUsageController extends Controller
             return $response;
         }
 
-        $userHelper->createUnlockVideoCreditUsage($user, $video);
+        $creditsUsageService->createUnlockVideoCreditUsage($user, $video);
 
         $response = new Response(json_encode(array(
               'success' => true,
@@ -125,9 +125,10 @@ class CreditsUsageController extends Controller
     public function processFormularAction($formularId, $formularConfig, $discounted = false, $discountedIsDraft = false, $formularData = NULL)
     {
         $user = $this->getUser();
-        $userHelper = $this->get('app.user_helper');
+        $userService = $this->get('app.user');
+        $creditsUsageService = $this->get('app.credits_usage');
         $formular = $this->getDoctrine()->getManager()->getRepository('AppBundle:Formular')->find($formularId);
-        if (!$userHelper->getIsUserException()) {
+        if (!$userService->getIsUserException()) {
             $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
             if (($user->getCreditsTotal() - $creditValue < 0) || (null === $user->getCreditsTotal())) {
                 $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.formular.no-credits'))));
@@ -135,7 +136,7 @@ class CreditsUsageController extends Controller
             }
         }
 
-        $userHelper->updateValidUserCredits();
+        $creditsUsageService->updateValidUserCredits();
 
         $formularService = $this->get("app.formular." . $formular->getSlug());
         $formularService->setName($formular->getSlug());
@@ -145,7 +146,7 @@ class CreditsUsageController extends Controller
             $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
         }
 
-        $creditsUsageId = $userHelper->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted, $formularData);
+        $creditsUsageId = $creditsUsageService->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted, $formularData);
 
         $response = new Response(json_encode(array(
               'success' => true,

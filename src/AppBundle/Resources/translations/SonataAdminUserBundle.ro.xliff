@@ -118,6 +118,10 @@
                 <source>form.label_image</source>
                 <target>Imagine</target>
             </trans-unit>
+            <trans-unit id="form.label_profile">
+                <source>form.label_profile</source>
+                <target>Profil</target>
+            </trans-unit>
             <trans-unit id="filter.label_username">
                 <source>filter.label_username</source>
                 <target>Nume de utilizator</target>
@@ -686,6 +690,62 @@
                 <source>show.label_no_certified_empowerment</source>
                 <target>Numar certificat de abilitare</target>
             </trans-unit>
+            <trans-unit id="show.label_profile_name">
+                <source>show.label_profile_name</source>
+                <target>Nume</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_function">
+                <source>show.label_profile_function</source>
+                <target>Functie</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_company">
+                <source>show.label_profile_company</source>
+                <target>Companie</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_image">
+                <source>show.label_profile_image</source>
+                <target>Imagine</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_phone">
+                <source>show.label_profile_phone</source>
+                <target>Telefon</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_county">
+                <source>show.label_profile_county</source>
+                <target>Judet</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_city">
+                <source>show.label_profile_city</source>
+                <target>Oras</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_address">
+                <source>show.label_profile_address</source>
+                <target>Adresa</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_no_employees">
+                <source>show.label_profile_no_employees</source>
+                <target>Nr. de angajati</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_cui">
+                <source>show.label_profile_cui</source>
+                <target>CUI</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_bank">
+                <source>show.label_profile_bank</source>
+                <target>Banca</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_iban">
+                <source>show.label_profile_iban</source>
+                <target>IBAN</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_no_registration_o_r_c">
+                <source>show.label_profile_no_registration_o_r_c</source>
+                <target>Nr. inregistrare O.R.C</target>
+            </trans-unit>
+            <trans-unit id="show.label_profile_no_certified_empowerment">
+                <source>show.label_profile_no_certified_empowerment</source>
+                <target>Numar certificat de abilitare</target>
+            </trans-unit>            
             <trans-unit id="User">
                 <source>User</source>
                 <target>Utilizator</target>
@@ -696,6 +756,14 @@
             </trans-unit>
             <trans-unit id="Profile">
                 <source>Profile</source>
+                <target>Profil</target>
+            </trans-unit>
+            <trans-unit id="User.General">
+                <source>User.General</source>
+                <target>General</target>
+            </trans-unit>
+            <trans-unit id="User.Profile">
+                <source>User.Profile</source>
                 <target>Profil</target>
             </trans-unit>
             <trans-unit id="Company">

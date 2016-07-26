@@ -25,14 +25,12 @@
         <form class="formular-form" id="decizie_organizare_activitate_ssm" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
             
-            {{ form_row(form.company) }}
+            {{ form_row(form.company, { 'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
             
-            {{ form_row(form.designedWorkerForPreventionProtection, 
-                    { 'label': 'Lucrator desemnat pentru a se ocupa de activitatile de prevenire si protectie',
-                    'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.designedWorkerForPreventionProtection.vars.full_name }}" data-valmsg-replace="true" ></span>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Lucrator desemnat pentru a se ocupa de activitatile de prevenire si protectie', 'persons': form.designedWorkerForPreventionProtection } %}
             
             <section>
                 <h3>{{ 'Serviciu intern de prevenire si protectie format din:' | trans }}</h3>
@@ -42,14 +40,24 @@
                     {% endfilter %}">
                     {% for item in form.membersForPreventionProtectionService %}
                         <li>
-                            {{ form_row(item.name, 
-                                {'attr': {'data-val': 'true',
-                                'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                } } ) }}
-                            {% if item.function.vars.value %}
-                                {{ item.function.vars.value | trans }}<br/>
-                            {% endif %}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.membersForPreventionProtectionService.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.membersForPreventionProtectionService.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-11">
+                                {{ form_row(item.name, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                {% if item.function.vars.value %}
+                                    {{ item.function.vars.value | trans }}<br/>
+                                {% endif %}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.membersForPreventionProtectionService.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="clear-both"></div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -112,7 +120,14 @@
                     {% endfilter %}">
                     {% for item in form.leaders %}
                         <li>
-                            <div class="col-xs-6 no-margin-left">
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.leaders.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-6">
                                 {{ form_row(item.name, 
                                     { 'label': 'Dl/Dna',
                                     'attr': {'data-val': 'true',
@@ -120,7 +135,7 @@
                                     } } ) }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ form.leaders.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
                             </div>
-                            <div class="col-xs-6 no-margin-right">
+                            <div class="col-xs-5 no-margin-right">
                                 {{ form_row(item.function, 
                                 { 'label': 'Loc de munca',
                                 'attr': {'data-val': 'true',
@@ -182,11 +197,7 @@
             </section>
             <div class="clear-both"></div>
             
-            {{ form_row(form.administrator, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Administrator', 'persons': form.administrator } %}
             
             <div class="hidden">{{ form_rest(form) }}</div>
             <div class="craue_formflow_buttons">
@@ -217,6 +228,11 @@
                         }
                     });
                 });
+                jQuery('#membrii-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
+                    });
+                });
             }
             
             if (!jQuery("#lideri-fields-list li").length) {
@@ -231,6 +247,11 @@
                         messages: {
                             required: 'Acest camp este obligatoriu'
                         }
+                    });
+                });
+                jQuery('#lideri-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
                     });
                 });
             }

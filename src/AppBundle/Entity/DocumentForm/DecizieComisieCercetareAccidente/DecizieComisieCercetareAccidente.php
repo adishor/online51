@@ -30,8 +30,7 @@ class DecizieComisieCercetareAccidente
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $administrator;
 
@@ -101,6 +100,7 @@ class DecizieComisieCercetareAccidente
         $y = new Person();
         $y->setName('');
         $y->setFunction('');
+        $y->setGender('');
 
         $this->members = new ArrayCollection();
         $members = [$y];
@@ -109,6 +109,10 @@ class DecizieComisieCercetareAccidente
         $this->undersigned = new ArrayCollection();
         $undersigned = [$y];
         $this->undersigned = $undersigned;
+
+        $this->administrator = new ArrayCollection();
+        $administrator = [$y];
+        $this->administrator = $administrator;
     }
 
     public function getCompany()

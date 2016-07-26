@@ -9,22 +9,24 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use AppBundle\Service\UserHelperService;
-use AppBundle\Entity\CreditsUsage;
+use AppBundle\Service\UserService;
+use AppBundle\Service\CreditsUsageService;
 
 class UserDownloadStrategy implements DownloadStrategyInterface
 {
     protected $translator;
     protected $authorizationChecker;
     protected $tokenStorage;
-    protected $userHelper;
+    protected $userService;
+    protected $creditsUsageService;
 
-    public function __construct(TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage, UserHelperService $userHelper)
+    public function __construct(TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker, TokenStorage $tokenStorage, UserService $userService, CreditsUsageService $creditsUsageService)
     {
         $this->translator = $translator;
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenStorage = $tokenStorage;
-        $this->userHelper = $userHelper;
+        $this->userService = $userService;
+        $this->creditsUsageService = $creditsUsageService;
     }
 
     /**
@@ -41,30 +43,30 @@ class UserDownloadStrategy implements DownloadStrategyInterface
             throw new AccessDeniedHttpException();
         }
         $user = $this->tokenStorage->getToken()->getUser();
-        if ($this->userHelper->getIsUserException($user->getId())) {
+        if ($this->userService->getIsUserException($user->getId())) {
 
             return true;
         }
 
-        if (empty($this->userHelper->getValidCreditsUsageForMedia($media->getId()))) {
+        if (empty($this->creditsUsageService->getValidCreditsUsageForMedia($media->getId()))) {
             throw new AccessDeniedHttpException();
         }
 
-        $creditsUsage = $this->userHelper->getValidCreditsUsageForMedia($media->getId())[0];
+        $creditsUsage = $this->creditsUsageService->getValidCreditsUsageForMedia($media->getId())[0];
 
 
         if (null !== $creditsUsage->getDocument()) {
-            if (!$this->userHelper->isValidUserDocument($user->getId(), $creditsUsage->getDocument()->getId())) {
+            if (!$this->creditsUsageService->isValidUserDocument($user->getId(), $creditsUsage->getDocument()->getId())) {
                 throw new AccessDeniedHttpException();
             }
         }
         if (null !== $creditsUsage->getVideo()) {
-            if (!$this->userHelper->isValidUserVideo($user->getId(), $creditsUsage->getVideo()->getId())) {
+            if (!$this->creditsUsageService->isValidUserVideo($user->getId(), $creditsUsage->getVideo()->getId())) {
                 throw new AccessDeniedHttpException();
             }
         }
         if (null !== $creditsUsage->getFormular()) {
-            if (!$this->userHelper->isValidUserFormularDocument($user->getId(), $creditsUsage->getFormular()->getId())) {
+            if (!$this->creditsUsageService->isValidUserFormularDocument($user->getId(), $creditsUsage->getFormular()->getId())) {
                 throw new AccessDeniedHttpException();
             }
         }

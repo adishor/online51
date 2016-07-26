@@ -46,8 +46,8 @@ class MailerService
         $subject = $this->translator->trans('mail.contact.subject') . $contact->getSubject();
 
         $contactBody = $this->templating->render('contact/contact_email_body.html.twig', array(
-            'name' => $contact->getName(),
-            'phone' => $contact->getPhone(),
+            'name' => $contact->getProfile()->getName(),
+            'phone' => $contact->getProfile()->getPhone(),
             'email' => $contact->getEmail(),
             'message' => $contact->getMessage()), 'text/html');
 
@@ -67,7 +67,7 @@ class MailerService
     public function sendResetPasswordMessage($user)
     {
         $confirmationBody = $this->templating->render('user/reset_password_email_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()->getName(),
             'token' => $user->getConfirmationToken())
           , 'text/html');
 
@@ -79,7 +79,7 @@ class MailerService
         $user = $order->getUser();
         $subscription = ($order->getSubscription()) ? $order->getSubscription()->getName() : null;
         $orderBody = $this->templating->render('order/order_confirmation_email_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()->getName(),
             'number' => $order->getId(),
             'subscription' => $subscription,
             'domains' => $order->getDomains(),
@@ -95,7 +95,7 @@ class MailerService
     public function sendActivationMessage($user)
     {
         $confirmationBody = $this->templating->render('user/activate_account_email_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()->getName(),
             'token' => $user->getConfirmationToken())
           , 'text/html');
 
@@ -107,7 +107,7 @@ class MailerService
         $user = $order->getUser();
 
         $orderBody = $this->templating->render('order/order_invoice_email_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()->getName(),
             'number' => $order->getId(),
             'subscription' => $order->getSubscription(),
             'domains' => $order->getDomains(),
@@ -125,7 +125,7 @@ class MailerService
     {
         $user = $order->getUser();
         $removePendingOrderBody = $this->templating->render('order/pending_order_remove_email_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()->getName(),
             'number' => $order->getId(),
             'mentions' => $order->getMentions(),
           ), 'text/html');
@@ -138,7 +138,7 @@ class MailerService
         $user = $creditsUsage->getUser();
 
         $formExpireNotificationBody = $this->templating->render('document_form/base/form_expire_notification_body.html.twig', array(
-            'name' => $user->getName(),
+            'name' => $user->getProfile()->getName(),
             'formName' => $creditsUsage->getFormular()->getName(),
             'formText' => $formText,
             'expireDate' => $creditsUsage->getExpireDate(),
@@ -164,7 +164,7 @@ class MailerService
         $subject = $this->translator->trans('mail.free-account.subject');
 
         $demoAccountMessageBody = $this->templating->render('user/demo_account_message_body.html.twig', array(
-            'name' => $demoUser->getName(),
+            'name' => $demoUser->getProfile()->getName(),
             'email' => $demoUser->getEmail(),
             'password' => $demoPassword,
             'order' => $demoOrder,
@@ -178,8 +178,8 @@ class MailerService
         $subject = $this->translator->trans('mail.free-account.subject');
 
         $createAdminUserMessageBody = $this->templating->render('user/create_admin_account_message_body.html.twig', array(
-          'name' => $user->getName(),
-          'username' => $user->getUsername(),
+          'name' => $user->getProfile()->getName(),
+            'username' => $user->getUsername(),
           'password' => $password,
         ), 'text/html');
 

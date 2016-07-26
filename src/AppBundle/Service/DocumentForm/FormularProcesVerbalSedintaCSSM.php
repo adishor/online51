@@ -10,8 +10,8 @@ class FormularProcesVerbalSedintaCSSM extends FormularGeneric implements Formula
 
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getCompany());
-        $formData->setCompanyCity($user->getCity());
+        $formData->setCompany($user->getProfile()->getCompany());
+        $formData->setCompanyCity($user->getProfile()->getCity());
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }

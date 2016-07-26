@@ -15,7 +15,7 @@ class AdController extends Controller
             $countyName = '';
             if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
                 if ($this->getUser()) {
-                    $countyName = $this->getUser()->getCounty()->getName();
+                    $countyName = $this->getUser()->getProfile()->getCounty()->getName();
                 } else {
                     $location = file_get_contents('http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR']);
                     if (FALSE !== $location) {
