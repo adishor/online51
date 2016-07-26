@@ -25,9 +25,9 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
 
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getProfile()->getCompany());
-        $formData->setCompanyCity($user->getProfile()->getCity()->getId());
-        $formData->setCompanyCounty($user->getProfile()->getCounty()->getId());
+        $formData->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
+        $formData->setCompanyCity($user->getProfile()->getCity() ? $user->getProfile()->getCity()->getId() : NULL);
+        $formData->setCompanyCounty($user->getProfile()->getCounty() ? $user->getProfile()->getCounty()->getId() : NULL);
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }
