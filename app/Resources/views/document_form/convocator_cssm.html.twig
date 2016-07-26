@@ -24,7 +24,7 @@
                 } } ) }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
             
-            {{ form_row(form.companyCounty, {'value': formData.company_county, 'label': 'Judet', 'attr':
+            {{ form_row(form.companyCounty, {'value': (formData.company_county is defined ? formData.company_county : null ), 'label': 'Judet', 'attr':
                   { 'data-val': 'true',
                     'data-val-number': 'form.valid.number.county'|trans,
                     'data-val-required': 'form.required.county'|trans,
@@ -36,7 +36,7 @@
             
             <div id="LocalitiesDiv">
                 <div class="editor-field">
-                    {{ form_row(form.companyCity, {'value': formData.company_city, 'label': 'Localitate', 'attr':
+                    {{ form_row(form.companyCity, {'value': (formData.company_city is defined ? formData.company_city : null), 'label': 'Localitate', 'attr':
                         { 'data-val': 'true',
                           'data-val-required': 'form.required.city'|trans,
                           'data-val-number': 'form.valid.number.city'|trans,
