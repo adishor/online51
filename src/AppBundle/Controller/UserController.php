@@ -14,6 +14,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Application\Sonata\MediaBundle\Entity\Media;
 use AppBundle\Helper\UserHelper;
 use AppBundle\Form\Type\RegisterType;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class UserController extends Controller
 {
@@ -40,12 +42,14 @@ class UserController extends Controller
             if ($flow->getCurrentStep() == 1) {
                 if ($form->isSubmitted()) {
                     if ($form->getData()->getProfile()->getCui()) {
-                        var_dump($form->getData()->getProfile()->getCui());
                         $registerErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()->getCui());
                     }
                     if ($form->getData()->getProfile()->getIban()) {
-                        var_dump($form->getData()->getProfile()->getIban());
                         $registerErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()->getIban());
+                    }
+                    if ($form->getData()->getProfile()->getFunction() == 'Serviciu extern' &&
+                      !$form->getData()->getProfile()->getNoCertifiedEmpowerment()) {
+                        $registerErrors['noCertifiedEmpowerment'] = false;
                     }
 
                     //save media in session
@@ -221,6 +225,12 @@ class UserController extends Controller
             $user->setEnabled(true);
             $this->addFlash('successful-activate', 'success.activate');
             $this->container->get('fos_user.user_manager')->updateUser($user);
+
+            $token = new UsernamePasswordToken($user, $user->getPassword(), "main", $user->getRoles());
+            $this->get("security.context")->setToken($token);
+
+            $event = new InteractiveLoginEvent($request, $token);
+            $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
         }
 
         return $this->redirect($this->generateUrl('homepage'));
@@ -266,6 +276,10 @@ class UserController extends Controller
             }
             if ($form->getData()->getProfile()->getIban()) {
                 $changeInfoErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()->getIban());
+            }
+            if ($form->getData()->getProfile()->getFunction() == 'Serviciu extern' &&
+              !$form->getData()->getProfile()->getNoCertifiedEmpowerment()) {
+                $changeInfoErrors['noCertifiedEmpowerment'] = false;
             }
         }
 

@@ -19,12 +19,12 @@
             <ol>
                 <li>{{ 'Prin prezenta Decizie se stabilesc responsabilitatile si modul de organizare a activitatii de prevenire si protectie in domeniul sanatatii si securitatii in munca, in' | trans }} {{ data.company }}</li>
                 <li>{{ 'In' | trans }} {{ data.company }}, {{ ' organizarea activitatilor de prevenire si protectie se realizeaza:' | trans }}
-                    <p>-&nbsp;&nbsp;&nbsp;{{ 'prin desemnarea D-lui/D-nei' | trans }} {{ data.designedWorkerForPreventionProtection }} {{ 'ca lucrator desemnat pentru a se ocupa de activitatile de prevenire si protectie' | trans }}</p>
+                    <p>-&nbsp;&nbsp;&nbsp;{{ 'prin desemnarea ' | trans }} {{ data.designedWorkerForPreventionProtection.0.gender | trans }} {{ data.designedWorkerForPreventionProtection.0.name }} {{ 'ca lucrator desemnat pentru a se ocupa de activitatile de prevenire si protectie' | trans }}</p>
                     <p>-&nbsp;&nbsp;&nbsp;{{ 'prin infintarea unui serviciu intern de prevenire si protectie format din:' | trans }}</p>
                     <div class="section-group2">
                         {% for item in data.membersForPreventionProtectionService %}
                             {% if item.name %}
-                                <p>{{ item.name }}
+                                <p>{{ item.gender | trans }} {{ item.name }}
                                     {% if item.function %}
                                         - {{ item.function | trans }}
                                     {% endif %}
@@ -42,7 +42,7 @@
                             <ul>
                                 {% for item in data.leaders %}
                                     {% if item.name %}
-                                        <li><p>{{ 'Dl/Dna' | trans }} {{ item.name }}</p></li>
+                                        <li><p>{{ item.gender | trans }} {{ item.name }}</p></li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
@@ -66,7 +66,7 @@
                 <li>{{ 'Obligatiile personalului angajat privind sanatatea si securitatea in munca fac parte din obligatiile de serviciu.' | trans }}</li>
             </ol>
             <div class="height-40-px"></div>
-            <p><span class="text-indent"></span>{{ 'Administrator' | trans }} {{ data.administrator }} ...........................................</p>
+            <p><span class="text-indent"></span>{{ 'Administrator' | trans }} {{ data.administrator.0.gender }} {{ data.administrator.0.name }} ...........................................</p>
             <div class="height-40-px"></div>
             <p><span class="text-indent"></span>{{ 'Am luat la cunostinta despre obligatiile pe care le am in calitate de conducator al locului de munca.' | trans }}</p>
             <p><span class="text-indent"></span>{{ 'Mi-am insusit prevederile cuprinse in Instructiunea specifica pentru conducatorii locurilor de munca.' | trans }}</p>
@@ -76,15 +76,15 @@
                 <div class="col-xs-6">
                     <p><span class="text-indent"></span>{{ 'Nume,prenume' | trans }}</p>
                     <ul>
-                        <li><p>{{ 'Dl/Dna' | trans }} {{ data.designedWorkerForPreventionProtection }}</p></li>
+                        <li><p>{{ data.designedWorkerForPreventionProtection.0.gender | trans }} {{ data.designedWorkerForPreventionProtection.0.name }}</p></li>
                         {% for item in data.membersForPreventionProtectionService %}
                             {% if item.name %}
-                                <li><p>{{ 'Dl/Dna' | trans }} {{ item.name }}</p></li>
+                                <li><p>{{ item.gender | trans }} {{ item.name }}</p></li>
                             {% endif %}
                         {% endfor %}
                         {% for item in data.leaders %}
                             {% if item.name %}
-                                <li><p>{{ 'Dl/Dna' | trans }} {{ item.name }}</p></li>
+                                <li><p>{{ item.gender | trans }} {{ item.name }}</p></li>
                             {% endif %}
                         {% endfor %}
                     </ul>

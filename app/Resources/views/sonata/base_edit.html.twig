@@ -36,7 +36,6 @@
 {#          used just for ProfileAdmin#}
           {% if admin.formFieldDescriptions.county is defined %}
             var county = $("#{{ admin.uniqId }}_county");
-            console.log(county);
             county.change(updateCities()); // Bind the function to updateCities
             county.change(); // Manual trigger to update cities in Document load.
 

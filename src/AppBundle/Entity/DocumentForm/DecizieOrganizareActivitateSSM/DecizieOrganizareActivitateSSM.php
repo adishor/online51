@@ -30,15 +30,13 @@ class DecizieOrganizareActivitateSSM
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $administrator;
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $designedWorkerForPreventionProtection;
 
@@ -62,9 +60,11 @@ class DecizieOrganizareActivitateSSM
     {
         $this->membersForPreventionProtectionService = new ArrayCollection();
         $x = new Person();
+        $x->setGender('');
         $x->setName('');
         $x->setFunction('formular.decizie-organizare-activitate-ssm.service-chief');
         $y = new Person();
+        $y->setGender('');
         $y->setName('');
         $y->setFunction('');
 
@@ -74,6 +74,15 @@ class DecizieOrganizareActivitateSSM
         $this->leaders = new ArrayCollection();
         $leaders = [$y];
         $this->leaders = $leaders;
+
+        $this->administrator = new ArrayCollection();
+        $this->designedWorkerForPreventionProtection = new ArrayCollection();
+
+        $administrator = [$y];
+        $designedWorkerForPreventionProtection = [$y];
+
+        $this->administrator = $administrator;
+        $this->designedWorkerForPreventionProtection = $designedWorkerForPreventionProtection;
     }
 
     public function getCompany()

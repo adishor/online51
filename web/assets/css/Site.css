@@ -2180,3 +2180,7 @@ input[readonly] {
 li section {
     padding: 0;
 }
+
+.form-control {
+    height: 34px !important;
+}

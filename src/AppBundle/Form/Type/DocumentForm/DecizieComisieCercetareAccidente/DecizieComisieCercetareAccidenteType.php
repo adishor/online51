@@ -15,9 +15,6 @@ class DecizieComisieCercetareAccidenteType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $options['container'];
-        $user = $container->get('security.context')->getToken()->getUser();
-
         $date = new \DateTime();
         $year = $date->format('Y');
         $years = array(
@@ -30,9 +27,7 @@ class DecizieComisieCercetareAccidenteType extends AbstractType
         );
 
         $builder
-          ->add('company', TextType::class, array(
-              'read_only' => $user->getProfile()->getDemoAccount() ? FALSE : TRUE,
-          ))
+          ->add('company', TextType::class)
           ->add('undersigned', CollectionType::class, array(
               'entry_type' => PersonType::class
           ))

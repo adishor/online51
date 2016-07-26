@@ -142,6 +142,8 @@ class FormularController extends Controller
             'templateData' => $formTemplateData,
             'formConfig' => json_decode($creditsUsage->getFormConfig())
         ));
+        echo $fileBody;
+        die;
         $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
 
         $file = new UploadedFile($filePath, $filename);

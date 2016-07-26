@@ -14,7 +14,7 @@ form:
         company-id: '*CUI'
         company-number: '*Numar de inregistrare la ORC'
         employees: 'Numar de angajati'
-        certificate: 'Numar certificat de abilitare'
+        certificate: '*Numar certificat de abilitare'
         bank-account: '*Contul bancar (IBAN)'
         bank: '*Banca'
         phone: '*Telefon (07xx xxxxxx )'
@@ -76,6 +76,7 @@ form:
         phone: '*Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu &#39;07&#39; si sa aiba 10 cifre'
         orc: '*Numar inregistrare ORC sa aiba forma: tip+cod judet/numar/an (tip: J, F, C, cod judet: din 2 cifre) ex: J11/11/2011'
         old-password: '*Parola Veche este invalida'
+        noCertifiedEmpowerment: 'Va rugam completati *Nr certificat de abilitare'
     password:
         length: '&#39;*Parola&#39; trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
@@ -603,6 +604,7 @@ No Subdomain: Fara subdomeniu
 No Document: Nici o selectie
 No Formular: Nici o selectie
 No Video: Nici o selectie
+No Image: Nici o imagine
 Deleted: Sters
 Deleted At: Sters la
 Create new: Creaza nou
@@ -618,6 +620,17 @@ Demo Domain: Disponibil pentru cont gratuit
 Demo Credit Value: Credite alocate la cont gratuit
 Areas: Zone
 Counties: Judete
+Function: Functie
+Phone: Telefon
+County: Judet
+City: Oras
+Address: Adresa
+No Employees: Nr. de anagajati
+Cui: CUI
+Bank: Banca
+Iban: IBAN
+No Registration O R C: Nr. de inregistrare O.R.C
+No Certified Empowerment: Nr. certificat de abilitare
 
 #media
 sonata:

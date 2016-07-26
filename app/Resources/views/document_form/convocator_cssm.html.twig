@@ -16,8 +16,36 @@
     <div class="col-xs-12">    
         <form class="formular-form" id="convocator_cssm" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
-
-            {{ form_row(form.company) }}
+            
+            {% set formData  = creditsUsage.formData | json_decode %}
+            
+            {{ form_row(form.company, { 'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            {{ form_row(form.companyCounty, {'value': formData.company_county, 'label': 'Judet', 'attr':
+                  { 'data-val': 'true',
+                    'data-val-number': 'form.valid.number.county'|trans,
+                    'data-val-required': 'form.required.county'|trans,
+                    'class': 'form-control shortdropdown',
+                    'onChange': 'getLocalities("convocator_cssm_type_companyCounty", "convocator_cssm_type_companyCity", null)'
+                  } })
+            }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.companyCounty.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
+            <div id="LocalitiesDiv">
+                <div class="editor-field">
+                    {{ form_row(form.companyCity, {'value': formData.company_city, 'label': 'Localitate', 'attr':
+                        { 'data-val': 'true',
+                          'data-val-required': 'form.required.city'|trans,
+                          'data-val-number': 'form.valid.number.city'|trans,
+                          'class': 'form-control shortdropdown'
+                        } })
+                    }}
+                    <span class="field-validation-valid" data-valmsg-for="{{ form.companyCity.vars.full_name }}" data-valmsg-replace="true" ></span>
+                </div>
+            </div>
 
             {{ form_row(form.meetingDate) }}
             <span class="field-validation-valid" id="error-meetingDate">{{ 'Completati toate detaliile referitor la data si ora' | trans }}</span>
@@ -185,6 +213,17 @@
     </div>
 
     <script type="text/javascript">
+        var ajax_localities = '{{ path('ajax_localities') }}';
+        
+        jQuery(document).ready(function () {
+            if ($('#convocator_cssm_type_companyCity').val()) {
+                var city = $('#convocator_cssm_type_companyCity option:selected').text();
+                getLocalities("convocator_cssm_type_companyCounty", "convocator_cssm_type_companyCity", city);
+            } else {
+                $("#LocalitiesDiv").hide();
+            }
+        });
+        
         function onConvocatorCSSMSubmit() {
             if (!(jQuery('#convocator_cssm_type_meetingDate_date_day').val() &&
                     jQuery('#convocator_cssm_type_meetingDate_date_month').val() &&

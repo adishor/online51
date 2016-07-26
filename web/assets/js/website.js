@@ -1,7 +1,7 @@
 $(document).ready(function () {
     if ($('#register_profile_county').val()) {
         var city = $('#register_profile_city option:selected').text();
-        getLocalities(city);
+        getLocalities('register_profile_county', 'register_profile_city', city);
     } else {
         $("#LocalitiesDiv").hide();
     }
@@ -43,23 +43,41 @@ function EmployeesNrChanged() {
 }
 
 function ShowHideItems() {
-    if ($("#register_function option:selected").text() == "Serviciu intern" || $("#register_function option:selected").text() == "Administrator") {
+    if ($("#register_profile_function option:selected").text() == "Serviciu intern" ||
+            $("#register_profile_function option:selected").text() == "Administrator") {
         $("#lblEmployeesNr").show();
-        $("#register_noEmployees").show();
-        $("#lblCertificateNumber").show();
-        $("#tbCertificateNumber").show();
+        $("#register_profile_noEmployees").show();
+        $("#lblCertificateNumber").hide();
+        $("#tbCertificateNumber").hide();
+        $('#tbCertificateNumber input').each(function () {
+            $(this).rules("remove");       
+        });
+        $('#tbCertificateNumber input').prop('disabled', true);
     } else {
-        if ($("#register_function option:selected").text() == "Lucrator desemnat") {
+        if ($("#register_profile_function option:selected").text() == "Lucrator desemnat") {
             $("#lblEmployeesNr").show();
-            $("#register_noEmployees").show();
+            $("#register_profile_noEmployees").show();
             $("#lblCertificateNumber").hide();
             $("#tbCertificateNumber").hide();
+            $('#tbCertificateNumber input').each(function () {
+                $(this).rules("remove");       
+            });
+            $('#tbCertificateNumber input').prop('disabled', true);
         } else {
-            if ($("#register_function option:selected").text() == "Serviciu extern") {
+            if ($("#register_profile_function option:selected").text() == "Serviciu extern") {
                 $("#lblEmployeesNr").hide();
-                $("#register_noEmployees").hide();
+                $("#register_profile_noEmployees").hide();
                 $("#lblCertificateNumber").show();
                 $("#tbCertificateNumber").show();
+                $('#tbCertificateNumber input').removeAttr('disabled');
+                $('#tbCertificateNumber input').each(function () {
+                    $(this).rules("add", {
+                        required: true,
+                        messages: {
+                            required: 'Va rugam completati *Nr certificat de abilitare'
+                        }
+                    });
+                });
             }
         }
     }
@@ -146,13 +164,17 @@ $("#register_iban, #register_profile_iban").bind('input propertychange', functio
     });
 });
 
-function getLocalities(city) {
+$("#register_profile_noCertifiedEmpowerment").bind('input propertychange', function () {
+    $("#validNoCertifiedEmpowermentCustomError").hide();
+});
+
+function getLocalities(countyId, cityId, cityValue) {
     $.ajax({
         type: 'post',
         url: ajax_localities,
         dataType: 'json',
         data: {
-            countyId: $('#register_profile_county').val()
+            countyId: $('#' + countyId).val()
         },
         success: function (cities) {
             var msg = '';
@@ -165,9 +187,9 @@ function getLocalities(city) {
                 $("#LocalitiesDiv").show();
                 msg = '<option value="">Selectati Localitatea</option>' + msg;
                 $('#LocalitiesDiv select').html(msg);
-                if (city) {
-                    $('#register_profile_city option').each(function () {
-                        if ($(this).text() == city) {
+                if (cityValue) {
+                    $('#' + cityId + ' option').each(function () {
+                        if ($(this).text() == cityValue) {
                             $(this).attr('selected', 'selected');
                         }
                     });

@@ -140,6 +140,11 @@
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.profile.noCertifiedEmpowerment.vars.full_name }}" data-valmsg-replace="true" ></span>
                     {{ form_errors(form.profile.noCertifiedEmpowerment) }}
+                    {% if changeInfoErrors.noCertifiedEmpowerment is defined and changeInfoErrors.noCertifiedEmpowerment == false %} 
+                        <span id="validNoCertifiedEmpowermentCustomError" class="field-validation-error" >
+                            {{ 'form.valid.noCertifiedEmpowerment'|trans }}
+                        </span> 
+                    {% endif%}
                 </div>
                 {#          iban#}
                 <div class="editor-label">
@@ -194,7 +199,7 @@
                 'data-val-number': 'form.valid.number.county'|trans,
                 'data-val-required': 'form.required.county'|trans,
                 'class': 'form-control shortdropdown',
-                'onChange': 'getLocalities(null)', },
+                'onChange': 'getLocalities("register_profile_county", "register_profile_city", null)', },
                 })
                     }}
                     <span class="field-validation-valid" data-valmsg-for="{{ form.profile.county.vars.full_name }}" data-valmsg-replace="true" ></span>

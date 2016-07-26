@@ -35,11 +35,21 @@
                     {% endfilter %}">
                     {% for item in form.workersLeaders %}
                         <li>
-                            {{ form_row(item.name, 
-                                {'attr': {'data-val': 'true',
-                                'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersLeaders.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersLeaders.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-11">
+                                {{ form_row(item.name, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersLeaders.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="clear-both"></div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -103,11 +113,21 @@
                     {% endfilter %}">
                     {% for item in form.workersCarsDriven %}
                         <li>
-                            {{ form_row(item.name, 
-                                {'attr': {'data-val': 'true',
-                                'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersCarsDriven.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersCarsDriven.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-11">
+                                {{ form_row(item.name, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersCarsDriven.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="clear-both"></div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -171,11 +191,21 @@
                     {% endfilter %}">
                     {% for item in form.workersFirstAid %}
                         <li>
-                            {{ form_row(item.name, 
-                                {'attr': {'data-val': 'true',
-                                'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersFirstAid.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersFirstAid.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-11">
+                                {{ form_row(item.name, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersFirstAid.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="clear-both"></div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -234,8 +264,9 @@
             <section>
                 <h3>{{ 'Urmatorii angajati sunt responsabili cu:' | trans }}</h3>
                 {% for item in form.workersResponsible %}
-                    {{ form_row(item.name) }}
-                    {{ item.function.vars.value | trans }}
+                    <div class="col-xs-1 no-margin-left">{{ form_row(item.gender) }}</div>
+                    <div class="col-xs-11">{{ form_row(item.name) }} {{ item.function.vars.value | trans }}</div>
+                    <div class="clear-both"></div>
                 {% endfor %}
             </section>
             
@@ -268,6 +299,11 @@
                         }
                     });
                 });
+                jQuery('#conducatorii-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
+                    });
+                });
             }
             
             if (!jQuery("#autoturisme-fields-list li input").length) {
@@ -284,6 +320,11 @@
                         }
                     });
                 });
+                jQuery('#autoturisme-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
+                    });
+                });
             }
             
             if (!jQuery("#primAjutor-fields-list li input").length) {
@@ -298,6 +339,11 @@
                         messages: {
                             required: 'Acest camp este obligatoriu'
                         }
+                    });
+                });
+                jQuery('#primAjutor-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
                     });
                 });
             }

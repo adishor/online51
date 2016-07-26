@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Form\Type\DocumentForm\Common\PersonType;
 use AppBundle\Form\Type\DocumentForm\Common\ConvocatorCSSMPunctType;
 
@@ -15,20 +16,19 @@ class ConvocatorCSSMType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $options['container'];
-        $user = $container->get('security.context')->getToken()->getUser();
-
         $date = new \DateTime();
         $year = $date->format('Y');
 
         $builder
-          ->add('company', TextType::class, array(
-              'read_only' => $user->getProfile()->getDemoAccount() ? FALSE : TRUE,
+          ->add('company', TextType::class)
+          ->add('companyCounty', EntityType::class, array(
+              'class' => 'AppBundle:ROCounty',
+              'choice_label' => 'name'
           ))
-//          ->add('companyCounty', null, array(
-//              'empty_value' => 'Selectati judetul'
-//          ))
-//          ->add('companyCity')
+          ->add('companyCity', EntityType::class, array(
+              'class' => 'AppBundle:ROCity',
+              'choice_label' => 'name'
+          ))
           ->add('meetingDate', DateTimeType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua', 'hour' => 'Ora'
