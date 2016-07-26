@@ -10,7 +10,7 @@ class FormularPermisDeLucruCuFoc extends FormularGeneric implements FormularForm
 
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getProfile()->getCompany());
+        $formData->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }
