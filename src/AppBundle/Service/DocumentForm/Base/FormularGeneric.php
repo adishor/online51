@@ -51,9 +51,6 @@ class FormularGeneric
 
     public function checkValidity($user, $creditsUsage)
     {
-        if (null === $user) {
-            return 'domain.not-logged-in';
-        }
         if ($creditsUsage->getUser()->getId() !== $user->getId()) {
             return 'formular-documents.access-denied';
         }

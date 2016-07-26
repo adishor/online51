@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Application\Sonata\UserBundle\Entity\User;
+use AppBundle\Entity\Profile;
 
 class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -31,13 +32,17 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
         $user->setEnabled(true);
         $user->setExpired(false);
         $user->setLocked(false);
-        $user->setName('SuperAdmin');
-        $user->setCompany('PITECH+PLUS');
         $user->addRole(User::ROLE_SUPER_ADMIN);
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
         $user->setPassword($encoder->encodePassword('admin', $user->getSalt()));
-        $user->setFunction(User::FUNCTION_ADMINISTRATOR);
         $user->setDeleted(FALSE);
+
+        $profile = new Profile();
+        $profile->setName('SuperAdmin');
+        $profile->setCompany('PITECH+PLUS');
+        $profile->setFunction(Profile::FUNCTION_ADMINISTRATOR);
+
+        $user->setProfile($profile);
         $manager->persist($user);
         $manager->flush();
     }

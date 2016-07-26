@@ -25,9 +25,9 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
 
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getCompany());
-        $formData->setCompanyCity($user->getCity());
-        $formData->setCompanyCounty($user->getCounty());
+        $formData->setCompany($user->getProfile()->getCompany());
+        $formData->setCompanyCity($user->getProfile()->getCity()->getId());
+        $formData->setCompanyCounty($user->getProfile()->getCounty()->getId());
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }
@@ -35,7 +35,7 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
     public function processHandleForm($creditsUsage, $flow, &$formData)
     {
         if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
-            $hour = $formData->getMeetingDate()->format('H');
+            $hour = $formData->getMeetingDate()->format('H:i');
 
             $formConfig['data'] = $formData->getMeetingDate()->format('d/m/Y');
             $formConfig['ora'] = $hour;
@@ -47,7 +47,7 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
 
     public function processEndHandleForm(&$formData)
     {
-        
+
     }
 
 }

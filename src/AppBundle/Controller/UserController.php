@@ -4,14 +4,18 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Form\Type\RegisterType;
 use AppBundle\Form\Type\ResetPasswordType;
 use Application\Sonata\UserBundle\Entity\User;
+use AppBundle\Entity\Profile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Application\Sonata\MediaBundle\Entity\Media;
+use AppBundle\Helper\UserHelper;
+use AppBundle\Form\Type\RegisterType;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class UserController extends Controller
 {
@@ -21,6 +25,11 @@ class UserController extends Controller
      */
     public function showRegisterAction(Request $request)
     {
+        if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // redirect authenticated users to homepage
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
         $register = new User();
         $flow = $this->get('app.form.flow.register'); // must match the flow's service id
         $flow->bind($register);
@@ -32,15 +41,19 @@ class UserController extends Controller
         if ($flow->isValid($form)) {
             if ($flow->getCurrentStep() == 1) {
                 if ($form->isSubmitted()) {
-                    if ($form->get('cui')->getData()) {
-                        $registerErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
+                    if ($form->getData()->getProfile()->getCui()) {
+                        $registerErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()->getCui());
                     }
-                    if ($form->get('iban')->getData()) {
-                        $registerErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
+                    if ($form->getData()->getProfile()->getIban()) {
+                        $registerErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()->getIban());
+                    }
+                    if ($form->getData()->getProfile()->getFunction() == 'Serviciu extern' &&
+                      !$form->getData()->getProfile()->getNoCertifiedEmpowerment()) {
+                        $registerErrors['noCertifiedEmpowerment'] = false;
                     }
 
                     //save media in session
-                    $media = $register->getImage();
+                    $media = $form->getData()->getProfile()->getImage();
                     if ($media) {
                         $media->setMediaType(Media::IMAGE_TYPE);
                         $this->getDoctrine()->getManager()->persist($media);
@@ -75,10 +88,10 @@ class UserController extends Controller
                         $register->setConfirmationToken($tokenGenerator->generateToken());
                     }
                     $this->container->get('app.mailer')->sendActivationMessage($register);
-                    $userId = $this->get('app.user_helper')->addUserToDatabase($register);
+                    $userId = $this->get('app.user')->addUserToDatabase($register);
 
                     if ($userId) {
-                        $this->get('app.order_helper')->addSubscription($register->getRegisterSubscriptionId(), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), count($domainKeys) ? $domainKeys : null, $userId);
+                        $this->get('app.order')->addSubscription($register->getRegisterSubscriptionId(), $this->getParameter('billing_data'), $this->get('sonata.media.provider.file'), count($domainKeys) ? $domainKeys : null, $userId);
                     }
 
                     return $this->render('user/register-success.html.twig');
@@ -89,7 +102,7 @@ class UserController extends Controller
         return $this->render('user/register.html.twig', array(
               'form' => $form->createView(),
               'flow' => $flow,
-              'registerErrors' => null,
+              'registerErrors' => $registerErrors,
               'subscriptions' => $this->getDoctrine()->getManager()->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false))
         ));
     }
@@ -184,7 +197,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->get('app.user_helper')->changePassword($reset, $user);
+            $this->get('app.user')->changePassword($reset, $user);
             $this->addFlash('successful-reset', 'success.reset');
             $user->setConfirmationToken(null);
             $user->setPasswordRequestedAt(null);
@@ -212,6 +225,12 @@ class UserController extends Controller
             $user->setEnabled(true);
             $this->addFlash('successful-activate', 'success.activate');
             $this->container->get('fos_user.user_manager')->updateUser($user);
+
+            $token = new UsernamePasswordToken($user, $user->getPassword(), "main", $user->getRoles());
+            $this->get("security.context")->setToken($token);
+
+            $event = new InteractiveLoginEvent($request, $token);
+            $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
         }
 
         return $this->redirect($this->generateUrl('homepage'));
@@ -229,9 +248,9 @@ class UserController extends Controller
         $form->add('oldPassword', 'password', array('mapped' => false));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && ($this->get('app.user_helper')->checkOldPassword($form->get('oldPassword')->getData(), $user))) {
+        if ($form->isSubmitted() && $form->isValid() && ($this->get('app.user')->checkOldPassword($form->get('oldPassword')->getData(), $user))) {
             $this->addFlash('successful-change', 'success.change');
-            $this->get('app.user_helper')->changePassword($change, $user);
+            $this->get('app.user')->changePassword($change, $user);
             return $this->redirect($this->generateUrl('homepage'));
         }
         return $this->render('user/change_password.html.twig', array(
@@ -245,30 +264,35 @@ class UserController extends Controller
     public function changeInformationAction(Request $request)
     {
         $user = $this->getUser();
-        $form = $this->createForm(new registerType(), $user);
-        $form->remove('password')->remove('captcha');
+        $form = $this->createForm(new RegisterType(), $user);
+        $form->remove('password');
 
         $form->handleRequest($request);
 
         $changeInfoErrors = array();
         if ($form->isSubmitted()) {
-            if ($form->get('cui')->getData()) {
-                $changeInfoErrors['cui'] = $this->get('app.user_helper')->checkCUI($form->get('cui')->getData());
+            if ($form->getData()->getProfile()->getCui()) {
+                $changeInfoErrors['cui'] = UserHelper::checkCUI($form->getData()->getProfile()->getCui());
             }
-            if ($form->get('iban')->getData()) {
-                $changeInfoErrors['iban'] = $this->get('app.user_helper')->checkIBAN($form->get('iban')->getData());
+            if ($form->getData()->getProfile()->getIban()) {
+                $changeInfoErrors['iban'] = UserHelper::checkIBAN($form->getData()->getProfile()->getIban());
+            }
+            if ($form->getData()->getProfile()->getFunction() == 'Serviciu extern' &&
+              !$form->getData()->getProfile()->getNoCertifiedEmpowerment()) {
+                $changeInfoErrors['noCertifiedEmpowerment'] = false;
             }
         }
+
         if ($form->isSubmitted() && $form->isValid() && !in_array(false, $changeInfoErrors)) {
 
-            if (null !== $user->getImage() && $user->getImage()->getProviderName() === 'sonata.media.provider.image') {
-                $media = $user->getImage();
+            if (null !== $user->getProfile()->getImage() && $user->getProfile()->getImage()->getProviderName() === 'sonata.media.provider.image') {
+                $media = $user->getProfile()->getImage();
                 $media->setMediaType(Media::IMAGE_TYPE);
-                $user->setImage($media);
+                $user->getProfile()->setImage($media);
             }
 
-            if ($user->getDemoAccount()) {
-                $user->setDemoAccount(FALSE);
+            if ($user->getProfile()->getDemoAccount()) {
+                $user->getProfile()->setDemoAccount(FALSE);
                 $this->container->get('fos_user.user_manager')->updateUser($user);
                 $this->addFlash('successful-account-activate', 'success.demo-activate');
 
@@ -356,9 +380,9 @@ class UserController extends Controller
             $domains = array($this->getDoctrine()->getManager()->getRepository('AppBundle:Domain')->findOneBySlug($domainSlug));
         }
 
-        $demoPassword = $this->get('app.user_helper')->generateDemoPassword();
-        $demoUser = $this->get('app.user_helper')->createDemoAccount($email, $name, $demoPassword);
-        $demoOrder = $this->get('app.order_helper')->createDemoOrder($demoUser, $domains, $this->getParameter('demo_account_valid_days'), $this->getParameter('default_demo_domain_credits'));
+        $demoPassword = UserHelper::generateRandomPassword();
+        $demoUser = $this->get('app.user')->createDemoAccount($email, $name, $demoPassword);
+        $demoOrder = $this->get('app.order')->createDemoOrder($demoUser, $domains, $this->getParameter('demo_account_valid_days'), $this->getParameter('default_demo_domain_credits'));
         $this->get('app.mailer')->sendDemoAccountMessage($demoUser, $demoPassword, $demoOrder);
 
         return new Response(json_encode($errors), 200);

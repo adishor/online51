@@ -13,7 +13,7 @@
             <div class="height-40-px"></div>
             <h3 class="text-center"><b>{{ 'CONVOCATOR' | trans}}</b></h3>
             <div class="height-20-px"></div>
-            <p><span class="text-indent"></span>{{ 'Prin prezenta va informam ca in data de ' | trans }} {{ data.meetingDate | date("d/m/Y") }}, {{ ' la ora ' | trans }} {{ data.meetingHour }},  {{ ' la sediul ' | trans }} {{ data.company }} {{ ' din localitatea ' }} {{ data.companyCity }}, {{ 'jud' | trans }} {{ data.companyCounty }}, {{ ' sala de sedinte, va avea loc intrunirea Comitetului de Securitate si Sanatate in Munca' | trans }}</p>
+            <p><span class="text-indent"></span>{{ 'Prin prezenta va informam ca in data de ' | trans }} {{ data.meetingDate | date("d/m/Y") }}, {{ ' la ora ' | trans }} {{ data.meetingHour }},  {{ ' la sediul ' | trans }} {{ data.company }} {{ ' din localitatea ' }} {{ render(controller('AppBundle:ROLocalities:getCityName', {'cityId': data.companyCity })) }}, {{ 'jud' | trans }} {{ render(controller('AppBundle:ROLocalities:getCountyName', {'countyId': data.companyCounty })) }}, {{ ' sala de sedinte, va avea loc intrunirea Comitetului de Securitate si Sanatate in Munca' | trans }}</p>
             <div class="height-40-px"></div>
             <p><span class="text-indent"></span>{{ 'Ordinea de zi a intrunirii este:' | trans }}</p>
             <div class="height-20-px"></div>

@@ -13,13 +13,8 @@ class DeciziePersonalCuAtributiiType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $options['container'];
-        $user = $container->get('security.context')->getToken()->getUser();
-
         $builder
-          ->add('company', TextType::class, array(
-              'read_only' => $user->getDemoAccount() ? FALSE : TRUE,
-          ))
+          ->add('company', TextType::class)
           ->add('workersLeaders', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,

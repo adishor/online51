@@ -1,0 +1,28 @@
+<section>
+    {% if title is not empty %}
+        <h3>{{ title | trans }}</h3>
+    {% endif %}
+    {% for item in persons %}
+        <div class="col-xs-1 no-margin-left">
+            {{ form_row(item.gender, 
+                {'attr': {'data-val': 'true',
+                'data-val-required': ' ',
+                } } ) }}
+        </div>
+        <div class="col-xs-6">
+            {{ form_row(item.name, 
+                {'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ persons.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+        </div>
+        <div class="col-xs-5 no-margin-right">
+            {{ form_row(item.function, {'label': functionLabel,
+                'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+                <span class="field-validation-valid" data-valmsg-for="{{ form.undersigned.vars.full_name }}[0][function]" data-valmsg-replace="true" ></span>
+        </div>
+        <div class="clear-both"></div>
+    {% endfor %}
+</section>

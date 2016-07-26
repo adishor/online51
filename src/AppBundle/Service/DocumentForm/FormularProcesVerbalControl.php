@@ -10,7 +10,7 @@ class FormularProcesVerbalControl extends FormularGeneric implements FormularFor
 
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getCompany());
+        $formData->setCompany($user->getProfile()->getCompany());
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }

@@ -33,7 +33,7 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function() {
-{#          used just for UserAdmin#}
+{#          used just for ProfileAdmin#}
           {% if admin.formFieldDescriptions.county is defined %}
             var county = $("#{{ admin.uniqId }}_county");
             county.change(updateCities()); // Bind the function to updateCities
@@ -70,6 +70,44 @@
                 };
             }
           {% endif %}
+      
+{#          used just for UserAdmin#}     
+          {% if admin.formFieldDescriptions.profile is defined %}
+            var county = $("#{{ admin.uniqId }}_profile_county");
+            county.change(updateCities()); // Bind the function to updateCities
+            county.change(); // Manual trigger to update cities in Document load.
+
+            function updateCities() {
+                return function () {
+                    var countyId = $("#{{ admin.uniqId }}_profile_county option:selected").val();
+                    var city = $("#{{ admin.uniqId }}_profile_city");
+                    city.empty();
+
+                    {% if object.profile.county is not null %}
+                        if ( countyId != {{ object.profile.county.id }} ) {
+                            //empty city value
+                            jQuery(city.prev().find('a > :first-child')).html('');
+                        }
+                    {% else %}
+                        jQuery(city.prev().find('a > :first-child')).html('');
+                    {% endif %}
+
+                    var locale = '{{ app.request.get('_locale') }}';
+                    var objectId = '{{ admin.id(object) }}';
+
+                    var url = '{{ admin.generateUrl('getCities') }}';
+                    $.post(url, { countyId: countyId }, function(data){
+                        var msg = '';
+                        $.each(data, function(index, element){
+                            msg = msg + '<option value="' + index + '">' + element + '</option>';
+                        });
+                        city.empty().append(msg);
+                    },"json");
+
+                    city.val("option:first").attr("selected", true);
+                };
+            }
+          {% endif %}      
       
 {#          used for CreditsUsageAdmin#}
           {% if admin.formFieldDescriptions.document is defined %}

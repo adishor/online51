@@ -9,7 +9,7 @@ class FormularDeciziePersonalCuAtributii extends FormularGeneric implements Form
 {
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getCompany());
+        $formData->setCompany($user->getProfile()->getCompany());
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }

@@ -25,11 +25,12 @@ class SubDomainController extends Controller
         $isUserException = false;
         if ($this->getUser()) {
             $userId = $this->getUser()->getId();
-            $userHelper = $this->get('app.user_helper');
-            $isValid = $userHelper->isDomainValidForUser($userId, $domain->getId());
-            $validDocuments = $userHelper->getValidUserDocuments($userId, $domain->getId(), $subdomain->getId());
-            $validVideos = $userHelper->getValidUserVideos($userId, $domain->getId(), $subdomain->getId());
-            $isUserException = $userHelper->getIsUserException($userId);
+            $userService = $this->get('app.user');
+            $creditsUsageService = $this->get('app.credits_usage');
+            $isValid = $userService->isDomainValidForUser($userId, $domain->getId());
+            $validDocuments = $creditsUsageService->getValidUserDocuments($userId, $domain->getId(), $subdomain->getId());
+            $validVideos = $creditsUsageService->getValidUserVideos($userId, $domain->getId(), $subdomain->getId());
+            $isUserException = $userService->getIsUserException($userId);
         }
         return $this->render('subdomain/show.html.twig', array(
               'domain' => $domain,

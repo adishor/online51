@@ -1842,8 +1842,8 @@ h5.first {
 
 }
 
-#register_image label,
-#register_image_unlink {
+#register_profile_image label,
+#register_profile_image_unlink {
     display: none;
 }
 
@@ -2171,4 +2171,16 @@ input[readonly] {
     position: absolute;
     top: 50%;
     z-index: 100;
+}
+
+.formular-form select, .formular-form input {
+    height: 25px;
+}
+
+li section {
+    padding: 0;
+}
+
+.form-control {
+    height: 34px !important;
 }

@@ -11,8 +11,8 @@ class FormularDecizieComisieCercetareAccidente extends FormularGeneric implement
 
     public function applyDefaultFormData($creditsUsage, $formData, $user)
     {
-        $formData->setCompany($user->getCompany());
-        $formData->setCompanyAddress($user->getAddress() . ", " . $user->getCity() . ", " . $user->getCounty());
+        $formData->setCompany($user->getProfile()->getCompany());
+        $formData->setCompanyAddress($user->getProfile()->getAddress() . ", " . $user->getProfile()->getCity() . ", " . $user->getProfile()->getCounty());
         $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
         $this->entityManager->flush();
     }
@@ -20,7 +20,7 @@ class FormularDecizieComisieCercetareAccidente extends FormularGeneric implement
     public function processHandleForm($creditsUsage, $flow, &$formData)
     {
         if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
-            $hour = $formData->getAccidentDate()->format('H');
+            $hour = $formData->getAccidentDate()->format('H:i');
             $formData->setAccidentHour($hour);
         }
     }

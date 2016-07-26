@@ -22,7 +22,7 @@ class DefaultController extends Controller
 
         $isUserException = false;
         if ($this->getUser()) {
-            $isUserException = $this->get('app.user_helper')->getIsUserException($this->getUser()->getId());
+            $isUserException = $this->get('app.user')->getIsUserException($this->getUser()->getId());
         }
 
         return $this->render('default/index.html.twig', array(

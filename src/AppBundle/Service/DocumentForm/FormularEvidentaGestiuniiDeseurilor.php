@@ -68,7 +68,7 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
     {
         $formConfigValue = $this->getValuesForFormConfig($creditsUsage->getFormConfig());
 
-        $formData->setAgentEconomic($user->getCompany());
+        $formData->setAgentEconomic($user->getProfile()->getCompany());
         $formData->setAn($formConfigValue['an']);
         $formData->setTipDeseu($formConfigValue['tip_deseu']);
         $formData->setTipDeseuCod($formConfigValue['tip_deseu_cod']);
