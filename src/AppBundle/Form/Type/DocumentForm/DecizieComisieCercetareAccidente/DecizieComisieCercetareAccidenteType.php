@@ -28,6 +28,7 @@ class DecizieComisieCercetareAccidenteType extends AbstractType
 
         $builder
           ->add('company', TextType::class)
+          ->add('companyAddress', TextType::class)
           ->add('undersigned', CollectionType::class, array(
               'entry_type' => PersonType::class
           ))

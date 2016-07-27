@@ -22,6 +22,12 @@
                 } } ) }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
             
+            {{ form_row(form.companyAddress, { 'label': 'Sediu social',
+                'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.companyAddress.vars.full_name }}" data-valmsg-replace="true" ></span>
+            
             {% include "document_form/base/person_generic_full.html.twig" with { 'title': 'Subsemnatul', 'persons': form.undersigned, 'functionLabel': 'in calitate de' } %}
                      
             {{ form_row(form.accidentDate, {'label':'Pentru cercetarea evenimentului ce a avut loc in data de'}) }}

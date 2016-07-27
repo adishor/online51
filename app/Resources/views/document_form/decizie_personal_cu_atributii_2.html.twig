@@ -25,27 +25,36 @@
         <form class="formular-form" id="decizie_personal_cu_atributii" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
             
-            {{ form_row(form.company) }}
+            {{ form_row(form.company, { 'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
             
-            {{ form_row(form.administrator, 
-                    { 'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Administrator', 'persons': form.administrator } %}
             
             <section>
                 <h3>{{ 'Se stabilesc urmatoarele atributii de serviciu pentru personalul propriu, dupa cum urmeaza:' | trans }}</h3>
                 <ul>
                     {% for item in form.workersAttributions %}
                         <li>
-                            {{ form_row(item.name, 
-                                {'attr': {'data-val': 'true',
-                                'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                } } ) }}
-                            {% if item.function.vars.value %}
-                                {{ item.function.vars.value | trans }}<br/>
-                            {% endif %}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.workersAttributions.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersAttributions.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-11">
+                                {{ form_row(item.name, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                {% if item.function.vars.value %}
+                                    {{ item.function.vars.value | trans }}<br/>
+                                {% endif %}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.workersAttributions.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="clear-both"></div>
                         </li>
                     {% endfor %}
                 </ul>

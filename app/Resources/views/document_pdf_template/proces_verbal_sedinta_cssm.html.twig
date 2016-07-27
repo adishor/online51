@@ -17,14 +17,20 @@
             <p><span class="text-indent"></span>{{ 'In data de ' | trans }} {{ data.meetingDate | date("d/m/Y") }}, {{ ' la sediul ' | trans }} {{ data.company }} {{ ' din localitatea ' | trans }} {{ data.companyCity }}, {{ ' sala ' | trans }} {{ data.room }}, {{ ' a avut loc intrunirea Comitetului de Securitate si Sanatate in Munca din unitate.' | trans }}</p>
             <p><span class="text-indent"></span>{{ 'La intrunire au participat:' | trans }}
             <ul class="section-group5">
-                <li>{{ 'Dl/Dna ' | trans }} {{ data.president }} {{ ' - angajator - presedinte CSSM (sau reprezentant legal)' | trans }}</li>
-                <li>{{ 'Dl/Dna ' | trans }} {{ data.secretary }} {{ ' - lucrator desemnat - secretar CSSM' | trans }}</li>
+                {% for president in data.president %}
+                    <li>{{ president.gender | trans }} {{ president.name }}{{ ' - angajator - presedinte CSSM (sau reprezentant legal)' | trans }}</li>
+                {% endfor %}
+                {% for secretary in data.secretary %}
+                    <li>{{ secretary.gender | trans }} {{ secretary.name }}{{ ' - lucrator desemnat - secretar CSSM' | trans }}</li>
+                {% endfor %}
                 {% for item in data.members %}
                     {% if item.name %}
-                        <li>{{ 'Dl/Dna ' | trans }} {{ item.name }} {{ ' - reprezentant al lucratorilor - membru' | trans }}</li>
+                        <li>{{ item.gender | trans }} {{ item.name }} {{ ' - reprezentant al lucratorilor - membru' | trans }}</li>
                     {% endif %}
                 {% endfor %}
-                <li>{{ 'Dl/Dna ' | trans }} {{ data.doctor }} {{ ' - Medic de Medicina Muncii' | trans }}</li>
+                {% for doctor in data.doctor %}
+                    <li>{{ doctor.gender | trans }} {{ doctor.name }}{{ ' - Medic de Medicina Muncii' | trans }}</li>
+                {% endfor %}
             </ul>
             <div class="height-20-px"></div>
             <p><span class="text-indent"></span>{{ 'Comitetul de securitate si sanatate in munca fiind legal intrunit s-a trecut la prezentarea ordinii de zi:' | trans }}</p>
@@ -50,27 +56,39 @@
             <div class="height-40-px"></div>
             <div class="col-xs-6 no-margin-left">
                 <p><span class="text-indent"></span>{{ 'Participanti:' | trans }}</p>
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.president }}</p>
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.secretary }}</p>
+                {% for president in data.president %}
+                    <p>{{ president.gender | trans }} {{ president.name }}</p>
+                {% endfor %}
+                {% for secretary in data.secretary %}
+                    <p>{{ secretary.gender | trans }} {{ secretary.name }}</p>
+                {% endfor %}
                 {% for membru in data.members %}
                     {% if membru.name %}
                         <p>{{ 'Dl/Dna ' | trans }} {{ membru.name }}</p>
                     {% endif %}
                 {% endfor %}
-                <p>{{ 'Dl/Dna ' | trans }} {{ data.doctor }}</p>
+                {% for doctor in data.doctor %}
+                    <p>{{ doctor.gender | trans }} {{ doctor.name }}</p>
+                {% endfor %}
             </div>
             <div class="col-xs-6 no-margin-right">
                 <p><span class="text-indent"></span>{{ 'Semnatura' | trans }}</p>
                 <div class="col-xs-4"></div>
                 <div class="col-xs-8">
-                    <p>...........................................................</p>
-                    <p>...........................................................</p>
+                    {% for president in data.president %}
+                        <p>...........................................................</p>
+                    {% endfor %}
+                    {% for secretary in data.secretary %}
+                        <p>...........................................................</p>
+                    {% endfor %}
                     {% for membru in data.members %}
                         {% if membru.name %}
                             <p>...........................................................</p>
                         {% endif %}
                     {% endfor %}
-                    <p>...........................................................</p>
+                    {% for doctor in data.doctor %}
+                        <p>...........................................................</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>

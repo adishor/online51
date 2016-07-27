@@ -2120,6 +2120,7 @@ input[readonly] {
 .formular-radio-inline input[type="radio"] {
     width: 20px;
     float:left;
+    height: 14px;
 }
 
 .formular-radio-inline label {
