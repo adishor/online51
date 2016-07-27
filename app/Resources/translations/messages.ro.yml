@@ -470,7 +470,7 @@ document-form:
         tip_deseu: Selecteaza tipul de deseu
         operatia: Selecteaza operatia
     autocomplete:
-        tip_deseu: Sau tasteaza direct codul pentru tipul de deseu
+        tip_deseu: Tasteaza direct codul pentru tipul de deseu
     error:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
