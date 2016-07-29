@@ -134,7 +134,7 @@ class DocumentAdmin extends Admin
         return $choices;
     }
 
-    function getTemplate($name)
+    public function getTemplate($name)
     {
         if ($name == "edit") {
             return 'sonata/base_edit.html.twig';
