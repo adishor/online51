@@ -31,7 +31,7 @@ assert:
         phone: '*Telefon (07xx xxxxxx ) trebuie sa fie un numar, sa inceapa cu "07" si sa aiba 10 cifre'
         image: 'Va rugam introduceti o imagine valida. (jpeg, png)'
         orc: '*Numar inregistrare ORC sa aiba forma: tip+cod judet/numar/an (tip: J, F, C, cod judet: din 2 cifre) ex: J11/11/2011'
-    at-least-0: 'Valoarea trebuie sa fie mai mare ca 0.'
+    at-least-0: 'Valoarea trebuie sa fie mai mare sau egal cu 0.'
     password:
         length: '*Parola trebuie sa aiba minim 6 caractere.'
         same: '*Parola si *Confirmarea Parolei nu coincid.'
@@ -41,6 +41,7 @@ assert:
     min-domains: 'Domeniile alese nu pot fi mai putine decat numarul de domenii.'
     valability-formular: 'Daca ati setat campul "Valabil pana la luna", nu puteti seta si numarul de zile'
     valability-formular-null: 'Este necesar sa setati unul din campurile "Nr de zile valide" sau "Valabil pana la luna"'
+    valability-for-zero-credits-value: 'Este necesar sa setati campul Nr zile valide daca valoarea pentru credit este mai mare decat 0.'
 user:
     required:
         name: 'Va rugam completati *Numele si prenumele.'

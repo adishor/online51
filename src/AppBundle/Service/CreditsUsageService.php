@@ -140,10 +140,16 @@ class CreditsUsageService
 
     public function getValidUserDocuments($userId, $domainId = null, $subdomainId = null)
     {
-        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserDocuments($userId, $domainId, $subdomainId);
+        $documents = $this->entityManager->getRepository('AppBundle:CreditsUsage')
+          ->findAllValidUserDocuments($userId, $domainId, $subdomainId);
+        $documentsZeroCreditValue = $this->entityManager->getRepository('AppBundle:Document')
+          ->findAllZeroCreditValueDocuments($domainId, $subdomainId);
         $validDocuments = array();
         foreach ($documents as $document) {
             $validDocuments[$document['id']] = $document['date'];
+        }
+        foreach ($documentsZeroCreditValue as $document) {
+            $validDocuments[$document['id']] = 'FREE';
         }
 
         return $validDocuments;
@@ -151,10 +157,16 @@ class CreditsUsageService
 
     public function getValidUserVideos($userId, $domainId = null, $subdomainId = null)
     {
-        $videos = $this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllValidUserVideos($userId, $domainId, $subdomainId);
+        $videos = $this->entityManager->getRepository('AppBundle:CreditsUsage')
+          ->findAllValidUserVideos($userId, $domainId, $subdomainId);
+        $videosZeroCreditValue = $this->entityManager->getRepository('AppBundle:Video')
+          ->findAllZeroCreditValueVideos($domainId, $subdomainId);
         $validVideos = array();
         foreach ($videos as $video) {
             $validVideos[$video['id']] = $video['date'];
+        }
+        foreach ($videosZeroCreditValue as $video) {
+            $validVideos[$video['id']] = 'FREE';
         }
 
         return $validVideos;
@@ -177,12 +189,6 @@ class CreditsUsageService
             }
         }
         $this->entityManager->flush();
-    }
-
-    public function getValidCreditsUsageForMedia($mediaId)
-    {
-        return $this->entityManager->getRepository('AppBundle:CreditsUsage')
-            ->findValidCreditsUsageForMedia($mediaId);
     }
 
 }

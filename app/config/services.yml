@@ -90,24 +90,27 @@ services:
 
 #    website
     app.mailer:
-        class:     AppBundle\Service\MailerService
+        class: AppBundle\Service\MailerService
         arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%, %report_email%]
     app.credits_usage:
-        class:     AppBundle\Service\CreditsUsageService
+        class: AppBundle\Service\CreditsUsageService
         arguments: [@doctrine.orm.entity_manager, @translator, @app.user]
+    app.media: 
+        class: AppBundle\Service\MediaService
+        arguments: [@doctrine.orm.entity_manager]
     app.user:
-        class:     AppBundle\Service\UserService
+        class: AppBundle\Service\UserService
         arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session, @translator]
     app.order:
-        class:     AppBundle\Service\OrderService
+        class: AppBundle\Service\OrderService
         arguments: [@doctrine.orm.entity_manager, @translator, @security.token_storage, @session, @app.mailer, @knp_snappy.pdf, '@templating', %invoice_dir%, %invoice_name%]
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false
         arguments: [@router, @session, @app.user, @app.credits_usage]
     app.media.security.user_strategy:
-        class:     AppBundle\Security\Sonata\UserDownloadStrategy
-        arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user, @app.credits_usage]
+        class: AppBundle\Security\Sonata\UserDownloadStrategy
+        arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user, @app.credits_usage, @app.media]
     app.container_aware_type:
         class: AppBundle\Form\Type\ContainerAwareType
         calls:

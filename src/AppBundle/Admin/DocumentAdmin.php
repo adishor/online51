@@ -134,10 +134,13 @@ class DocumentAdmin extends Admin
         return $choices;
     }
 
-    public function getTemplate($name)
+    function getTemplate($name)
     {
         if ($name == "edit") {
             return 'sonata/base_edit.html.twig';
+        }
+        if ($name == "list") {
+            return 'sonata/base_list.html.twig';
         }
         return parent::getTemplate($name);
     }

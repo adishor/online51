@@ -61,7 +61,6 @@
     </form>
     <br/><div id="formularError{{ formular.id }}"></div>
 </div></div></div>
-
 <script type="text/javascript">   
     var items = [];
     items = {{ uniqueValues|json_encode|raw }};
@@ -219,7 +218,7 @@
         });
         
         if (errorNo === 0) {
-            {% if isUserException or isDraft %}
+            {% if isUserException or isDraft or formular.creditValue == 0 %}
                 AjaxCheckSubmitFormConfig_{{ formular.slug }}(); 
             {% else %}
                 $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
