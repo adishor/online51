@@ -73,7 +73,7 @@
                 {% endfor %}
                 {% for item in data.members %}
                     {% if item.name %}
-                        <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                        <p>{{ item.gender | trans }} {{ item.name }}</p>
                     {% endif %}
                 {% endfor %}
                 {% for doctor in data.doctor %}

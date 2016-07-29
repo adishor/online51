@@ -15,28 +15,42 @@ class ProcesVerbalSedintaCSSMType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $options['container'];
-        $user = $container->get('security.context')->getToken()->getUser();
+        $date = new \DateTime();
+        $year = $date->format('Y');
+        $years = array(
+            $year => $year,
+            $year + 1 => $year + 1,
+            $year + 2 => $year + 2,
+            $year + 3 => $year + 3,
+            $year + 4 => $year + 4,
+            $year + 5 => $year + 5
+        );
 
         $builder
-          ->add('company', TextType::class, array(
-              'read_only' => $user->getProfile()->getDemoAccount() ? FALSE : TRUE,
-          ))
+          ->add('company', TextType::class)
+          ->add('companyCity', TextType::class)
           ->add('room', TextType::class)
           ->add('meetingDate', DateType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
-              )
+              ),
+              'years' => $years
           ))
-          ->add('president', TextType::class)
-          ->add('secretary', TextType::class)
+          ->add('president', CollectionType::class, array(
+              'entry_type' => PersonType::class,
+          ))
+          ->add('secretary', CollectionType::class, array(
+              'entry_type' => PersonType::class,
+          ))
           ->add('members', CollectionType::class, array(
               'entry_type' => PersonType::class,
               'allow_add' => true,
               'allow_delete' => true,
               'prototype' => true
           ))
-          ->add('doctor', TextType::class)
+          ->add('doctor', CollectionType::class, array(
+              'entry_type' => PersonType::class,
+          ))
           ->add('meetingPoints', CollectionType::class, array(
               'entry_type' => ConvocatorCSSMPunctType::class,
               'allow_add' => true,

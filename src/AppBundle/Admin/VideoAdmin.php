@@ -59,7 +59,9 @@ class VideoAdmin extends Admin
                   'context' => 'default',
                   'provider' => 'sonata.media.provider.video',
               )
-        ));
+          ))
+          ->add('youtubeLink')
+        ;
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)

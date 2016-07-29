@@ -1,7 +1,7 @@
 <div id="formularError{{ formular.id }}" class="document-info"></div>
 <script type="text/javascript">
     jQuery("#{{ formular.slug }}").on('click', function(){
-        {% if isUserException %}
+        {% if isUserException or formular.creditValue == 0 %}
             AjaxCheckSubmitFormConfig_{{ formular.slug }}();
         {% else %}
             $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body-no-config'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');

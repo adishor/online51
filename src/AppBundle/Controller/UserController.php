@@ -219,7 +219,8 @@ class UserController extends Controller
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 
         if ((null === $user) || $user->isEnabled() || ($user->getDeleted())) {
-            throw new NotFoundHttpException($this->get('translator')->trans('activate-account.link-invalid'));
+            $this->addFlash('error-account-activate', 'activate-account.link-invalid');
+            return $this->redirect($this->generateUrl('homepage'));
         }
         if (false === $user->isEnabled()) {
             $user->setEnabled(true);

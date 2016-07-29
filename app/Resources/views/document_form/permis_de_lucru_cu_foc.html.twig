@@ -25,21 +25,14 @@
         <form class="formular-form" id="permis_de_lucru_cu_foc" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
 
-            {{ form_row(form.company) }}
-            
-            {{ form_row(form.personWithWorkPermitForFire, 
-                    { 'label': 'Prezentul permis de lucru cu foc se elibereaza pentru',
-                    'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.personWithWorkPermitForFire.vars.full_name }}" data-valmsg-replace="true" ></span>
-            
-            {{ form_row(form.helpPersonForWorkWithFire, 
-                    { 'label': 'Acesta va fi ajutat de',
-                    'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.helpPersonForWorkWithFire.vars.full_name }}" data-valmsg-replace="true" ></span>
+            {{ form_row(form.company, { 'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
+                        
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Prezentul permis de lucru cu foc se elibereaza pentru', 'persons': form.personWithWorkPermitForFire } %}
+                        
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Acesta va fi ajutat de', 'persons': form.helpPersonForWorkWithFire } %}
             
             {{ form_row(form.executeWork, 
                     { 'label': 'care urmeaza sa execute',
@@ -127,27 +120,12 @@
                     } } ) }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.measure7.vars.full_name }}" data-valmsg-replace="true" ></span>
             
-            {{ form_row(form.measure9SurveillanceBy, 
-                    { 'label': 'Pe timpul lucrarilor se asigura supravegherea acestora de catre:',
-                    'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.measure9SurveillanceBy.vars.full_name }}" data-valmsg-replace="true" ></span>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Pe timpul lucrarilor se asigura supravegherea acestora de catre:', 'persons': form.measure9SurveillanceBy } %}
             
-            {{ form_row(form.measure11AssuredBy, 
-                    { 'label': 'Controlul masurilor de aparare impotriva incendiilor se asigura de catre:',
-                    'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.measure11AssuredBy.vars.full_name }}" data-valmsg-replace="true" ></span>
-            
-            {{ form_row(form.measure12SurveillanceBy, 
-                    { 'label': 'Supravegherea lucrarilor cu foc se asigura de catre:',
-                    'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.measure12SurveillanceBy.vars.full_name }}" data-valmsg-replace="true" ></span>
-            
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Controlul masurilor de aparare impotriva incendiilor se asigura de catre:', 'persons': form.measure11AssuredBy } %}
+                        
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Supravegherea lucrarilor cu foc se asigura de catre:', 'persons': form.measure12SurveillanceBy } %}
+                        
             {{ form_row(form.measure13AnnoucementAt, 
                     { 'label': 'Incendiul sau orice alt eveniment se anunta la',
                     'attr': {'data-val': 'true',

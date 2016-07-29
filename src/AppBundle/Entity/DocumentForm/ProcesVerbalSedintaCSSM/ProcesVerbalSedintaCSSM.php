@@ -53,15 +53,13 @@ class ProcesVerbalSedintaCSSM
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $president;
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $secretary;
 
@@ -75,8 +73,7 @@ class ProcesVerbalSedintaCSSM
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $doctor;
 
@@ -99,12 +96,25 @@ class ProcesVerbalSedintaCSSM
         $this->meetingPoints = $meetingPoints;
 
         $y = new Person();
+        $y->setGender('');
         $y->setName('');
         $y->setFunction('');
 
         $this->members = new ArrayCollection();
         $members = [$y];
         $this->members = $members;
+
+        $this->president = new ArrayCollection();
+        $president = [$y];
+        $this->president = $president;
+
+        $this->secretary = new ArrayCollection();
+        $secretary = [$y];
+        $this->secretary = $secretary;
+
+        $this->doctor = new ArrayCollection();
+        $doctor = [$y];
+        $this->doctor = $doctor;
     }
 
     public function getMeetingDate()

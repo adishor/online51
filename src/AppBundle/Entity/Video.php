@@ -5,11 +5,13 @@ namespace AppBundle\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraints as CustomAssert;
 
 /**
  * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\VideoRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @CustomAssert\ValabilityForZeroCreditsValue
  */
 class Video
 {
@@ -37,6 +39,7 @@ class Video
      * @var integer
      *
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
+     * @Assert\NotBlank()
      * @ORM\Column(type="integer")
      */
     private $creditValue;
@@ -46,7 +49,7 @@ class Video
      * @var integer
      *
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $valabilityDays;
 
@@ -74,6 +77,14 @@ class Video
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
     private $media;
+
+    /**
+     *
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     */
+    private $youtubeLink;
 
     /**
      *
@@ -311,4 +322,27 @@ class Video
         return ($this->getId() ? $this->getName() : 'Create new');
     }
 
+
+    /**
+     * Set youtubeLink
+     *
+     * @param string $youtubeLink
+     * @return Video
+     */
+    public function setYoutubeLink($youtubeLink)
+    {
+        $this->youtubeLink = $youtubeLink;
+
+        return $this;
+    }
+
+    /**
+     * Get youtubeLink
+     *
+     * @return string
+     */
+    public function getYoutubeLink()
+    {
+        return $this->youtubeLink;
+    }
 }

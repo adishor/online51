@@ -3,7 +3,9 @@
 namespace AppBundle\Entity\DocumentForm\PermisDeLucruCuFoc;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
+use AppBundle\Entity\DocumentForm\Common\Person;
 
 class PermisDeLucruCuFoc
 {
@@ -28,14 +30,13 @@ class PermisDeLucruCuFoc
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $personWithWorkPermitForFire;
 
     /**
      * @var type
-     * @Type("string")
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $helpPersonForWorkWithFire;
 
@@ -130,19 +131,19 @@ class PermisDeLucruCuFoc
 
     /**
      * @var type
-     * @Type("string")
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $measure9SurveillanceBy;
 
     /**
      * @var type
-     * @Type("string")
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $measure11AssuredBy;
 
     /**
      * @var type
-     * @Type("string")
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $measure12SurveillanceBy;
 
@@ -187,6 +188,34 @@ class PermisDeLucruCuFoc
      * @Type("string")
      */
     protected $measure15Emergency;
+
+    public function __construct()
+    {
+        $y = new Person();
+        $y->setGender('');
+        $y->setName('');
+        $y->setFunction('');
+
+        $this->personWithWorkPermitForFire = new ArrayCollection();
+        $personWithWorkPermitForFire = [$y];
+        $this->personWithWorkPermitForFire = $personWithWorkPermitForFire;
+
+        $this->helpPersonForWorkWithFire = new ArrayCollection();
+        $helpPersonForWorkWithFire = [$y];
+        $this->helpPersonForWorkWithFire = $helpPersonForWorkWithFire;
+
+        $this->measure9SurveillanceBy = new ArrayCollection();
+        $measure9SurveillanceBy = [$y];
+        $this->measure9SurveillanceBy = $measure9SurveillanceBy;
+
+        $this->measure11AssuredBy = new ArrayCollection();
+        $measure11AssuredBy = [$y];
+        $this->measure11AssuredBy = $measure11AssuredBy;
+
+        $this->measure12SurveillanceBy = new ArrayCollection();
+        $measure12SurveillanceBy = [$y];
+        $this->measure12SurveillanceBy = $measure12SurveillanceBy;
+    }
 
     public function getPersonWithWorkPermitForFire()
     {

@@ -454,19 +454,23 @@ $('#documentConfirmModalYes').click(function () {
     });
 });
 
-function VideoConfirmPopup(message, path, videoId, videoPath, flowplayerPath) {
+function VideoConfirmPopup(message, path, videoId, videoPath, videoDownload, youtubeId, flowplayerPath) {
     $('#videoConfirmModalBody').text(message);
     $('#videoConfirmModal').modal();
     $('#videoConfirmModalPath').val(path);
     $('#videoConfirmModalId').val(videoId);
-    $('#videoConfirmModalDownload').val(videoPath);
+    $('#videoConfirmModalVideoPath').val(videoPath);
+    $('#videoConfirmModalVideoDownload').val(videoDownload);
+    $('#videoConfirmModalYoutube').val(youtubeId);
     $('#videoConfirmModalFlowplayer').val(flowplayerPath);
 }
 
 $('#videoConfirmModalYes').click(function () {
     var path = $('#videoConfirmModalPath').val();
     var videoId = $('#videoConfirmModalId').val();
-    var videoPath = $('#videoConfirmModalDownload').val();
+    var videoPath = $('#videoConfirmModalVideoPath').val();
+    var videoDownload = $('#videoConfirmModalVideoDownload').val();
+    var youtubeId = $('#videoConfirmModalYoutube').val();
     var flowplayerPath = $('#videoConfirmModalFlowplayer').val();
     $.ajax({
         type: "POST",
@@ -475,10 +479,14 @@ $('#videoConfirmModalYes').click(function () {
         dataType: 'json',
         success: function (response) {
             if (response.success) {
-                var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><video width="480" height="320" controls><source src="' + videoPath + '" type="video/mp4" /><object id="flowplayer" data="' + flowplayerPath + '" type="application/x-shockwave-flash" width="480" height="320" ><param name="movie" value="' + flowplayerPath + '"><param name="allowfullscreen" value="true"><param name="flashvars" value="config={\'clip\':{\'url\':\'' + videoPath + '\',\'autoPlay\':false}}"></object></video></div></div></div></div>';
+                //flowplayer
+//                var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><video width="480" height="320" controls><source src="' + videoPath + '" type="video/mp4" /><object id="flowplayer" data="' + flowplayerPath + '" type="application/x-shockwave-flash" width="480" height="320" ><param name="movie" value="' + flowplayerPath + '"><param name="allowfullscreen" value="true"><param name="flashvars" value="config={\'clip\':{\'url\':\'' + videoPath + '\',\'autoPlay\':false}}"></object></video></div></div></div></div>';
+                if (youtubeId) {
+                    var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><iframe width="480" height="270" src="https://www.youtube.com/embed/' + youtubeId + '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>' + (videoDownload ? '<a href="' + videoDownload + '">Descarca video</a>' : '') + '</div></div></div></div>';
+                    $('#showLink' + videoId).parent().append(html);
+                }
                 
-                $('#showLink' + videoId).attr("href", "javascript:;").attr("onclick", "showVideoModal" + videoId + "();");
-                $('#showLink' + videoId).append(html);
+                $('#showLink' + videoId).attr("href", "javascript:;").attr("onclick", "showVideoModal" + videoId + "();");   
                 $('#totalUserCredits').text(response.credits);
                 $('#errorOrSuccessVideo' + videoId).addClass('color-green');
                 $('#documentIcon' + videoId).removeClass('color-red').addClass('color-green').text('0');

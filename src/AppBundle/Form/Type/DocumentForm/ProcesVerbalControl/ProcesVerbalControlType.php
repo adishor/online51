@@ -16,17 +16,24 @@ class ProcesVerbalControlType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $options['container'];
-        $user = $container->get('security.context')->getToken()->getUser();
+        $date = new \DateTime();
+        $year = $date->format('Y');
+        $years = array(
+            $year => $year,
+            $year + 1 => $year + 1,
+            $year + 2 => $year + 2,
+            $year + 3 => $year + 3,
+            $year + 4 => $year + 4,
+            $year + 5 => $year + 5
+        );
 
         $builder
-          ->add('company', TextType::class, array(
-              'read_only' => $user->getProfile()->getDemoAccount() ? FALSE : TRUE,
-          ))
+          ->add('company', TextType::class)
           ->add('controlDate', DateType::class, array(
               'placeholder' => array(
                   'year' => 'An', 'month' => 'Luna', 'day' => 'Ziua'
-              )
+              ),
+              'years' => $years
           ))
           ->add('controlBy', TextType::class)
           ->add('participants', CollectionType::class, array(
@@ -43,7 +50,9 @@ class ProcesVerbalControlType extends AbstractType
           ))
           ->add('findings', TextareaType::class)
           ->add('proposedMeasures', TextareaType::class)
-          ->add('administrator', TextType::class)
+          ->add('administrator', CollectionType::class, array(
+              'entry_type' => PersonType::class,
+          ))
         ;
     }
 

@@ -37,6 +37,9 @@ class FormularConvocatorCSSM extends FormularGeneric implements FormularFormConf
         if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
             $hour = $formData->getMeetingDate()->format('H:i');
 
+            $formData->setCompanyCounty($formData->getCompanyCounty()->getId());
+            $formData->setCompanyCity($formData->getCompanyCity()->getId());
+
             $formConfig['data'] = $formData->getMeetingDate()->format('d/m/Y');
             $formConfig['ora'] = $hour;
             $creditsUsage->setFormConfig(json_encode($formConfig));

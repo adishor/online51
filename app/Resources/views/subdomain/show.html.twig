@@ -47,13 +47,13 @@
                         {% if isValid or isUserException %}
                             {% set subdomainEmptyDocuments = TRUE %}
                             {% for document in subdomain.documents %}
-                                {% if not document.deleted or not document.media.deleted %}
+                                {% if (not document.deleted and document.media and not document.media.deleted) %}
                                     {% set subdomainEmptyDocuments = FALSE %}
                                 {% endif %}
                             {% endfor %}
                             {% set subdomainEmptyVideos = TRUE %}
                             {% for video in subdomain.videos %}
-                                {% if not video.deleted or not video.media.deleted %}
+                                {% if (not video.deleted and video.youtubeLink) or (not video.deleted and video.media and not video.media.deleted) %}
                                     {% set subdomainEmptyVideos = FALSE %}
                                 {% endif %}
                             {% endfor %}
@@ -68,7 +68,7 @@
                                 <h4>{{ 'domain.documents' | trans }}</h4>
                                 <ul>
                                     {% for document in subdomain.documents %}
-                                        {% if (not document.deleted) and (not document.media.deleted) %}
+                                        {% if (not document.deleted and document.media and not document.media.deleted) %}
                                             <div class="row new-evaluation">
                                                 {% if validDocuments[document.id] is defined or isUserException %}
                                                     <a href="{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}">
@@ -83,7 +83,7 @@
                                                             <h4>{{ document.name }}</h4>
                                                         </div>        
                                                     </a>
-                                                    {% if not isUserException %}
+                                                    {% if not isUserException and validDocuments[document.id] != 'FREE' %}
                                                         <p class="document-info" >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</p>            
                                                     {% endif %}
                                                 {% else %}
@@ -111,10 +111,10 @@
                                 <h4>{{ 'domain.videos' | trans }}</h4>
                                 <ul>
                                     {% for video in subdomain.videos %}
-                                        {% if (not video.deleted) and (not video.media.deleted) %}
+                                        {% if (not video.deleted and video.youtubeLink) or (not video.deleted and video.media and not video.media.deleted) %}
                                             <div class="row new-evaluation">
                                                 {% if validVideos[video.id] is defined or isUserException %}
-                                                    <a href="javascript:;" onclick="showVideoModal{{ video.media.id }}();">
+                                                    <a href="javascript:;" onclick="showVideoModal{{ video.id }}(this);">
                                                         <div class="col-xs-2">
                                                             <div class="credit-icon">
                                                                 <div class="credit-icon-value color-green">
@@ -126,34 +126,49 @@
                                                             <h4>{{ video.name }}</h4>
                                                         </div>        
                                                     </a>
-                                                    {% if not isUserException %}
+                                                    {% if not isUserException and validVideos[video.id] != 'FREE' %}
                                                         <p class="document-info" >{{ "domain.video.available-until"|trans({ '%date%' : validVideos[video.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</p>            
                                                     {% endif %}
-                                                    <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ video.media.id }}" tabindex="-1" role="dialog">
-                                                        <div class="modal-dialog  modal-sm" role="video">
-                                                            <div class="modal-content">
-                                                                <div class="modal-body flowplayer" data-embed="false">
-                                                                    <video width="480" height="320">
-                                                                        <source src='{% path video.media, 'reference' %}' type='video/mp4' />
-                                                                        <object id="flowplayer" data="{{ asset('assets/flowplayer/flowplayer.swf') }}" type="application/x-shockwave-flash" width="480" height="320" >
-                                                                            <param name="movie" value="{{ asset('assets/flowplayer/flowplayer.swf') }}">
-                                                                            <param name="allowfullscreen" value="true">
-                                                                            <param name="flashvars" value="config={'clip':{'url':'{% path video.media, 'reference' %}','autoPlay':false}}">
-                                                                        </object> 
+                                                    {% if video.youtubeLink %}
+                                                        <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ video.id }}" tabindex="-1" role="dialog">
+                                                            <div class="modal-dialog  modal-sm" role="video">
+                                                                <div class="modal-content">
+    {#                                                                <div class="modal-body flowplayer" data-embed="false">
+                                                                        <video width="480" height="320">
+                                                                            <source src='{% path video.media, 'reference' %}' type='video/mp4' />
+                                                                            <object id="flowplayer" data="{{ asset('assets/flowplayer/flowplayer.swf') }}" type="application/x-shockwave-flash" width="480" height="320" >
+                                                                                <param name="movie" value="{{ asset('assets/flowplayer/flowplayer.swf') }}">
+                                                                                <param name="allowfullscreen" value="true">
+                                                                                <param name="flashvars" value="config={'clip':{'url':'{% path video.media, 'reference' %}','autoPlay':false}}">
+                                                                            </object> 
 
-                                                                    </video>
+                                                                        </video>
+                                                                    </div>#}
+                                                                    <div class="modal-body">
+                                                                            <iframe width="480" height="270" src="https://www.youtube.com/embed/{{ video.youtubeLink | youtube_id }}?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+                                                                        {% if video.media %}
+                                                                            <a href="{{ path('sonata_media_download', {'id': video.media|sonata_urlsafeid }) }}">{{ 'Descarca video' | trans }}</a>
+                                                                        {% endif %}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>       
+                                                    {% endif %}
                                                     <script type="text/javascript">
-                                                        function showVideoModal{{ video.media.id }}()
+                                                        function showVideoModal{{ video.id }}(elem)
                                                         {
-                                                            $('#showVideoModal{{ video.media.id }}').modal();
+                                                            {% if video.youtubeLink %}
+                                                                $('#showVideoModal{{ video.id }}').modal();
+                                                            {% else %}
+                                                                {% if video.media %}
+                                                                    $(elem).attr("href", '{{ path('sonata_media_download', {'id': video.media|sonata_urlsafeid }) }}');
+                                                                    $(elem).removeAttr("onclick");
+                                                                {% endif %}
+                                                            {% endif %} 
                                                         }
                                                     </script>
                                                 {% else %}
-                                                    <a id="showLink{{ video.id }}" href ="javascript:;" onclick="javascript:VideoConfirmPopup('{{ 'modal.video-confirm.body'|trans({'%title%': video.name, '%credits%': video.creditValue, '%plural%' : (video.creditValue == 1) ? 'modal.video-confirm.credit'|trans : 'modal.video-confirm.credits'|trans }) }}', '{{ path('unlock_video') }}', '{{ video.id }}', '{% path video.media, 'reference' %}', '{{ asset('assets/flowplayer/flowplayer.swf') }}' );">
+                                                    <a id="showLink{{ video.id }}" href ="javascript:;" onclick="javascript:VideoConfirmPopup('{{ 'modal.video-confirm.body'|trans({'%title%': video.name, '%credits%': video.creditValue, '%plural%' : (video.creditValue == 1) ? 'modal.video-confirm.credit'|trans : 'modal.video-confirm.credits'|trans }) }}', '{{ path('unlock_video') }}', '{{ video.id }}', '{% path video.media, 'reference' %}', '{{ (video.media) ? path('sonata_media_download', {'id': video.media|sonata_urlsafeid }) : "" }}', '{{ (video.youtubeLink) ? video.youtubeLink | youtube_id : '' }}', '{{ asset('assets/flowplayer/flowplayer.swf') }}' );">
                                                         <div class="col-xs-2">
                                                             <div class="credit-icon">
                                                                 <div id="documentIcon{{ video.id }}" class="credit-icon-value color-{{ (video.creditValue > 0) ? "red" : "green" }}">
@@ -168,7 +183,14 @@
                                                     <script type="text/javascript">
                                                         function showVideoModal{{ video.id }}()
                                                         {
-                                                            $('#showVideoModal{{ video.id }}').modal();
+                                                            {% if video.youtubeLink %}
+                                                                $('#showVideoModal{{ video.id }}').modal();
+                                                            {% else %}
+                                                                {% if video.media %}
+                                                                    $('#showLink{{ video.id }}').attr("href", '{{ path('sonata_media_download', {'id': video.media|sonata_urlsafeid }) }}');
+                                                                    $('#showLink{{ video.id }}').removeAttr("onclick");
+                                                                {% endif %}
+                                                            {% endif %}
                                                         }
                                                     </script>
                                                     <p class="document-info" id="errorOrSuccessVideo{{video.id}}" hidden="hidden"></p>
