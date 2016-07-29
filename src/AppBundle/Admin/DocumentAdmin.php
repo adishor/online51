@@ -139,6 +139,9 @@ class DocumentAdmin extends Admin
         if ($name == "edit") {
             return 'sonata/base_edit.html.twig';
         }
+        if ($name == "list") {
+            return 'sonata/base_list.html.twig';
+        }
         return parent::getTemplate($name);
     }
 

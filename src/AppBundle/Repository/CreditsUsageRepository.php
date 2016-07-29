@@ -58,12 +58,12 @@ class CreditsUsageRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('p.company, v.id as id, v.name, m.id as mid, m as media, '
+          ->select('p.company, v.id as id, v.name, v.youtubeLink, m.id as mid, m as media, '
             . 'cu.id as cuid, cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
           ->from('AppBundle:CreditsUsage ', 'cu')
           ->join('AppBundle:Video', 'v', 'WITH', 'cu.video = v')
-          ->join('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
+          ->leftJoin('Application\Sonata\MediaBundle\Entity\Media', 'm', 'WITH', 'cu.media = m')
           ->join('AppBundle:SubDomain', 'sd', 'WITH', 'v.subdomain = sd')
           ->join('AppBundle:Domain', 'dom', 'WITH', 'sd.domain = dom')
           ->join('cu.user', 'u')
@@ -73,7 +73,6 @@ class CreditsUsageRepository extends EntityRepository
           ->andWhere('cu.expireDate > :now')
           ->setParameter('now', new \DateTime)
           ->andWhere('v.deleted = FALSE')
-          ->andWhere('m.deleted = FALSE')
           ->andWhere('cu.deleted = FALSE')
           ->andWhere('sd.deleted = FALSE')
           ->andWhere('dom.deleted = FALSE');

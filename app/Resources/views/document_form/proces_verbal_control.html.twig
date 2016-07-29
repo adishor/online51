@@ -25,7 +25,10 @@
         <form class="formular-form" id="proces_verbal_control" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
 
-            {{ form_row(form.company) }}
+            {{ form_row(form.company, { 'attr': {'data-val': 'true',
+                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                } } ) }}
+            <span class="field-validation-valid" data-valmsg-for="{{ form.company.vars.full_name }}" data-valmsg-replace="true" ></span>
             
             {{ form_row(form.controlDate, {'label': 'Control desfasurat in data de'}) }}
             <span class="field-validation-valid" id="error-controlDate">{{ 'Completati toate detaliile referitor la data' | trans }}</span>        
@@ -45,11 +48,21 @@
                     {% endfilter %}">
                     {% for item in form.participants %}
                         <li>
-                            {{ form_row(item.name, 
-                                {'attr': {'data-val': 'true',
-                                'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                } } ) }}
-                            <span class="field-validation-valid" data-valmsg-for="{{ form.participants.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            <div class="col-xs-1 no-margin-left">
+                                {{ form_row(item.gender, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': ' ',
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.participants.vars.full_name }}[{{ loop.index0 }}][gender]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="col-xs-11">
+                                {{ form_row(item.name, 
+                                    {'attr': {'data-val': 'true',
+                                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                    } } ) }}
+                                <span class="field-validation-valid" data-valmsg-for="{{ form.participants.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
+                            </div>
+                            <div class="clear-both"></div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -143,11 +156,7 @@
                     } } ) }}
             <span class="field-validation-valid" data-valmsg-for="{{ form.proposedMeasures.vars.full_name }}" data-valmsg-replace="true" ></span>
             
-            {{ form_row(form.administrator, 
-                    {'attr': {'data-val': 'true',
-                    'data-val-required': 'Acest camp este obligatoriu' | trans,
-                    } } ) }}
-            <span class="field-validation-valid" data-valmsg-for="{{ form.administrator.vars.full_name }}" data-valmsg-replace="true" ></span>
+            {% include "document_form/base/person_generic.html.twig" with { 'title': 'Administrator', 'persons': form.administrator } %}
             
             <div class="hidden">{{ form_rest(form) }}</div>
             <div class="craue_formflow_buttons">
@@ -184,6 +193,11 @@
                         messages: {
                             required: 'Acest camp este obligatoriu'
                         }
+                    });
+                });
+                jQuery('#membrii-fields-list li select').each(function () {
+                    jQuery(this).rules("add", {
+                        required: true
                     });
                 });
             }

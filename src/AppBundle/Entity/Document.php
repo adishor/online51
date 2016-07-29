@@ -5,11 +5,13 @@ namespace AppBundle\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraints as CustomAssert;
 
 /**
  * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\DocumentRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @CustomAssert\ValabilityForZeroCreditsValue
  */
 class Document
 {
@@ -37,6 +39,7 @@ class Document
      * @var integer
      *
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
+     * @Assert\NotBlank()
      * @ORM\Column(type="integer")
      */
     private $creditValue;
@@ -46,7 +49,7 @@ class Document
      * @var integer
      *
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $valabilityDays;
 

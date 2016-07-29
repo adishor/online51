@@ -106,22 +106,22 @@
                         <p>{{ 'Nume, Prenume' | trans }}</p>
                         {% for item in data.workersLeaders %}
                             {% if item.name %}
-                                <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                                <p>{{ item.gender | trans }} {{ item.name }}</p>
                             {% endif %}
                         {% endfor %}
                         {% for item in data.workersCarsDriven %}
                             {% if item.name %}
-                                <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                                <p>{{ item.gender | trans }} {{ item.name }}</p>
                             {% endif %}
                         {% endfor %}
                         {% for item in data.workersFirstAid %}
                             {% if item.name %}
-                                <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                                <p>{{ item.gender | trans }} {{ item.name }}</p>
                             {% endif %}
                         {% endfor %}
                         {% for item in data.workersResponsible %}
                             {% if item.name %}
-                                <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                                <p>{{ item.name ? ((item.gender) ? item.gender : 'Dl/Dna ' | trans) ~ " " ~ item.name : 'Dl/Dna ' | trans ~ "..............................." }}</p>
                             {% endif %}
                         {% endfor %}
                     </div>

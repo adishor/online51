@@ -10,6 +10,9 @@
 {% for flash_message in app.session.flashbag.get('successful-account-activate') %}
     <h5 class="color-blue text-center first" >{{ flash_message|trans }}</h5>
 {% endfor %}
+{% for flash_message in app.session.flashbag.get('error-account-activate') %}
+    <h5 class="color-red text-center first" >{{ flash_message|trans }}</h5>
+{% endfor %}
 {% if app.user %}
     <div class="login-form" id="loginDiv">
         <p class="first text-center text-small">{{ 'login.user-information'|trans }}</p>
@@ -20,17 +23,19 @@
             <h4 id="totalUserCredits" class="text-center">0</h4>
         {% endif %}
         <input type="button" class="costum centered" value="{{ 'login.button.logout'|trans }}" onclick="UserLogOut('{{ path('sonata_user_security_logout') }}')" />
-        {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <p class="last"><a href="{{ path('sonata_admin_dashboard') }}">{{ 'login.administration'|trans }}</a></p>
-        {% endif %}
-        {% if app.user.profile.demoAccount %}
-            <p class="last"><a href="{{ path('change_info') }}">{{ 'login.activate-account'|trans }}</a></p>
-        {% else %}
-            <p class="last"><a href="{{ path('show_orders') }}">{{ 'login.credit-status'|trans }}</a></p>
-            <p class="last"><a href="{{ path('show_valid_documents') }}">{{ 'login.my-documents'|trans }}</a></p>
-            <p class="last"><a href="{{ path('change_info') }}">{{ 'login.change-user-information'|trans }}</a></p>
-            <p class="last"><a href="{{ path('change_password') }}">{{ 'login.change-password'|trans }}</a></p>
-        {% endif %}
+        <div class="fa-icon-section">
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <p class="last fa fa-icon fa-arrow-up"><a href="{{ path('sonata_admin_dashboard') }}">{{ 'login.administration'|trans }}</a></p>
+            {% endif %}
+            {% if app.user.profile.demoAccount %}
+                <p class="last fa fa-icon fa-hand-o-up"><a href="{{ path('change_info') }}">{{ 'login.activate-account'|trans }}</a></p>
+            {% else %}
+                <p class="last fa fa-icon fa-money"><a href="{{ path('show_orders') }}">{{ 'login.credit-status'|trans }}</a></p>
+                <p class="last fa fa-icon fa-file"><a href="{{ path('show_valid_documents') }}">{{ 'login.my-documents'|trans }}</a></p>
+                <p class="last fa fa-icon fa-pencil"><a href="{{ path('change_info') }}">{{ 'login.change-user-information'|trans }}</a></p>
+                <p class="last fa fa-icon fa-exchange"><a href="{{ path('change_password') }}">{{ 'login.change-password'|trans }}</a></p>
+            {% endif %}
+        </div>
     </div>
 {% elseif not app.user %}
     <form action="" method="post" onsubmit="return false">
@@ -44,8 +49,10 @@
             <span class="field-validation-valid text-center" data-valmsg-for="Password" data-valmsg-replace="true" id="validPass" ></span>
             <input type="submit" class="costum" value="{{ 'login.button.login'|trans }}" onclick="GoLogin('{{ path('sonata_user_security_check') }}', '{{ path('homepage') }}', '{{ path('sonata_admin_dashboard') }}');" />
             <br class="clear" />
-            <p class="last"><a onclick="ResetPasswordShow();" href="#">{{ 'login.forgot'|trans }}</a></p>
-            <p class="last"><a href="{{ path('create_demo_account') }}">{{ 'login.free'|trans }}</a></p>
+            <div class="fa-icon-section">
+                <p class="last fa-icon fa fa-key"><a onclick="ResetPasswordShow();" href="#">{{ 'login.forgot'|trans }}</a></p>
+                <p class="last fa-icon fa fa-unlock"><a href="{{ path('create_demo_account') }}">{{ 'login.free'|trans }}</a></p>
+            </div>
         </div>
     </form>
     <form action="" method="post" onsubmit="return false">

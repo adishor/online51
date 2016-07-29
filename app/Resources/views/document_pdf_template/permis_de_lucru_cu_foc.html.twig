@@ -14,7 +14,7 @@
             <div class="height-40-px"></div>
             <table class="pdf-table text-justify">
                 <tr><td colspan="3">
-                    <p><span class="text-small-indent"></span>{{ 'Se elibereaza prezentul permis de lucru cu foc doamnei/domnului' | trans }} {{ data.personWithWorkPermitForFire }}, {{ ' ajutat de doamna/domnul ' | trans }} {{ data.helpPersonForWorkWithFire }}, {{ ' care urmeaza sa execute ' | trans }} {{ data.executeWork }} {{ ' folosind ' | trans }} {{ data.useForWork }} {{ ' la(in) ' | trans }} {{ data.forWork }}. {{ 'Lucrarile incep la data de ' | trans }} {{ data.startWorkDate | date("d/m/Y") }} {{ ' ora ' | trans }} {{ data.startWorkDate | date("H") }}, {{ ' si se incheie la data de ' | trans }} {{ data.endWorkDate | date("d/m/Y") }} {{ ' ora ' | trans }} {{ data.endWorkDate | date("H") }}.</p>
+                    <p><span class="text-small-indent"></span>{{ 'Se elibereaza prezentul permis de lucru cu foc ' | trans }} {{ data.personWithWorkPermitForFire.0.gender | trans }} {{ data.personWithWorkPermitForFire.0.name }}, {{ ' ajutat de ' | trans }} {{ data.helpPersonForWorkWithFire.0.gender | trans }} {{ data.helpPersonForWorkWithFire.0.name }}, {{ ' care urmeaza sa execute ' | trans }} {{ data.executeWork }} {{ ' folosind ' | trans }} {{ data.useForWork }} {{ ' la(in) ' | trans }} {{ data.forWork }}. {{ 'Lucrarile incep la data de ' | trans }} {{ data.startWorkDate | date("d/m/Y") }} {{ ' ora ' | trans }} {{ data.startWorkDate | date("H:i") }}, {{ ' si se incheie la data de ' | trans }} {{ data.endWorkDate | date("d/m/Y") }} {{ ' ora ' | trans }} {{ data.endWorkDate | date("H:i") }}.</p>
                 </td></tr>
                 <tr><td colspan="3">
                     <p>{{ 'Premergator, pe timpul si la terminarea lucrarilor cu foc se vor lua urmatoarele masuri:' | trans }}</p>
@@ -48,18 +48,18 @@
                 </td></tr>
                 <tr><td colspan="3">
                     <p><b>9.</b> {{ 'Pe timpul lucrarilor se asigura supravegherea acestora de catre:' | trans }}</p>
-                    <p>{{ 'Dl/Dna' | trans }} {{ data.measure9SurveillanceBy }}</p>
+                    <p>{{ data.measure9SurveillanceBy.0.gender | trans }} {{ data.measure9SurveillanceBy.0.name }}</p>
                 </td></tr>
                 <tr><td colspan="3">
                     <p><b>10.</b> {{ 'Seful serviciului public voluntar/privat pentru situatii de urgenta este anuntat despre inceperea, intreruperea si incheierea lucrarii.' | trans }}</p>
                 </td></tr>
                 <tr><td colspan="3">
                     <p><b>11.</b> {{ 'In zona de lucru se asigura urmatoarele mijloace de stingere a incendiilor:' | trans }}</p>
-                    <p>{{ 'Dl/Dna' | trans }} {{ data.measure11AssuredBy }}</p>
+                    <p>{{ data.measure11AssuredBy.0.gender  | trans }} {{ data.measure11AssuredBy.0.name }}</p>
                 </td></tr>
                 <tr><td colspan="3">
                     <p><b>12.</b> {{ 'In zona de lucru se asigura urmatoarele mijloace de stingere a incendiilor:' | trans }}</p>
-                    <p>{{ 'Dl/Dna' | trans }} {{ data.measure12SurveillanceBy }}</p>
+                    <p>{{ data.measure12SurveillanceBy.0.gender | trans }} {{ data.measure12SurveillanceBy.0.name }}</p>
                 </td></tr>
                 <tr><td colspan="3">
                     <p><b>13.</b> {{ 'Incendiul sau orice alt eveniment se anunta la ' | trans }} {{ data.measure13AnnoucementAt }}, {{ ' prin ' | trans }} {{ data.measure13AnnoucementTrought }}</p>

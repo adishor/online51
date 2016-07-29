@@ -35,7 +35,7 @@ file that was distributed with this source code.
             </span>
         {% else %}
             {# download link in document #}
-            {% if field_description.name == 'media' %}
+            {% if field_description.name == 'media' and object.media %}
                 <a href="{{ path('sonata_media_download', {'id': object.media|sonata_urlsafeid }) }}">
                     {{ object.media.name }}
                 </a>

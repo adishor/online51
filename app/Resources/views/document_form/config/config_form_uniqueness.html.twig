@@ -3,8 +3,6 @@
 
     <form id="form_Config_{{ formular.slug }}" method="post" onsubmit="return false;">
     {% for key, items in uniqueValues %}
-        <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
-
         {% set singleSelect = true %}
         {% for itemUnique in items %}
             {% if itemUnique is iterable %}
@@ -15,6 +13,7 @@
 {#        singleSelect means that we have a configurationOption with a 1 level value#}
 {#        example: Year - by selecting one value we have the final configuration#}
         {% if singleSelect and items|length > 0 %}
+            <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
             <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" id="{{ key }}">
                 {% if items|length > 1 %}
                     <option></option>
@@ -30,6 +29,11 @@
 {#        final configuration for this cases is done by selecting multiple level values#}
 {#        example select value 01, after that another select is being loaded , select value 03 and final configiuration is 01 03#}
         {% if not singleSelect and items|length > 0 %}
+            <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
+            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" onChange="loadAutocomplete('{{ key }}')"/>
+            <span class="field-validation-valid" data-valmsg-for="autocomplete_{{ key }}" data-valmsg-replace="true" ></span>
+            
+            <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
             <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" id='{{ key }}' onChange="loadSubItem('{{ key }}', jQuery(this).find('option:selected').val());">
                 {% if items|length > 1 %}
                     <option></option>
@@ -48,10 +52,6 @@
                 <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3" onChange="loadSub3Item('{{ key }}', jQuery(this).find('option:selected').val());"></select>
                 <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level3" data-valmsg-replace="true" ></span>
             </div>
-
-            <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
-            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" onChange="loadAutocomplete('{{ key }}')"/>
-            <span class="field-validation-valid" data-valmsg-for="autocomplete_{{ key }}" data-valmsg-replace="true" ></span>
             
         {% endif %}    
     {% endfor %}
@@ -61,7 +61,6 @@
     </form>
     <br/><div id="formularError{{ formular.id }}"></div>
 </div></div></div>
-
 <script type="text/javascript">   
     var items = [];
     items = {{ uniqueValues|json_encode|raw }};
@@ -219,7 +218,7 @@
         });
         
         if (errorNo === 0) {
-            {% if isUserException or isDraft %}
+            {% if isUserException or isDraft or formular.creditValue == 0 %}
                 AjaxCheckSubmitFormConfig_{{ formular.slug }}(); 
             {% else %}
                 $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');

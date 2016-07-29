@@ -31,7 +31,7 @@
             <div class="section-group3">
                 <ul>
                 {% for item in data.workersAttributions %}
-                    <li>{{ 'Dl/Dna ' | trans }} {{ item.name ? item.name : "..............................." }} - {{ item.function | trans }}</li>
+                    <li>{{ item.name ? ((item.gender) ? item.gender : 'Dl/Dna ' | trans) ~ " " ~ item.name : 'Dl/Dna ' | trans ~ "..............................." }} - {{ item.function | trans }}</li>
                 {% endfor %}
                 </ul>
             </div>
@@ -45,7 +45,7 @@
             <div class="section-group3">
                 <ul>
                 {% for item in data.interventionTeam %}
-                    <li>{{ 'Dl/Dna ' | trans }} {{ item.name ? item.name : "..............................." }} - {{ item.function | trans }}</li>
+                    <li>{{ item.name ? ((item.gender) ? item.gender : 'Dl/Dna ' | trans) ~ " " ~ item.name : 'Dl/Dna ' | trans ~ "..............................." }} - {{ item.function | trans }}</li>
                 {% endfor %}
                 </ul>
             </div>
@@ -63,19 +63,21 @@
                 </tr>
             </table>
             <div class="height-40-px"></div>
-            <p>{{ 'Dl/Dna' | trans }} {{ data.administrator }} - Administrator</p>
+            {% for administrator in data.administrator %}
+                <p>{{ administrator.gender | trans }} {{ administrator.name }} {{ '- Administrator' | trans }}</p>
+            {% endfor %}
             <p><span class="text-indent"></span>........................................</p>
             <div class="height-40-px"></div>
             <div class="col-xs-6 no-margin-left">
                 <p>{{ 'Am luat la cunostinta,' | trans }}</p>
                 {% for item in data.workersAttributions %}
                     {% if item.name %}
-                        <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                        <p>{{ item.name ? ((item.gender) ? item.gender : 'Dl/Dna ' | trans) ~ " " ~ item.name : 'Dl/Dna ' | trans ~ "..............................." }}</p>
                     {% endif %}
                 {% endfor %}
                 {% for item in data.interventionTeam %}
                     {% if item.name %}
-                        <p>{{ 'Dl/Dna ' | trans }} {{ item.name }}</p>
+                        <p>{{ item.name ? ((item.gender) ? item.gender : 'Dl/Dna ' | trans) ~ " " ~ item.name : 'Dl/Dna ' | trans ~ "..............................." }}</p>
                     {% endif %}
                 {% endfor %}
             </div>

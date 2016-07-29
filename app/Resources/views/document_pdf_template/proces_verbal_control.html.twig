@@ -19,7 +19,7 @@
             <p>{{ 'Participanti' | trans }}</p>
             {% for item in data.participants %}
                 {% if item.name %}
-                    <p>{{ item.name }}</p>
+                    <p>{{ item.gender | trans }} {{ item.name }}</p>
                 {% endif %}
             {% endfor %}
             <div class="height-40-px"></div>
@@ -54,7 +54,9 @@
             <p><b>{{ '3 - Masuri propuse:' | trans }}</b></p>
             <p>{{ data.proposedMeasures }}</p>
             <div class="height-40-px"></div>
-            <p>{{ 'Dl/Dna' | trans }} {{ data.administrator }} {{ ' - Administrator' | trans }}</p>
+            {% for administrator in data.administrator %}
+                <p>{{ administrator.gender | trans }} {{ administrator.name }} {{ ' - Administrator' | trans }}</p>
+            {% endfor %}
             <p><span class="text-indent"></span>.........................................</p>
         </div>
         <div class="col-xs-1"></div>

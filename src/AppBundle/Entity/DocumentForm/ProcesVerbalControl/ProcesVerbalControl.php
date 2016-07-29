@@ -46,8 +46,7 @@ class ProcesVerbalControl
 
     /**
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\Common\Person>")
      */
     protected $administrator;
 
@@ -144,14 +143,18 @@ class ProcesVerbalControl
         $organizationalQuestionss = [$x1, $x2, $x3, $x4, $x5, $x6, $x7, $x8, $x9, $x10, $x11, $x12, $x13, $x14];
         $this->organizationalQuestions = $organizationalQuestionss;
 
-
-        $this->members = new ArrayCollection();
         $y = new Person();
+        $y->setGender('');
         $y->setName('');
         $y->setFunction('');
 
-        $participants = [$y, $y];
+        $this->participants = new ArrayCollection();
+        $participants = [$y];
         $this->participants = $participants;
+
+        $this->administrator = new ArrayCollection();
+        $administrator = [$y];
+        $this->administrator = $administrator;
     }
 
     public function getControlDate()
