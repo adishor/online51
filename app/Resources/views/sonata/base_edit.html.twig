@@ -83,7 +83,7 @@
                     var city = $("#{{ admin.uniqId }}_profile_city");
                     city.empty();
 
-                    {% if object.profile.county is not null %}
+                    {% if object.profile is not null and object.profile.county is not null %}
                         if ( countyId != {{ object.profile.county.id }} ) {
                             //empty city value
                             jQuery(city.prev().find('a > :first-child')).html('');
