@@ -63,16 +63,34 @@ class FormularController extends Controller
                     $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
                 } else {
                     if (!$request->getSession()->get('currentStepLoad' . $creditsUsage->getId()) && $currentStep > 1) {
-                        while ($currentStep) {
-                            $form = $flow->createForm();
-                            $flow->saveCurrentStepData($form);
-                            $flow->nextStep();
-                            $currentStep--;
-                        }
+//                        while ($currentStep) {
+//                            var_dump("currentStep", $currentStep);
+//                            var_dump($creditsUsage->getFormConfig());
+//                            $formData = $this->get('jms_serializer')
+//                              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+//                            $flow->bind($formData);
+//                            $form = $flow->createForm();
+//                            if (method_exists($formularService, 'applyFormCustomization')) {
+//                                $formularService->applyFormCustomization($flow, $form, $creditsUsage);
+//                            }
+//                            $flow->saveCurrentStepData($form);
+//                            if (method_exists($formularService, 'processHandleForm')) {
+//                                $formularService->processHandleForm($creditsUsage, $flow, $formData);
+//                            }
+//                            var_dump($creditsUsage->getFormConfig(), $formData);
+//                            $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
+//                            $this->getDoctrine()->getManager()->flush();
+//                            $flow->nextStep();
+//                            $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData);
+//                            $currentStep--;
+//                        }
                         $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
                     }
                 }
             }
+//            $formData = $this->get('jms_serializer')
+//              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+//            $flow->bind($formData);
         }
 
         // form of the current step

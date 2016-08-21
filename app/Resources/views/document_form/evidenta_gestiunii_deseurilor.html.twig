@@ -54,7 +54,11 @@
             {% endif %}
             
             {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 2 : 1) %}
-                {{ form_row(form.agentEconomic) }}
+                {{ form_row(form.agentEconomic, 
+                    {'attr': {'data-val': 'true',
+                    'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    } } ) }}
+                <span class="field-validation-valid" data-valmsg-for="{{ form.agentEconomic.vars.full_name }}" data-valmsg-replace="true" ></span>
                 {{ form_row(form.stareFizica, {'attr': {'class': 'stareFizica max-width-500'  } }) }}
                 {{ form_row(form.unitateMasura, {'attr': {'class': 'unitateMasura max-width-500'  } }) }}
                 {{ form_row(form.stocareTip, {'attr': {'class': 'stocareTip max-width-500'  } }) }}
@@ -148,6 +152,14 @@
 
             {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 3 : 2) %}
                 <h3>{{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}</h3>
+                {{ form_row(form.lastYearInStock, {'label': 'Ramas in stoc de anul trecut (se va adauga in plus la luna Ianuarie)',                             'attr': {'class': 'lastYearInStock', 
+                                'data-val': 'true',
+                                'data-val-required': 'Acest camp este obligatoriu' | trans,
+                                'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'
+                                } }) }}
+                <span class="field-validation-valid" data-valmsg-for="{{ form.lastYearInStock.vars.full_name }}" data-valmsg-replace="true" ></span>
+                <br/>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
                         <th class="text-center width-35-px" rowspan="3">{{ 'Nr.' | trans }}</th>
@@ -375,46 +387,64 @@
                     jQuery('#{{ key }}').text(sum{{ key }});
                 });            
             {% endfor %}
-            
+                    
             {% if form.EGD1GenerareDeseuri is defined %}
                 {% if formConfig.operatia == 3 %}
+                    jQuery('.lastYearInStock').change(function(){
+                        jQuery('.calcul-valorificata').each(function(index){
+                            calculValorificata(index);
+                        });
+                    });
                     {% for key in form.EGD1GenerareDeseuri|keys %}
                         jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
-                            jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
-                            calculTotalValorificata();
+                            calculValorificata({{ key }});
                         });
                         jQuery('.EGD1CantitateDeseuValorificata{{ key }}').change(function(){
-                            jQuery('.EGD1CantitateDeseuInStocValorificata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuValorificata{{ key }}').val());
-                            calculTotalValorificata();
+                            calculValorificata({{ key }});
                         });
                     {% endfor %}
-                    function calculTotalValorificata() {
-                        var total = 0;
-                        jQuery('.calcul-valorificata').each(function(){
-                            total += parseFloat(jQuery(this).text());
-                        });   
-                        jQuery('#EGD1CantitateDeseuInStocTotal').text(total);
+                    function calculValorificata(key) {
+                        var lastYearInStock = (key == 0) ? jQuery('.lastYearInStock').val() : 0;
+                        var value = parseFloat(jQuery('.EGD1CantitateDeseuGenerate' + key).val()) - 
+                                parseFloat(jQuery('.EGD1CantitateDeseuValorificata' + key).val()) + 
+                                parseFloat(lastYearInStock);
+                        value = value + ((parseInt(key) >= 1) ? parseFloat(jQuery('.EGD1CantitateDeseuInStocValorificata' + (parseInt(key) - 1)).text()) : 0);
+                        jQuery('.calcul-valorificata').each(function(index){
+                            if (index >= parseInt(key)) {
+                                jQuery('.EGD1CantitateDeseuInStocValorificata' + index).text(value);
+                            }
+                        });
+                        jQuery('#EGD1CantitateDeseuInStocTotal').text(value);
                     }
                 {% endif %}
 
                 {% if formConfig.operatia == 4 %}
+                    jQuery('.lastYearInStock').change(function(){
+                        jQuery('.calcul-eliminata').each(function(index){
+                            calculEliminata(index);
+                        });
+                    });
                     {% for key in form.EGD1GenerareDeseuri|keys %}
                         jQuery('.EGD1CantitateDeseuGenerate{{ key }}').change(function(){
-                            jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
-                            calculTotalEliminata();
+                            calculEliminata({{ key }});
                         });
                         jQuery('.EGD1CantitateDeseuEliminata{{ key }}').change(function(){
-                            jQuery('.EGD1CantitateDeseuInStocEliminata{{ key }}').text(jQuery('.EGD1CantitateDeseuGenerate{{ key }}').val() - jQuery('.EGD1CantitateDeseuEliminata{{ key }}').val());
-                            calculTotalEliminata();
+                            calculEliminata({{ key }});
                         });
                     {% endfor %}
-                    function calculTotalEliminata() {
-                        var total = 0;
-                        jQuery('.calcul-eliminata').each(function(){
-                            total += parseFloat(jQuery(this).text());
+                    function calculEliminata(key) {
+                        var lastYearInStock = (key == 0) ? jQuery('.lastYearInStock').val() : 0;
+                        var value = parseFloat(jQuery('.EGD1CantitateDeseuGenerate' + key).val()) - 
+                                parseFloat(jQuery('.EGD1CantitateDeseuEliminata' + key).val()) + 
+                                parseFloat(lastYearInStock);
+                        value = value + ((parseInt(key) >= 1) ? parseFloat(jQuery('.EGD1CantitateDeseuInStocEliminata' + (parseInt(key) - 1)).text()) : 0);
+                        jQuery('.calcul-eliminata').each(function(index){
+                            if (index >= parseInt(key)) {
+                                jQuery('.EGD1CantitateDeseuInStocEliminata' + index).text(value);
+                            }
                         });
-                        jQuery('#EGD1CantitateDeseuInStocTotal').text(total);
-                    }
+                        jQuery('#EGD1CantitateDeseuInStocTotal').text(value);
+                    }  
                 {% endif %}
             {% endif %}
                 

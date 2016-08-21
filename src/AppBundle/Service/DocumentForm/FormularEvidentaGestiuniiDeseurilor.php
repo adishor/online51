@@ -100,6 +100,7 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
         $EGD2 = $formData->getEGD2StocareTratareTransportDeseuri();
         $EGD3 = $formData->getEGD3ValorificareDeseuri();
         $EGD4 = $formData->getEGD4EliminareDeseuri();
+        $lastYearInStock = $formData->getLastYearInStock();
         $EGD1CantitateDeseuGenerateTotal = 0;
         $EGD1CantitateDeseuValorificataTotal = 0;
         $EGD1CantitateDeseuEliminataTotal = 0;
@@ -111,6 +112,7 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
         $EGD3CantitateDeseuValorificataTotal = 0;
         $EGD4CantitateDeseuEliminataTotal = 0;
         foreach ($formData->luni as $key => $luna) {
+            $valueLastYearInStock = ($key == 0) ? $lastYearInStock : 0;
             $EGD1CantitateDeseuGenerateTotal += $EGD1[$key]->getCantitateDeseuGenerate();
             $EGD1CantitateDeseuValorificataTotal += $EGD1[$key]->getCantitateDeseuValorificata();
             $EGD1CantitateDeseuEliminataTotal += $EGD1[$key]->getCantitateDeseuEliminata();
@@ -118,14 +120,14 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
             $EGD2TratareCantitateTotal += $EGD2[$key]->getTratareCantitate();
             $EGD3CantitateDeseuValorificataTotal += $EGD3[$key]->getCantitateDeseuValorificata();
             $EGD4CantitateDeseuEliminataTotal += $EGD4[$key]->getCantitateDeseuEliminata();
-            $EGD1CantitateDeseuInStocValorificata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuValorificata();
-            $EGD1CantitateDeseuInStocEliminata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuEliminata();
+            $EGD1CantitateDeseuInStocValorificata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuValorificata() + $valueLastYearInStock + (($key > 0) ? $EGD1CantitateDeseuInStocValorificata[$key - 1] : 0);
+            $EGD1CantitateDeseuInStocEliminata[$key] = $EGD1[$key]->getCantitateDeseuGenerate() - $EGD1[$key]->getCantitateDeseuEliminata() + $valueLastYearInStock + (($key > 0) ? $EGD1CantitateDeseuInStocEliminata[$key - 1] : 0);
         }
         if ($formData->getOperatia() == 3) {
-            $EGD1CantitateDeseuInStocTotal = $EGD1CantitateDeseuGenerateTotal - $EGD1CantitateDeseuValorificataTotal;
+            $EGD1CantitateDeseuInStocTotal = $EGD1CantitateDeseuInStocValorificata[count($formData->luni) - 1];
         }
         if ($formData->getOperatia() == 4) {
-            $EGD1CantitateDeseuInStocTotal = $EGD1CantitateDeseuGenerateTotal - $EGD1CantitateDeseuEliminataTotal;
+            $EGD1CantitateDeseuInStocTotal = $EGD1CantitateDeseuInStocEliminata[count($formData->luni) - 1];
         }
         $EGDTotals['EGD1CantitateDeseuGenerateTotal'] = $EGD1CantitateDeseuGenerateTotal;
         $EGDTotals['EGD1CantitateDeseuValorificataTotal'] = $EGD1CantitateDeseuValorificataTotal;
@@ -172,6 +174,10 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
             }
 
             if ($formData->getOperatiaDeValorificare()) {
+                foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
+                    //var_dump($formData->getEGD1GenerareDeseuri()[$key]);
+//                    $item->setStocareCantitate($formData->getEGD1GenerareDeseuri()[$key]);
+                }
                 foreach ($formData->getEGD3ValorificareDeseuri() as $key => $item) {
                     $item->setOperatiaDeValorificare($formData->getOperatiaDeValorificare());
                     $item->setAgentEconomicValorificare(NULL);
