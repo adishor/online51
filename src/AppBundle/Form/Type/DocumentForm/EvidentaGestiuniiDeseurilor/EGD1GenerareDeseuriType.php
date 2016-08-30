@@ -16,10 +16,10 @@ class EGD1GenerareDeseuriType extends AbstractType
         $builder->add('luna', TextType::class, array(
             'read_only' => TRUE, 'disabled' => TRUE,
           ))
-          ->add('cantitateDeseuGenerate', NumberType::class)
-          ->add('cantitateDeseuValorificata', NumberType::class)
-          ->add('cantitateDeseuEliminata', NumberType::class)
-          ->add('cantitateDeseuInStoc', NumberType::class, array(
+          ->add('cantitateDeseuGenerate', TextType::class)
+          ->add('cantitateDeseuValorificata', TextType::class)
+          ->add('cantitateDeseuEliminata', TextType::class)
+          ->add('cantitateDeseuInStoc', TextType::class, array(
               'read_only' => true
           ))
         ;

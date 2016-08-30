@@ -163,6 +163,14 @@ class EvidentaGestiuniiDeseurilor
     /**
      *
      * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $lastYearInStock;
+
+    /**
+     *
+     * @var type
      * @Type("array<AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor\EGD1GenerareDeseuri>")
      */
     protected $EGD1GenerareDeseuri;
@@ -190,6 +198,8 @@ class EvidentaGestiuniiDeseurilor
 
     public function __construct()
     {
+        $this->lastYearInStock = 0;
+
         $this->EGD1GenerareDeseuri = new ArrayCollection();
         $EGD1 = [];
         foreach ($this->luni as $luna) {
@@ -414,6 +424,16 @@ class EvidentaGestiuniiDeseurilor
     public function setCurrentStep($currentStep)
     {
         $this->currentStep = $currentStep;
+    }
+
+    public function getLastYearInStock()
+    {
+        return $this->lastYearInStock;
+    }
+
+    public function setLastYearInStock($lastYearInStock)
+    {
+        $this->lastYearInStock = $lastYearInStock;
     }
 
 }
