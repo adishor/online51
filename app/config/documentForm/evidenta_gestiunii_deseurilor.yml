@@ -1,13 +1,13 @@
 parameters:
     stare_fizica: 
         solid: 'solid'
-        semi-solid: 'semi-solid'
         lichid: 'lichid'        
     unitate_masura: 
         metru-cub: 'metru cub'
         tone: 'tone'
         kilograme: 'kilograme'
         litri: 'litri'
+        'buc': 'buc'
     tip_stocare:
         RM: RM - recipient metalic
         RP: RP - recipient de plastic

@@ -27,9 +27,7 @@ class EGDStep1Type extends AbstractType
         $operatieEliminare = $container->getParameter('operatia_eliminare_deseu');
 
         $builder
-          ->add('agentEconomic', TextType::class, array(
-              'read_only' => TRUE
-          ))
+          ->add('agentEconomic', TextType::class)
           ->add('an', TextType::class, array(
               'read_only' => TRUE
           ))
@@ -42,7 +40,11 @@ class EGDStep1Type extends AbstractType
           ->add('stareFizica', ChoiceType::class, array('choices' => $stareFizica))
           ->add('unitateMasura', ChoiceType::class, array('choices' => $unitateMasura))
           ->add('stocareTip', ChoiceType::class, array('choices' => $stocareTip))
-          ->add('tratareMod', ChoiceType::class, array('choices' => $tratareMod))
+          ->add('tratareMod', ChoiceType::class, array(
+              'choices' => $tratareMod,
+              'placeholder' => '',
+              'empty_data' => null
+          ))
           ->add('transportMijloc', ChoiceType::class, array('choices' => $transportMijloc))
           ->add('transportDestinatie', ChoiceType::class, array('choices' => $transportDestinatie))
           ->add('operatiaDeValorificare', ChoiceType::class, array('choices' => $operatieValorificare))

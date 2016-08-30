@@ -155,13 +155,37 @@ formular-documents:
     access-denied-expired: Acces interzis. Valabilitatea de editare pentru formular a expirat.
     reset-filter: 'Resetati filtrul'
     new-documents: Creare document nou pe baza acestuia
+    
+    info:
+        egd:
+            operatia: ''
+            agentEconomic: 'test agentEconomic'
+            stareFizica: ''
+            unitateMasura: ''
+            stocareTip: ''
+            tratareMod: ''
+            transportMijloc: ''
+            transportDestinatie: ''
+            operatiaDeValorificare: ''
+            operatiaDeEliminare: ''
+            EGDCompany: ''
+            chapter1: ''
+            lastYearInStock: ''
+            EGD1GenerareDeseuri: ''
+            chapter2: ''
+            EGD2StocareTratareTransportDeseuri: ''
+            chapter3: ''
+            EGD3ValorificareDeseuri: ''
+            chapter4: ''
+            EGD4EliminareDeseuri: ''
+    
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
     price: 'Pret : '
     number-of-credits: 'Numar Credite : '
     valability: 'Termen de valabilitate : '
-
+    
     not-logged-in: 'Abonamentele se pot comanda dupa acces in sistem:'
     no_subscription: 'Fara abonament'
     bought: 'Abonament achizitionat de utilizator.'
@@ -169,6 +193,7 @@ subscription:
     canceled: 'Anulata de utilizator'
     superadmin: 'Sunteti logat cu un cont de superadministrator.'
     demo-account: 'Sunteti logat cu un cont gratuit, pentru a trimite o comanda trebuie sa va activati contul folosind link-ul din partea dreapta.'
+                
 currency: ' RON'
 user:
     function:
@@ -476,6 +501,7 @@ document-form:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
     text:
         egd: ' <span><b>Tip deseu:</b> waste-type; <b>Operatia:</b> operation; <b>Anul:</b> year; </span>'
+        egd-full: '<b>Tip deseu:</b> waste-type'
         egd-operatia-unselect: neselectat
         ccssm: '<span>Ziua: <b>day</b>; Ora: <b>hour</b>; </span>'
     report:
