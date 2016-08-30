@@ -24,6 +24,32 @@ $(document).ready(function () {
     });
 });
 
+function validate(evt, elem) {
+    var theEvent = evt || window.event,
+            key = theEvent.keyCode || theEvent.which,
+            ENTER = 13,
+            TAB = 9,
+            BACKSPACE = 8,
+            DEL = 46,
+            ARROW_KEYS = {left: 37, right: 39},
+            regex = /[0-9]|\./;
+    if (key === ENTER) {
+        var tabindex = parseInt($(elem).attr("tabindex")) + 1;
+        $("input[tabindex='" + tabindex + "']").focus();
+        evt.preventDefault();
+        return true;
+    }
+    if (key === TAB || key === BACKSPACE || key === DEL || key === ARROW_KEYS.left || key === ARROW_KEYS.right) {
+        return true;
+    }
+    key = String.fromCharCode(key);
+    if (!regex.test(key)) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault)
+            theEvent.preventDefault();
+    }
+}
+
 function popitup(url) {
     newwindow = window.open(url, 'name', 'height=1000,width=1200');
     if (window.focus) {
@@ -50,7 +76,7 @@ function ShowHideItems() {
         $("#lblCertificateNumber").hide();
         $("#tbCertificateNumber").hide();
         $('#tbCertificateNumber input').each(function () {
-            $(this).rules("remove");       
+            $(this).rules("remove");
         });
         $('#tbCertificateNumber input').prop('disabled', true);
     } else {
@@ -60,7 +86,7 @@ function ShowHideItems() {
             $("#lblCertificateNumber").hide();
             $("#tbCertificateNumber").hide();
             $('#tbCertificateNumber input').each(function () {
-                $(this).rules("remove");       
+                $(this).rules("remove");
             });
             $('#tbCertificateNumber input').prop('disabled', true);
         } else {
@@ -211,7 +237,7 @@ function disableCheckedCheckedbox(cb) {
 function isCheckedx(cb, id, no, isRegister) {
     var checkedOffice = $("#" + id + " input:checked").length;
     if (isRegister) {
-        var value = $(cb).attr("name").replace("domains", "").replace("[","").replace("]","");
+        var value = $(cb).attr("name").replace("domains", "").replace("[", "").replace("]", "");
         if ($(cb).prop('checked')) {
             $("#register_order_type_registerDomainIds").val($("#register_order_type_registerDomainIds").val() + "," + value);
         } else {
@@ -485,8 +511,8 @@ $('#videoConfirmModalYes').click(function () {
                     var html = '<div class="modal fade bs-modal-sm m-video" id="showVideoModal' + videoId + '" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog  modal-sm" role="video"><div class="modal-content"><div class="modal-body"><iframe width="480" height="270" src="https://www.youtube.com/embed/' + youtubeId + '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>' + (videoDownload ? '<a href="' + videoDownload + '">Descarca video</a>' : '') + '</div></div></div></div>';
                     $('#showLink' + videoId).parent().append(html);
                 }
-                
-                $('#showLink' + videoId).attr("href", "javascript:;").attr("onclick", "showVideoModal" + videoId + "();");   
+
+                $('#showLink' + videoId).attr("href", "javascript:;").attr("onclick", "showVideoModal" + videoId + "();");
                 $('#totalUserCredits').text(response.credits);
                 $('#errorOrSuccessVideo' + videoId).addClass('color-green');
                 $('#documentIcon' + videoId).removeClass('color-red').addClass('color-green').text('0');
@@ -646,12 +672,12 @@ $("#FreeUserName").bind('input propertychange', function () {
     }
 });
 
-$(document).ajaxStart(function() {
-  $("#loading").show();
+$(document).ajaxStart(function () {
+    $("#loading").show();
 });
 
-$(document).ajaxStop(function() {
-  $("#loading").hide();
+$(document).ajaxStop(function () {
+    $("#loading").hide();
 });
 
 

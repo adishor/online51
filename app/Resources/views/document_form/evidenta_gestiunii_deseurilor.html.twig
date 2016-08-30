@@ -37,19 +37,20 @@
     {% endif %}
     
     <div class="panel"><div class="panel-body">
-        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : creditsUsage.id, 'short' : false })) }}
+        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : creditsUsage.id, 'short' : false })) | replace({'||': '<br/><span class="indent2"></span>' }) | replace({'|': '<br/><span class="indent"></span>' }) | raw }}
     </div></div>
 
     <div class="col-xs-2">
         {% include 'CraueFormFlowBundle:FormFlow:stepList.html.twig' %}
     </div>
-    <div class="col-xs-10">    
+    <div class="col-xs-10">
+        {% form_theme form with 'document_form/base/form_fields.html.twig' %}
         <form class="formular-form" id="evidenta_gestiunii_deseurilor" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
             
             {% if creditsUsage.isFormConfigFinished %}
                 {% if flow.getCurrentStepNumber() == 1 %}
-                    {{ form_row(form.operatia, {'attr': {'class': 'operatia max-width-500'  } }) }}
+                    {{ form_row(form.operatia, {'attr': {'class': 'operatia max-width-500', 'label_info': 'formular-documents.info.egd.operatia' | trans } }) }}
                 {% endif %}
             {% endif %}
             
@@ -57,19 +58,20 @@
                 {{ form_row(form.agentEconomic, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
+                    'label_info': 'formular-documents.info.egd.agentEconomic' | trans
                     } } ) }}
                 <span class="field-validation-valid" data-valmsg-for="{{ form.agentEconomic.vars.full_name }}" data-valmsg-replace="true" ></span>
-                {{ form_row(form.stareFizica, {'attr': {'class': 'stareFizica max-width-500'  } }) }}
-                {{ form_row(form.unitateMasura, {'attr': {'class': 'unitateMasura max-width-500'  } }) }}
-                {{ form_row(form.stocareTip, {'attr': {'class': 'stocareTip max-width-500'  } }) }}
-                {{ form_row(form.tratareMod, {'attr': {'class': 'tratareMod max-width-500'} }) }}
-                {{ form_row(form.transportMijloc, {'attr': {'class': 'transportMijloc max-width-500'} }) }}
-                {{ form_row(form.transportDestinatie, {'attr': {'class': 'transportDestinatia max-width-500'} }) }}
+                {{ form_row(form.stareFizica, {'attr': {'class': 'stareFizica max-width-500', 'label_info': 'formular-documents.info.egd.stareFizica' | trans } }) }}
+                {{ form_row(form.unitateMasura, {'attr': {'class': 'unitateMasura max-width-500', 'label_info': 'formular-documents.info.egd.unitateMasura' | trans } }) }}
+                {{ form_row(form.stocareTip, {'attr': {'class': 'stocareTip max-width-500', 'label_info': 'formular-documents.info.egd.stocareTip' | trans } }) }}
+                {{ form_row(form.tratareMod, {'attr': {'class': 'tratareMod max-width-500', 'label_info': 'formular-documents.info.egd.tratareMod' | trans } }) }}
+                {{ form_row(form.transportMijloc, {'attr': {'class': 'transportMijloc max-width-500', 'label_info': 'formular-documents.info.egd.transportMijloc' | trans } }) }}
+                {{ form_row(form.transportDestinatie, {'attr': {'class': 'transportDestinatia max-width-500', 'label_info': 'formular-documents.info.egd.transportDestinatie' | trans } }) }}
                 {% if formConfig.operatia is defined and formConfig.operatia == 3 %}
-                    {{ form_row(form.operatiaDeValorificare, {'attr': {'class': 'operatiaDeValorificare max-width-500'} }) }}
+                    {{ form_row(form.operatiaDeValorificare, {'attr': {'class': 'operatiaDeValorificare max-width-500', 'label_info': 'formular-documents.info.egd.operatiaDeValorificare' | trans } }) }}
                 {% endif %}
                 {% if formConfig.operatia is defined and formConfig.operatia == 4 %}
-                    {{ form_row(form.operatiaDeEliminare, {'attr': {'class': 'operatiaDeEliminare max-width-500'} }) }}
+                    {{ form_row(form.operatiaDeEliminare, {'attr': {'class': 'operatiaDeEliminare max-width-500', 'label_info': 'formular-documents.info.egd.operatiaDeEliminare' | trans } }) }}
                 {% endif %}
                 <label>
                     {% if formConfig.operatia is not defined %}
@@ -81,6 +83,7 @@
                     {% if formConfig.operatia is defined and formConfig.operatia == 4 %}
                         {{ 'Agentul economic care efectueaza operatia de eliminare' | trans }}
                     {% endif %}
+                    {{ include('document_form/base/form_label_info.html.twig', {'label_info': 'formular-documents.info.egd.EGDCompany' | trans }) }} 
                 </label>
                 <p>{{ 'Va rugam introduceti in ordinea cronologica a lunilor agentii economici' | trans }}</p>
                 <ul id="company-fields-list" data-prototype="
@@ -151,12 +154,16 @@
             {% endif %}
 
             {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 3 : 2) %}
-                <h3>{{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}</h3>
+                <h3>
+                    {{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}
+                    {{ include('document_form/base/form_label_info.html.twig', {'label_info': 'formular-documents.info.egd.chapter1' | trans }) }} 
+                </h3>
                 {{ form_row(form.lastYearInStock, {'label': 'Ramas in stoc de anul trecut (se va adauga in plus la luna Ianuarie)',                             'attr': {'class': 'lastYearInStock', 
                                 'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'
+                                'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$',
+                                'label_info': 'formular-documents.info.egd.lastYearInStock' | trans
                                 } }) }}
                 <span class="field-validation-valid" data-valmsg-for="{{ form.lastYearInStock.vars.full_name }}" data-valmsg-replace="true" ></span>
                 <br/>
@@ -187,7 +194,10 @@
                                     {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate EGD1CantitateDeseuGenerate' ~ key, 
                                     'data-val': 'true',
                                     'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
+                                    'onkeypress': 'validate(event, this)',
+                                    'tabindex': loop.index0 * 2, 
+                                    'autocomplete': 'off' } }
                                     ) 
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuGenerate.vars.full_name }}" data-valmsg-replace="true" ></span>
@@ -196,7 +206,10 @@
                             <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata EGD1CantitateDeseuValorificata' ~ key, 
                                     'data-val': 'true',
                                     'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
+                                    'onkeypress': 'validate(event, this)',
+                                    'tabindex': loop.index0 * 2 + 1,
+                                    'autocomplete': 'off' } }
                                     ) 
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
@@ -207,7 +220,10 @@
                             <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata EGD1CantitateDeseuEliminata' ~ key, 
                                     'data-val': 'true',
                                     'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$'} }
+                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
+                                    'onkeypress': 'validate(event, this)', 
+                                    'tabindex': loop.index0 * 2 + 1, 
+                                    'autocomplete': 'off' } }
                                     ) 
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
@@ -232,7 +248,10 @@
             {% endif %}
 
             {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 4 : 3) %}
-                <h3>{{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}</h3>
+                <h3>
+                    {{ 'CAPITOLUL 2' | trans}}<br/>{{'Stocarea provizorie, tratarea si transportul deseurilor' | trans}}
+                    {{ include('document_form/base/form_label_info.html.twig', {'label_info': 'formular-documents.info.egd.chapter2' | trans }) }}
+                </h3>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
                         <th class="text-center width-35-px" rowspan="2">{{ 'Nr.' | trans }}</th>
@@ -381,7 +400,7 @@
                     var sum{{ key }} = 0;
                     jQuery('.' + totalClass{{ key }}).each(function () {
                         if (jQuery(this).val().replace(',', '.').replace(' ', '') !== '') {
-                            sum{{ key }} += parseFloat(jQuery(this).val().replace(',', '.'));
+                            sum{{ key }} += parseFloat(jQuery(this).val());
                         }
                     });
                     jQuery('#{{ key }}').text(sum{{ key }});

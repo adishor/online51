@@ -34,8 +34,8 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
                     case 'tip_deseu':
                         $deseuCodes = explode(" ", $config);
                         $tipDeseuArray = $parameters['tip_deseu'];
-                        $formConfigValue[$key] = $tipDeseuArray[$deseuCodes[0]]['name'] . "; " .
-                          $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "; " .
+                        $formConfigValue[$key] = $tipDeseuArray[$deseuCodes[0]]['name'] . "|" .
+                          $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['name'] . "||" .
                           $tipDeseuArray[$deseuCodes[0]]['values'][$deseuCodes[1]]['values'][$deseuCodes[2]];
                         $formConfigValue[$key . "_cod"] = $config;
                         break;
@@ -55,9 +55,9 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
         $formConfigValue = $this->getValuesForFormConfig($formConfig);
 
         return array(
-            'message' => 'document-form.text.egd',
+            'message' => (!$short) ? 'document-form.text.egd-full' : 'document-form.text.egd',
             'variables' => array(
-                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "; " . $formConfigValue['tip_deseu'],
+                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "<br/> " . $formConfigValue['tip_deseu'],
                 'year' => $formConfigValue['an'],
                 'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'neselectat'
             )
