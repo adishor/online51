@@ -167,7 +167,7 @@
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ item.luna }}</td>
                             <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
-                            <td>{{ egd.operatia_valorificare_deseu[item.operatiaDeValorificare] }}</td>
+                            <td>{#{{ (item.operatiaDeValorificare is defined) ? egd.operatia_valorificare_deseu[item.operatiaDeValorificare] : "" }}#}</td>
                             <td>{{ item.agentEconomicValorificare }}</td>
                         </tr>
                     {% endfor %}

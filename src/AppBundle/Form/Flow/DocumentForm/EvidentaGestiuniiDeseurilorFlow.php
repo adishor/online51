@@ -47,35 +47,34 @@ class EvidentaGestiuniiDeseurilorFlow extends FormFlow
             'label' => 'Generarea deseurilor',
             'type' => new EGDStep2Type(),
         );
-        $stepConfig[] = array(
-            'label' => 'Stocarea provizorie, tratarea si transportul deseurilor',
-            'type' => new EGDStep3Type(),
-        );
-
-        if ($creditsUsage->getIsFormConfigFinished()) {
-            $formConfig = json_decode($creditsUsage->getFormConfig());
-            if (isset($formConfig->operatia) && ($formConfig->operatia == 3)) {
-                $stepConfig[] = array(
-                    'label' => 'Valorificarea deseurilor',
-                    'type' => new EGDStep4Type(),
-                );
-            }
-            if (isset($formConfig->operatia) && ($formConfig->operatia == 4)) {
-                $stepConfig[] = array(
-                    'label' => 'Eliminarea deseurilor',
-                    'type' => new EGDStep5Type(),
-                );
-            }
-        } else {
-            $stepConfig[] = array(
-                'label' => 'Valorificarea deseurilor',
-                'type' => new EGDStep4Type(),
-            );
-            $stepConfig[] = array(
-                'label' => 'Eliminarea deseurilor',
-                'type' => new EGDStep5Type(),
-            );
-        }
+//        $stepConfig[] = array(
+//            'label' => 'Stocarea provizorie, tratarea si transportul deseurilor',
+//            'type' => new EGDStep3Type(),
+//        );
+//        if ($creditsUsage->getIsFormConfigFinished()) {
+//            $formConfig = json_decode($creditsUsage->getFormConfig());
+//            if (isset($formConfig->operatia) && ($formConfig->operatia == 3)) {
+//                $stepConfig[] = array(
+//                    'label' => 'Valorificarea deseurilor',
+//                    'type' => new EGDStep4Type(),
+//                );
+//            }
+//            if (isset($formConfig->operatia) && ($formConfig->operatia == 4)) {
+//                $stepConfig[] = array(
+//                    'label' => 'Eliminarea deseurilor',
+//                    'type' => new EGDStep5Type(),
+//                );
+//            }
+//        } else {
+//            $stepConfig[] = array(
+//                'label' => 'Valorificarea deseurilor',
+//                'type' => new EGDStep4Type(),
+//            );
+//            $stepConfig[] = array(
+//                'label' => 'Eliminarea deseurilor',
+//                'type' => new EGDStep5Type(),
+//            );
+//        }
 
         $stepConfig[] = array(
             'label' => 'Generare Document'
