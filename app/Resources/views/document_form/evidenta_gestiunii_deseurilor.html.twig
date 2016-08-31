@@ -36,9 +36,7 @@
         {% include "document_form/config/config_form_uniqueness_on_form_egd.html.twig" with {'creditsUsage': creditsUsage, 'isUserException': isUserException } %}
     {% endif %}
     
-    <div class="panel"><div class="panel-body">
-        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : creditsUsage.id, 'short' : false })) | replace({'||': '<br/><span class="indent2"></span>' }) | replace({'|': '<br/><span class="indent"></span>' }) | raw }}
-    </div></div>
+    {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : creditsUsage.id, 'short' : false })) }}
 
     <div class="col-xs-2">
         {% include 'CraueFormFlowBundle:FormFlow:stepList.html.twig' %}
@@ -430,7 +428,7 @@
                         value = value + ((parseInt(key) >= 1) ? parseFloat(jQuery('.EGD1CantitateDeseuInStocValorificata' + (parseInt(key) - 1)).text()) : 0);
                         jQuery('.calcul-valorificata').each(function(index){
                             if (index >= parseInt(key)) {
-                                jQuery('.EGD1CantitateDeseuInStocValorificata' + index).text(value);
+                                jQuery('.EGD1CantitateDeseuInStocValorificata' + index).text(value.toFixed(2));
                             }
                         });
                         jQuery('#EGD1CantitateDeseuInStocTotal').text(value);

@@ -33,7 +33,7 @@
             <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" onChange="loadAutocomplete('{{ key }}')"/>
             <span class="field-validation-valid" data-valmsg-for="autocomplete_{{ key }}" data-valmsg-replace="true" ></span>
             
-            <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
+            {#<p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
             <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" id='{{ key }}' onChange="loadSubItem('{{ key }}', jQuery(this).find('option:selected').val());">
                 {% if items|length > 1 %}
                     <option></option>
@@ -51,7 +51,7 @@
             <div class="multipleSelectLevel3">
                 <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3" onChange="loadSub3Item('{{ key }}', jQuery(this).find('option:selected').val());"></select>
                 <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level3" data-valmsg-replace="true" ></span>
-            </div>
+            </div>#}
             
         {% endif %}    
     {% endfor %}
@@ -235,6 +235,7 @@
             var autocompleteItems = [];
             if (key == 'tip_deseu') {
                 autocompleteItems = AutocompleteTipDeseu(key);
+{#                console.log(autocompleteItems);#}
             }
 
             $("#" + id).autocomplete({
@@ -284,8 +285,10 @@
                 for (var key2Subitem in key2SubitemArray) {
                     if (items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]].hasOwnProperty('values')) {
                         var key3SubitemArray = Object.keys(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']).sort();
+                        console.log(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']);
                         for (var key3Subitem in key3SubitemArray) {
                             autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem] + " " + key3SubitemArray[key3Subitem]);
+{#                            autocompleteItems.push();#}
                         }
                     } else {
                         autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem]);
