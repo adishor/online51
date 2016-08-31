@@ -239,7 +239,13 @@ class FormularController extends Controller
             $formularService->setName($creditsUsage->getFormular()->getSlug());
             $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig(), $short);
 
-            return new Response($this->get('translator')->trans($text['message'], $text['variables']));
+            if ($short) {
+                return new Response($this->get('translator')->trans($text['message'], $text['variables']));
+            } else {
+                return $this->render('document_form/config/full_configuration_text.html.twig', array(
+                      'message' => $this->get('translator')->trans($text['message'], $text['variables'])
+                ));
+            }
         }
 
         return new Response();

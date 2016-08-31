@@ -45,7 +45,6 @@
                     <table cellspacing="0" cellpadding="0" border="0" id="overview" class="display users documents clearfix dataTable valid-documents" aria-describedby="overview_info">
                         <thead>
                             <tr role="row">
-                                <th>{{ 'formular-documents.company' | trans }}</th>
                                 <th>{{ 'formular-documents.name' | trans }}</th>
                                 <th class="text-center">{{ 'formular-documents.type' | trans }}</th>
                                 <th class="text-center">{{ 'formular-documents.date-expired' | trans }}</th>
@@ -56,10 +55,8 @@
                         <tbody>
                 {% endif %}                 
                         <tr class="{{ (loop.index % 2) ? "odd" : "even" }}">
-                            <td class="">{{ doc.company }}</td>
                             <td class="">
                                 {% set title = (doc.title is defined and doc.title is not empty) ? doc.title : doc.name %}
-                                <span>{{ title }}</span>
                                 <a onclick="EditDocument(this);">
                                     <img src="{{ asset('assets/images/edit.png') }}">
                                 </a>
@@ -71,6 +68,7 @@
                                         <img src="{{ asset('assets/images/Close.png') }}">
                                     </a>
                                 </span>
+                                <span>{{ title }}</span>
                                 <br/>
                                 <p class="errorUpdateTitle" id="errorUpdateTitle{{ doc.cuid }}"></p>
                             {% if doc.usageType == formularType and doc.formConfig != 'null' %}
@@ -189,14 +187,14 @@
         
         function EditDocument(elem) 
         {
-            jQuery(elem).prev().html("<input class='valid-doc-title' type='text' value='" + jQuery(elem).prev().html() + "'>");
+            jQuery(elem).next().next().html("<input class='valid-doc-title' type='text' value='" + jQuery(elem).next().next().html() + "'>");
             jQuery(elem).next().show();
             jQuery(elem).hide();
         }
         
         function ConfirmEditDocument(elem, creditUsageId)
         {
-           var title = jQuery(elem).parent().prev().prev().children().val();
+           var title = jQuery(elem).parent().next().children().val();
            $.ajax({
                 type: "POST",
                 url: '{{ path("update_title_document") }}',
@@ -204,7 +202,7 @@
                 dataType: 'json',
                 success: function (response) {
                     if (response.success) {
-                        jQuery(elem).parent().prev().prev().html(title);
+                        jQuery(elem).parent().next().html(title);
                         jQuery(elem).parent().prev().show();
                         jQuery(elem).parent().hide();
                     } else {
@@ -217,7 +215,7 @@
         
         function CancelEditDocument(elem, text)
         {
-            jQuery(elem).parent().prev().prev().html(text);
+            jQuery(elem).parent().next().html(text);
             jQuery(elem).parent().prev().show();
             jQuery(elem).parent().hide();
         }

@@ -1,0 +1,9 @@
+<div class="panel">
+    <div class="panel-body">
+        {% set Msg = message | split('&&') %}
+        <div class="headerMsg"><a class="show-form-config">{{ Msg[0] | raw }}</a></div>
+        <div class="form-config">
+            {{ Msg[1] | replace({'||': '<br/><span class="indent2"></span>' }) | replace({'|': '<br/><span class="indent"></span>' }) | raw }}
+        </div>
+    </div>
+</div>
