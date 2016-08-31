@@ -16,10 +16,9 @@
                 <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
                     {{ label|trans({}, translation_domain) }}
                     {% if attr.label_info is defined and attr.label_info != '' %}
-                        <a class="show-at-hover">
-                            <img src="{{ asset('assets/images/info.png') }}" />
-                            <span>{{ attr.label_info }}</span>
-                        </a>
+                        <span class="tooltip2"><img src="{{ asset('assets/images/info.png') }}" />
+                            <span class="tooltiptext">{{ attr.label_info }}</span>
+                        </span>
                     {% endif %}
                 </label>
             {%- endif %}

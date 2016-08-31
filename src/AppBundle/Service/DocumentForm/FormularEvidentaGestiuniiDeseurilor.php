@@ -54,10 +54,11 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
         $formConfigD = json_decode($formConfig);
         $formConfigValue = $this->getValuesForFormConfig($formConfig);
 
+        // && - special character separator for dropdown display for full configuration
         return array(
             'message' => (!$short) ? 'document-form.text.egd-full' : 'document-form.text.egd',
             'variables' => array(
-                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "<br/> " . $formConfigValue['tip_deseu'],
+                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "&&" . $formConfigValue['tip_deseu'],
                 'year' => $formConfigValue['an'],
                 'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'neselectat'
             )
@@ -156,50 +157,68 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
             unset($formConfig['tip_deseu_cod']);
             $formConfig['operatia'] = $formData->getOperatia();
             $creditsUsage->setFormConfig(json_encode($formConfig));
-
-            foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
-                $item->setTratareScop(str_replace(array(3, 4), array('V', 'E'), $formData->getOperatia()));
-                $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
-            }
         }
 
-        if ($flow->getCurrentStep() == ($creditsUsage->getIsFormConfigFinished() ? 2 : 1)) {
-            foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
-                $item->setStocareTip($formData->getStocareTip());
-                $item->setTratareMod($formData->getTratareMod());
-                $item->setTratareScop($formData->getTratareScop());
-                $item->setTransportMijloc($formData->getTransportMijloc());
-                $item->setTransportDestinatie($formData->getTransportDestinatie());
-                $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
+        if ($flow->getCurrentStep() == ($creditsUsage->getIsFormConfigFinished() ? 3 : 2)) {
+
+//            foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
+//                $item->setTratareScop(str_replace(array(3, 4), array('V', 'E'), $formData->getOperatia()));
+//                $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
+//            }
+
+            foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+                $valueLastYearInStock = ($key == 0) ? $formData->getlastYearInStock() : 0;
+                if ($formData->getOperatiaDeValorificare()) {
+                    $formData->getEGD1GenerareDeseuri()[$key]->setCantitateDeseuInStoc($item->getCantitateDeseuGenerate() - $item->getCantitateDeseuValorificata() + $valueLastYearInStock + (($key > 0) ? $formData->getEGD1GenerareDeseuri()[$key - 1]->getCantitateDeseuInStoc() : 0));
+                }
+                if ($formData->getOperatiaDeEliminare()) {
+                    $formData->getEGD1GenerareDeseuri()[$key]->setCantitateDeseuInStoc($item->getCantitateDeseuGenerate() - $item->getCantitateDeseuEliminata() + $valueLastYearInStock + (($key > 0) ? $formData->getEGD1GenerareDeseuri()[$key - 1]->getCantitateDeseuInStoc() : 0));
+                }
             }
 
-            if ($formData->getOperatiaDeValorificare()) {
-                foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
-                    //var_dump($formData->getEGD1GenerareDeseuri()[$key]);
-//                    $item->setStocareCantitate($formData->getEGD1GenerareDeseuri()[$key]);
+            foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
+                $item->setStocareCantitate($formData->getEGD1GenerareDeseuri()[$key]->getCantitateDeseuInStoc());
+                if ($formData->getEGD1GenerareDeseuri()[$key]->getCantitateDeseuInStoc() > 0) {
+                    $item->setStocareTip($formData->getStocareTip());
                 }
-                foreach ($formData->getEGD3ValorificareDeseuri() as $key => $item) {
-                    $item->setOperatiaDeValorificare($formData->getOperatiaDeValorificare());
-                    $item->setAgentEconomicValorificare(NULL);
-                    foreach ($formData->getEGDCompany() as $company) {
-                        if ($key + 1 >= $company->getStartMonth()) {
-                            $item->setAgentEconomicValorificare($company->getName());
+                if ($formData->getEGD1GenerareDeseuri()[$key]->getCantitateDeseuValorificata() > 0 ||
+                  $formData->getEGD1GenerareDeseuri()[$key]->getCantitateDeseuEliminata() > 0) {
+                    $item->setTransportMijloc($formData->getTransportMijloc());
+                    $item->setTransportDestinatie($formData->getTransportDestinatie());
+                }
+                $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
+            }
+//            var_dump($formData);
+//            die;
+
+
+            if ($formData->getOperatiaDeValorificare()) {
+                foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+                    if ($item->getCantitateDeseuValorificata() > 0) {
+                        $formData->getEGD3ValorificareDeseuri()[$key]->setCantitateDeseuValorificata($item->getCantitateDeseuValorificata());
+                        $formData->getEGD3ValorificareDeseuri()[$key]->setOperatiaDeValorificare($formData->getOperatiaDeValorificare());
+                        $formData->getEGD3ValorificareDeseuri()[$key]->setAgentEconomicValorificare(NULL);
+                        foreach ($formData->getEGDCompany() as $company) {
+                            if ($key + 1 >= $company->getStartMonth()) {
+                                $formData->getEGD3ValorificareDeseuri()[$key]->setAgentEconomicValorificare($company->getName());
+                            }
                         }
                     }
-                    $formData->getEGD3ValorificareDeseuri()[$key] = $item;
                 }
             }
 
             if ($formData->getOperatiaDeEliminare()) {
-                foreach ($formData->getEGD4EliminareDeseuri() as $key => $item) {
-                    $item->setOperatiaDeEliminare($formData->getOperatiaDeEliminare());
-                    $item->setAgentEconomicEliminare(NULL);
-                    foreach ($formData->getEGDCompany() as $company) {
-                        if ($key + 1 >= $company->getStartMonth()) {
-                            $item->setAgentEconomicEliminare($company->getName());
+                foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+                    if ($item->getCantitateDeseuEliminata() > 0) {
+                        $formData->getEGD4EliminareDeseuri()[$key]->setCantitateDeseuEliminata($item->getCantitateDeseuEliminata());
+                        $formData->getEGD4EliminareDeseuri()[$key]->setOperatiaDeEliminare($formData->getOperatiaDeEliminare());
+                        $formData->getEGD4EliminareDeseuri()[$key]->setAgentEconomicEliminare(NULL);
+                        foreach ($formData->getEGDCompany() as $company) {
+                            if ($key + 1 >= $company->getStartMonth()) {
+                                $formData->getEGD4EliminareDeseuri()[$key]->setAgentEconomicEliminare($company->getName());
+                            }
                         }
                     }
-                    $formData->getEGD4EliminareDeseuri()[$key] = $item;
                 }
             }
         }

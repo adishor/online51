@@ -24,6 +24,19 @@ $(document).ready(function () {
     });
 });
 
+function decimalPlaces(num) {
+    var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+    if (!match) {
+        return 0;
+    }
+    return Math.max(
+            0,
+            // Number of digits right of decimal point.
+            (match[1] ? match[1].length : 0)
+            // Adjust for scientific notation.
+            - (match[2] ? + match[2] : 0));
+}
+
 function validate(evt, elem) {
     var theEvent = evt || window.event,
             key = theEvent.keyCode || theEvent.which,
@@ -32,7 +45,7 @@ function validate(evt, elem) {
             BACKSPACE = 8,
             DEL = 46,
             ARROW_KEYS = {left: 37, right: 39},
-            regex = /[0-9]|\./;
+    regex = /[0-9]|\./;
     if (key === ENTER) {
         var tabindex = parseInt($(elem).attr("tabindex")) + 1;
         $("input[tabindex='" + tabindex + "']").focus();

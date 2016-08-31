@@ -1,8 +1,7 @@
 {% block label_info %}
     {% if label_info != '' %}
-        <a class="show-at-hover">
-            <img src="{{ asset('assets/images/info.png') }}" />
-            <span>{{ label_info }}</span>
-        </a>
+        <div class="tooltip2"><img src="{{ asset('assets/images/info.png') }}" />
+            <span class="tooltiptext">{{ label_info }}</span>
+        </div>
     {% endif %}
 {% endblock %}
