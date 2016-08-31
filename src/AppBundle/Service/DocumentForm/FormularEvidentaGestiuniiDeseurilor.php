@@ -188,7 +188,7 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
                 }
                 $formData->getEGD2StocareTratareTransportDeseuri()[$key] = $item;
             }
-            var_dump($formData);
+//            var_dump($formData);
 //            die;
 
 
