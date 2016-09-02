@@ -29,7 +29,11 @@
     
     <div class="row">
         <div class="col-xs-12">
-            <a href="{{ path('show_valid_documents') }}"><button class="custom pull-right">{{ 'formular-documents.reset-filter'|trans }}</button></a>
+            {% if app.request.query.get('mediaId') is not null %}
+                <a href="{{ path('show_valid_documents') }}">
+                    <button class="custom pull-right">{{ 'formular-documents.reset-filter'|trans }}</button>
+                </a>
+            {% endif %}
             <h1 class="title-top">{{ 'formular-documents.title' | trans }}</h1>
         </div>
         <div class="clear-both"></div>
@@ -78,16 +82,21 @@
                             <td class="">{{ doc.usageType }}</td>
                             <td class="">{{ doc.date|date('d-m-Y') }}</td>
                             <td class="">
-                                {% if doc.usageType == formularType and date(doc.date) > date() and not doc.mid %}
+                                {% if doc.usageType == formularType and date(doc.date) > date() %}
                                     <a href="{{ path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) }}">
                                         <img alt="EditDocImg" src="{{ asset("assets/images/EditDoc.png") }}" id="EditDocImg" title="{{ 'formular-documents.edit' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
                                     </a>
+                                    {% if doc.mid is not null %}
+                                        <a href="{{ path('sonata_media_download', {'id': doc.mid }) }}">
+                                            <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                        </a>
+                                    {% endif %}
                                 {% elseif doc.usageType == videoType and doc.youtubeLink is not null %}
                                     <a href="javascript:;" onclick="showVideoModal{{ doc.mid }}();">
                                         <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">        
                                     </a>
                                     <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ doc.mid }}" tabindex="-1" role="dialog">         
-                                        <div class="modal-dialog  modal-sm" role="video">                                     
+                                        <div class="modal-dialog modal-sm" role="video">                                     
                                             <div class="modal-content">
 {#                                                    <div class="modal-body flowplayer" data-embed="false">
                                                     <video width="480" height="320">

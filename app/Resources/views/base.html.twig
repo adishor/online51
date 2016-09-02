@@ -6,22 +6,22 @@
         <title>{% block title %} {{ 'index.page-title'|trans }} {% endblock %}</title>
         {% block stylesheets %}
             {% stylesheets filter='cssrewrite'
-                'assets/css/Bootstrap-3.2.0/css/bootstrap-theme.min.css'
-                'assets/css/Bootstrap-3.2.0/css/bootstrap.min.css'
+                'assets/css/Bootstrap-3.3.7/css/bootstrap-theme.min.css'
+                'assets/css/Bootstrap-3.3.7/css/bootstrap.min.css'
                 'assets/css/Site.css'
                 'assets/css/font-awesome-4.1.0/css/font-awesome.min.css'
                 'assets/css/cssd2d5.css'
                 'assets/css/css5d2a.css'
-                'assets/css/jQueryUI/jquery.ui.core.css'
-                'assets/css/jQueryUI/jquery.ui.theme.css'
-                'assets/css/jQueryUI/jquery.ui.selectmenu.css'
+                'assets/css/jQueryUI/jquery-ui.css'
+                'assets/css/jQueryUI/jquery-ui.theme.css'
+                'assets/css/jQueryUI/jquery-ui.structure.css'     
             %}
             <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
             {% endstylesheets %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% javascripts
-              'assets/js/jquery-1.8.2.min4198.js'
+              'assets/js/jquery-1.12.4.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -73,23 +73,13 @@
 
     {% block javascripts %}
         {% javascripts
-              'assets/js/jquery-1.8.2.min4198.js'
-              'assets/js/jquery-ui-1.8.24.min4198.js'
-              'assets/js/jquery.linx.ui.fancy-combobox4198.js'
-              'assets/js/jquery.fileDownload4198.js'
-              'assets/js/Common4198.js'
+              'assets/js/jquery-1.12.4.js'
+              'assets/js/jquery-ui.min.js'
+              'assets/js/Common.js'
               'assets/js/jquery.form4198.js'
               'assets/js/jquery.validate4198.js'
               'assets/js/jquery.validate.unobtrusive4198.js'
-              'assets/js/jquery.unobtrusive-ajax4198.js'
-              'assets/js/jquery.blockUI4198.js'
-              'assets/js/jquery.dataTables4198.js'
-              'assets/js/jquery.jeditable4198.js'
-              'assets/js/bootstrap.min4198.js'
-              'assets/js/jquery.ui.core.js'
-              'assets/js/jquery.ui.widget.js'
-              'assets/js/jquery.ui.position.js'
-              'assets/js/jquery.ui.selectmenu.js'
+              'assets/js/bootstrap.min.js'
               'assets/js/website.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

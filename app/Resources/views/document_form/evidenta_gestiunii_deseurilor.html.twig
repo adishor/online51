@@ -11,6 +11,9 @@
     {% if not creditsUsage.isFormConfigFinished %}
         {% include "document_form/config/config_form_add_uniqueness_on_form_modal.html.twig" %}
     {% endif %}
+    {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 4 : 3) %}
+        {% include "document_form/config/confirm_generate_document.html.twig" %}
+    {% endif %}
 {% endblock %}
 
 {% block ccontainer %}
@@ -195,8 +198,10 @@
                                     'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
                                     'onkeypress': 'validate(event, this)',
                                     'tabindex': loop.index0 * 2, 
-                                    'autocomplete': 'off' } }
-                                    ) 
+                                    'autocomplete': 'off', 
+                                    'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
+                                    'onblur': "if(this.value == '') {this.value ='0'}" 
+                                    } } ) 
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuGenerate.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>
@@ -207,8 +212,10 @@
                                     'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
                                     'onkeypress': 'validate(event, this)',
                                     'tabindex': loop.index0 * 2 + 1,
-                                    'autocomplete': 'off' } }
-                                    ) 
+                                    'autocomplete': 'off', 
+                                    'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
+                                    'onblur': "if(this.value == '') {this.value ='0'}" 
+                                    } } ) 
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>
@@ -221,8 +228,10 @@
                                     'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
                                     'onkeypress': 'validate(event, this)', 
                                     'tabindex': loop.index0 * 2 + 1, 
-                                    'autocomplete': 'off' } }
-                                    ) 
+                                    'autocomplete': 'off', 
+                                    'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
+                                    'onblur': "if(this.value == '') {this.value ='0'}" 
+                                    } } )  
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>      
@@ -251,6 +260,11 @@
         </form>
     </div>
     <script type="text/javascript">
+        $(".generate").on('click', function(){
+            $('#confirmGenerateModal').modal();
+            $('#confirmGenerateModalFormId').val('evidenta_gestiunii_deseurilor');
+        });
+        
         jQuery(document).ready(function () {
             {% for key in formTemplateData.EGDTotals|keys %}
                 var totalClass{{ key }} = '{{ key }}'.replace('Total', '');
