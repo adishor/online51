@@ -28,11 +28,26 @@
 {#        for cases when after selecting first value, another select is being loaded#}
 {#        final configuration for this cases is done by selecting multiple level values#}
 {#        example select value 01, after that another select is being loaded , select value 03 and final configiuration is 01 03#}
-        {% if not singleSelect and items|length > 0 %}
-            <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
-            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" onChange="loadAutocomplete('{{ key }}')"/>
-            <span class="field-validation-valid" data-valmsg-for="autocomplete_{{ key }}" data-valmsg-replace="true" ></span>
+        {% if not singleSelect and items|length > 0 %}     
+            <div class="ui-widget">
+                <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
+                <select id="combobox_{{ key }}" name="combobox_{{ key }}" class="combobox" data-val="true" data-val-required="{{ 'form.required-combobox.field' | trans }}">
+                    <option></option>
+                    {% for itemKey, item in uniqueValues[key] %}
+                        {% for subItemKey, subItem in item['values'] %}
+                            {% for sub2ItemKey, sub2Item in subItem['values'] %}
+{#                                <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}</option>#}
+                                <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ sub2Item }}</option>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+                <span class="field-validation-valid" data-valmsg-for="combobox_{{ key }}" data-valmsg-replace="true" ></span>
+            </div>
             
+{#            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" onChange="loadAutocomplete('{{ key }}')"/>  
+            <span class="field-validation-valid" data-valmsg-for="autocomplete_{{ key }}" data-valmsg-replace="true" ></span>
+
             <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
             <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" id='{{ key }}' onChange="loadSubItem('{{ key }}', jQuery(this).find('option:selected').val());">
                 {% if items|length > 1 %}
@@ -51,7 +66,7 @@
             <div class="multipleSelectLevel3">
                 <select name="select_{{ key }}_level3" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" class="selectmenu" style="display:none" id="{{ key }}_level3" onChange="loadSub3Item('{{ key }}', jQuery(this).find('option:selected').val());"></select>
                 <span class="field-validation-valid" data-valmsg-for="select_{{ key }}_level3" data-valmsg-replace="true" ></span>
-            </div>
+            </div>#}
             
         {% endif %}    
     {% endfor %}
@@ -171,13 +186,20 @@
     var data = {};
     function SubmitFormConfig_{{ formular.slug }}() {
         $.each(items, function(index, value) {
-            $("#" + index).valid();
-            if ( $("#autocomplete_" + index).length) {
+            if ( $("#" + index).length) {
+                $("#" + index).valid();
+                data[index] = $("#" + index).val();
+            }            
+            if ( $("#combobox_" + index).length) {
+                $("#combobox_" + index).valid();
+                data[index] = $("#combobox_" + index).val();
+            } 
+            
+            
+{#            if ( $("#autocomplete_" + index).length) {
                 $("#autocomplete_" + index).valid();
-            }
-
-            data[index] = $("#" + index).val();
-            if (typeof value === 'object') {
+            }#}        
+            {#if (typeof value === 'object') {
                 for (var firstSubitem in value) break;
                 if (typeof value[firstSubitem] === 'object') {
                     if ($("#" + index).val()) {
@@ -207,7 +229,7 @@
                         }
                     }
                 }
-            }
+            }#}
         });
 
         var errorNo = 0;
@@ -216,7 +238,7 @@
                 errorNo = errorNo + 1;
             }
         });
-        
+          
         if (errorNo === 0) {
             {% if isUserException or isDraft or formular.creditValue == 0 %}
                 AjaxCheckSubmitFormConfig_{{ formular.slug }}(); 
@@ -235,10 +257,9 @@
             var autocompleteItems = [];
             if (key == 'tip_deseu') {
                 autocompleteItems = AutocompleteTipDeseu(key);
-{#                console.log(autocompleteItems);#}
             }
 
-            $("#" + id).autocomplete({
+{#            $("#" + id).autocomplete({
                 source: function(req, responseFn) {
                     var re = $.ui.autocomplete.escapeRegex(req.term);
                     var matcher = new RegExp( "^" + re, "i" );
@@ -247,6 +268,12 @@
                     });
                     responseFn( a );
                 }
+            });#}
+            
+            $(function() {
+                $("#" + id).autocomplete({
+                  source:[autocompleteItems]
+                }); 
             });
             
        }); 
@@ -285,10 +312,11 @@
                 for (var key2Subitem in key2SubitemArray) {
                     if (items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]].hasOwnProperty('values')) {
                         var key3SubitemArray = Object.keys(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']).sort();
-                        console.log(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']);
                         for (var key3Subitem in key3SubitemArray) {
                             autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem] + " " + key3SubitemArray[key3Subitem]);
-{#                            autocompleteItems.push();#}
+                        }
+                        for (value in items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']) {
+                            autocompleteItems.push(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values'][value]);
                         }
                     } else {
                         autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem]);

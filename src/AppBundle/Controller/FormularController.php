@@ -33,9 +33,9 @@ class FormularController extends Controller
             return $this->redirect($this->generateUrl('homepage'));
         }
 
-        if ($mesage = $formularService->checkValidity($user, $creditsUsage)) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans($mesage));
-        }
+//        if ($mesage = $formularService->checkValidity($user, $creditsUsage)) {
+//            throw new AccessDeniedHttpException($this->get('translator')->trans($mesage));
+//        }
 
         $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
 
