@@ -54,7 +54,7 @@ form:
         message: 'Va rugam completati *Mesajul'
         field: 'Campul este obligatoriu.'
     required-autocomplete:
-        field: Unul din aceste campuri este obligatoriu
+        field: Campul este obligatoriu
     placeholder:
         username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
@@ -418,6 +418,9 @@ modal:
     order-remove-confirm:
         title: 'Anuleaza comanda'
         body: 'Sunteti sigur ca doriti sa anulati comanda?'
+    confirm-generate:
+        title: Confirmare generare document
+        body: 'Sunteti sigur ca doriti sa generati documentul final?'
     button:
         yes: 'Da'
         no: 'Nu'
