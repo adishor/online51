@@ -693,8 +693,6 @@ $(document).ajaxStop(function () {
     $("#loading").hide();
 });
 
-
-
 // Js not currently used.
 //function GetProfile(currentUserId) {
 //    var link = '/Aldex/User/UserDetails/1';

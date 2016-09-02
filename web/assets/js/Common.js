@@ -24,6 +24,8 @@
             minLength: 0,
             source: $.proxy( this, "_source" )
           })
+          .click(function() { this.preValue = $(this).val(); $(this).val('');})
+          .blur(function() { if (this.preValue !== '') {$(this).val(this.preValue);} })
           .tooltip({
             classes: {
               "ui-tooltip": "ui-state-highlight"
@@ -129,8 +131,15 @@
       }
     });
  
-    $( "#combobox" ).combobox();
+    $( ".combobox" ).combobox();
+    $('a.clearCombo').click(function() {
+        $(this).prevAll('.ui-autocomplete-input').first()
+            .focus()
+            .val('')
+            .autocomplete('close');
+        return false;
+    });
     $( "#toggle" ).on( "click", function() {
-      $( "#combobox" ).toggle();
+      $( ".combobox" ).toggle();
     });
   } );

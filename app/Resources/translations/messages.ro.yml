@@ -55,6 +55,8 @@ form:
         field: 'Campul este obligatoriu.'
     required-autocomplete:
         field: Campul este obligatoriu
+    required-combobox:
+        field: Campul este obligatoriu
     placeholder:
         username: 'Email(Utilizator)'
         company-id: 'RO111111 sau 1111111'
