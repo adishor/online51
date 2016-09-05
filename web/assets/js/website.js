@@ -24,43 +24,41 @@ $(document).ready(function () {
     });
 });
 
-function decimalPlaces(num) {
-    var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
-    if (!match) {
-        return 0;
+function validateFloatKeyPress(el, evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;    
+    var number = el.value.split('.');
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
     }
-    return Math.max(
-            0,
-            // Number of digits right of decimal point.
-            (match[1] ? match[1].length : 0)
-            // Adjust for scientific notation.
-            - (match[2] ? + match[2] : 0));
-}
-
-function validate(evt, elem) {
-    var theEvent = evt || window.event,
-            key = theEvent.keyCode || theEvent.which,
-            ENTER = 13,
-            TAB = 9,
-            BACKSPACE = 8,
-            DEL = 46,
-            ARROW_KEYS = {left: 37, right: 39},
-    regex = /[0-9]|\./;
-    if (key === ENTER) {
-        var tabindex = parseInt($(elem).attr("tabindex")) + 1;
+    //just one dot
+    if(number.length>1 && charCode == 46){
+         return false;
+    }
+    //get the carat position
+    var caratPos = getSelectionStart(el);
+    var dotPos = el.value.indexOf(".");
+    if( caratPos > dotPos && dotPos>-1 && (number[1].length > 1)){
+        return false;
+    }
+    
+    if (charCode === 13) {
+        var tabindex = parseInt($(el).attr("tabindex")) + 1;
         $("input[tabindex='" + tabindex + "']").focus();
         evt.preventDefault();
-        return true;
+        return false;
     }
-    if (key === TAB || key === BACKSPACE || key === DEL || key === ARROW_KEYS.left || key === ARROW_KEYS.right) {
-        return true;
-    }
-    key = String.fromCharCode(key);
-    if (!regex.test(key)) {
-        theEvent.returnValue = false;
-        if (theEvent.preventDefault)
-            theEvent.preventDefault();
-    }
+    
+    return true;
+}
+
+//thanks: http://javascript.nwbox.com/cursor_position/
+function getSelectionStart(o) {
+    if (o.createTextRange) {
+        var r = document.selection.createRange().duplicate()
+        r.moveEnd('character', o.value.length)
+        if (r.text == '') return o.value.length
+        return o.value.lastIndexOf(r.text)
+    } else return o.selectionStart
 }
 
 function popitup(url) {

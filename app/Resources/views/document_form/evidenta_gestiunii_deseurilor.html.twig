@@ -162,7 +162,7 @@
                 {{ form_row(form.lastYearInStock, {'label': 'Ramas in stoc de anul trecut (se va adauga in plus la luna Ianuarie)',                             'attr': {'class': 'lastYearInStock', 
                                 'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                'data-val-regex': 'Nu este valoare pozitiva' | trans,
+                                'data-val-regex': 'Nu este valoare pozitiva cu doar 2 zecimale' | trans,
                                 'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$',
                                 'label_info': 'formular-documents.info.egd.lastYearInStock' | trans
                                 } }) }}
@@ -193,10 +193,8 @@
                             <td class="width-105-px">{{ form_widget(item.luna) }}</td>
                             <td>{{ form_widget(item.cantitateDeseuGenerate, 
                                     {'attr': {'class': 'text-right EGD1CantitateDeseuGenerate EGD1CantitateDeseuGenerate' ~ key, 
-                                    'data-val': 'true',
-                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
-                                    'onkeypress': 'validate(event, this)',
+                                    'data-val': 'true', 
+                                    'onkeypress': 'return validateFloatKeyPress(this, event);',
                                     'tabindex': loop.index0 * 2, 
                                     'autocomplete': 'off', 
                                     'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
@@ -208,9 +206,7 @@
                             {% if formConfig.operatia == 3 %}
                             <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata EGD1CantitateDeseuValorificata' ~ key, 
                                     'data-val': 'true',
-                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
-                                    'onkeypress': 'validate(event, this)',
+                                    'onkeypress': 'return validateFloatKeyPress(this, event);',
                                     'tabindex': loop.index0 * 2 + 1,
                                     'autocomplete': 'off', 
                                     'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
@@ -224,9 +220,7 @@
                             {% if formConfig.operatia == 4 %}
                             <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata EGD1CantitateDeseuEliminata' ~ key, 
                                     'data-val': 'true',
-                                    'data-val-regex': 'Nu este valoare pozitiva' | trans,
-                                    'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$', 
-                                    'onkeypress': 'validate(event, this)', 
+                                    'onkeypress': 'return validateFloatKeyPress(this, event);', 
                                     'tabindex': loop.index0 * 2 + 1, 
                                     'autocomplete': 'off', 
                                     'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
@@ -272,10 +266,10 @@
                     var sum{{ key }} = 0;
                     jQuery('.' + totalClass{{ key }}).each(function () {
                         if (jQuery(this).val().replace(',', '.').replace(' ', '') !== '') {
-                            sum{{ key }} += parseFloat(jQuery(this).val());
+                            sum{{ key }} += (parseFloat(jQuery(this).val()) || 0);
                         }
                     });
-                    jQuery('#{{ key }}').text(sum{{ key }});
+                    jQuery('#{{ key }}').text(sum{{ key }}.toFixed(2));
                 });            
             {% endfor %}
                     
@@ -295,17 +289,22 @@
                         });
                     {% endfor %}
                     function calculValorificata(key) {
-                        var lastYearInStock = (key == 0) ? jQuery('.lastYearInStock').val() : 0;
-                        var value = parseFloat(jQuery('.EGD1CantitateDeseuGenerate' + key).val()) - 
-                                parseFloat(jQuery('.EGD1CantitateDeseuValorificata' + key).val()) + 
-                                parseFloat(lastYearInStock);
-                        value = value + ((parseInt(key) >= 1) ? parseFloat(jQuery('.EGD1CantitateDeseuInStocValorificata' + (parseInt(key) - 1)).text()) : 0);
+                        var valueTotal = 0;
                         jQuery('.calcul-valorificata').each(function(index){
                             if (index >= parseInt(key)) {
+                                var lastYearInStock = (index === 0) ? (parseFloat(jQuery('.lastYearInStock').val()) || 0) : 0;
+                                var valueG = parseFloat(jQuery('.EGD1CantitateDeseuGenerate' + index).val()) || 0;
+                                var valueV = parseFloat(jQuery('.EGD1CantitateDeseuValorificata' + index).val()) || 0;
+                                var value = valueG - valueV + lastYearInStock;
+                                value = value + ((index >= 1) ? 
+                                    parseFloat(jQuery('.EGD1CantitateDeseuInStocValorificata' + (index - 1)).text()) : 0);
+                                if (index === 11) {
+                                    valueTotal = value;
+                                }
                                 jQuery('.EGD1CantitateDeseuInStocValorificata' + index).text(value.toFixed(2));
                             }
                         });
-                        jQuery('#EGD1CantitateDeseuInStocTotal').text(value);
+                        jQuery('#EGD1CantitateDeseuInStocTotal').text(valueTotal.toFixed(2));
                     }
                 {% endif %}
 
@@ -324,17 +323,23 @@
                         });
                     {% endfor %}
                     function calculEliminata(key) {
-                        var lastYearInStock = (key == 0) ? jQuery('.lastYearInStock').val() : 0;
-                        var value = parseFloat(jQuery('.EGD1CantitateDeseuGenerate' + key).val()) - 
-                                parseFloat(jQuery('.EGD1CantitateDeseuEliminata' + key).val()) + 
-                                parseFloat(lastYearInStock);
-                        value = value + ((parseInt(key) >= 1) ? parseFloat(jQuery('.EGD1CantitateDeseuInStocEliminata' + (parseInt(key) - 1)).text()) : 0);
+                        var valueTotal = 0;
                         jQuery('.calcul-eliminata').each(function(index){
+                            var lastYearInStock = (index === 0) ? (parseFloat(jQuery('.lastYearInStock').val()) || 0) : 0;
+                            var valueG = parseFloat(jQuery('.EGD1CantitateDeseuGenerate' + index).val()) || 0;
+                            var valueE = parseFloat(jQuery('.EGD1CantitateDeseuEliminata' + index).val()) || 0;     
+                            var value = valueG - valueE + lastYearInStock;
+                            console.log(index, valueG, valueE, lastYearInStock);
+                            value = value + ((index >= 1) ? 
+                                parseFloat(jQuery('.EGD1CantitateDeseuInStocEliminata' + (index - 1)).text()) : 0);
+                            if (index === 11) {
+                                valueTotal = value;
+                            }
                             if (index >= parseInt(key)) {
-                                jQuery('.EGD1CantitateDeseuInStocEliminata' + index).text(value);
+                                jQuery('.EGD1CantitateDeseuInStocEliminata' + index).text(value.toFixed(2));
                             }
                         });
-                        jQuery('#EGD1CantitateDeseuInStocTotal').text(value);
+                        jQuery('#EGD1CantitateDeseuInStocTotal').text(valueTotal.toFixed(2));
                     }  
                 {% endif %}
             {% endif %}

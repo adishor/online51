@@ -9,17 +9,17 @@
             <h2 class="title text-center">{{ 'pdf-doc-egd.waste-management-title' | trans }}</h2>
             <div>{{ 'pdf-doc-egd.agent'|trans }}: <span class="text-bold">{{ data.agentEconomic }}</span></div>
             <div>{{ 'pdf-doc-egd.year'|trans }}: <span class="text-bold">{{ data.an }}</span></div>
-            <div>{{ 'pdf-doc-egd.waste-type'|trans }}: <span class="text-bold">{{ data.tipDeseu }}</span></div>
+            <div>{{ 'pdf-doc-egd.waste-type'|trans }}: <span class="text-bold">{{ data.tipDeseu | replace({'||': '; '}) | replace({'|': '; '})}}</span></div>
             <div>{{ 'pdf-doc-egd.waste-code'|trans }}: <span class="text-bold">{{ data.tipDeseuCod }}</span></div>
             <div>{{ 'pdf-doc-egd.physical-state'|trans }}: <span class="text-bold">{{ data.stareFizica }}</span></div>
             <div>{{ 'pdf-doc-egd.unit-of-measure'|trans }}: <span class="text-bold">{{ data.unitateMasura }}</span></div>
         </div>
     </div>
 
-    <div class="row page">
+    <div class="row">
         <div class="col-xs-12">
             <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 1<br/>{{'pdf-doc-egd.waste-generation' | trans}}</h3>
-            <table class="table table-bordered ">
+            <table class="table table-bordered pdf-table">
                 <tr>
                     <th class="text-center width-35-px" rowspan="3">{{ 'pdf-doc-egd.number'|trans }}</th>
                     <th class="text-center width-105-px" rowspan="3">{{ 'pdf-doc-egd.month'|trans }}</th>
@@ -38,24 +38,24 @@
                     <tr>
                         <td class="width-35-px">{{ loop.index }}</td>
                         <td class="width-105-px">{{ item.luna }}</td>
-                        <td class="text-right">{{ item.cantitateDeseuGenerate }}</td>
-                        <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
-                        <td class="text-right">{{ item.cantitateDeseuEliminata }}</td>
+                        <td class="text-right">{{ item.cantitateDeseuGenerate | number_format(2) }}</td>
+                        <td class="text-right">{{ item.cantitateDeseuValorificata | number_format(2) }}</td>
+                        <td class="text-right">{{ item.cantitateDeseuEliminata  | number_format(2)}}</td>
                         {% if data.operatia == 3 %}
-                            <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] }}</td>
+                            <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] | number_format(2) }}</td>
                         {% endif %}
                         {% if data.operatia == 4 %}
-                            <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key] }}</td>
+                            <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key]  | number_format(2)}}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}
                 <tr>
                     <td class="width-35-px"></td>
                     <td class="width-105-px">{{ 'TOTAL' | trans }}</td>
-                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuGenerateTotal }}</td>
-                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuValorificataTotal }}</td>
-                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuEliminataTotal }}</td>
-                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocTotal }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuGenerateTotal | number_format(2) }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuValorificataTotal | number_format(2) }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuEliminataTotal | number_format(2) }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD1CantitateDeseuInStocTotal | number_format(2) }}</td>
                 </tr>
             </table>
         </div>
@@ -65,7 +65,7 @@
     <div class="row">
         <div class="col-xs-12">
             <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 2<br/>{{'pdf-doc-egd.waste-management' | trans}}</h3>
-            <table class="table table-bordered ">
+            <table class="table table-bordered pdf-table">
                 <tr>
                     <th class="text-center width-35-px" rowspan="2">{{ 'pdf-doc-egd.number'|trans }}</th>
                     <th class="text-center width-105-px" rowspan="2">{{ 'pdf-doc-egd.month'|trans }}</th>
@@ -89,9 +89,9 @@
                         <td class="width-35-px">{{ loop.index }}</td>
                         <td class="width-105-px">{{ item.luna }}</td>
                         <td>{{ item.sectia }}</td>
-                        <td class="text-right">{{ item.stocareCantitate }}</td>
+                        <td class="text-right">{{ item.stocareCantitate | number_format(2) }}</td>
                         <td>{{ item.stocareTip }}</td>
-                        <td class="text-right">{{ item.tratareCantitate }}</td>
+                        <td class="text-right">{{ item.tratareCantitate | number_format(2) }}</td>
                         <td>{{ item.tratareMod }}</td>
                         <td>{{ item.tratareScop }}</td>
                         <td>{{ item.transportMijloc }}</td>
@@ -102,9 +102,9 @@
                     <td class="width-35-px"></td>
                     <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
                     <td></td>
-                    <td class="text-right">{{ templateData.EGDTotals.EGD2StocareCantitateTotal }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD2StocareCantitateTotal | number_format(2) }}</td>
                     <td></td>
-                    <td class="text-right">{{ templateData.EGDTotals.EGD2TratareCantitateTotal }}</td>
+                    <td class="text-right">{{ templateData.EGDTotals.EGD2TratareCantitateTotal | number_format(2) }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -116,7 +116,16 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <h4> *1){{ 'pdf-doc-egd.storage-type' | trans }} </h4>
+            <p>{{ egd.tip_stocare[data.stocareTip] }}</p>
+            {% if data.tratareMod is not null %} 
+                <p>{{ egd.mod_tratare[data.tratareMod] }}</p>
+            {% endif %}
+            {% if data.tratareScop is not null %} 
+                <p>{{ egd.scop_tratare[data.tratareScop] }}</p>
+            {% endif %}
+            <p>{{ egd.mijloc_transport[data.transportMijloc] }}</p>
+            <p>{{ egd.destinatia[data.transportDestinatie] }}</p>
+{#            <h4> *1){{ 'pdf-doc-egd.storage-type' | trans }} </h4>
             <ul>
                 {% for value in egd.tip_stocare %}
                     <li>{{ value }}</li>
@@ -145,7 +154,7 @@
                 {% for value in egd.destinatia %}
                     <li>{{ value }}</li>
                     {% endfor %}    
-            </ul>
+            </ul>#}
         </div>
     </div>
             
@@ -153,7 +162,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 3<br/>{{'pdf-doc-egd.waste-reclamation' | trans}}</h3>
-                <table class="table table-bordered ">
+                <table class="table table-bordered pdf-table">
                     <tr>
                         <th class="text-center width-35-px">{{ 'pdf-doc-egd.number'|trans }}</th>
                         <th class="text-center width-105-px">{{ 'pdf-doc-egd.month'|trans }}</th>
@@ -167,14 +176,15 @@
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ item.luna }}</td>
                             <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
-                            <td>{#{{ (item.operatiaDeValorificare is defined) ? egd.operatia_valorificare_deseu[item.operatiaDeValorificare] : "" }}#}</td>
+                            <td>
+                                {{ (item.operatiaDeValorificare is not null) ? egd.operatia_valorificare_deseu[item.operatiaDeValorificare] : "" }}</td>
                             <td>{{ item.agentEconomicValorificare }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
                         <td class="width-35-px"></td>
                         <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
-                        <td class="text-right">{{ templateData.EGDTotals.EGD3CantitateDeseuValorificataTotal }}</td>
+                        <td class="text-right">{{ templateData.EGDTotals.EGD3CantitateDeseuValorificataTotal | number_format(2) }}</td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -187,7 +197,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <h3 class="text-center">{{ 'pdf-doc-egd.chapter' | trans}} 4<br/>{{'pdf-doc-egd.waste-elimination' | trans}}</h3>
-                <table class="table table-bordered ">
+                <table class="table table-bordered pdf-table">
                     <tr>
                         <th class="text-center width-35-px">{{ 'pdf-doc-egd.number'|trans }}</th>
                         <th class="text-center width-105-px">{{ 'pdf-doc-egd.month'|trans }}</th>
@@ -201,14 +211,14 @@
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ item.luna }}</td>
                             <td class="text-right">{{ item.cantitateDeseuEliminata }}</td>
-                            <td>{#{{ egd.operatia_eliminare_deseu[item.operatiaDeEliminare] }}#}</td>
+                            <td>{{ (item.operatiaDeEliminare is not null) ? egd.operatia_eliminare_deseu[item.operatiaDeEliminare] : "" }}</td>
                             <td>{{ item.agentEconomicEliminare }}</td>
                         </tr>
                     {% endfor %}
                      <tr>
                             <td class="width-35-px"></td>
                             <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
-                            <td class="text-right" >{{ templateData.EGDTotals.EGD4CantitateDeseuEliminataTotal }}</td>
+                            <td class="text-right" >{{ templateData.EGDTotals.EGD4CantitateDeseuEliminataTotal | number_format(2) }}</td>
                             <td></td>
                             <td></td>
                         </tr>
