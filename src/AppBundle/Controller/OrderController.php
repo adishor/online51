@@ -82,6 +82,15 @@ class OrderController extends Controller
             $formularService->setName($doc['fslug']);
             if (method_exists($formularService, 'getTextForFormConfig') && $doc['formConfig'] != 'null') {
                 $text = $formularService->getTextForFormConfig($doc['formConfig'], true);
+                if (method_exists($formularService, 'getValuesForFormConfig') && $doc['formConfig'] != 'null') {
+                    $formConfigValues = $formularService->getValuesForFormConfig($doc['formConfig']);
+                    if (isset($formConfigValues['an'])) {
+                        $formularDocuments[$index]['formConfigYear'] = $formConfigValues['an'];
+                    }
+                    if (isset($formConfigValues['tip_deseu'])) {
+                        $formularDocuments[$index]['formConfigTipDeseu'] = $formConfigValues['tip_deseu'];
+                    }
+                }
                 $formularDocuments[$index]['formConfig'] = $this->get('translator')->trans($text['message'], $text['variables']);
             }
             $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
@@ -94,9 +103,47 @@ class OrderController extends Controller
 
             //sort documents by domain Name - group them
             usort($validDocuments, function ($item1, $item2) {
-                if ($item1['domain'] == $item2['domain'])
-                    return 0;
-                return $item1['domain'] < $item2['domain'] ? -1 : 1;
+                if ($item1['domain'] < $item2['domain']) {
+                    return -1;
+                }
+                if ($item1['domain'] > $item2['domain']) {
+                    return 1;
+                }
+
+                if (isset($item1['formConfigYear']) && isset($item2['formConfigYear'])) {
+                    if ((int) $item1['formConfigYear'] > (int) $item2['formConfigYear']) {
+                        return -1;
+                    }
+                    if ((int) $item1['formConfigYear'] < (int) $item2['formConfigYear']) {
+                        return 1;
+                    }
+                }
+
+                if ($item1['name'] < $item2['name']) {
+                    return -1;
+                }
+                if ($item1['name'] > $item2['name']) {
+                    return 1;
+                }
+
+                if ($item1['date']->format('d-m-Y') > $item2['date']->format('d-m-Y')) {
+                    return -1;
+                }
+                if ($item1['date']->format('d-m-Y') < $item2['date']->format('d-m-Y')) {
+                    return 1;
+                }
+
+                if (isset($item1['formConfigTipDeseu']) && isset($item2['formConfigTipDeseu'])) {
+                    if ($item1['formConfigTipDeseu'] < $item2['formConfigTipDeseu']) {
+                        return -1;
+                    }
+                    if ($item1['formConfigTipDeseu'] > $item2['formConfigTipDeseu']) {
+                        return 1;
+                    }
+                }
+
+                return 0;
+
             });
         }
 
