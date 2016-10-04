@@ -42,9 +42,9 @@ parameters:
         HP: HP - halda proprie
         HC: HC - halda industriala comuna
         I: I - incinerare in scopul eliminarii
-        Vr: Vr - valorificare prin ageti economici autorizati
+        Vr: Vr - valorificare prin agenti economici autorizati
         P: P - utilizare materiala sau energetica in propria intreprindere
-        Ve: Ve - valorificarea energetica prin ageti economici autorizati
+        Ve: Ve - valorificarea energetica prin agenti economici autorizati
         A: A - altele
     operatia:
         3: Valorificarea deseurilor
@@ -1283,32 +1283,32 @@ parameters:
                         '07': '20 03 07 deşeuri voluminoase'
                         '99': '20 03 99 deşeuri municipale, fără alta specificaţie'
     operatia_valorificare_deseu:
-        1: '1. utilizarea ca material combustibil sau ca mijloc de producere a energiei'
-        2: '2. reciclarea sau recuperarea substanţelor organice care nu sunt utilizate ca solvenţi'
-        3: '3. reciclarea sau recuperarea metalelor sau compuşilor metalici'
-        4: '4. reciclarea sau recuperarea altor materiale anorganice'
-        5: '5. regenerarea acizilor sau bazelor'
-        6: '6. valorificarea produselor folosite la captarea poluanţilor'
-        7: '7. valorificarea produselor din catalizatori'
-        8: '8. rerafinarea uleiurilor uzate sau alte reutilizări ale acestora'
-        9: '9. recuperarea sau regenerarea solvenţilor'
-        10: '10. împrăştierea pe sol, în beneficiul agriculturii sau pentru reconstrucţie ecologică, inclusiv operaţiunile de compostare şi alte procese de transformare biologică'
-        11: '11. utilizarea deşeurilor obţinute în urma oricărei operaţiuni menţionate la pct. 1-10'
-        12: '12. schimb de deşeuri între deţinători, pentru a fi supuse uneia dintre operaţiunile menţionate la pct. 1-11'
-        13: '13. stocarea de deşeuri în scopul de a fi supuse uneia dintre operaţiunile menţionate la pct. 1-12, exclusiv depozitarea temporară înaintea colectării, în zona de producere'
+        R1: 'R1. utilizarea ca material combustibil sau ca mijloc de producere a energiei'
+        R2: 'R2. reciclarea sau recuperarea substanţelor organice care nu sunt utilizate ca solvenţi'
+        R3: 'R3. reciclarea sau recuperarea metalelor sau compuşilor metalici'
+        R4: 'R4. reciclarea sau recuperarea altor materiale anorganice'
+        R5: 'R5. regenerarea acizilor sau bazelor'
+        R6: 'R6. valorificarea produselor folosite la captarea poluanţilor'
+        R7: 'R7. valorificarea produselor din catalizatori'
+        R8: 'R8. rerafinarea uleiurilor uzate sau alte reutilizări ale acestora'
+        R9: 'R9. recuperarea sau regenerarea solvenţilor'
+        R10: 'R10. împrăştierea pe sol, în beneficiul agriculturii sau pentru reconstrucţie ecologică, inclusiv operaţiunile de compostare şi alte procese de transformare biologică'
+        R11: 'R11. utilizarea deşeurilor obţinute în urma oricărei operaţiuni menţionate la pct. R1-R10'
+        R12: 'R12. schimb de deşeuri între deţinători, pentru a fi supuse uneia dintre operaţiunile menţionate la pct. R1-R11'
+        R13: 'R13. stocarea de deşeuri în scopul de a fi supuse uneia dintre operaţiunile menţionate la pct. R1-R12, exclusiv depozitarea temporară înaintea colectării, în zona de producere'
     operatia_eliminare_deseu:
-        1: '1. depozitarea pe sol şi în subsol (de exemplu: depunerea în depozite de gunoi)'
-        2: '2. tratarea prin contact cu solul (de exemplu: biodegradarea deşeurilor lichide sau a nămolurilor depozitate pe sol)'
-        3: '3. injectarea în subteran (de exemplu: injectarea deşeurilor pompabile în puţuri, saline sau în straturi geologice)'
-        4: '4. descărcarea pe suprafeţe (de exemplu: descărcarea de deşeuri lichide sau de nămoluri în depresiuni, iazuri sau lagune)'
-        5: '5. depozitarea pe teren special amenajat (de exemplu: dispunerea în celule etanşe separate, acoperite şi izolate unele de celelalte şi de mediu)'
-        6: '6. evacuarea deşeurilor solide în apele interioare de suprafaţă şi subterane'
-        7: '7. evacuarea în mări/oceane, inclusiv îngroparea în subsolul marin'
-        8: '8. tratament biologic nespecificat la alt punct din prezenta anexă, din care rezultă în final compuşi sau amestecuri care sunt eliminate prin intermediul oricărei operaţiuni enumerate la pct. 1-12'
-        9: '9. tratament fizico-chimic nespecificat la alt punct din prezenta anexă, din care rezultă în final compuşi sau amestecuri care sunt eliminate prin intermediul oricărei operaţiuni enumerate la pct. 1-12 (de exemplu: evaporare, uscare, calcinare etc.);'
-        10: '10. incinerare pe sol'
-        11: '11. incinerare pe mare'
-        12: '12. stocare permanentă (de exemplu, introducerea de containere cu deşeuri într-o mină)'
-        13: '13. amestecare, înainte de a se încadra în oricare dintre operaţiunile menţionate la pct. 1-12'
-        14: '14. reambalare înainte de a se încadra în oricare dintre operaţiunile menţionate la pct. 1-13'
-        15: '15. stocarea înainte de efectuarea oricărei operaţiuni menţionate la pct. 1-14, cu excepţia depozitării temporare, înaintea colectării, pe zona de producere'
+        D1: 'D1. depozitarea pe sol şi în subsol (de exemplu: depunerea în depozite de gunoi)'
+        D2: 'D2. tratarea prin contact cu solul (de exemplu: biodegradarea deşeurilor lichide sau a nămolurilor depozitate pe sol)'
+        D3: 'D3. injectarea în subteran (de exemplu: injectarea deşeurilor pompabile în puţuri, saline sau în straturi geologice)'
+        D4: 'D4. descărcarea pe suprafeţe (de exemplu: descărcarea de deşeuri lichide sau de nămoluri în depresiuni, iazuri sau lagune)'
+        D5: 'D5. depozitarea pe teren special amenajat (de exemplu: dispunerea în celule etanşe separate, acoperite şi izolate unele de celelalte şi de mediu)'
+        D6: 'D6. evacuarea deşeurilor solide în apele interioare de suprafaţă şi subterane'
+        D7: 'D7. evacuarea în mări/oceane, inclusiv îngroparea în subsolul marin'
+        D8: 'D8. tratament biologic nespecificat la alt punct din prezenta anexă, din care rezultă în final compuşi sau amestecuri care sunt eliminate prin intermediul oricărei operaţiuni enumerate la pct. D1-D12'
+        D9: 'D9. tratament fizico-chimic nespecificat la alt punct din prezenta anexă, din care rezultă în final compuşi sau amestecuri care sunt eliminate prin intermediul oricărei operaţiuni enumerate la pct. D1-D12 (de exemplu: evaporare, uscare, calcinare etc.);'
+        D10: 'D10. incinerare pe sol'
+        D11: 'D11. incinerare pe mare'
+        D12: 'D12. stocare permanentă (de exemplu, introducerea de containere cu deşeuri într-o mină)'
+        D13: 'D13. amestecare, înainte de a se încadra în oricare dintre operaţiunile menţionate la pct. D1-D12'
+        D14: 'D14. reambalare înainte de a se încadra în oricare dintre operaţiunile menţionate la pct. D1-D13'
+        D15: 'D15. stocarea înainte de efectuarea oricărei operaţiuni menţionate la pct. D1-D14, cu excepţia depozitării temporare, înaintea colectării, pe zona de producere'

@@ -1,7 +1,7 @@
 {% block label_info %}
     {% if label_info != '' %}
         <div class="tooltip2"><img src="{{ asset('assets/images/info.png') }}" />
-            <span class="tooltiptext">{{ label_info }}</span>
+            <span class="tooltiptext">{{ label_info | raw }}</span>
         </div>
     {% endif %}
 {% endblock %}

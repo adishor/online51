@@ -28,6 +28,7 @@ form:
         subject: '*Subiect'
         message: '*Mesaj'
         save: 'Trimite'
+        continue: 'Continua'
         save-and-continue: 'Salvati si continuati'
         save-info: 'Salvati informatiile'
         generate-document: 'Generati document'
@@ -160,19 +161,23 @@ formular-documents:
     
     info:
         egd:
-            operatia: 'test operatia'
-            agentEconomic: 'test agentEconomic'
-            stareFizica: 'test stareFizica'
-            unitateMasura: 'test unitateMasura'
-            stocareTip: 'test stocareTip'
-            tratareMod: 'test tratareMod'
-            transportMijloc: 'test transportMijloc'
-            transportDestinatie: 'test transportDestinatie'
-            operatiaDeValorificare: 'test operatiaDeValorificare'
-            operatiaDeEliminare: 'test operatiaDeEliminare'
-            EGDCompany: 'test EGDCompany'
-            chapter1: 'test chapter1'
-            lastYearInStock: 'test lastYearInStock'
+            operatia1: 'Gasesti specificat in autorizatia de mediu operatia aferenta fiecarui deseu identificat in parte.'
+            operatia2: 'Daca e deseu nou identificat, iti recomandam sa te consulti cu firma cu care aveti contract pentru colectarea deseurilor pentru stabilirea operatia la care va fi supus deseul respectiv.'
+            operatia3: 'Daca ai nevoie de consiliere pentru identificarea corecta a operatiei la care va fi supus deseul respective, trimite-ne un <a href="%link_contact%">mail</a>. Atentie: contul tau va fi debitat cu 1 credit!'
+            agentEconomic: ''
+            stareFizica: ''
+            unitateMasura: 'In masura in care natura deseului o permite, recomandam utilizarea ca unitate de masura tone.'
+            stocareTip: 'Consulta AICI (link catre stocarea deseurilor) informatii despre modul de stocare a deseurilor'
+            tratareMod1: 'De regula, Generatorii de deseuri trateaza rar deseurile uzuale generate. In afara de cazul in care prin autorizatia de mediu vi se cere in mod expres un mod de tratare a deseului respectiv, alegeti Altele.'
+            tratareMod2: 'Pentru exemple de tratare uzuale, click AICI (link catre Exemple tratare deseuri)'
+            transportMijloc: 'Recomandam  sa te consulti cu firma cu care aveti contract pentru colectarea deseurilor pentru stabilirea corecta a mijlocului de transport folosit pentru deseul respectiv.'
+            transportDestinatie: 'Recomandam  sa te consulti cu firma cu care aveti contract pentru colectarea deseurilor pentru stabilirea corecta a destinatiei pentru deseul respectiv.'
+            operatiaDeValorificare/Eliminare1: 'De regula, in autorizatia de mediu sunt specificate operatiile necesare pentru fiecare deseu in parte. Pentru operatii aferente deseurilor uzuale, click AICI (link catre operatii uzuale de valorificare/eliminare)'
+            operatiaDeValorificare/Eliminare2: 'Recomandam  sa te consulti cu firma cu care aveti contract pentru colectarea deseurilor pentru stabilirea corecta a operatiei pentru deseul respectiv.'
+            EGDCompany1: 'Alegerea agentului economic cu care lucrati este foarte Importanta, pentru acesta trebuie sa indeplineasca anumite conditii pe care aveti obligatia legala sa le verificati.'
+            EGDCompany2: 'Incheierea contractelor cu firme care nu respecta conditiile minime de AICI (link catre Conditii firme de preluare deseuri), poate avea repercursiuni negative asupra conformarii la cerintele legale si va aduce in imposibilitatea de a face raportarea electronica aferenta in SIM (link la Raportare electronica SIM).'
+            chapter1: ''
+            lastYearInStock: ''
             EGD1GenerareDeseuri: ''
             chapter2: ''
             EGD2StocareTratareTransportDeseuri: ''
@@ -180,7 +185,35 @@ formular-documents:
             EGD3ValorificareDeseuri: ''
             chapter4: ''
             EGD4EliminareDeseuri: ''
-    
+    input-info: 
+        egd:
+            operatia: 'Alege operatia la care va fi supus deseul: valorificare sau eliminare.'
+            agentEconomic: 'Introdu denumirea firmei pentru care se va tine gestiunea deseului.'
+            stareFizica: 'Alege starea fizica a deseului.'
+            unitateMasura: 'Alege unitatea de masura a deseului.<br/>Atentie: Pentru raportarea electronica in SIM (link la Raportare electronica SIM), toate unitatile de masura vor trebui convertite in tone. Gasesti AICI (link catre conversie in tone) formule de conversie pentru deseurile uzuale.'
+            stocareTip: 'Alege modul de stocare a deseului. <br/>Atentie: Exista reglamantari stricte referitor la modul de stocare a deseurilor.'
+            tratareMod: 'Alege modul de tratare a deseului.'
+            transportMijloc: 'Alege mijlocul de transport a deseului. </br> Atentie: Modul de transport a deseurilor, in special a celor periculoase este strict reglementat.'
+            transportDestinatie: 'Alege mijlocul de transport a deseului.'
+            operatiaDeValorificare: 'Alege operatia de valorificare.'
+            operatiaDeEliminare: 'Alege operatia de eliminare.'
+            EGDCompany: ''
+            chapter1: ''
+            lastYearInStock: ''
+            EGD1GenerareDeseuri: ''
+            chapter2: ''
+            EGD2StocareTratareTransportDeseuri: ''
+            chapter3: ''
+            EGD3ValorificareDeseuri: ''
+            chapter4: ''
+            EGD4EliminareDeseuri: ''
+    label:
+        egd:
+            stocareTip: 'Tip stocare'
+            tratareMod: 'Mod tratare'
+            transportMijloc: 'Mijloc transport'
+            transportDestinatie: 'Destinatie transport'
+            
 subscription:
     types: 'Tipuri de abonamente'
     choose-one-type: 'Pentru a alege un alt domeniu, trebuie sa debifati unul din domeniile alese sau sa alegeti un abonament care va permite accesul la mai multe domenii.'
@@ -428,8 +461,10 @@ modal:
         no: 'Nu'
     config-form-add-confirm:
         title: 'Confirma deblocare formular'
-        body: 'Sunteti sigur ca doriti sa deblocati %title% pentru configuratia aleasa? Atentie veti consuma %credits% %plural%!'
+        body: 'Sunteti sigur ca doriti sa deblocati %title% pentru %for_what%? Atentie veti consuma %credits% %plural%!'
         body-no-config: 'Sunteti sigur ca doriti sa deblocati %title%? Atentie veti consuma %credits% %plural%!'
+        selected: 'configuratia aleasa'
+        egd: 'deseul ales'
         credit:  'credit'
         credits:  'credite'
     config-form-add-uniqueness-on-form:
@@ -499,8 +534,16 @@ document-form:
         an: Selecteaza an
         tip_deseu: Selecteaza tipul de deseu
         operatia: Selecteaza operatia
+    label:
+        an: 'Daca ai utilizat Online51 in anul precedent pentru acelasi cod de deseu, continua <a href="%link_documentele_mele%">AICI</a> si utilizeaza optiunea Creare document nou pentru acelasi cod de deseu.'
+        tip_deseu1: 'Gasesti codul deseurilor in autorizatia de mediu sau, daca e un deseu nou generat, urmeaza pasii de identificare de AICI (link catre “Identificarea si codificarea deseurilor(exemple)”).'
+        tip_deseu2: 'E bine sa te consulti cu firma cu care aveti contract pentru colectarea deseurilor pentru stabilirea corecta a codului unui deseu nou.'
+        tip_deseu3: 'Daca ai nevoie de consiliere pentru identificarea corecta a codului deseului, trimite-ne un <a href="%link_contact%">mail</a>. Atentie: contul tau va fi debitat cu 1 credit!'
+    input-info:
+        an: 'SELECTEAZA ANUL PENTRU CARE SE VA TINE GESTIUNEA DESEULUI'
+        tip_deseu: 'TASTEAZA CODUL DIN 6 CIFRE (format cu spatiu intre grupurile de 2 cifre “00 00 00”), SAU DENUMIREA DESEULUI'
     autocomplete:
-        tip_deseu: Tipul de deseu 
+        tip_deseu: COD/DENUMIRE DESEU
     error:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'

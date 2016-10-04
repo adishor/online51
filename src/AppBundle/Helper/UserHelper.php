@@ -26,7 +26,7 @@ class UserHelper
     public static function checkCUI($data)
     {
         $data = str_replace('ro', '', strtolower($data));
-        $jsonurl = "http://openapi.ro/api/validate/cif/$data.json";
+        $jsonurl = "http://legacy.openapi.ro/api/validate/cif/$data.json";
         $json = json_decode(file_get_contents($jsonurl));
 
         return $json->valid;
@@ -34,7 +34,7 @@ class UserHelper
 
     public static function checkIBAN($data)
     {
-        $jsonurl = "http://openapi.ro/api/validate/iban/$data.json";
+        $jsonurl = "http://legacy.openapi.ro/api/validate/iban/$data.json";
         $json = json_decode(file_get_contents($jsonurl));
 
         return $json->valid;

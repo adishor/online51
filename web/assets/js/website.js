@@ -14,6 +14,7 @@ $(document).ready(function () {
             width: 500,
             menuWidth: 500
         });
+        showTooltip(jQuery("span.ui-selectmenu-button"));
     });
 
     $(function () {
@@ -156,7 +157,7 @@ $("#register_cui, #register_profile_cui").bind('input propertychange', function 
         cuiText = cuiText.toString().toLowerCase().replace("ro", "")
     }
     if (cuiText) {
-        var link = 'http://openapi.ro/api/validate/cif/' + cuiText + '.json';
+        var link = 'http://legacy.openapi.ro/api/validate/cif/' + cuiText + '.json';
 
         $.ajax({
             type: 'get',
@@ -182,7 +183,7 @@ $("#register_iban, #register_profile_iban").bind('input propertychange', functio
     $("#validIbanCustomError").hide();
     $("#ValidIban").hide();
     var ibanText = $(this).val();
-    var link = 'http://openapi.ro/api/validate/iban/' + ibanText + '.json';
+    var link = 'http://legacy.openapi.ro/api/validate/iban/' + ibanText + '.json';
 
     $.ajax({
         type: 'get',
@@ -430,7 +431,7 @@ $(document).ready(function () {
         if (e.keyCode == 13 || e.which == 13) {
             SubmitFreeAccount();
         }
-    })
+    });
 
     $("#resetPassDiv").keyup(function (e) {
         $("#validUser").hide();
@@ -438,15 +439,35 @@ $(document).ready(function () {
         if (e.keyCode == 13 || e.which == 13) {
             SubmitResetPassword();
         }
-    })
+    });
 
     $("#loginDiv").keyup(function (e) {
         if (e.keyCode == 13 || e.which == 13) {
             GoLogin();
         }
-    })
+    });
+    
+    showTooltip(jQuery("input, span.custom-combobox"));
 
 });
+
+showTooltip = function (element) {
+    console.log(element);
+    element.click(function () {
+        jQuery(this).parent().find(".tooltip-box").show();
+    });
+    element.hover(function () {
+        jQuery(this).parent().find(".tooltip-box").show();
+    }, function() {
+        jQuery(this).parent().find(".tooltip-box").hide();
+    });
+    element.on("keyup", function () {
+        jQuery(this).parent().find(".tooltip-box").hide();
+    });
+    element.on("blur", function () {
+        jQuery(this).parent().find(".tooltip-box").hide();
+    });
+};
 
 function ReloadPage() {
     window.top.location.reload();

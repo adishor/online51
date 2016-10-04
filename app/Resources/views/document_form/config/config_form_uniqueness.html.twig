@@ -14,15 +14,25 @@
 {#        example: Year - by selecting one value we have the final configuration#}
         {% if singleSelect and items|length > 0 %}
             <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
-            <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" id="{{ key }}">
-                {% if items|length > 1 %}
-                    <option></option>
-                {% endif %}
-                {% for keyItem, item in items %}
-                    <option value="{{ keyItem }}">{{ item }}</option>
-                {% endfor %}
-            </select>
-            <span class="field-validation-valid" data-valmsg-for="select_{{ key }}" data-valmsg-replace="true" ></span>
+            {{ include('document_form/base/form_label_info.html.twig', {'label_info': '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key) | trans({'%link_documentele_mele%': path('show_valid_documents')}) }) }}
+                      
+            <div>
+                <div class="tooltip-container">
+                    <div class="tooltip-box">
+                        <p>{{ ('document-form.input-info.' ~ key) | trans }}</p>
+                        <img src="{{ asset( 'assets/images/tooltip-arrow.png') }}" />
+                    </div>
+                </div>
+                <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" id="{{ key }}">
+                    {% if items|length > 1 %}
+                        <option></option>
+                    {% endif %}
+                    {% for keyItem, item in items %}
+                        <option value="{{ keyItem }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+                <span class="field-validation-valid" data-valmsg-for="select_{{ key }}" data-valmsg-replace="true" ></span>
+            </div>
         {% endif %}
         
 {#        for cases when after selecting first value, another select is being loaded#}
@@ -31,18 +41,30 @@
         {% if not singleSelect and items|length > 0 %}     
             <div class="ui-widget">
                 <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
-                <select id="combobox_{{ key }}" name="combobox_{{ key }}" class="combobox" data-val="true" data-val-required="{{ 'form.required-combobox.field' | trans }}">
-                    <option></option>
-                    {% for itemKey, item in uniqueValues[key] %}
-                        {% for subItemKey, subItem in item['values'] %}
-                            {% for sub2ItemKey, sub2Item in subItem['values'] %}
-{#                                <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}</option>#}
-                                <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ sub2Item }}</option>
+                {{ include('document_form/base/form_label_info.html.twig', 
+                    {'label_info': 
+                        ((('document-form.label.' ~ key ~ '1') | trans != '') ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key ~ '1') | trans : "") ~  ((('document-form.label.' ~ key ~ '2') | trans != '') ? '<br/><img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key ~ '2') | trans : "") ~ ((('document-form.label.' ~ key ~ '3') | trans != '') ? '<br/><img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key ~ '3') | trans({'%link_contact%': path('contact') }) : "")
+                    }) }}
+                <div>
+                    <div class="tooltip-container">
+                        <div class="tooltip-box custom-combobox-tooltip">
+                            <p>{{ ('document-form.input-info.' ~ key) | trans }}</p>
+                            <img src="{{ asset( 'assets/images/tooltip-arrow.png') }}" />
+                        </div>
+                    </div>
+                    <select id="combobox_{{ key }}" name="combobox_{{ key }}" class="combobox" data-val="true" data-val-required="{{ 'form.required-combobox.field' | trans }}">
+                        <option></option>
+                        {% for itemKey, item in uniqueValues[key] %}
+                            {% for subItemKey, subItem in item['values'] %}
+                                {% for sub2ItemKey, sub2Item in subItem['values'] %}
+    {#                                <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}</option>#}
+                                    <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ sub2Item }}</option>
+                                {% endfor %}
                             {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </select>
-                <span class="field-validation-valid" data-valmsg-for="combobox_{{ key }}" data-valmsg-replace="true" ></span>
+                    </select>
+                    <span class="field-validation-valid" data-valmsg-for="combobox_{{ key }}" data-valmsg-replace="true" ></span>
+                </div>
             </div>
             
 {#            <input type="text" id="autocomplete_{{ key }}" name="autocomplete_{{ key }}" class="loadAutocompleteItems" data-val="true" data-val-required="{{ 'form.required-autocomplete.field' | trans }}" onChange="loadAutocomplete('{{ key }}')"/>  
@@ -71,7 +93,7 @@
         {% endif %}    
     {% endfor %}
     <p class="register-form2 pull-right">
-        <input type="button" value="{{ 'form.label.save'|trans }}" id="btnRegister" class="costum" onclick="SubmitFormConfig_{{ formular.slug }}();" />
+        <input type="button" value="{{ 'form.label.continue'|trans }}" id="btnRegister" class="costum" onclick="SubmitFormConfig_{{ formular.slug }}();" />
     </p>
     </form>
     <br/><div id="formularError{{ formular.id }}"></div>
@@ -243,7 +265,7 @@
             {% if isUserException or isDraft or formular.creditValue == 0 %}
                 AjaxCheckSubmitFormConfig_{{ formular.slug }}(); 
             {% else %}
-                $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
+                $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%for_what%' : (formular.slug == 'Evidenta_Gestiunii_Deseurilor' ? 'modal.config-form-add-confirm.egd' | trans : 'modal.config-form-add-confirm.selected' | trans ), '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
                 $('#configFormAddConfirmModal').modal();
             {% endif %}
         }
