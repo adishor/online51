@@ -17,13 +17,21 @@
                     {{ label|trans({}, translation_domain) }}
                     {% if attr.label_info is defined and attr.label_info != '' %}
                         <span class="tooltip2"><img src="{{ asset('assets/images/info.png') }}" />
-                            <span class="tooltiptext">{{ attr.label_info }}</span>
+                            <span class="tooltiptext">{{ attr.label_info | raw }}</span>
                         </span>
                     {% endif %}
                 </label>
             {%- endif %}
         {%- endblock form_label %}
         {{- form_errors(form) -}}
+        {% if attr.input_info is defined and attr.input_info != '' %}
+            <div class="tooltip-container">
+                <div class="tooltip-box">
+                    <p>{{ attr.input_info | raw }}</p>
+                    <img src="{{ asset( 'assets/images/tooltip-arrow.png') }}" />
+                </div>
+            </div>
+        {% endif %}
         {{- form_widget(form) -}}
     </div>
 {%- endblock form_row %}

@@ -1867,6 +1867,7 @@ h5.first {
 
 .config-unique-title {
     margin:15px 0 3px 0;
+    display: inline-block;
 }
 
 .form-config {
@@ -2248,7 +2249,7 @@ p.fa-icon a:hover {
     background-color: #555;
     color: #fff;
     text-align: center;
-    padding: 5px 0;
+    padding: 10px 5px;
     border-radius: 6px;
 
     /* Position the tooltip text */
@@ -2263,8 +2264,40 @@ p.fa-icon a:hover {
     transition: opacity 1s;
 }
 
+.tooltip2 .tooltiptext a {
+    color: yellow;
+}
+
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip2:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+.tooltip-container {
+    position: relative;
+}
+
+.tooltip-box {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 0;
+    border: 1px solid #cccccc;
+    background: #FFFFFF;
+    max-width: 550px;
+    width: 100%;
+}
+
+.tooltip-box img {
+    bottom: -11px;
+    position: absolute;
+    left: 30px; 
+}
+.tooltip-box p {
+    font-size: 12px;
+    line-height: 14px;
+    padding: 15px 10px 5px 10px;
+    color: #aaa; 
 }
