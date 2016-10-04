@@ -16,22 +16,22 @@ class EGDCompanyType extends AbstractType
     {
         $builder
           ->add('name', TextType::class)
-          ->add('startMonth', ChoiceType::class, array(
-              'choices' => array(
-                  EGDCompany::MONTH_JANUARY => 'month.january',
-                  EGDCompany::MONTH_FEBRUARY => 'month.february',
-                  EGDCompany::MONTH_MARCH => 'month.march',
-                  EGDCompany::MONTH_APRIL => 'month.april',
-                  EGDCompany::MONTH_MAY => 'month.may',
-                  EGDCompany::MONTH_JUNE => 'month.june',
-                  EGDCompany::MONTH_JULY => 'month.july',
-                  EGDCompany::MONTH_AUGUST => 'month.august',
-                  EGDCompany::MONTH_SEPTEMBER => 'month.september',
-                  EGDCompany::MONTH_OCTOMBER => 'month.octomber',
-                  EGDCompany::MONTH_NOVEMBER => 'month.november',
-                  EGDCompany::MONTH_DECEMBER => 'month.december'
-              ),
-          ))
+//          ->add('startMonth', ChoiceType::class, array(
+//              'choices' => array(
+//                  EGDCompany::MONTH_JANUARY => 'month.january',
+//                  EGDCompany::MONTH_FEBRUARY => 'month.february',
+//                  EGDCompany::MONTH_MARCH => 'month.march',
+//                  EGDCompany::MONTH_APRIL => 'month.april',
+//                  EGDCompany::MONTH_MAY => 'month.may',
+//                  EGDCompany::MONTH_JUNE => 'month.june',
+//                  EGDCompany::MONTH_JULY => 'month.july',
+//                  EGDCompany::MONTH_AUGUST => 'month.august',
+//                  EGDCompany::MONTH_SEPTEMBER => 'month.september',
+//                  EGDCompany::MONTH_OCTOMBER => 'month.octomber',
+//                  EGDCompany::MONTH_NOVEMBER => 'month.november',
+//                  EGDCompany::MONTH_DECEMBER => 'month.december'
+//              ),
+//          ))
         ;
     }
 
