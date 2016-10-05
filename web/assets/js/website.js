@@ -38,7 +38,7 @@ function validateFloatKeyPress(el, evt) {
     //get the carat position
     var caratPos = getSelectionStart(el);
     var dotPos = el.value.indexOf(".");
-    if( caratPos > dotPos && dotPos>-1 && (number[1].length > 1)){
+    if( caratPos > dotPos && dotPos>-1 && (number[1].length > 1) && charCode != 8){
         return false;
     }
     
@@ -50,6 +50,13 @@ function validateFloatKeyPress(el, evt) {
     }
     
     return true;
+}
+
+function validateValueValorificata(index) {
+}
+
+function validateValueEliminata(index) {
+    
 }
 
 //thanks: http://javascript.nwbox.com/cursor_position/
@@ -452,7 +459,6 @@ $(document).ready(function () {
 });
 
 showTooltip = function (element) {
-    console.log(element);
     element.click(function () {
         jQuery(this).parent().find(".tooltip-box").show();
     });
