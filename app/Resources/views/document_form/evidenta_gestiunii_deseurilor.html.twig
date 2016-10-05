@@ -18,6 +18,7 @@
 
 {% block ccontainer %}
     {% set formConfig  = creditsUsage.formConfig | json_decode %}
+    {% set formData  = creditsUsage.formData | json_decode %}
 
     <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
 
@@ -176,6 +177,7 @@
                                 var newLi = jQuery('<li></li>').html(newWidget);
                                 newLi.appendTo(companyList);
                                 addCompanyFormDeleteLink(newLi);
+                                showTooltip(jQuery("input"));
                             });
                         })
                         
@@ -196,15 +198,18 @@
             {% endif %}
 
             {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 3 : 2) %}
-                <h3>
-                    {{ 'CAPITOLUL 1' | trans}}<br/>{{'Generare deseuri' | trans}}
-                    {{ include('document_form/base/form_label_info.html.twig', {'label_info': 'formular-documents.info.egd.chapter1' | trans }) }} 
+                <h3>{{'Generare deseuri' | trans}}
+                    {{ include('document_form/base/form_label_info.html.twig', {'label_info': 'formular-documents.info.egd.chapter1' | trans }) }}
                 </h3>
+                <p>{{ 'In aceasta pagina poti sa introduci cantitatea de deseu generata in coloana Generate si valorificat/eliminate in coloana valorificata/eliminate final.' | trans }}</p>
+                <p>{{ 'Daca utilizezi pentru prima data(in primul an) aplicatia, va trebui sa introduci stocul de la sfarsitul anului precedent in campul: Ramas in stoc de anul trecut.' | trans }}</p>
+                <p>{{ '<b>Atentie:</b> E important sa utilizezi unitatea de masura pe care ai ales-o in pasii precedent pentru acest deseu' | trans | raw }}</p>
                 {{ form_row(form.lastYearInStock, {'label': 'Ramas in stoc de anul trecut (se va adauga in plus la luna Ianuarie)',                             'attr': {'class': 'lastYearInStock', 
                                 'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
-                                'data-val-regex': 'Nu este valoare pozitiva cu doar 2 zecimale' | trans,
-                                'data-val-regex-pattern': '^\\s*(?=.*[0-9])\\d*(?:[\\.\\,]\\d{1,2})?\\s*$',
+                                'onkeypress': 'return validateFloatKeyPress(this, event);',
+                                'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
+                                'onblur': "if(this.value == '') {this.value ='0'}",
                                 'label_info': 'formular-documents.info.egd.lastYearInStock' | trans, 
                                 'input_info': 'formular-documents.input-info.egd.lastYearInStock' | trans,
                                 } }) }}
@@ -214,7 +219,7 @@
                     <tr>
                         <th class="text-center width-35-px" rowspan="3">{{ 'Nr.' | trans }}</th>
                         <th class="text-center width-105-px" rowspan="3">{{ 'Luna' | trans }}</th>
-                        <th class="text-center" colspan="3">{{ 'Cantitatea de deseuri' | trans }}</th>
+                        <th class="text-center" colspan="3">{{ 'Cantitatea de deseuri' | trans }}<span> ({{ 'U/M aleasa este ' ~ formData.unitate_masura }})</span></th>
                     </tr>
                     <tr>
                         <th class="text-center" rowspan="2">{{ 'Generate' | trans }}</th>
@@ -252,7 +257,7 @@
                                     'tabindex': loop.index0 * 2 + 1,
                                     'autocomplete': 'off', 
                                     'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
-                                    'onblur': "if(this.value == '') {this.value ='0'}" 
+                                    'onblur': "if(this.value == '') {this.value ='0'}; validateValueValorificata(" ~ key ~");" 
                                     } } ) 
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
@@ -266,7 +271,7 @@
                                     'tabindex': loop.index0 * 2 + 1, 
                                     'autocomplete': 'off', 
                                     'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
-                                    'onblur': "if(this.value == '') {this.value ='0'}" 
+                                    'onblur': "if(this.value == '') {this.value ='0'}; validateValueEliminata(" ~ key ~");" 
                                     } } )  
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
@@ -303,17 +308,21 @@
         
         jQuery(document).ready(function () {
             {% for key in formTemplateData.EGDTotals|keys %}
-                var totalClass{{ key }} = '{{ key }}'.replace('Total', '');
-                jQuery('.' + totalClass{{ key }}).change(function () {
-                    var sum{{ key }} = 0;
-                    jQuery('.' + totalClass{{ key }}).each(function () {
-                        if (jQuery(this).val().replace(',', '.').replace(' ', '') !== '') {
-                            sum{{ key }} += (parseFloat(jQuery(this).val()) || 0);
-                        }
-                    });
-                    jQuery('#{{ key }}').text(sum{{ key }}.toFixed(2));
+                var totalClass{{ key}} = '{{ key }}'.replace('Total', '');
+                jQuery('.' + totalClass{{ key}}).change(function () {
+                    calculTotal(totalClass{{ key}});
                 });            
             {% endfor %}
+                
+            function calculTotal(key) {
+                var sum = 0;
+                jQuery('.' +  key ).each(function () {
+                    if (jQuery(this).val().replace(',', '.').replace(' ', '') !== '') {
+                        sum += (parseFloat(jQuery(this).val()) || 0);
+                    }
+                });
+                jQuery('#' + key + 'Total').text(sum.toFixed(2));
+            }
                     
             {% if form.EGD1GenerareDeseuri is defined %}
                 {% if formConfig.operatia == 3 %}
@@ -331,7 +340,6 @@
                         });
                     {% endfor %}
                     function calculValorificata(key) {
-                        var valueTotal = 0;
                         jQuery('.calcul-valorificata').each(function(index){
                             if (index >= parseInt(key)) {
                                 var lastYearInStock = (index === 0) ? (parseFloat(jQuery('.lastYearInStock').val()) || 0) : 0;
@@ -340,13 +348,19 @@
                                 var value = valueG - valueV + lastYearInStock;
                                 value = value + ((index >= 1) ? 
                                     parseFloat(jQuery('.EGD1CantitateDeseuInStocValorificata' + (index - 1)).text()) : 0);
+                                if (value < 0) {
+                                    jQuery('.EGD1CantitateDeseuValorificata' + index).val(0);
+                                    calculValorificata(index);
+                                    calculTotal('EGD1CantitateDeseuValorificata');
+                                    alert('Stocul existent mai mic decat valoarea introdusa!');
+                                    return false;
+                                }
                                 if (index === 11) {
-                                    valueTotal = value;
+                                    jQuery('#EGD1CantitateDeseuInStocTotal').text(value.toFixed(2));
                                 }
                                 jQuery('.EGD1CantitateDeseuInStocValorificata' + index).text(value.toFixed(2));
                             }
                         });
-                        jQuery('#EGD1CantitateDeseuInStocTotal').text(valueTotal.toFixed(2));
                     }
                 {% endif %}
 
@@ -365,23 +379,27 @@
                         });
                     {% endfor %}
                     function calculEliminata(key) {
-                        var valueTotal = 0;
                         jQuery('.calcul-eliminata').each(function(index){
                             var lastYearInStock = (index === 0) ? (parseFloat(jQuery('.lastYearInStock').val()) || 0) : 0;
                             var valueG = parseFloat(jQuery('.EGD1CantitateDeseuGenerate' + index).val()) || 0;
                             var valueE = parseFloat(jQuery('.EGD1CantitateDeseuEliminata' + index).val()) || 0;     
                             var value = valueG - valueE + lastYearInStock;
-                            console.log(index, valueG, valueE, lastYearInStock);
                             value = value + ((index >= 1) ? 
                                 parseFloat(jQuery('.EGD1CantitateDeseuInStocEliminata' + (index - 1)).text()) : 0);
+                            if (value < 0) {
+                                jQuery('.EGD1CantitateDeseuEliminata' + index).val(0);
+                                calculEliminata(index);
+                                calculTotal('EGD1CantitateDeseuEliminata');
+                                alert('Stocul existent mai mic decat valoarea introdusa!');
+                                return false;
+                            }
                             if (index === 11) {
-                                valueTotal = value;
+                                jQuery('#EGD1CantitateDeseuInStocTotal').text(value.toFixed(2));
                             }
                             if (index >= parseInt(key)) {
                                 jQuery('.EGD1CantitateDeseuInStocEliminata' + index).text(value.toFixed(2));
                             }
                         });
-                        jQuery('#EGD1CantitateDeseuInStocTotal').text(valueTotal.toFixed(2));
                     }  
                 {% endif %}
             {% endif %}

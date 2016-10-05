@@ -1,7 +1,9 @@
+{% form_theme form with 'document_form/base/form_fields.html.twig' %}
 <div>
     {{ form_row(form.name, 
         {'attr': {'data-val': 'true',
         'data-val-required': 'Acest camp este obligatoriu' | trans,
+        'input_info': 'formular-documents.input-info.egd.EGDCompany' | trans,
         } } ) }}
     <span class="field-validation-valid" data-valmsg-for="{{ form.vars.full_name }}[name]" data-valmsg-replace="true" ></span>
 {#    {{ form_row(form.startMonth) }}#}

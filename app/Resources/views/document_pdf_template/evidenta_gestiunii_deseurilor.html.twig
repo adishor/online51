@@ -171,13 +171,16 @@
                         <th class="text-center">{{ 'pdf-doc-egd.reclamation-agent' | trans }}</th>
                     </tr>
 
+                    {% set operatiaDeValorificare = null %}
                     {% for item in data.EGD3ValorificareDeseuri %}
+                        {% if operatiaDeValorificare is null and item.operatiaDeValorificare is not null %}
+                            {% set operatiaDeValorificare = egd.operatia_valorificare_deseu[item.operatiaDeValorificare] %}
+                        {% endif %}
                         <tr>
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ item.luna }}</td>
                             <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
-                            <td>
-                                {{ (item.operatiaDeValorificare is not null) ? egd.operatia_valorificare_deseu[item.operatiaDeValorificare] : "" }}</td>
+                            <td>{{ (item.operatiaDeValorificare is not null) ? item.operatiaDeValorificare : "" }}</td>
                             <td>{{ item.agentEconomicValorificare }}</td>
                         </tr>
                     {% endfor %}
@@ -189,6 +192,9 @@
                         <td></td>
                     </tr>
                 </table>
+                {% if operatiaDeValorificare is not null %} 
+                    <p>{{ operatiaDeValorificare }}</p>
+                {% endif %}
             </div>
         </div>
     {% endif %}
@@ -206,12 +212,16 @@
                         <th class="text-center">{{ 'pdf-doc-egd.elimination-agent' | trans }}</th>
                     </tr>
 
+                    {% set operatiaDeEliminare = null %}
                     {% for item in data.EGD4EliminareDeseuri %}
+                        {% if operatiaDeEliminare is null and item.operatiaDeEliminare is not null %}
+                            {% set operatiaDeEliminare = egd.operatia_eliminare_deseu[item.operatiaDeEliminare] %}
+                        {% endif %}
                         <tr>
                             <td class="width-35-px">{{ loop.index }}</td>
                             <td class="width-105-px">{{ item.luna }}</td>
                             <td class="text-right">{{ item.cantitateDeseuEliminata }}</td>
-                            <td>{{ (item.operatiaDeEliminare is not null) ? egd.operatia_eliminare_deseu[item.operatiaDeEliminare] : "" }}</td>
+                            <td>{{ (item.operatiaDeEliminare is not null) ? item.operatiaDeEliminare : "" }}</td>
                             <td>{{ item.agentEconomicEliminare }}</td>
                         </tr>
                     {% endfor %}
@@ -223,6 +233,9 @@
                             <td></td>
                         </tr>
                 </table>
+                {% if operatiaDeEliminare is not null %} 
+                    <p>{{ operatiaDeEliminare }}</p>
+                {% endif %}
             </div>
         </div>
     {% endif %}
