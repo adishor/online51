@@ -10,6 +10,7 @@ use AppBundle\Service\DocumentForm\Base\FormularFormDefaultInterface;
 use AppBundle\Service\DocumentForm\Base\FormularFormChangeStructureInterface;
 use AppBundle\Service\DocumentForm\Base\FormularFormTemplateInterface;
 use AppBundle\Service\DocumentForm\Base\FormularFormProcessInterface;
+use AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor\EGDCompany;
 
 class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements FormularFormConfigValueInterface, FormularFormConfigTextInterface, FormularFormDefaultInterface, FormularFormChangeStructureInterface, FormularFormTemplateInterface, FormularFormProcessInterface
 {
@@ -159,7 +160,67 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
             $creditsUsage->setFormConfig(json_encode($formConfig));
         }
 
+        if ($flow->getCurrentStep() == ($creditsUsage->getIsFormConfigFinished() ? 2 : 1)) {
+
+            $companies = [];
+            foreach ($formData->getEGDCompany() as $company) {
+                $companies[] = $company;
+            }
+            $formData->setEGDCompany($companies);
+
+            foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
+
+                $agents = [];
+                if (count($formData->getEGDCompany()) == 1) {
+                    $company = $formData->getEGDCompany();
+                    $company = reset($company);
+                    if ($formData->getOperatia() == 3) {
+                        $company->setCantitateDeseu($formData->getEGD3ValorificareDeseuri()[$key]->getCantitateDeseuValorificata());
+                    }
+                    if ($formData->getOperatia() == 4) {
+                        $company->setCantitateDeseu($formData->getEGD4EliminareDeseuri()[$key]->getCantitateDeseuEliminata());
+                    }
+                    $agents[] = $company;
+                } else {
+                    foreach ($formData->getEGDCompany() as $company) {
+                        $found = 0;
+                        if ($formData->getOperatia() == 3 && $formData->getEGD3ValorificareDeseuri()[$key]->getAgentEconomicValorificare()) {
+                            foreach ($formData->getEGD3ValorificareDeseuri()[$key]->getAgentEconomicValorificare() as $agent) {
+                                if ($agent->getName() == $company->getName()) {
+                                    $agents[] = $agent;
+                                    $found = 1;
+                                    break;
+                                }
+                            }
+                        }
+                        if ($formData->getOperatia() == 4 && $formData->getEGD4EliminareDeseuri()[$key]->getAgentEconomicEliminare()) {
+                            foreach ($formData->getEGD4EliminareDeseuri()[$key]->getAgentEconomicEliminare() as $agent) {
+                                if ($agent->getName() == $company->getName()) {
+                                    $agents[] = $agent;
+                                    $found = 1;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!$found) {
+                            $company->setCantitateDeseu(0);
+                            $agents[] = $company;
+                        }
+                    }
+                }
+
+                $formData->getEGD1GenerareDeseuri()[$key]->setAgentEconomic($agents);
+            }
+        }
+
         if ($flow->getCurrentStep() == ($creditsUsage->getIsFormConfigFinished() ? 3 : 2)) {
+
+            $companies = [];
+            foreach ($formData->getEGDCompany() as $company) {
+                $companies[] = $company;
+            }
+            $formData->setEGDCompany($companies);
 
 //            foreach ($formData->getEGD2StocareTratareTransportDeseuri() as $key => $item) {
 //                $item->setTratareScop(str_replace(array(3, 4), array('V', 'E'), $formData->getOperatia()));
@@ -194,34 +255,26 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
 
             if ($formData->getOperatia() == 3) {
                 foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
-                    $formData->getEGD3ValorificareDeseuri()[$key]->setCantitateDeseuValorificata(NULL);
+                    $formData->getEGD3ValorificareDeseuri()[$key]->setCantitateDeseuValorificata(0);
                     $formData->getEGD3ValorificareDeseuri()[$key]->setOperatiaDeValorificare(NULL);
                     $formData->getEGD3ValorificareDeseuri()[$key]->setAgentEconomicValorificare(NULL);
                     if ($item->getCantitateDeseuValorificata() > 0) {
                         $formData->getEGD3ValorificareDeseuri()[$key]->setCantitateDeseuValorificata($item->getCantitateDeseuValorificata());
                         $formData->getEGD3ValorificareDeseuri()[$key]->setOperatiaDeValorificare($formData->getOperatiaDeValorificare());
-                        foreach ($formData->getEGDCompany() as $company) {
-                            if ($key + 1 >= $company->getStartMonth()) {
-                                $formData->getEGD3ValorificareDeseuri()[$key]->setAgentEconomicValorificare($company->getName());
-                            }
-                        }
+                        $formData->getEGD3ValorificareDeseuri()[$key]->setAgentEconomicValorificare($item->getAgentEconomic());
                     }
                 }
             }
 
             if ($formData->getOperatia() == 4) {
                 foreach ($formData->getEGD1GenerareDeseuri() as $key => $item) {
-                    $formData->getEGD4EliminareDeseuri()[$key]->setCantitateDeseuEliminata(NULL);
+                    $formData->getEGD4EliminareDeseuri()[$key]->setCantitateDeseuEliminata(0);
                     $formData->getEGD4EliminareDeseuri()[$key]->setOperatiaDeEliminare(NULL);
                     $formData->getEGD4EliminareDeseuri()[$key]->setAgentEconomicEliminare(NULL);
                     if ($item->getCantitateDeseuEliminata() > 0) {
                         $formData->getEGD4EliminareDeseuri()[$key]->setCantitateDeseuEliminata($item->getCantitateDeseuEliminata());
                         $formData->getEGD4EliminareDeseuri()[$key]->setOperatiaDeEliminare($formData->getOperatiaDeEliminare());
-                        foreach ($formData->getEGDCompany() as $company) {
-                            if ($key + 1 >= $company->getStartMonth()) {
-                                $formData->getEGD4EliminareDeseuri()[$key]->setAgentEconomicEliminare($company->getName());
-                            }
-                        }
+                        $formData->getEGD4EliminareDeseuri()[$key]->setAgentEconomicEliminare($item->getAgentEconomic());
                     }
                 }
             }

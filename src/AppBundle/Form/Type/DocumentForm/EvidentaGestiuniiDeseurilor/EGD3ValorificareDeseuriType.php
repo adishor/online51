@@ -8,6 +8,7 @@ USE Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDCompanyType;
 
 class EGD3ValorificareDeseuriType extends AbstractType
 {
@@ -23,8 +24,9 @@ class EGD3ValorificareDeseuriType extends AbstractType
           ))
           ->add('cantitateDeseuValorificata', NumberType::class)
           ->add('operatiaDeValorificare', ChoiceType::class, array('choices' => $operatieValorificare))
-          ->add('agentEconomicValorificare', TextType::class)
-        ;
+          ->add('agentEconomic', CollectionType::class, array(
+              'entry_type' => EGDCompanyType::class,
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

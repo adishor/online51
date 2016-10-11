@@ -459,6 +459,8 @@ modal:
     button:
         yes: 'Da'
         no: 'Nu'
+        cancel: 'Anuleaza'
+        ok: 'Salveaza'
     config-form-add-confirm:
         title: 'Confirma deblocare formular'
         body: 'Sunteti sigur ca doriti sa deblocati %title% pentru %for_what%? Atentie veti consuma %credits% %plural%!'
@@ -473,6 +475,8 @@ modal:
         credit:  'credit'
         credits:  'credite'
         error: 'Eroare la salvare configuratia aleasa. reincercati din nou.'
+    customize-agent-details:
+        title: 'Precizeaza cantitatea pentru fiecare agent economic.'
 total-credits: 'Credite Totale:'
 year: ' an'
 years: ' ani'
