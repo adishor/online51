@@ -36,8 +36,8 @@ class EGD3ValorificareDeseuri
     /**
      *
      * @var type
-     * @Type("string")
-     * @Assert\NotBlank()
+     * @Type("array<AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor\EGDCompany>")
+     * @Assert\Count(min="1")
      */
     protected $agentEconomicValorificare;
 

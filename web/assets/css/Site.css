@@ -1574,7 +1574,6 @@ label.css-label {
 .color-red-form {
     padding:5px 10px;
     border:1px solid #ff0000;
-    color:#ff0000;
     background-color:#ff9a9a;
 }
 
@@ -1930,6 +1929,10 @@ h5.first {
 
 .width-35-px{
     width: 35px;
+}
+
+.width-75-px {
+    width: 75px;
 }
 
 .width-105-px{
@@ -2304,4 +2307,30 @@ p.fa-icon a:hover {
     line-height: 14px;
     padding: 15px 10px 5px 10px;
     color: #aaa; 
+}
+
+.width80 {
+    width: 80%;
+    float: left; 
+}
+
+.activeAddAgent {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    background: url(../images/Button-Add-icon.png);
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.inactiveAddAgent {
+    width: 16px;
+    height: 16px;
+    background: url(../images/Button-Add-icon-grey.png) no-repeat;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.addAgent-validation-error {
+    border: 1px solid red;
 }

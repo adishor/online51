@@ -12,7 +12,11 @@
         {% include "document_form/config/config_form_add_uniqueness_on_form_modal.html.twig" %}
     {% endif %}
     {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 4 : 3) %}
-        {% include "document_form/config/confirm_generate_document.html.twig" %}
+        {% include "document_form/config/confirm_generate_document_modal.html.twig" %}
+    {% endif %}
+    {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 3 : 2) %}
+        {% set formData  = creditsUsage.formData | json_decode %}
+        {% include "document_form/config/customize_agent_details_modal.html.twig" with {'agentiEconomici': formData._e_g_d_company } %}
     {% endif %}
 {% endblock %}
 
@@ -34,7 +38,7 @@
         <h4 class="color-green text-center first flash-message" >{{ flash_message|trans }}</h4>
     {% endfor %}
 
-    <h4 class="color-red text-center first" id="globalErrors" hidden="hidden">{{ 'Mai aveti erori. Verificati si celelalte capitole!' | trans }}</h4>
+    <h4 class="color-red text-center first hidden" id="globalErrors"></h4>
 
     {% if not creditsUsage.isFormConfigFinished %}
         {% include "document_form/config/config_form_uniqueness_on_form_egd.html.twig" with {'creditsUsage': creditsUsage, 'isUserException': isUserException } %}
@@ -140,7 +144,6 @@
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 } } ) }}
                             <span class="field-validation-valid" data-valmsg-for="{{ form.EGDCompany.vars.full_name }}[{{ loop.index0 }}][name]" data-valmsg-replace="true" ></span>
-{#                            {{ form_row(item.startMonth) }}#}
                         </li>
                     {% endfor %}
                 </ul>
@@ -210,11 +213,13 @@
                                 'onkeypress': 'return validateFloatKeyPress(this, event);',
                                 'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
                                 'onblur': "if(this.value == '') {this.value ='0'}",
+                                'autocomplete': 'off',
                                 'label_info': 'formular-documents.info.egd.lastYearInStock' | trans, 
                                 'input_info': 'formular-documents.input-info.egd.lastYearInStock' | trans,
                                 } }) }}
                 <span class="field-validation-valid" data-valmsg-for="{{ form.lastYearInStock.vars.full_name }}" data-valmsg-replace="true" ></span>
                 <br/>
+                <h4 class="color-red text-center first" id="globalAddAgentErrors" hidden="hidden">{{ 'Nu ati precizat agentul economic care efectueaza operatia aleasa!' | trans }}</h4>
                 <table class="table-bordered text-center form-table form-table-layout-fixed">
                     <tr>
                         <th class="text-center width-35-px" rowspan="3">{{ 'Nr.' | trans }}</th>
@@ -250,49 +255,143 @@
                                 }}
                                 <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuGenerate.vars.full_name }}" data-valmsg-replace="true" ></span>
                             </td>
+                            {% set sum = 0 %}
+                            {% for agent in formData._e_g_d1_generare_deseuri[key].agent_economic %}
+                                {% if agent.cantitate_deseu is defined %}
+                                    {% set sum = sum + agent.cantitate_deseu %}
+                                {% endif %}
+                            {% endfor %}
                             {% if formConfig.operatia == 3 %}
-                            <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {'class': 'text-right EGD1CantitateDeseuValorificata EGD1CantitateDeseuValorificata' ~ key, 
-                                    'data-val': 'true',
-                                    'onkeypress': 'return validateFloatKeyPress(this, event);',
-                                    'tabindex': loop.index0 * 2 + 1,
-                                    'autocomplete': 'off', 
-                                    'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
-                                    'onblur': "if(this.value == '') {this.value ='0'}; validateValueValorificata(" ~ key ~");" 
-                                    } } ) 
-                                }}
-                                <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
-                            </td>
-                            <td class="EGD1CantitateDeseuInStocValorificata{{ key }} text-right calcul-valorificata">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] }}</td>
+                                {% set valid = true %}                                   
+                                {% if sum != formData._e_g_d1_generare_deseuri[key].cantitate_deseu_valorificata %}
+                                    {% set valid = false %}
+                                {% endif %}
+                                <td>{{ form_widget(item.cantitateDeseuValorificata, {'attr': {
+                                        'class': 'text-right ' ~ ((formData._e_g_d_company | length > 1) ? "width80 " ~ ((item.cantitateDeseuValorificata.vars.value > 0 and not valid) ? "addAgent-validation-error " : "") : "") ~ 'EGD1CantitateDeseuValorificata EGD1CantitateDeseuValorificata' ~ key, 
+                                        'title': (formData._e_g_d_company | length > 1 and item.cantitateDeseuValorificata.vars.value > 0 and not valid) ? 'Foloseste butonul de langa pentru a alege agentul economic' : '',
+                                        'data-val': 'true',
+                                        'onkeypress': 'return validateFloatKeyPress(this, event);',
+                                        'tabindex': loop.index0 * 2 + 1,
+                                        'autocomplete': 'off', 
+                                        'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
+                                        'onblur': "if(this.value == '') {this.value ='0'}; " ~ ((formData._e_g_d_company | length > 1) ? "validateValueValorificata(" ~ key ~ ");" : "") 
+                                        } } ) 
+                                    }}
+                                    <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuValorificata.vars.full_name }}" data-valmsg-replace="true" ></span>
+                                    {% if formData._e_g_d_company | length > 1 %}
+                                        <a id="showAddAgentModal{{ key }}" {{ (item.cantitateDeseuValorificata.vars.value > 0) ? "onclick='AddAgentDetails(this.id);' class='activeAddAgent' title='Selecteaza agentul economic'" : 'class="inactiveAddAgent"' }}></a>
+                                    {% endif %}
+                                </td>
+                                <td class="EGD1CantitateDeseuInStocValorificata{{ key }} text-right calcul-valorificata">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocValorificata[key] }}</td>
                             {% endif %}
-                            {% if formConfig.operatia == 4 %}
-                            <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {'class': 'text-right EGD1CantitateDeseuEliminata EGD1CantitateDeseuEliminata' ~ key, 
+                            {% if formConfig.operatia == 4 %}                                
+                                {% set valid = true %}
+                                {% if sum != formData._e_g_d1_generare_deseuri[key].cantitate_deseu_eliminata %}
+                                    {% set valid = false %}
+                                {% endif %}
+                                <td>{{ form_widget(item.cantitateDeseuEliminata, {'attr': {
+                                    'class': 'text-right ' ~ ((formData._e_g_d_company | length > 1) ? "width80 " ~ ((item.cantitateDeseuEliminata.vars.value > 0 and not valid) ? "addAgent-validation-error " : "") : "") ~ 'EGD1CantitateDeseuEliminata EGD1CantitateDeseuEliminata' ~ key,
+                                    'title': (formData._e_g_d_company | length > 1 and item.cantitateDeseuEliminata.vars.value > 0 and not valid) ? 'Foloseste butonul de langa pentru a alege agentul economic' : '',
                                     'data-val': 'true',
                                     'onkeypress': 'return validateFloatKeyPress(this, event);', 
                                     'tabindex': loop.index0 * 2 + 1, 
                                     'autocomplete': 'off', 
                                     'onfocus': "if(this.value == '0') {this.value=''} else {this.value = this.value}", 
-                                    'onblur': "if(this.value == '') {this.value ='0'}; validateValueEliminata(" ~ key ~");" 
+                                    'onblur': "if(this.value == '') {this.value ='0'}; " ~ ((formData._e_g_d_company | length > 1) ? "validateValueEliminata(" ~ key ~");" : "")
                                     } } )  
                                 }}
-                                <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
-                            </td>      
-                            <td class="EGD1CantitateDeseuInStocEliminata{{ key }} text-right calcul-eliminata">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key] }}</td>
+                                    <span class="field-validation-valid" data-valmsg-for="{{ item.cantitateDeseuEliminata.vars.full_name }}" data-valmsg-replace="true" ></span>
+                                    {% if formData._e_g_d_company | length > 1 %}
+                                        <a id="showAddAgentModal{{ key }}" {{ (item.cantitateDeseuEliminata.vars.value > 0) ? "onclick='AddAgentDetails(this.id);' class='activeAddAgent' title='Selecteaza agentul economic'" : 'class="inactiveAddAgent"' }}></a>
+                                    {% endif %}
+                                </td>      
+                                <td class="EGD1CantitateDeseuInStocEliminata{{ key }} text-right calcul-eliminata">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocEliminata[key] | number_format(2) }}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}
                     <tr>
                         <td class="width-35-px"></td>
                         <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
-                        <td id="EGD1CantitateDeseuGenerateTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuGenerateTotal }}</td>
+                        <td id="EGD1CantitateDeseuGenerateTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuGenerateTotal | number_format(2) }}</td>
                         {% if formConfig.operatia == 3 %}
-                        <td id="EGD1CantitateDeseuValorificataTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuValorificataTotal }}</td>
+                        <td id="EGD1CantitateDeseuValorificataTotal" class="text-right {{ (formData._e_g_d_company | length > 1) ? "width80" : "" }}">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuValorificataTotal | number_format(2) }}</td>
                         {% endif %}
                         {% if formConfig.operatia == 4 %}
-                        <td id="EGD1CantitateDeseuEliminataTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuEliminataTotal }}</td>
+                        <td id="EGD1CantitateDeseuEliminataTotal" class="text-right {{ (formData._e_g_d_company | length > 1) ? "width80" : "" }}">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuEliminataTotal | number_format(2) }}</td>
                         {% endif %}
-                        <td id="EGD1CantitateDeseuInStocTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocTotal }}</td>
+                        <td id="EGD1CantitateDeseuInStocTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocTotal | number_format(2) }}</td>
                     </tr>
-                </table> 
+                </table>
+                <script type="text/javascript">  
+                    function AddAgentDetails(id) {
+                        var key = id.replace("showAddAgentModal", "");
+                        {% if formConfig.operatia == 3 %}
+                            var value = jQuery(".EGD1CantitateDeseuValorificata" + key).val();
+                        {% endif %}
+
+                        {% if formConfig.operatia == 4 %}
+                            var value = jQuery(".EGD1CantitateDeseuEliminata" + key).val();
+                        {% endif %}
+
+                        var text = '{{ 'Suma cantitatilor introduse trebuie sa fie exact:' | trans ~ ' %value% (' ~ formData.unitate_masura ~ ')' }}';
+                        text = text.replace('%value%', value);
+                        jQuery('#customizeAgentDetailsModalTotal').text(text);
+                        jQuery('#configTotalSum').val(value);
+                        jQuery('#configIndexMonth').val(key);
+                        jQuery('#customizeAgentDetailsModalError').addClass("hidden");
+                        
+                        var formData = null;
+                        jQuery.ajax({
+                            type: "POST",
+                            url: '{{ path('get_agent_quantities') }}',
+                            data: { 'creditUsageId': {{ creditsUsage.id }}, 'indexMonth': key },
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success) {
+                                    {% for agentKey,agent in formData._e_g_d_company %}
+                                        jQuery("#agent{{ agentKey }}").val(response.agentsQuantity[{{ agentKey }}]);
+                                    {% endfor %} 
+                                } else {
+                                    jQuery('#globalErrors').text(response.message).removeClass('hidden'); 
+                                }
+                            }
+                        });
+                                                
+                        jQuery('#customizeAgentDetailsModal').modal();
+                    }
+                    
+                    $('#customizeAgentDetailsModalYes').click(function () {
+                        var userSum = 0;
+                        var agentsQuantity = new Array();
+                        jQuery(".agentValue").each(function() {
+                            var agentKey = jQuery(this).attr("id").replace("agent", "");
+                            agentsQuantity[agentKey] = parseFloat(jQuery(this).val());
+                            userSum = userSum + parseFloat(jQuery(this).val());
+                            
+                        });
+                        if (parseFloat(userSum) === parseFloat(jQuery("#configTotalSum").val())) {
+                            var index = parseInt(jQuery("#configIndexMonth").val());
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('update_agent_quantities') }}',
+                                data: { 'creditUsageId': {{ creditsUsage.id }}, 'indexMonth':  index, 'agentsQuantity' : agentsQuantity },
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.success) {
+                                        jQuery('#customizeAgentDetailsModal').modal('toggle');
+                                        jQuery('#showAddAgentModal' + index).parent().find('input').removeClass('addAgent-validation-error');
+                                    } else {
+                                        jQuery('#globalErrors').text(response.message).removeClass('hidden'); 
+                                    }
+                                }
+                            });
+                            return true;
+                        } 
+                        
+                        jQuery("#customizeAgentDetailsModalError").removeClass("hidden");
+                        
+                    });
+                </script>
             {% endif %}
 
             <div class="hidden">{{ form_rest(form) }}</div>
@@ -306,7 +405,7 @@
             $('#confirmGenerateModalFormId').val('evidenta_gestiunii_deseurilor');
         });
         
-        jQuery(document).ready(function () {
+        jQuery(document).ready(function () {            
             {% for key in formTemplateData.EGDTotals|keys %}
                 var totalClass{{ key}} = '{{ key }}'.replace('Total', '');
                 jQuery('.' + totalClass{{ key}}).change(function () {
@@ -349,7 +448,8 @@
                                 value = value + ((index >= 1) ? 
                                     parseFloat(jQuery('.EGD1CantitateDeseuInStocValorificata' + (index - 1)).text()) : 0);
                                 if (value < 0) {
-                                    jQuery('.EGD1CantitateDeseuValorificata' + index).val(0);
+                                    jQuery('.EGD1CantitateDeseuValorificata' + index).val(0).removeClass("addAgent-validation-error");
+                                    jQuery('#showAddAgentModal' + index).removeAttr("onclick").removeAttr("title").removeClass("activeAddAgent").addClass("inactiveAddAgent");
                                     calculValorificata(index);
                                     calculTotal('EGD1CantitateDeseuValorificata');
                                     alert('Stocul existent mai mic decat valoarea introdusa!');
@@ -387,7 +487,8 @@
                             value = value + ((index >= 1) ? 
                                 parseFloat(jQuery('.EGD1CantitateDeseuInStocEliminata' + (index - 1)).text()) : 0);
                             if (value < 0) {
-                                jQuery('.EGD1CantitateDeseuEliminata' + index).val(0);
+                                jQuery('.EGD1CantitateDeseuEliminata' + index).val(0).removeClass("addAgent-validation-error");
+                                jQuery('#showAddAgentModal' + index).removeAttr("onclick").removeAttr("title").removeClass("activeAddAgent").addClass("inactiveAddAgent");
                                 calculEliminata(index);
                                 calculTotal('EGD1CantitateDeseuEliminata');
                                 alert('Stocul existent mai mic decat valoarea introdusa!');
@@ -423,21 +524,19 @@
                     }
                 });
             {% endif %}
-            
-            jQuery('.craue_formflow_button_last').click(function () {
-                var errorNo = 0;
-                jQuery(this).parent().parent().prevAll().find('.field-validation-error').each(function () {
-                    if (jQuery(this).html() !== '') {
-                        errorNo = errorNo + 1;
-                    }
+               
+            jQuery('.craue_formflow_button_last').click(function () {               
+                var errorNoAddAgent = 0;
+                jQuery(this).parent().parent().find('.addAgent-validation-error').each(function () {
+                    errorNoAddAgent = errorNoAddAgent + 1;
                 });
-                if (errorNo !== 0) {
-                    jQuery('#globalErrors').show();
+                if (errorNoAddAgent !== 0) {
+                    jQuery('#globalAddAgentErrors').show();
                     return false;
                 } else {
-                    jQuery('#globalErrors').hide();
+                    jQuery('#globalAddAgentErrors').hide();
                     jQuery('.flash-message').hide();
-                }
+                }                
             });
             
             jQuery('.navtab').click(function () {

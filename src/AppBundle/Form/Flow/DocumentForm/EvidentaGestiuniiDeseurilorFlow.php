@@ -44,7 +44,7 @@ class EvidentaGestiuniiDeseurilorFlow extends FormFlow
             'type' => new EGDStep1Type(),
         );
         $stepConfig[] = array(
-            'label' => 'Generarea deseurilor',
+            'label' => 'Actualizare Generare Deseu',
             'type' => new EGDStep2Type(),
         );
 //        $stepConfig[] = array(
@@ -77,7 +77,7 @@ class EvidentaGestiuniiDeseurilorFlow extends FormFlow
 //        }
 
         $stepConfig[] = array(
-            'label' => 'Generare Document'
+            'label' => 'Generare Document Final'
         );
 
         return $stepConfig;
