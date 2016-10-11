@@ -1,0 +1,25 @@
+<div class="modal fade bs-modal-sm" id="customizeAgentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="customizeAgentDetailsModalLabel">
+    <div class="modal-dialog  modal-sm" role="agent">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="customizeAgentDetailsModalLabel">{{ 'modal.customize-agent-details.title' | trans }}</h4>
+            </div>
+            <div class="modal-body">
+                <p id="customizeAgentDetailsModalBody">
+                    <p class="color-blue" id="customizeAgentDetailsModalTotal"></p>
+                    {% for key,agent in agentiEconomici %}
+                        <label>{{ 'Agentul ' ~ agent.name }}</label>
+                        <input class="agentValue" id="agent{{ key }}" onfocus="if(this.value == '0') {this.value=''} else {this.value = this.value}" onblur="if(this.value == '') {this.value ='0'};" />
+                    {% endfor %}
+                </p>
+                <input type="hidden" id="configTotalSum"/>
+                <input type="hidden" id="configIndexMonth">
+                <p id="customizeAgentDetailsModalError" class="hidden color-red-form">{{ 'Suma cantitatilor introduse nu coincide cu suma precizata mai sus.' | trans }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.button.cancel'|trans }}</button>
+                <button type="button" class="btn btn-primary" id="customizeAgentDetailsModalYes">{{ 'modal.button.ok'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>

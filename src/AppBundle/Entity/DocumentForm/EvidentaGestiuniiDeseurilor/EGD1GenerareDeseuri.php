@@ -56,6 +56,14 @@ class EGD1GenerareDeseuri
      */
     protected $cantitateDeseuInStoc;
 
+    /**
+     *
+     * @var type
+     * @Type("array<AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor\EGDCompany>")
+     * @Assert\Count(min="1")
+     */
+    protected $agentEconomic;
+
     public function getLuna()
     {
         return $this->luna;
@@ -81,6 +89,11 @@ class EGD1GenerareDeseuri
         return $this->cantitateDeseuInStoc;
     }
 
+    public function getAgentEconomic()
+    {
+        return $this->agentEconomic;
+    }
+
     public function setLuna($luna)
     {
         $this->luna = $luna;
@@ -104,6 +117,11 @@ class EGD1GenerareDeseuri
     public function setCantitateDeseuInStoc($cantitateDeseuInStoc)
     {
         $this->cantitateDeseuInStoc = $cantitateDeseuInStoc;
+    }
+
+    public function setAgentEconomic($agentEconomic)
+    {
+        $this->agentEconomic = $agentEconomic;
     }
 
 }

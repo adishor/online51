@@ -191,4 +191,72 @@ class CreditsUsageController extends Controller
         )));
     }
 
+    /**
+     * @Route("/get-agent-quantities", name="get_agent_quantities")
+     */
+    public function getAgentQuantities(Request $request)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
+        $creditUsageId = $request->request->get('creditUsageId');
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
+        if ((!$creditsUsage) || ($creditsUsage->getUser()->getId() != $user->getId())) {
+            return new Response(json_encode(array(
+                  'success' => false,
+                  'message' => $this->get('translator')->trans('invalid.data')
+            )));
+        }
+
+        $index = $request->request->get('indexMonth');
+        $formData = json_decode($creditsUsage->getFormData());
+
+        $agentsQuantity = [];
+        foreach ($formData->_e_g_d1_generare_deseuri[$index]->agent_economic as $key => $agent) {
+            $agentsQuantity[$key] = $agent->cantitate_deseu;
+        }
+
+        return new Response(json_encode(array('success' => true, 'agentsQuantity' => $agentsQuantity)));
+    }
+
+    /**
+     * @Route("/update-agent-quantities", name="update_agent_quantities")
+     */
+    public function updateAgentQuantities(Request $request)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
+        $creditUsageId = $request->request->get('creditUsageId');
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
+        if ((!$creditsUsage) || ($creditsUsage->getUser()->getId() != $user->getId())) {
+            return new Response(json_encode(array(
+                  'success' => false,
+                  'message' => $this->get('translator')->trans('invalid.data')
+            )));
+        }
+
+        $index = $request->request->get('indexMonth');
+        $agentsQuantity = $request->request->get('agentsQuantity');
+        $formData = json_decode($creditsUsage->getFormData());
+
+        foreach ($formData->_e_g_d1_generare_deseuri[$index]->agent_economic as $key => $agent) {
+            $formData->_e_g_d1_generare_deseuri[$index]->agent_economic[$key]->cantitate_deseu = $agentsQuantity[$key];
+        }
+
+        $creditsUsage->setFormData(json_encode($formData));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->merge($creditsUsage);
+        $em->flush();
+
+        return new Response(json_encode(array(
+              'success' => true
+        )));
+    }
+
 }

@@ -166,8 +166,8 @@
                     <tr>
                         <th class="text-center width-35-px">{{ 'pdf-doc-egd.number'|trans }}</th>
                         <th class="text-center width-105-px">{{ 'pdf-doc-egd.month'|trans }}</th>
-                        <th class="text-center">{{ 'pdf-doc-egd.waste-quantity' | trans }} {{ 'pdf-doc-egd.reclaimed'|trans }}</th>
-                        <th class="text-center">{{ 'pdf-doc-egd.reclamation-operation' | trans }}</th>
+                        <th class="text-center" colspan="2">{{ 'pdf-doc-egd.waste-quantity' | trans }} {{ 'pdf-doc-egd.reclaimed'|trans }}</th>
+                        <th class="text-center width-200-px">{{ 'pdf-doc-egd.reclamation-operation' | trans }}</th>
                         <th class="text-center">{{ 'pdf-doc-egd.reclamation-agent' | trans }}</th>
                     </tr>
 
@@ -176,18 +176,38 @@
                         {% if operatiaDeValorificare is null and item.operatiaDeValorificare is not null %}
                             {% set operatiaDeValorificare = egd.operatia_valorificare_deseu[item.operatiaDeValorificare] %}
                         {% endif %}
-                        <tr>
-                            <td class="width-35-px">{{ loop.index }}</td>
-                            <td class="width-105-px">{{ item.luna }}</td>
-                            <td class="text-right">{{ item.cantitateDeseuValorificata }}</td>
-                            <td>{{ (item.operatiaDeValorificare is not null) ? item.operatiaDeValorificare : "" }}</td>
-                            <td>{{ item.agentEconomicValorificare }}</td>
-                        </tr>
+                        {% set length = item.agentEconomicValorificare | length %}
+                        {% if length == 1 or item.agentEconomicValorificare is null %}
+                            <tr>
+                                <td class="width-35-px vertical-middle">{{ loop.index }}</td>
+                                <td class="width-105-px vertical-middle">{{ item.luna }}</td>
+                                <td class="text-center vertical-middle">{{ item.cantitateDeseuValorificata | number_format(2) }}</td>
+                                <td></td>
+                                <td class="text-center width-200-px vertical-middle">{{ (item.operatiaDeValorificare is not null) ? item.operatiaDeValorificare : "" }}</td>
+                                <td>{{ (item.agentEconomicValorificare) ? item.agentEconomicValorificare.0.name : "" }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="width-35-px vertical-middle" rowspan="{{ length }}">{{ loop.index }}</td>
+                                <td class="width-105-px vertical-middle" rowspan="{{ length }}">{{ item.luna }}</td>
+                                <td class="text-center vertical-middle" rowspan="{{ length }}">{{ item.cantitateDeseuValorificata | number_format(2) }}</td>
+                                <td class="text-center">{{ item.agentEconomicValorificare.0.cantitateDeseu | number_format(2) }}</td>
+                                <td class="text-center width-200-px vertical-middle" rowspan="{{ length }}">{{ (item.operatiaDeValorificare is not null) ? item.operatiaDeValorificare : "" }}</td>
+                                <td>{{ item.agentEconomicValorificare.0.name }}</td>
+                            </tr>
+                            {% for agent in item.agentEconomicValorificare[1:] %}
+                                <tr>
+                                    <td class="text-center">{{ agent.cantitateDeseu | number_format(2) }}</td>
+                                    <td>{{ agent.name }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                     <tr>
                         <td class="width-35-px"></td>
                         <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
-                        <td class="text-right">{{ templateData.EGDTotals.EGD3CantitateDeseuValorificataTotal | number_format(2) }}</td>
+                        <td class="text-center">{{ templateData.EGDTotals.EGD3CantitateDeseuValorificataTotal | number_format(2) }}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -207,8 +227,8 @@
                     <tr>
                         <th class="text-center width-35-px">{{ 'pdf-doc-egd.number'|trans }}</th>
                         <th class="text-center width-105-px">{{ 'pdf-doc-egd.month'|trans }}</th>
-                        <th class="text-center">{{ 'pdf-doc-egd.waste-quantity-eliminated' | trans }}</th>
-                        <th class="text-center">{{ 'pdf-doc-egd.elimination-operation' | trans }}</th>
+                        <th class="text-center" colspan="2">{{ 'pdf-doc-egd.waste-quantity-eliminated' | trans }}</th>
+                        <th class="text-center width-200-px">{{ 'pdf-doc-egd.elimination-operation' | trans }}</th>
                         <th class="text-center">{{ 'pdf-doc-egd.elimination-agent' | trans }}</th>
                     </tr>
 
@@ -217,18 +237,38 @@
                         {% if operatiaDeEliminare is null and item.operatiaDeEliminare is not null %}
                             {% set operatiaDeEliminare = egd.operatia_eliminare_deseu[item.operatiaDeEliminare] %}
                         {% endif %}
-                        <tr>
-                            <td class="width-35-px">{{ loop.index }}</td>
-                            <td class="width-105-px">{{ item.luna }}</td>
-                            <td class="text-right">{{ item.cantitateDeseuEliminata }}</td>
-                            <td>{{ (item.operatiaDeEliminare is not null) ? item.operatiaDeEliminare : "" }}</td>
-                            <td>{{ item.agentEconomicEliminare }}</td>
-                        </tr>
+                        {% set length = item.agentEconomicEliminare | length %}
+                        {% if length == 1 or item.agentEconomicEliminare is null %}
+                            <tr>
+                                <td class="width-35-px vertical-middle">{{ loop.index }}</td>
+                                <td class="width-105-px vertical-middle">{{ item.luna }}</td>
+                                <td class="text-center vertical-middle">{{ item.cantitateDeseuEliminata | number_format(2) }}</td>
+                                <td></td>
+                                <td class="text-center width-200-px vertical-middle">{{ (item.operatiaDeEliminare is not null) ? item.operatiaDeEliminare : "" }}</td>
+                                <td>{{ (item.agentEconomicEliminare) ? item.agentEconomicEliminare.0.name : "" }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="width-35-px vertical-middle" rowspan="{{ length }}">{{ loop.index }}</td>
+                                <td class="width-105-px vertical-middle" rowspan="{{ length }}">{{ item.luna }}</td>
+                                <td class="text-center vertical-middle" rowspan="{{ length }}">{{ item.cantitateDeseuEliminata | number_format(2) }}</td>
+                                <td class="text-center">{{ item.agentEconomicEliminare.0.cantitateDeseu | number_format(2) }}</td>
+                                <td class="text-center width-200-px vertical-middle" rowspan="{{ length }}">{{ (item.operatiaDeEliminare is not null) ? item.operatiaDeEliminare : "" }}</td>
+                                <td>{{ item.agentEconomicEliminare.0.name }}</td>
+                            </tr>
+                            {% for agent in item.agentEconomicEliminare[1:] %}
+                                <tr>
+                                    <td class="text-center">{{ agent.cantitateDeseu | number_format(2) }}</td>
+                                    <td>{{ agent.name }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                      <tr>
                             <td class="width-35-px"></td>
                             <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
-                            <td class="text-right" >{{ templateData.EGDTotals.EGD4CantitateDeseuEliminataTotal | number_format(2) }}</td>
+                            <td class="text-center" >{{ templateData.EGDTotals.EGD4CantitateDeseuEliminataTotal | number_format(2) }}</td>
+                            <td></td>
                             <td></td>
                             <td></td>
                         </tr>

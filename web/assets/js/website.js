@@ -53,10 +53,29 @@ function validateFloatKeyPress(el, evt) {
 }
 
 function validateValueValorificata(index) {
+    if (jQuery(".EGD1CantitateDeseuValorificata" + index).val() > 0) {
+        jQuery("#showAddAgentModal" + index).removeClass("inactiveAddAgent").addClass("activeAddAgent");
+        jQuery("#showAddAgentModal" + index).attr("onclick", "AddAgentDetails(this.id);").
+                attr("title", "Selecteaza agentul economic");
+        jQuery(".EGD1CantitateDeseuValorificata" + index).addClass("addAgent-validation-error").attr("title", "Foloseste butonul de langa pentru a alege agentul economic");
+    } else {
+        jQuery("#showAddAgentModal" + index).removeClass("activeAddAgent").addClass("inactiveAddAgent");
+        jQuery("#showAddAgentModal" + index).removeAttr("onclick").removeAttr("title");
+        jQuery(".EGD1CantitateDeseuValorificata" + index).removeClass("addAgent-validation-error").removeAttr("title");
+    }
 }
 
 function validateValueEliminata(index) {
-    
+    if (jQuery(".EGD1CantitateDeseuEliminata" + index).val() > 0) {
+        jQuery("#showAddAgentModal" + index).removeClass("inactiveAddAgent").addClass("activeAddAgent");
+        jQuery("#showAddAgentModal" + index).attr("onclick", "AddAgentDetails(this.id);").
+                attr("title", "Selecteaza agentul economic");
+        jQuery(".EGD1CantitateDeseuEliminata" + index).addClass("addAgent-validation-error").attr("title", "Foloseste butonul de langa pentru a alege agentul economic");
+    } else {
+        jQuery("#showAddAgentModal" + index).removeClass("activeAddAgent").addClass("inactiveAddAgent");
+        jQuery("#showAddAgentModal" + index).removeAttr("onclick").removeAttr("title");
+        jQuery(".EGD1CantitateDeseuEliminata" + index).removeClass("addAgent-validation-error").removeAttr("title");
+    }
 }
 
 //thanks: http://javascript.nwbox.com/cursor_position/

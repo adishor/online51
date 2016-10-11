@@ -167,6 +167,14 @@ table.pdf-table {
     width: 35px;
 }
 
+.width-200-px {
+    width: 200px;
+}
+
 .width-300-percent {
     width: 300px;
+}
+
+.vertical-middle {
+    vertical-align: middle !important;
 }
