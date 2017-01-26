@@ -27,6 +27,7 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
         $formConfigD = json_decode($formConfig);
         if (count($formConfig)) {
             $parameters = $this->getParameters();
+
             foreach ($formConfigD as $key => $config) {
                 switch ($key) {
                     case 'an':
@@ -42,6 +43,9 @@ class FormularEvidentaGestiuniiDeseurilor extends FormularGeneric implements For
                         break;
                     case 'operatia':
                         $formConfigValue[$key] = $parameters['operatia'][$config];
+                        break;
+                    case 'currentStepNumber':
+                        $formConfigValue[$key] = $config;
                         break;
                 }
             }

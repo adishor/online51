@@ -38,13 +38,14 @@ class FormularController extends Controller
 //        }
 
         $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
-
+        $flow->setId('app_form_flow_' . $formular->getSlug() . '_' . $creditsUsage->getId());
         $creditsUsageId = $request->get('creditsUsageId');
-        if ($creditsUsageId != $request->getSession()->get('currentFormular')) {
-            $flow->reset();
-            $request->getSession()->set('currentFormular', $creditsUsageId);
-            $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), false);
-        }
+
+//        if (null == $request->getSession()->get('currentFormular' . $creditsUsage->getId())) {
+//            $flow->reset();
+//            $request->getSession()->set('currentFormular' . $creditsUsage->getId(), true);
+//            $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), false);
+//        }
 
         if (empty($creditsUsage->getFormData())) {
             $entity = $formularService->getEntity();
@@ -55,39 +56,39 @@ class FormularController extends Controller
             $flow->bind($formData);
         } else {
             $formData = $this->get('jms_serializer')
-              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+                ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
             $flow->bind($formData);
-            if (method_exists($formData, 'getCurrentStep')) {
-                $currentStep = $formData->getCurrentStep();
-                if (!$currentStep) {
-                    $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
-                } else {
-                    if (!$request->getSession()->get('currentStepLoad' . $creditsUsage->getId()) && $currentStep > 1) {
-//                        while ($currentStep) {
-//                            var_dump("currentStep", $currentStep);
-//                            var_dump($creditsUsage->getFormConfig());
-//                            $formData = $this->get('jms_serializer')
-//                              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
-//                            $flow->bind($formData);
-//                            $form = $flow->createForm();
-//                            if (method_exists($formularService, 'applyFormCustomization')) {
-//                                $formularService->applyFormCustomization($flow, $form, $creditsUsage);
-//                            }
-//                            $flow->saveCurrentStepData($form);
-//                            if (method_exists($formularService, 'processHandleForm')) {
-//                                $formularService->processHandleForm($creditsUsage, $flow, $formData);
-//                            }
-//                            var_dump($creditsUsage->getFormConfig(), $formData);
-//                            $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
-//                            $this->getDoctrine()->getManager()->flush();
-//                            $flow->nextStep();
-//                            $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData);
-//                            $currentStep--;
-//                        }
-                        $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
-                    }
-                }
-            }
+//            if (method_exists($formData, 'getCurrentStep')) {
+//                $currentStep = $formData->getCurrentStep();
+//                if (!$currentStep) {
+//                    $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
+//                } else {
+//                    if (!$request->getSession()->get('currentStepLoad' . $creditsUsage->getId()) && $currentStep > 1) {
+////                        while ($currentStep) {
+////                            var_dump("currentStep", $currentStep);
+////                            var_dump($creditsUsage->getFormConfig());
+////                            $formData = $this->get('jms_serializer')
+////                              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+////                            $flow->bind($formData);
+////                            $form = $flow->createForm();
+////                            if (method_exists($formularService, 'applyFormCustomization')) {
+////                                $formularService->applyFormCustomization($flow, $form, $creditsUsage);
+////                            }
+////                            $flow->saveCurrentStepData($form);
+////                            if (method_exists($formularService, 'processHandleForm')) {
+////                                $formularService->processHandleForm($creditsUsage, $flow, $formData);
+////                            }
+////                            var_dump($creditsUsage->getFormConfig(), $formData);
+////                            $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
+////                            $this->getDoctrine()->getManager()->flush();
+////                            $flow->nextStep();
+////                            $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData);
+////                            $currentStep--;
+////                        }
+//                        $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
+//                    }
+//                }
+//            }
 //            $formData = $this->get('jms_serializer')
 //              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
 //            $flow->bind($formData);
@@ -107,11 +108,11 @@ class FormularController extends Controller
         $formTemplateData = (method_exists($formularService, 'calculateExtraTemplateData')) ? $formularService->calculateExtraTemplateData($formData) : null;
 
         return $this->render('document_form/' . strtolower($formular->getSlug()) . ".html.twig", array(
-              'form' => $form->createView(),
-              'flow' => $flow,
-              'creditsUsage' => $creditsUsage,
-              'formTemplateData' => $formTemplateData,
-              'isUserException' => $this->get('app.user')->getIsUserException(),
+            'form' => $form->createView(),
+            'flow' => $flow,
+            'creditsUsage' => $creditsUsage,
+            'formTemplateData' => $formTemplateData,
+            'isUserException' => $this->get('app.user')->getIsUserException(),
         ));
     }
 
@@ -126,6 +127,12 @@ class FormularController extends Controller
             if (!$nextStep && method_exists($formularService, 'processEndHandleForm')) {
                 $formularService->processEndHandleForm($formData);
             }
+
+            $currentStepNumber = $flow->getCurrentStepNumber();
+            if ($currentStepNumber > 1) {
+                $creditsUsage->setCurrentStepNumber($currentStepNumber);
+            }
+
             $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
@@ -214,16 +221,16 @@ class FormularController extends Controller
             }
 
             return $this->render('document_form/config/config_form_uniqueness.html.twig', array(
-                  'uniqueValues' => $uniqueValues,
-                  'formular' => $formular,
-                  'isUserException' => $this->get('app.user')->getIsUserException(),
-                  'isDraft' => !$entity::$oneStepFormConfig,
+                'uniqueValues' => $uniqueValues,
+                'formular' => $formular,
+                'isUserException' => $this->get('app.user')->getIsUserException(),
+                'isDraft' => !$entity::$oneStepFormConfig,
             ));
         }
 
         return $this->render('document_form/config/no_config_form_uniqueness.html.twig', array(
-              'formular' => $formular,
-              'isUserException' => $this->get('app.user')->getIsUserException(),
+            'formular' => $formular,
+            'isUserException' => $this->get('app.user')->getIsUserException(),
         ));
     }
 
@@ -243,7 +250,7 @@ class FormularController extends Controller
                 return new Response($this->get('translator')->trans($text['message'], $text['variables']));
             } else {
                 return $this->render('document_form/config/full_configuration_text.html.twig', array(
-                      'message' => $this->get('translator')->trans($text['message'], $text['variables'])
+                    'message' => $this->get('translator')->trans($text['message'], $text['variables'])
                 ));
             }
         }

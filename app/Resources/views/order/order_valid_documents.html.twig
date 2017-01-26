@@ -83,7 +83,11 @@
                             <td class="">{{ doc.date|date('d-m-Y') }}</td>
                             <td class="">
                                 {% if doc.usageType == formularType and date(doc.date) > date() %}
-                                    <a href="{{ path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) }}">
+                                    {% set path = path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) %}
+                                    {% if doc.currentStepNumber is defined %}
+                                        {% set path = path ~ '?step=' ~ doc.currentStepNumber %}
+                                    {% endif %}
+                                    <a href="{{ path }}">
                                         <img alt="EditDocImg" src="{{ asset("assets/images/EditDoc.png") }}" id="EditDocImg" title="{{ 'formular-documents.edit' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
                                     </a>
                                     {% if doc.mid is not null %}

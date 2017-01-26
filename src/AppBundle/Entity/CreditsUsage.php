@@ -286,7 +286,7 @@ class CreditsUsage
             return true;
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -588,4 +588,26 @@ class CreditsUsage
         return ($this->getId() ? "Credit Usage" . " #" . $this->getId() : 'Create new');
     }
 
+    /**
+     * @param $currentStepNumber
+     */
+    public function setCurrentStepNumber($currentStepNumber)
+    {
+        $formConfig = json_decode($this->getFormConfig());
+        if (!isset($formConfig->currentStepNumber) || $formConfig->currentStepNumber < $currentStepNumber) {
+            $formConfig->currentStepNumber = $currentStepNumber;
+        }
+        $this->setFormConfig(json_encode($formConfig));
+    }
+
+
+    public function getCurrentStepNumber()
+    {
+        $formConfig = json_decode($this->getFormConfig());
+        if (isset($formConfig->currentStepNumber)) {
+            return $formConfig->currentStepNumber;
+        }
+
+        return null;
+    }
 }

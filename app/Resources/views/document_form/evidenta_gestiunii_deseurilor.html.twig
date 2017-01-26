@@ -1,5 +1,6 @@
 {% extends "base.html.twig" %}
 
+
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets '@CraueFormFlowBundle/Resources/assets/css/buttons.css' %}
@@ -59,7 +60,6 @@
                     {{ form_row(form.operatia, 
                     {'attr': {'class': 'operatia max-width-500', 
                     'label_info': '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia1' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia2' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia3' | trans({'%link_contact%': path('contact') }),
-                    'input_info': 'formular-documents.input-info.egd.operatia' | trans ,
                 } }) }}
                 {% endif %}
             {% endif %}
@@ -69,55 +69,46 @@
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
                     'label_info': ('formular-documents.info.egd.agentEconomic' | trans != '') ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.agentEconomic' | trans : "",
-                    'input_info': 'formular-documents.input-info.egd.agentEconomic' | trans,
                     } } ) }}
                 <span class="field-validation-valid" data-valmsg-for="{{ form.agentEconomic.vars.full_name }}" data-valmsg-replace="true" ></span>
                 {{ form_row(form.stareFizica, 
                     {'attr': {'class': 'stareFizica max-width-500', 
                     'label_info': ('formular-documents.info.egd.stareFizica' | trans != '') ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.stareFizica' | trans : "",
-                    'input_info': 'formular-documents.input-info.egd.stareFizica' | trans,
                  } }) }}
                 {{ form_row(form.unitateMasura, 
                     {'attr': {'class': 'unitateMasura max-width-500', 
                     'label_info': ('formular-documents.info.egd.unitateMasura' | trans != '') ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.unitateMasura' | trans : "", 
-                    'input_info': 'formular-documents.input-info.egd.unitateMasura' | trans,
                  } }) }}
                 {{ form_row(form.stocareTip, 
                     { 'label': 'formular-documents.label.egd.stocareTip' | trans,
                     'attr': {'class': 'stocareTip max-width-500', 
                     'label_info': ('formular-documents.info.egd.stocareTip' | trans) ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.stocareTip' | trans : "", 
-                    'input_info': 'formular-documents.input-info.egd.stocareTip' | trans,
                  } }) }}
                 {{ form_row(form.tratareMod, 
                     { 'label': 'formular-documents.label.egd.tratareMod' | trans,
                     'attr': {'class': 'tratareMod max-width-500', 
                     'label_info': '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.tratareMod1' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.tratareMod2' | trans, 
-                    'input_info': 'formular-documents.input-info.egd.tratareMod' | trans,
                  } }) }}
                 {{ form_row(form.transportMijloc, 
                     { 'label': 'formular-documents.label.egd.transportMijloc' | trans,
                     'attr': {'class': 'transportMijloc max-width-500', 
                     'label_info': ('formular-documents.info.egd.transportMijloc' | trans) ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.transportMijloc' | trans, 
-                    'input_info': 'formular-documents.input-info.egd.transportMijloc' | trans,
                  } }) }}
                 {{ form_row(form.transportDestinatie, 
                     { 'label': 'formular-documents.label.egd.transportDestinatie' | trans,
                     'attr': {'class': 'transportDestinatia max-width-500', 
                     'label_info': ('formular-documents.info.egd.transportDestinatie' | trans) ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.transportDestinatie' | trans, 
-                    'input_info': 'formular-documents.input-info.egd.transportDestinatie' | trans,
                  } }) }}
                 {% if formConfig.operatia is defined and formConfig.operatia == 3 %}
                     {{ form_row(form.operatiaDeValorificare, 
                     {'attr': {'class': 'operatiaDeValorificare max-width-500', 
                     'label_info': '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatiaDeValorificare/Eliminare1' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatiaDeValorificare/Eliminare2' | trans, 
-                    'input_info': 'formular-documents.input-info.egd.operatiaDeValorificare' | trans,
                  } }) }}
                 {% endif %}
                 {% if formConfig.operatia is defined and formConfig.operatia == 4 %}
                     {{ form_row(form.operatiaDeEliminare, 
                     {'attr': {'class': 'operatiaDeEliminare max-width-500', 
                     'label_info': 'formular-documents.info.egd.operatiaDeEliminare' | trans, 
-                    'input_info': 'formular-documents.input-info.egd.operatiaDeEliminare' | trans,
                  } }) }}
                 {% endif %}
                 <label>
@@ -207,7 +198,8 @@
                 <p>{{ 'In aceasta pagina poti sa introduci cantitatea de deseu generata in coloana Generate si valorificat/eliminate in coloana valorificata/eliminate final.' | trans }}</p>
                 <p>{{ 'Daca utilizezi pentru prima data(in primul an) aplicatia, va trebui sa introduci stocul de la sfarsitul anului precedent in campul: Ramas in stoc de anul trecut.' | trans }}</p>
                 <p>{{ '<b>Atentie:</b> E important sa utilizezi unitatea de masura pe care ai ales-o in pasii precedent pentru acest deseu' | trans | raw }}</p>
-                {{ form_row(form.lastYearInStock, {'label': 'Ramas in stoc de anul trecut (se va adauga in plus la luna Ianuarie)',                             'attr': {'class': 'lastYearInStock', 
+                {{ form_row(form.lastYearInStock, {'label': 'Ramas in stoc de anul trecut (se va adauga in plus la luna Ianuarie)', 'attr': {'class': 'lastYearInStock',
+                                'data' : formData.last_year_in_stock,
                                 'data-val': 'true',
                                 'data-val-required': 'Acest camp este obligatoriu' | trans,
                                 'onkeypress': 'return validateFloatKeyPress(this, event);',
@@ -215,7 +207,6 @@
                                 'onblur': "if(this.value == '') {this.value ='0'}",
                                 'autocomplete': 'off',
                                 'label_info': 'formular-documents.info.egd.lastYearInStock' | trans, 
-                                'input_info': 'formular-documents.input-info.egd.lastYearInStock' | trans,
                                 } }) }}
                 <span class="field-validation-valid" data-valmsg-for="{{ form.lastYearInStock.vars.full_name }}" data-valmsg-replace="true" ></span>
                 <br/>
