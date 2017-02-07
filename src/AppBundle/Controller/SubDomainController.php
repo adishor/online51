@@ -19,10 +19,9 @@ class SubDomainController extends Controller
     public function showSubDomainAction(Domain $domain, SubDomain $subdomain)
     {
 
-        $isValid = false;
-        $validDocuments = null;
-        $validVideos = null;
-        $isUserException = false;
+        $isValid = $isUserException = false;
+        $validDocuments = $validVideos = null;
+
         if ($this->getUser()) {
             $userId = $this->getUser()->getId();
             $userService = $this->get('app.user');
@@ -32,6 +31,7 @@ class SubDomainController extends Controller
             $validVideos = $creditsUsageService->getValidUserVideos($userId, $domain->getId(), $subdomain->getId());
             $isUserException = $userService->getIsUserException($userId);
         }
+
         return $this->render('subdomain/show.html.twig', array(
               'domain' => $domain,
               'subdomain' => $subdomain,

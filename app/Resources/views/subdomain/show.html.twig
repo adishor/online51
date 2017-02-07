@@ -69,9 +69,10 @@
                                 <ul>
                                     {% for document in subdomain.documents %}
                                         {% if (not document.deleted and document.media and not document.media.deleted) %}
+                                            {% set downloadPath = path('media_show', {'fileId': document.media|sonata_urlsafeid }) %}
                                             <div class="row new-evaluation">
                                                 {% if validDocuments[document.id] is defined or isUserException %}
-                                                    <a href="{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}">
+                                                    <a href="{{ downloadPath }}" target="_blank">
                                                         <div class="col-xs-2">
                                                             <div class="credit-icon">
                                                                 <div class="credit-icon-value color-green">
@@ -87,7 +88,8 @@
                                                         <p class="document-info" >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</p>            
                                                     {% endif %}
                                                 {% else %}
-                                                    <a id="downloadLink{{ document.id }}" href ="javascript:;" onclick="javascript:DocumentConfirmPopup('{{ 'modal.document-confirm.body'|trans({'%title%': document.name, '%credits%': document.creditValue, '%plural%' : (document.creditValue == 1) ? 'modal.document-confirm.credit'|trans : 'modal.document-confirm.credits'|trans }) }}', '{{ path('unlock_document') }}', {{ document.id }}, '{{ path('sonata_media_download', {'id': document.media|sonata_urlsafeid }) }}');">
+                                                    <a id="downloadLink{{ document.id }}" href ="javascript:;" onclick="
+                                                            javascript:DocumentConfirmPopup('{{ 'modal.document-confirm.body'|trans({'%title%': document.name, '%credits%': document.creditValue, '%plural%' : (document.creditValue == 1) ? 'modal.document-confirm.credit'|trans : 'modal.document-confirm.credits'|trans }) }}', '{{ path('unlock_document') }}', {{ document.id }}, '{{ downloadPath }}');">
                                                         <div class="col-xs-2">
                                                             <div class="credit-icon">
                                                                 <div id="documentIcon{{ document.id }}" class="credit-icon-value color-{{ (document.creditValue > 0) ? "red" : "green" }}">

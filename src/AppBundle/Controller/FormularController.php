@@ -33,19 +33,10 @@ class FormularController extends Controller
             return $this->redirect($this->generateUrl('homepage'));
         }
 
-//        if ($mesage = $formularService->checkValidity($user, $creditsUsage)) {
-//            throw new AccessDeniedHttpException($this->get('translator')->trans($mesage));
-//        }
 
         $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
         $flow->setId('app_form_flow_' . $formular->getSlug() . '_' . $creditsUsage->getId());
         $creditsUsageId = $request->get('creditsUsageId');
-
-//        if (null == $request->getSession()->get('currentFormular' . $creditsUsage->getId())) {
-//            $flow->reset();
-//            $request->getSession()->set('currentFormular' . $creditsUsage->getId(), true);
-//            $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), false);
-//        }
 
         if (empty($creditsUsage->getFormData())) {
             $entity = $formularService->getEntity();
@@ -57,41 +48,8 @@ class FormularController extends Controller
         } else {
             $formData = $this->get('jms_serializer')
                 ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+
             $flow->bind($formData);
-//            if (method_exists($formData, 'getCurrentStep')) {
-//                $currentStep = $formData->getCurrentStep();
-//                if (!$currentStep) {
-//                    $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
-//                } else {
-//                    if (!$request->getSession()->get('currentStepLoad' . $creditsUsage->getId()) && $currentStep > 1) {
-////                        while ($currentStep) {
-////                            var_dump("currentStep", $currentStep);
-////                            var_dump($creditsUsage->getFormConfig());
-////                            $formData = $this->get('jms_serializer')
-////                              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
-////                            $flow->bind($formData);
-////                            $form = $flow->createForm();
-////                            if (method_exists($formularService, 'applyFormCustomization')) {
-////                                $formularService->applyFormCustomization($flow, $form, $creditsUsage);
-////                            }
-////                            $flow->saveCurrentStepData($form);
-////                            if (method_exists($formularService, 'processHandleForm')) {
-////                                $formularService->processHandleForm($creditsUsage, $flow, $formData);
-////                            }
-////                            var_dump($creditsUsage->getFormConfig(), $formData);
-////                            $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
-////                            $this->getDoctrine()->getManager()->flush();
-////                            $flow->nextStep();
-////                            $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData);
-////                            $currentStep--;
-////                        }
-//                        $request->getSession()->set('currentStepLoad' . $creditsUsage->getId(), true);
-//                    }
-//                }
-//            }
-//            $formData = $this->get('jms_serializer')
-//              ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
-//            $flow->bind($formData);
         }
 
         // form of the current step
@@ -158,7 +116,6 @@ class FormularController extends Controller
 
     public function generateDocument($formularService, $creditsUsage, $formData)
     {
-
         $filename = $formularService->getName() . $creditsUsage->getId() . '.pdf';
         $filePath = $this->getParameter('generated_documents_dir') . strtolower($formularService->getSlug()) . '/' . $filename;
         $formTemplateData = (method_exists($formularService, 'calculateExtraTemplateData')) ? $formularService->calculateExtraTemplateData($formData) : null;
