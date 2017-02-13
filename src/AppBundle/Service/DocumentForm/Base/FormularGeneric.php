@@ -2,51 +2,35 @@
 
 namespace AppBundle\Service\DocumentForm\Base;
 
+use AppBundle\Entity\CreditsUsage;
 use Doctrine\ORM\EntityManager;
 use JMS\Serializer\Serializer;
 
-class FormularGeneric
+abstract class FormularGeneric
 {
-    protected $slug;
-
-    protected $name;
+    protected $unique;
 
     protected $jmsSerializer;
-
     protected $entityManager;
+    protected $fileLocator;
 
-    protected $kernelRootDir;
-
-    public function __construct(EntityManager $entityManager, Serializer $jmsSerializer, $kernelRootDir)
+    public function __construct(EntityManager $entityManager, Serializer $jmsSerializer, $fileLocator)
     {
         $this->entityManager = $entityManager;
         $this->jmsSerializer = $jmsSerializer;
-        $this->kernelRootDir = $kernelRootDir;
+        $this->fileLocator = $fileLocator;
+
+        $this->unique = false;
     }
 
-    public function setName($slug)
+    public function hasToBeUnique()
     {
-        $this->slug = $slug;
-        $this->name = str_replace("_", "", $slug);
+        return $this->unique;
     }
 
-    public function getName()
+    public function setUnique()
     {
-        return $this->name;
-    }
-
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    public function getEntity()
-    {
-        if (!$this->name) {
-            throw new Exception('Please set a value for name variable using setName function.');
-        }
-
-        return "AppBundle\\Entity\\DocumentForm\\" . $this->name . "\\" . $this->name;
+        $this->unique = true;
     }
 
     public function checkValidity($user, $creditsUsage)
@@ -63,5 +47,9 @@ class FormularGeneric
 
         return false;
     }
+
+    abstract function getEntity();
+
+    abstract function applyDefaultFormData(CreditsUsage $creditsUsage, $user);
 
 }

@@ -15,7 +15,7 @@ class SubDomainAdmin extends Admin
 
     public function configureFormFields(FormMapper $form)
     {
-        $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
+        $disabled = (boolean)($this->getSubject()->getDeleted());
 
         $queryDomain = $this->modelManager
           ->getEntityManager('AppBundle:Domain')
@@ -68,7 +68,6 @@ class SubDomainAdmin extends Admin
     {
         $filter->add('name')
           ->add('domain')
-          ->add('documents')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -76,7 +75,6 @@ class SubDomainAdmin extends Admin
     {
         $list->addIdentifier('name')
           ->add('domain')
-          ->add('documents')
           ->add('deleted');
     }
 
@@ -85,7 +83,6 @@ class SubDomainAdmin extends Admin
         $show->add('name')
           ->add('description', 'html')
           ->add('domain')
-          ->add('documents')
           ->add('deleted')
           ->add('deletedAt');
     }

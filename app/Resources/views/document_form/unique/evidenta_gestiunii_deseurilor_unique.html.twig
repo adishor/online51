@@ -1,0 +1,319 @@
+<div class="form-config col-xs-12"><div class="panel"><div class="panel-body">
+    {{ 'domain.formular.config' | trans }}
+
+    <form id="form_egd" method="post" onsubmit="return false;">
+    {% for key, items in uniqueValues %}
+        {% set singleSelect = true %}
+        {% for itemUnique in items %}
+            {% if itemUnique is iterable %}
+                {% set singleSelect = false %}
+            {% endif %}
+        {% endfor %}
+
+{#        singleSelect means that we have a configurationOption with a 1 level value#}
+{#        example: Year - by selecting one value we have the final configuration#}
+        {% if singleSelect and items|length > 0 %}
+            <p class="config-unique-title">{{ ('document-form.select.' ~ key) | trans }}</p>
+            {{ include('document_form/base/form_label_info.html.twig', {'label_info': '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key) | trans({'%link_documentele_mele%': path('show_valid_documents')}) }) }}
+                      
+            <div>
+                <select name="select_{{ key }}" data-val="true" data-val-required="{{ 'form.required.field' | trans }}" class="selectmenu" id="{{ key }}">
+                    {% if items|length > 1 %}
+                        <option></option>
+                    {% endif %}
+                    {% for keyItem, item in items %}
+                        <option value="{{ keyItem }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+                <span class="field-validation-valid" data-valmsg-for="select_{{ key }}" data-valmsg-replace="true" ></span>
+            </div>
+        {% endif %}
+        
+{#        for cases when after selecting first value, another select is being loaded#}
+{#        final configuration for this cases is done by selecting multiple level values#}
+{#        example select value 01, after that another select is being loaded , select value 03 and final configiuration is 01 03#}
+        {% if not singleSelect and items|length > 0 %}
+            <div class="ui-widget">
+                <p class="config-unique-title">{{ ('document-form.autocomplete.' ~ key) | trans }}</p>
+                {{ include('document_form/base/form_label_info.html.twig', 
+                    {'label_info': 
+                        ((('document-form.label.' ~ key ~ '1') | trans != '') ? '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key ~ '1') | trans : "") ~  ((('document-form.label.' ~ key ~ '2') | trans != '') ? '<br/><img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key ~ '2') | trans : "") ~ ((('document-form.label.' ~ key ~ '3') | trans != '') ? '<br/><img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ ('document-form.label.' ~ key ~ '3') | trans({'%link_contact%': path('contact') }) : "")
+                    }) }}
+                <div>
+                    <select id="combobox_{{ key }}" name="combobox_{{ key }}" class="combobox" data-val="true" data-val-required="{{ 'form.required-combobox.field' | trans }}">
+                        <option></option>
+                        {% for itemKey, item in uniqueValues[key] %}
+                            {% for subItemKey, subItem in item['values'] %}
+                                {% for sub2ItemKey, sub2Item in subItem['values'] %}
+    {#                                <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}</option>#}
+                                    <option value="{{ itemKey ~ ' ' ~ subItemKey ~ ' ' ~ sub2ItemKey }}">{{ sub2Item }}</option>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                    <span class="field-validation-valid" data-valmsg-for="combobox_{{ key }}" data-valmsg-replace="true" ></span>
+                </div>
+            </div>
+        {% endif %}    
+    {% endfor %}
+    <p class="register-form2 pull-right">
+        <input type="button" value="{{ 'form.label.continue'|trans }}" id="btnRegister" class="costum" onclick="SubmitFormConfig();" />
+    </p>
+    </form>
+    <br/><div id="formularError{{ formular.id }}"></div>
+</div></div></div>
+<script type="text/javascript">   
+    var items = [];
+    items = {{ uniqueValues|json_encode|raw }};
+    function loadSubItem(key, subKey) {
+        if (subKey !== '') {
+            $("#autocomplete_" + key).prop('disabled', 'true').addClass('disabled').val(subKey);
+            if ('values' in items[key][subKey]) {
+                var objLength = Object.keys(items[key][subKey]['values']).length;
+                if (objLength > 0) {               
+                    var options = '<option></option>';
+                    $('#' + key + '_level3').html(options);
+                    $('#' + key + '_level3').selectmenu();
+
+                    var keysSubitemArray = Object.keys(items[key][subKey]['values']).sort();
+                    for (var keySubitem in keysSubitemArray) {
+                        options = options + '<option value="' + subKey + ' ' + keysSubitemArray[keySubitem] + '">' + items[key][subKey]['values'][keysSubitemArray[keySubitem]]['name'] + '</option>';
+                    }
+                    $('#' + key + '_level2').html(options);
+                    $('#' + key + '_level2').selectmenu();
+                    $('#' + key).next().next().css('display', 'none');
+                    $('.multipleSelectLevel2').css('display', 'block');
+                }
+            }    
+        } else {
+            $("#autocomplete_" + key).removeAttr('disabled').removeClass('disabled').val("");
+            $('#' + key + '_level2').html("");
+            $('#' + key + '_level2').selectmenu();
+            $('#' + key + '_level3').html("");
+            $('#' + key + '_level3').selectmenu();
+            $('#' + key).next().next().css('display', 'block');
+            $(".multipleSelectLevel2").css('display', 'none');
+            $('#' + key + '_level2').next().next().css('display', 'block');
+            $(".multipleSelectLevel3").css('display', 'none');
+        }
+    }
+    
+    function loadSub2Item(key, sub2Key) {
+        if (sub2Key !== '') {
+            $("#autocomplete_" + key).val(sub2Key);
+            var keys = sub2Key.split(" "); 
+            var objLength = Object.keys(items[key][keys[0]]['values'][keys[1]]['values']).length;
+            if (objLength > 0) {               
+                var options = '';
+                if (objLength > 1) {
+                    options = options + '<option></option>';            
+                }
+                
+                var keysSub2ItemArray = Object.keys(items[key][keys[0]]['values'][keys[1]]['values']).sort();
+                for (var key2Subitem in keysSub2ItemArray) {
+                    options = options + '<option value="' + sub2Key + ' ' + keysSub2ItemArray[key2Subitem] + '">' + items[key][keys[0]]['values'][keys[1]]['values'][keysSub2ItemArray[key2Subitem]] + '</option>';
+                }
+                $('#' + key + '_level3').html(options);
+                $('#' + key + '_level3').selectmenu();
+                $('#' + key + '_level2').next().next().css('display', 'none');
+                $('.multipleSelectLevel3').css('display', 'block');
+            }
+        } else {
+            $("#autocomplete_" + key).val(jQuery("#" + key).val());
+        }
+    }
+    
+    function loadSub3Item(key, sub3Key) {
+        if (sub3Key !== '') {
+            $("#autocomplete_" + key).val(sub3Key);
+        } else {
+            $("#autocomplete_" + key).val(jQuery("#" + key + "_level2").val());
+        }
+    }
+    
+    function loadAutocomplete(key) {
+        value = $("#autocomplete_" + key).val();
+        if (value.length == 8 || value.length == 9) {
+            jQuery("#" + key).selectmenu("enable");
+            jQuery("#" + key + "_level2").selectmenu("enable");
+            jQuery("#" + key + "_level3").selectmenu("enable");
+            options = value.split(" ");
+            var valueSelected = '';
+            for (var i=0; i<options.length; i++) {
+                valueSelected = valueSelected + ((valueSelected) ? " ":"") + options[i];
+                level = (i>0) ? "_level" + (i+1) : "";
+                jQuery("#" + key + level).selectmenu("value", valueSelected);
+                jQuery("#" + key + level).selectmenu("disable");
+            }
+            $("#autocomplete_" + key).removeClass("disabled").removeAttr("disabled");
+        } else {
+            jQuery("#" + key).selectmenu("enable").selectmenu("value","");
+            jQuery("#" + key + "_level2").selectmenu("enable").selectmenu("value","");
+            jQuery("#" + key + "_level3").selectmenu("enable").selectmenu("value","");
+        }
+        
+        jQuery(".ui-autocomplete li a").click(function(){
+            jQuery("#" + key).selectmenu("enable");
+            jQuery("#" + key + "_level2").selectmenu("enable");
+            jQuery("#" + key + "_level3").selectmenu("enable");
+            value = jQuery(this).html();
+            options = value.split(" ");
+            var valueSelected = '';
+            for (var i=0; i<options.length; i++) {
+                valueSelected = valueSelected + ((valueSelected) ? " ":"") + options[i];
+                level = (i>0) ? "_level" + (i+1) : "";
+                jQuery("#" + key + level).selectmenu("value", valueSelected);
+                jQuery("#" + key + level).selectmenu("disable");
+            }
+            $("#autocomplete_" + key).removeClass("disabled").removeAttr("disabled");
+        });
+    }
+    
+    var data = {};
+    function SubmitFormConfig() {
+        $.each(items, function(index, value) {
+            if ( $("#" + index).length) {
+                $("#" + index).valid();
+                data[index] = $("#" + index).val();
+            }            
+            if ( $("#combobox_" + index).length) {
+                $("#combobox_" + index).valid();
+                data[index] = $("#combobox_" + index).val();
+            } 
+            
+            
+{#            if ( $("#autocomplete_" + index).length) {
+                $("#autocomplete_" + index).valid();
+            }#}        
+            {#if (typeof value === 'object') {
+                for (var firstSubitem in value) break;
+                if (typeof value[firstSubitem] === 'object') {
+                    if ($("#" + index).val()) {
+                        if (value[firstSubitem].hasOwnProperty('values')) {
+                            $("#" + index + "_level2").valid();
+                            data[index] = $("#" + index + "_level2").val();
+                            if (typeof value[firstSubitem]['values'] === 'object') {
+                                for (var firstSub2item in value[firstSubitem]['values']) break;
+                                if (typeof value[firstSubitem]['values'][firstSub2item] === 'object') {
+                                    if (value[firstSubitem]['values'][firstSub2item].hasOwnProperty('values')) {
+                                        $("#" + index + "_level3").valid();
+                                        data[index] = $("#" + index + "_level3").val();
+                                        if ($("#" + index + "_level3").val()) {
+                                            $("#autocomplete_" + index).next().html("");
+                                            $("#autocomplete_" + index).removeClass('input-validation-error');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        if ($("#autocomplete_" + index).val()) {
+                            $("#" + index).next().next().html("");
+                            $("#" + index + "_level2").next().next().html("");
+                            $("#" + index + "_level3").next().next().html("");
+                            data[index] = $("#autocomplete_" + index).val();
+                        }
+                    }
+                }
+            }#}
+        });
+
+        var errorNo = 0;
+        $('.field-validation-error').each(function(){
+            if ($(this).html() != '') {
+                errorNo = errorNo + 1;
+            }
+        });
+          
+        if (errorNo === 0) {
+            {% if isUserException or isDraft or formular.creditValue == 0 %}
+                AjaxCheckSubmitFormConfig();
+            {% else %}
+                $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%for_what%' : 'modal.config-form-add-confirm.egd' | trans, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
+                $('#configFormAddConfirmModal').modal();
+            {% endif %}
+        }
+    }
+        
+    $( document ).ready(function() {
+       $(".loadAutocompleteItems").each(function(){
+            var id = $(this).attr("id");
+            var key = id.replace("autocomplete_", "");
+            
+            var autocompleteItems = [];
+            if (key == 'tip_deseu') {
+                autocompleteItems = AutocompleteTipDeseu(key);
+            }
+
+{#            $("#" + id).autocomplete({
+                source: function(req, responseFn) {
+                    var re = $.ui.autocomplete.escapeRegex(req.term);
+                    var matcher = new RegExp( "^" + re, "i" );
+                    var a = $.grep( autocompleteItems, function(item,index){
+                        return matcher.test(item);
+                    });
+                    responseFn( a );
+                }
+            });#}
+            
+            $(function() {
+                $("#" + id).autocomplete({
+                  source:[autocompleteItems]
+                }); 
+            });
+            
+       }); 
+    });
+    
+    $('#configFormAddConfirmModalYes').click(function () {
+        $('#configFormAddConfirmModal').modal('toggle');
+        AjaxCheckSubmitFormConfig();
+    });
+    
+    function AjaxCheckSubmitFormConfig() {
+        $.ajax({
+            type: "POST",
+            url: '{{ path('unlock_formular') }}',
+            data: { 'data': data, 'formularId': {{ formular.id }} },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    $('#totalUserCredits').text(response.credits);
+                    var url = '{{ path('formular_show' , {'slug': formular.slug, 'creditsUsageId': 'creditsUsageId' }) }}';
+                    window.location.href = url.replace("creditsUsageId", response.creditsUsageId); 
+                } else {
+                    $('#formularError' + {{ formular.id }}).addClass('color-red');
+                    $('#formularError' + {{ formular.id }}).text(response.message);
+                }
+            }
+        });
+    }
+    
+    function AutocompleteTipDeseu(key) {
+        var autocompleteItems = [];
+        var keySubitemArray = Object.keys(items[key]).sort();
+        for (var keySubitem in keySubitemArray) {
+            if (items[key][keySubitemArray[keySubitem]].hasOwnProperty('values')) {
+                var key2SubitemArray = Object.keys(items[key][keySubitemArray[keySubitem]]['values']).sort();
+                for (var key2Subitem in key2SubitemArray) {
+                    if (items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]].hasOwnProperty('values')) {
+                        var key3SubitemArray = Object.keys(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']).sort();
+                        for (var key3Subitem in key3SubitemArray) {
+                            autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem] + " " + key3SubitemArray[key3Subitem]);
+                        }
+                        for (value in items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values']) {
+                            autocompleteItems.push(items[key][keySubitemArray[keySubitem]]['values'][key2SubitemArray[key2Subitem]]['values'][value]);
+                        }
+                    } else {
+                        autocompleteItems.push(keySubitemArray[keySubitem] + " " + key2SubitemArray[key2Subitem]);
+                    }
+                }
+            } else {
+                autocompleteItems.push(keySubitemArray[keySubitem]);
+            }
+        }
+        
+        return autocompleteItems;
+    }
+    
+</script>

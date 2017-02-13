@@ -75,27 +75,12 @@ class CreditsUsage
 
     /**
      *
-     * @var \AppBundle\Entity\Document
-     * @ORM\ManyToOne(targetEntity="Document", inversedBy="documentCreditsUsage")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
+     * @var \AppBundle\Entity\File
+     * @ORM\ManyToOne(targetEntity="File", inversedBy="creditsUsage")
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", nullable=true)
      */
-    protected $document;
+    protected $file;
 
-    /**
-     *
-     * @var \AppBundle\Entity\Video
-     * @ORM\ManyToOne(targetEntity="Video", inversedBy="videoCreditsUsage")
-     * @ORM\JoinColumn(name="video_id", referencedColumnName="id", nullable=true)
-     */
-    protected $video;
-
-    /**
-     *
-     * @var \AppBundle\Entity\Formular
-     * @ORM\ManyToOne(targetEntity="Formular", inversedBy="formularCreditsUsage")
-     * @ORM\JoinColumn(name="formular_id", referencedColumnName="id", nullable=true)
-     */
-    protected $formular;
 
     /**
      *
@@ -479,9 +464,9 @@ class CreditsUsage
      * @param \AppBundle\Entity\Document $document
      * @return CreditsUsage
      */
-    public function setDocument(\AppBundle\Entity\Document $document = null)
+    public function setFile(\AppBundle\Entity\File $file = null)
     {
-        $this->document = $document;
+        $this->file = $file;
 
         return $this;
     }
@@ -491,56 +476,11 @@ class CreditsUsage
      *
      * @return \AppBundle\Entity\Document
      */
-    public function getDocument()
+    public function getFile()
     {
-        return $this->document;
+        return $this->file;
     }
 
-    /**
-     * Set video
-     *
-     * @param \AppBundle\Entity\Video $video
-     * @return CreditsUsage
-     */
-    public function setVideo(\AppBundle\Entity\Video $video = null)
-    {
-        $this->video = $video;
-
-        return $this;
-    }
-
-    /**
-     * Get video
-     *
-     * @return \AppBundle\Entity\Video
-     */
-    public function getVideo()
-    {
-        return $this->video;
-    }
-
-    /**
-     * Set formular
-     *
-     * @param \AppBundle\Entity\Formular $formular
-     * @return CreditsUsage
-     */
-    public function setFormular(\AppBundle\Entity\Formular $formular = null)
-    {
-        $this->formular = $formular;
-
-        return $this;
-    }
-
-    /**
-     * Get formular
-     *
-     * @return \AppBundle\Entity\Formular
-     */
-    public function getFormular()
-    {
-        return $this->formular;
-    }
 
     /**
      * Set media

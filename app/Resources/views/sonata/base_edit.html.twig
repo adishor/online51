@@ -290,6 +290,34 @@
                 };
             }
           {% endif %}
+
+          {% if admin.formFieldDescriptions.subdomain is defined %}
+
+            var subdomainSelector = $("#{{ admin.uniqId }}_subdomain");
+            subdomainSelector.change(updateCategories()); // Bind the function to updateCategories
+            subdomainSelector.change(); // Manual trigger to update categories in Document load.
+
+            function updateCategories(){
+                return function () {
+                    var selectedSubdomain = $("#{{ admin.uniqId }}_subdomain option:selected").val();
+                    var folder = $("#{{ admin.uniqId }}_folder");
+
+                    folder.empty();
+
+                    var locale = '{{ app.request.get('_locale') }}';
+
+                    var objectId = '{{ admin.id(object) }}'
+
+                    var url = '{{ admin.generateUrl('getFolders') }}';
+
+                    $.post(url, { subdomainId: selectedSubdomain }, function(data){
+                        folder.empty().append(data);
+                    },"text");
+
+                    folder.val("option:first").attr("selected", true);
+                };
+            }
+          {% endif %}
         });
     </script>
 {% endblock %}

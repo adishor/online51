@@ -33,4 +33,3 @@ sonata_user_admin_security:
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
-    

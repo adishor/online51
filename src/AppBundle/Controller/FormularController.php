@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\UniqueDocumentInterface;
+use AppBundle\Helper\GeneralHelper;
+use Doctrine\Common\Inflector\Inflector;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -18,6 +21,38 @@ class FormularController extends Controller
 {
 
     /**
+     * @Route("/configFormular/{slug}", name="formular_config")
+     * @ParamConverter("formular")
+     */
+    public function configFormularUniquenessAction(Formular $formular, Request $request)
+    {
+        $name = Inflector::classify($formular->getSlug());
+
+        $formularId = GeneralHelper::getServiceIdBySlug($formular->getSlug());
+        $formService = $this->get('app.formular.' . $formularId);
+
+        if ($formService->hasToBeUnique()) {
+            $uniqueValues = $this->get('app.formular.' . $formularId)->getUniquenessValues($formular);
+
+            $entity = $formService->getEntity();
+
+            return $this->render('document_form/unique/' . $formularId . '_unique.html.twig', array(
+                'uniqueValues' => $uniqueValues,
+                'formular' => $formular,
+                'isUserException' => $this->get('app.user')->getIsUserException(),
+                'isDraft' => !$entity::$oneStepFormConfig,
+            ));
+        }
+
+        return $this->render('document_form/config/no_config_form_uniqueness.html.twig', array(
+            'formular' => $formular,
+            'isUserException' => $this->get('app.user')->getIsUserException(),
+        ));
+
+    }
+
+
+    /**
      * @Route("/showFormular/{slug}/{creditsUsageId}", name="formular_show")
      * @ParamConverter("formular")
      * @ParamConverter("creditsUsage", options={"id" = "creditsUsageId"})
@@ -26,8 +61,9 @@ class FormularController extends Controller
     {
 
         $user = $this->getUser();
-        $formularService = $this->get('app.formular.' . $formular->getSlug());
-        $formularService->setName($formular->getSlug());
+
+        $serviceId = GeneralHelper::getServiceIdBySlug($formular->getSlug());
+        $formularService = $this->get('app.formular.' . $serviceId);
 
         if (null === $user) {
             return $this->redirect($this->generateUrl('homepage'));
@@ -36,21 +72,15 @@ class FormularController extends Controller
 
         $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
         $flow->setId('app_form_flow_' . $formular->getSlug() . '_' . $creditsUsage->getId());
-        $creditsUsageId = $request->get('creditsUsageId');
 
         if (empty($creditsUsage->getFormData())) {
-            $entity = $formularService->getEntity();
-            $formData = new $entity();
-            if (method_exists($formularService, 'applyDefaultFormData')) {
-                $formularService->applyDefaultFormData($creditsUsage, $formData, $user);
-            }
-            $flow->bind($formData);
+            $formData = $formularService->applyDefaultFormData($creditsUsage, $user);
         } else {
             $formData = $this->get('jms_serializer')
                 ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
-
-            $flow->bind($formData);
         }
+
+        $flow->bind($formData);
 
         // form of the current step
         $form = $flow->createForm();
@@ -74,7 +104,35 @@ class FormularController extends Controller
         ));
     }
 
-    public function handleForm($formularService, $creditsUsage, &$flow, &$form, &$formData)
+
+    /**
+     * @Route("/shortFormConfigurationText/{creditUsageId}", name="short_form_configuration_text")
+     */
+    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId, $short = true)
+    {
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
+        return new Response();
+
+        if ($creditsUsage->getFormConfig() && $creditsUsage->getFormConfig() != 'null') {
+            $formularService = $this->get('app.formular.' . $creditsUsage->getFormular()->getSlug());
+            $formularService->setName($creditsUsage->getFormular()->getSlug());
+            $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig(), $short);
+
+            if ($short) {
+                return new Response($this->get('translator')->trans($text['message'], $text['variables']));
+            } else {
+                return $this->render('document_form/config/full_configuration_text.html.twig', array(
+                    'message' => $this->get('translator')->trans($text['message'], $text['variables'])
+                ));
+            }
+        }
+
+        return new Response();
+    }
+
+
+
+    private function handleForm($formularService, $creditsUsage, &$flow, &$form, &$formData)
     {
         if ($flow->isValid($form)) {
             $flow->saveCurrentStepData($form);
@@ -114,7 +172,7 @@ class FormularController extends Controller
         }
     }
 
-    public function generateDocument($formularService, $creditsUsage, $formData)
+    private function generateDocument($formularService, $creditsUsage, $formData)
     {
         $filename = $formularService->getName() . $creditsUsage->getId() . '.pdf';
         $filePath = $this->getParameter('generated_documents_dir') . strtolower($formularService->getSlug()) . '/' . $filename;
@@ -139,80 +197,6 @@ class FormularController extends Controller
         $fs->remove($filePath);
 
         return $media;
-    }
-
-    /**
-     * @Route("/configFormular/{slug}", name="formular_config")
-     * @ParamConverter("formular")
-     */
-    public function configFormularUniquenessAction(Formular $formular, Request $request)
-    {
-        $name = str_replace("_", "", $formular->getSlug());
-        $entity = "AppBundle\\Entity\\DocumentForm\\" . $name . "\\" . $name;
-
-        $uniqueValues = [];
-
-        if (isset($entity::$uniqueness) && null !== $entity::$uniqueness) {
-            //set values for YEAR - 2 cases depends by ValabilityMonth
-            if (in_array($entity::UNIQUE_AN, $entity::$uniqueness)) {
-                $uniqueValues[$entity::UNIQUE_AN] = [];
-                $currYear = date('Y');
-
-                if (null !== $formular->getValabilityMonth()) {
-                    $currMonth = date('n');
-                    $uniqueValues[$entity::UNIQUE_AN][$currYear] = $currYear;
-                    if ($currMonth <= $formular->getValabilityMonth()) {
-                        $uniqueValues[$entity::UNIQUE_AN][$currYear - 1] = $currYear - 1;
-                    }
-                } else {
-                    for ($i = $this->getParameter('formular.startYear'); $i <= $currYear; $i++) {
-                        $uniqueValues[$entity::UNIQUE_AN][$i] = $i;
-                    }
-                }
-            }
-
-            foreach ($entity::$uniqueness as $unique) {
-                if ($unique != $entity::UNIQUE_AN) {
-                    $uniqueValues[$unique] = $this->getParameter($unique);
-                }
-            }
-
-            return $this->render('document_form/config/config_form_uniqueness.html.twig', array(
-                'uniqueValues' => $uniqueValues,
-                'formular' => $formular,
-                'isUserException' => $this->get('app.user')->getIsUserException(),
-                'isDraft' => !$entity::$oneStepFormConfig,
-            ));
-        }
-
-        return $this->render('document_form/config/no_config_form_uniqueness.html.twig', array(
-            'formular' => $formular,
-            'isUserException' => $this->get('app.user')->getIsUserException(),
-        ));
-    }
-
-    /**
-     * @Route("/shortFormConfigurationText/{creditUsageId}", name="short_form_configuration_text")
-     */
-    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId, $short = true)
-    {
-        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
-
-        if ($creditsUsage->getFormConfig() && $creditsUsage->getFormConfig() != 'null') {
-            $formularService = $this->get('app.formular.' . $creditsUsage->getFormular()->getSlug());
-            $formularService->setName($creditsUsage->getFormular()->getSlug());
-            $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig(), $short);
-
-            if ($short) {
-                return new Response($this->get('translator')->trans($text['message'], $text['variables']));
-            } else {
-                return $this->render('document_form/config/full_configuration_text.html.twig', array(
-                    'message' => $this->get('translator')->trans($text['message'], $text['variables'])
-                ));
-            }
-        }
-
-        return new Response();
     }
 
 }

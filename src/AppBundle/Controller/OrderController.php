@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Helper\GeneralHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,8 +79,10 @@ class OrderController extends Controller
 
         $formularDocuments = $creditUsageRepository->findAllUserFormularDocuments($userId, ($request->query->get('mediaId') ? $request->query->get('mediaId') : null));
         foreach ($formularDocuments as $index => $doc) {
-            $formularService = $this->get('app.formular.' . $doc['fslug']);
-            $formularService->setName($doc['fslug']);
+
+            $serviceId = GeneralHelper::getServiceIdBySlug($doc['fslug']);
+            $formularService = $this->get('app.formular.' . $serviceId);
+
             if (method_exists($formularService, 'getTextForFormConfig') && $doc['formConfig'] != 'null') {
                 $text = $formularService->getTextForFormConfig($doc['formConfig'], true);
                 if (method_exists($formularService, 'getValuesForFormConfig') && $doc['formConfig'] != 'null') {

@@ -22,12 +22,14 @@ class CreditsUsageController extends Controller
         }
         $creditsUsageService = $this->get('app.credits_usage');
         $creditsUsageService->updateValidUserCredits();
+
         $documentId = $request->request->get('documentId');
         $document = $this->getDoctrine()->getManager()->getRepository('AppBundle:Document')->find($documentId);
 
         if (true === $creditsUsageService->isValidUserDocument($user->getId(), $documentId)) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.document.already-unlocked'));
         }
+
         if (($user->getCreditsTotal() - $document->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
             $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.document.no-credits'))));
 
@@ -56,6 +58,7 @@ class CreditsUsageController extends Controller
         }
         $creditsUsageService = $this->get('app.credits_usage');
         $creditsUsageService->updateValidUserCredits();
+
         $videoId = $request->request->get('videoId');
         $video = $this->getDoctrine()->getManager()->getRepository('AppBundle:Video')->find($videoId);
 
@@ -122,26 +125,28 @@ class CreditsUsageController extends Controller
         return $this->processFormularAction($formularId, $formularConfig, true, $discountedIsDraft, $formularData);
     }
 
-    public function processFormularAction($formularId, $formularConfig, $discounted = false, $discountedIsDraft = false, $formularData = NULL)
+    private function processFormularAction($formularId, $formularConfig, $discounted = false, $discountedIsDraft = false, $formularData = NULL)
     {
         $user = $this->getUser();
         $userService = $this->get('app.user');
         $creditsUsageService = $this->get('app.credits_usage');
+
         $formular = $this->getDoctrine()->getManager()->getRepository('AppBundle:Formular')->find($formularId);
         if (!$userService->getIsUserException()) {
             $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
+
             if (($user->getCreditsTotal() - $creditValue < 0) || (null === $user->getCreditsTotal())) {
-                $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.formular.no-credits'))));
+                $response = new Response(json_encode(array(
+                    'success' => false,
+                    'message' => $this->get('translator')->trans('domain.formular.no-credits'),
+                )));
                 return $response;
             }
         }
 
-        $creditsUsageService->updateValidUserCredits();
+//        $creditsUsageService->updateValidUserCredits();
 
-        $formularService = $this->get("app.formular." . $formular->getSlug());
-        $formularService->setName($formular->getSlug());
-        $entity = $formularService->getEntity();
-        $isDraft = ($discounted) ? $discountedIsDraft : !$entity::$oneStepFormConfig;
+        $isDraft = ($discounted) ? $discountedIsDraft : false;
         if ($isDraft) {
             $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
         }

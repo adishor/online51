@@ -28,7 +28,7 @@ class EGD1GenerareDeseuriType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor\EGD1GenerareDeseuri',
+            'data_class' => 'AppBundle\Document\EvidentaGestiuniiDeseurilor\EGD1GenerareDeseuri',
             'cascade_validation' => true,
         ));
     }

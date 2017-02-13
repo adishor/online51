@@ -6,7 +6,12 @@
         <ul class="nav nav-tabs clearfix" role="tablist">
             {% for subdomain in domain.subdomains %}
                 {% if not subdomain.deleted %}
-                    <li><a href="{{ path("subdomain_show", {'domain': domain.slug, 'subdomain': subdomain.slug }) }}">{{ subdomain.name | upper }}</a></li>
+                    <li>
+                        <a href="{{ path("subdomain_show", {'domain': domain.slug, 'subdomain': subdomain.slug }) }}">{{ subdomain.name | upper }}</a>
+                        {#<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">#}
+                            {#{{ subdomain.name | upper }}#}
+                        {#</a>#}
+                    </li>
                 {% endif %}
             {% endfor %}
         </ul>

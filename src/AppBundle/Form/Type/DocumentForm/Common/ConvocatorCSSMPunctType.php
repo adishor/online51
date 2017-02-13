@@ -19,7 +19,7 @@ class ConvocatorCSSMPunctType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\DocumentForm\Common\ConvocatorCSSMPunct',
+            'data_class' => 'AppBundle\Document\Common\ConvocatorCSSMPunct',
             'cascade_validation' => true,
         ));
     }

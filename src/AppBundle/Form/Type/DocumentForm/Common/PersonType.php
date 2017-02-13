@@ -29,7 +29,7 @@ class PersonType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\DocumentForm\Common\Person',
+            'data_class' => 'AppBundle\Document\Common\Person',
             'cascade_validation' => true,
         ));
     }

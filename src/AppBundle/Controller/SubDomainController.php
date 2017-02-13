@@ -27,8 +27,8 @@ class SubDomainController extends Controller
             $userService = $this->get('app.user');
             $creditsUsageService = $this->get('app.credits_usage');
             $isValid = $userService->isDomainValidForUser($userId, $domain->getId());
-            $validDocuments = $creditsUsageService->getValidUserDocuments($userId, $domain->getId(), $subdomain->getId());
-            $validVideos = $creditsUsageService->getValidUserVideos($userId, $domain->getId(), $subdomain->getId());
+//            $validDocuments = $creditsUsageService->getValidUserDocuments($userId, $domain->getId(), $subdomain->getId());
+//            $validVideos = $creditsUsageService->getValidUserVideos($userId, $domain->getId(), $subdomain->getId());
             $isUserException = $userService->getIsUserException($userId);
         }
 

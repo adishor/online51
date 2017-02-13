@@ -32,7 +32,6 @@ class DomainController extends CRUDController
 
     public function batchActionDelete(ProxyQueryInterface $query)
     {
-
         $request = $this->getRequest();
         $idx = $request->request->get('idx');
 

@@ -15,8 +15,6 @@ parameters:
     sonata.media.provider.file.class: AppBundle\Provider\CustomFileProvider
     sonata.media.admin.media.class: AppBundle\Admin\MediaAdmin
     stof_doctrine_extensions.listener.softdeleteable.class: AppBundle\Listener\SoftDeleteableListener
-    formular.startYear: 2015
-
 
 framework:
     #esi:             ~

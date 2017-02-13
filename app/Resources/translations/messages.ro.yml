@@ -613,6 +613,7 @@ admin_label:
     subscription: 'Abonament'
     domain: 'Domeniu'
     sub_domain: 'Sub domeniu'
+    folder: 'Folder'
     order: 'Comenzi'
     credits_usage: 'Credite folosite'
     ad: 'Reclame'
@@ -679,6 +680,7 @@ User: Utilizator
 Expire Date: Data de expirare
 No Domain: Fara domeniu
 No Subdomain: Fara subdomeniu
+No Folder: Fara folder
 No Document: Nici o selectie
 No Formular: Nici o selectie
 No Video: Nici o selectie

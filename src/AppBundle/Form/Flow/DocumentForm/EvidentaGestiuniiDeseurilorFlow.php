@@ -11,7 +11,7 @@ use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep4Type;
 use AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor\EGDStep5Type;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use AppBundle\Entity\DocumentForm\EvidentaGestiuniiDeseurilor\EvidentaGestiuniiDeseurilor;
+use AppBundle\Document\EvidentaGestiuniiDeseurilor\EvidentaGestiuniiDeseurilor;
 
 class EvidentaGestiuniiDeseurilorFlow extends FormFlow
 {

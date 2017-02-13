@@ -20,6 +20,11 @@ services:
         arguments: [~, AppBundle\Entity\SubDomain, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.sub_domain, group: admin_group_data }
+    admin.folder:
+        class: AppBundle\Admin\FolderAdmin
+        arguments: [~, AppBundle\Entity\Folder, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: admin_label.folder, group: admin_group_data }
     admin.order:
         class: AppBundle\Admin\OrderAdmin
         arguments: [~, AppBundle\Entity\Order, AppBundle:Admin\Order]
@@ -55,7 +60,7 @@ services:
             - [setTemplates, [{ base_list_field: sonata/document_base_list_field.html.twig }]]
     admin.video:
         class: AppBundle\Admin\VideoAdmin
-        arguments: [~, AppBundle\Entity\Video, ~]
+        arguments: [~, AppBundle\Entity\Video, AppBundle:Admin\Video]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.video, group: sonata_media }
         calls:
@@ -87,138 +92,3 @@ services:
             - ['video/mp4']
         tags:
             - { name: sonata.media.provider }
-
-#    website
-    app.mailer:
-        class: AppBundle\Service\MailerService
-        arguments: ['@mailer', '@templating', '@translator', %email_from%, %contact_email%, %email_title%, %report_email%]
-    app.credits_usage:
-        class: AppBundle\Service\CreditsUsageService
-        arguments: [@doctrine.orm.entity_manager, @translator, @app.user]
-    app.media: 
-        class: AppBundle\Service\MediaService
-        arguments: [@doctrine.orm.entity_manager]
-    app.user:
-        class: AppBundle\Service\UserService
-        arguments: [@doctrine.orm.entity_manager, @security.encoder_factory, @security.authorization_checker, @security.token_storage, @session, @translator]
-    app.order:
-        class: AppBundle\Service\OrderService
-        arguments: [@doctrine.orm.entity_manager, @translator, @security.token_storage, @session, @app.mailer, @knp_snappy.pdf, '@templating', %invoice_dir%, %invoice_name%]
-    app.security.authentication_handler:
-        class: AppBundle\Listener\AuthenticationHandler
-        public: false
-        arguments: [@router, @session, @app.user, @app.credits_usage]
-    app.media.security.user_strategy:
-        class: AppBundle\Security\Sonata\UserDownloadStrategy
-        arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user, @app.credits_usage, @app.media]
-    app.container_aware_type:
-        class: AppBundle\Form\Type\ContainerAwareType
-        calls:
-            - [setContainer, ['@service_container']]
-        tags:
-            - { name: form.type, alias: 'container_aware' }
-    app.twig.extension.json_decode:
-        class: AppBundle\Twig\Extension\VarsExtension
-        tags:
-            - { name: twig.extension }
-        arguments: ['@service_container']
-    
-#    flows
-    app.form.flow.Evidenta_Gestiunii_Deseurilor:
-        class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Convocator_CSSM:
-        class: AppBundle\Form\Flow\DocumentForm\ConvocatorCSSMFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Componenta_CSSM:
-        class: AppBundle\Form\Flow\DocumentForm\DecizieComponentaCSSMFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Personal_Cu_Atributii:
-        class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributiiFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Comisie_Cercetare_Accidente:
-        class: AppBundle\Form\Flow\DocumentForm\DecizieComisieCercetareAccidenteFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Organizare_Activitate_SSM:
-        class: AppBundle\Form\Flow\DocumentForm\DecizieOrganizareActivitateSSMFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Proces_Verbal_Sedinta_CSSM:
-        class: AppBundle\Form\Flow\DocumentForm\ProcesVerbalSedintaCSSMFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Proces_Verbal_Control:
-        class: AppBundle\Form\Flow\DocumentForm\ProcesVerbalControlFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Permis_De_Lucru_Cu_Foc:
-        class: AppBundle\Form\Flow\DocumentForm\PermisDeLucruCuFocFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Personal_Cu_Atributii_PSI:
-        class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributiiPSIFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Personal_Cu_Atributii_2:
-        class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributii2Flow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.register:
-        class: AppBundle\Form\Flow\RegisterFlow
-        parent: craue.form.flow
-        scope: request
-        
-#    formular class
-    app.formular.generic:
-        class: AppBundle\Service\DocumentForm\FormularGeneric
-        arguments: [@doctrine.orm.entity_manager, @jms_serializer, "%kernel.root_dir%"]
-    app.formular.Evidenta_Gestiunii_Deseurilor:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularEvidentaGestiuniiDeseurilor
-    app.formular.Convocator_CSSM:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularConvocatorCSSM
-    app.formular.Decizie_Componenta_CSSM:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularDecizieComponentaCSSM
-    app.formular.Decizie_Personal_Cu_Atributii:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii
-    app.formular.Decizie_Comisie_Cercetare_Accidente:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularDecizieComisieCercetareAccidente
-    app.formular.Decizie_Organizare_Activitate_SSM:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularDecizieOrganizareActivitateSSM
-    app.formular.Proces_Verbal_Sedinta_CSSM:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularProcesVerbalSedintaCSSM
-    app.formular.Proces_Verbal_Control:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularProcesVerbalControl
-    app.formular.Permis_De_Lucru_Cu_Foc:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularPermisDeLucruCuFoc
-    app.formular.Decizie_Personal_Cu_Atributii_PSI:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributiiPSI
-    app.formular.Decizie_Personal_Cu_Atributii_2:
-        parent: app.formular.generic
-        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii2
-    

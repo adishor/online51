@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * SubDomain
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\SubDomainRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("name", message="assert.unique.name")
  */
@@ -56,21 +56,9 @@ class SubDomain
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="subdomain")
+     * @ORM\OneToMany(targetEntity="Folder", mappedBy="subdomain")
      */
-    private $documents;
-
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="Video", mappedBy="subdomain")
-     */
-    private $videos;
-
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="Formular", mappedBy="subdomain")
-     */
-    private $formulars;
+    private $folders;
 
     /**
      *
@@ -93,9 +81,7 @@ class SubDomain
      */
     public function __construct()
     {
-        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->videos = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formulars = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->folders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->deleted = FALSE;
     }
 
@@ -181,12 +167,13 @@ class SubDomain
     /**
      * Add documents
      *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $documents
+     * @param Folder $folder
      * @return SubDomain
+     * @internal param \Application\Sonata\MediaBundle\Entity\Media $documents
      */
-    public function addDocument(\Application\Sonata\MediaBundle\Entity\Media $documents)
+    public function addFolder(Folder $folder)
     {
-        $this->documents[] = $documents;
+        $this->folders[] = $folder;
 
         return $this;
     }
@@ -194,11 +181,12 @@ class SubDomain
     /**
      * Remove documents
      *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $documents
+     * @param Folder $folder
+     * @internal param \Application\Sonata\MediaBundle\Entity\Media $documents
      */
-    public function removeDocument(\Application\Sonata\MediaBundle\Entity\Media $documents)
+    public function removeFolder(Folder $folder)
     {
-        $this->documents->removeElement($documents);
+        $this->folders->removeElement($folder);
     }
 
     /**
@@ -206,75 +194,9 @@ class SubDomain
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDocuments()
+    public function getFolders()
     {
-        return $this->documents;
-    }
-
-    /**
-     * Add videos
-     *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $videos
-     * @return SubDomain
-     */
-    public function addVideo(\Application\Sonata\MediaBundle\Entity\Media $videos)
-    {
-        $this->videos[] = $videos;
-
-        return $this;
-    }
-
-    /**
-     * Remove videos
-     *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $videos
-     */
-    public function removeVideo(\Application\Sonata\MediaBundle\Entity\Media $videos)
-    {
-        $this->videos->removeElement($videos);
-    }
-
-    /**
-     * Get videos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVideos()
-    {
-        return $this->videos;
-    }
-
-    /**
-     * Add formulars
-     *
-     * @param \AppBundle\Entity\Formular $formulars
-     * @return SubDomain
-     */
-    public function addFormular(\AppBundle\Entity\Formular $formulars)
-    {
-        $this->formulars[] = $formulars;
-
-        return $this;
-    }
-
-    /**
-     * Remove formulars
-     *
-     * @param \AppBundle\Entity\Formular $formulars
-     */
-    public function removeFormular(\AppBundle\Entity\Formular $formulars)
-    {
-        $this->formulars->removeElement($formulars);
-    }
-
-    /**
-     * Get formulars
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFormulars()
-    {
-        return $this->formulars;
+        return $this->folders;
     }
 
     /**
@@ -325,7 +247,7 @@ class SubDomain
 
     public function __toString()
     {
-        return ($this->getId() ? $this->getName() : 'Create new');
+        return ($this->getId() ? $this->getDomain()->getName() . ' - ' . $this->getName() : 'Create new');
     }
 
     public function getSluggableFields()

@@ -3,7 +3,10 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\CreditsUsage;
+use AppBundle\EventListener\Event\CreditUsedEvent;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use AppBundle\Service\UserService;
 
@@ -12,12 +15,14 @@ class CreditsUsageService
     protected $entityManager;
     protected $translator;
     protected $userService;
+    protected $eventDispatcher;
 
-    public function __construct(EntityManager $entityManager, TranslatorInterface $translator, UserService $userService)
+    public function __construct(EntityManager $entityManager, TranslatorInterface $translator, UserService $userService, EventDispatcherInterface $eventDispatcher)
     {
         $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->userService = $userService;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function createUnlockDocumentCreditUsage($user, $document)
@@ -62,12 +67,8 @@ class CreditsUsageService
         $creditsUsage->setUser($user);
         $creditsUsage->setFormular($formular);
         $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
-        //consumul de credite se realizeaza doar daca configuratia este finala
-        if (!$this->userService->getIsUserException() && !$isDraft) {
-            $user->setCreditsTotal($user->getCreditsTotal() - $creditValue);
-            $user->setLastCreditUpdate(new \DateTime());
-        }
         $creditsUsage->setMentions($this->translator->trans('credit-usage.formular-unlocked-by-user'));
+
         if (null !== $formular->getValabilityDays()) {
             $expireDate = new \DateTime();
             $expireDate->add(new \DateInterval('P' . $formular->getValabilityDays() . 'D'));
@@ -84,25 +85,17 @@ class CreditsUsageService
         $creditsUsage->setFormData($formularData);
         $creditsUsage->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
         $creditsUsage->setIsFormConfigFinished(!$isDraft);
+
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
+
+        $event = new CreditUsedEvent($creditValue);
+        $this->eventDispatcher->dispatch('app.event.credits_used', $event);
 
         return $creditsUsage->getId();
     }
 
-    public function createExpiredCreditUsage($user, $credit)
-    {
-        $creditsUsage = new CreditsUsage();
-        $creditsUsage->setUser($user);
-        $user->setLastCreditUpdate(new \DateTime());
-        $creditsUsage->setMentions($this->translator->trans('credit-usage.expired'));
-        $expireDate = new \DateTime();
-        $creditsUsage->setExpireDate($expireDate);
-        $creditsUsage->setCredit($credit);
-        $creditsUsage->setUsageType(CreditsUsage::TYPE_EXPIRED);
-        $this->entityManager->persist($creditsUsage);
-        $this->entityManager->flush();
-    }
+
 
     public function isValidUserDocument($userId, $documentId)
     {

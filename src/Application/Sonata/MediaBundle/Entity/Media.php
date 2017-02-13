@@ -11,6 +11,7 @@
 
 namespace Application\Sonata\MediaBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Sonata\MediaBundle\Entity\BaseMedia as BaseMedia;
 
 /**
@@ -81,8 +82,8 @@ class Media extends BaseMedia
      */
     public function __construct()
     {
-        $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->creditsUsage = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->galleryHasMedias = new ArrayCollection();
+        $this->creditsUsage = new ArrayCollection();
         $this->deleted = FALSE;
     }
 

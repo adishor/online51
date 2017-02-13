@@ -718,21 +718,19 @@ footer p img{
 /* tabs costum*/
 .nav-tabs {
     margin:10px 0px;
-    min-height:630px;
+    min-height: 100%;
     font-family: "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
     border-bottom:0;
 }
 
-.nav-tabs > li {
+.nav-tabs  li {
     float:none!important;
     border:0;
 
 }
 
 .nav-tabs li a{
-
     font-weight:bold;
-
     color:#333;
     background: #AFCA36;
     border:0;
@@ -741,10 +739,12 @@ footer p img{
     box-shadow:         2px 2px 3px 0px rgba(77, 79, 79, 0.75);
     margin-bottom:8px;
     border-radius:0px;
-
-
-
 }
+
+.nav-tabs li a.submenu{
+    background: #ddd;
+}
+
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
 

@@ -6,17 +6,18 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use Application\Sonata\MediaBundle\Entity\Media;
 
-class DocumentAdmin extends Admin
+class DocumentAdmin extends AbstractFileAdmin
 {
 
     public function configureFormFields(FormMapper $form)
     {
-        $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
+        $disabled = (boolean)($this->getSubject()->getDeleted());
 
         $subdomainsOptions = array(
             'expanded' => false,
@@ -24,6 +25,7 @@ class DocumentAdmin extends Admin
             'by_reference' => true,
             'required' => false,
             'class' => 'AppBundle:SubDomain',
+            'empty_value' => 'No Subdomain',
             'choices' => $this->getSubdomainChoices($form),
             'disabled' => $disabled
         );
@@ -49,7 +51,6 @@ class DocumentAdmin extends Admin
           ->add('valabilityDays', null, array(
               'disabled' => $disabled
           ))
-          ->add('subdomain', 'entity', $subdomainsOptions)
           ->add('media', 'sonata_type_model', array(
               'query' => $queryMedia,
               'disabled' => $disabled,
@@ -59,7 +60,14 @@ class DocumentAdmin extends Admin
                   'context' => 'default',
                   'provider' => 'sonata.media.provider.file',
               )
-        ));
+        ))
+            ->add('subdomain', null, $subdomainsOptions)
+            ->add('folder', null, array(
+                'required' => false,
+                'empty_value' => 'No Folder',
+//                'disabled' => $disabledFolder,
+            ))
+        ;
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
@@ -67,7 +75,7 @@ class DocumentAdmin extends Admin
         $filter->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
-          ->add('subdomain')
+          ->add('folder')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -76,7 +84,7 @@ class DocumentAdmin extends Admin
         $list->addIdentifier('name')
           ->add('creditValue')
           ->add('valabilityDays')
-          ->add('subdomain')
+          ->add('folder')
           ->add('media')
           ->add('deleted');
     }
@@ -86,7 +94,7 @@ class DocumentAdmin extends Admin
         $show->add('name')
           ->add('creditValue')
           ->add('valabilityDays')
-          ->add('subdomain')
+          ->add('folder')
           ->add('media', null, array(
               'template' => 'sonata/document_base_show_field.html.twig',
           ))
@@ -107,42 +115,4 @@ class DocumentAdmin extends Admin
 
         return $parameters;
     }
-
-    public function getSubdomainChoices(FormMapper $formMapper)
-    {
-        //get all subdomains that are associated
-        $domainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:Domain');
-        $domains = $domainEm->getRepository('AppBundle:Domain')->findAll();
-        $choices = [];
-        foreach ($domains as $domain) {
-            $subdomains = [];
-            foreach ($domain->getSubdomains() as $subdomain) {
-                if (!$subdomain->getDeleted()) {
-                    $subdomains[] = $subdomain;
-                }
-            }
-            $choices[$domain->getName()] = $subdomains;
-        }
-        //get all subdomains that are not associated
-        $subdomainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:SubDomain');
-        $noDomainSubdomains = $subdomainEm->getRepository('AppBundle:SubDomain')->createQueryBuilder('s')
-          ->where('s.domain is NULL')
-          ->andWhere('s.deleted = 0')
-          ->getQuery()
-          ->getResult();
-        $choices['No Domain'] = $noDomainSubdomains;
-        return $choices;
-    }
-
-    public function getTemplate($name)
-    {
-        if ($name == "edit") {
-            return 'sonata/base_edit.html.twig';
-        }
-        if ($name == "list") {
-            return 'sonata/base_list.html.twig';
-        }
-        return parent::getTemplate($name);
-    }
-
 }

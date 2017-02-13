@@ -1,0 +1,47 @@
+services:
+#    formular class
+    app.formular.generic:
+        abstract: true
+        class: AppBundle\Service\DocumentForm\FormularGeneric
+        arguments: [@doctrine.orm.entity_manager, @jms_serializer, @file_locator]
+
+    app.formular.generic_unique:
+        abstract: true
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularGenericUnique
+
+    app.formular.evidenta_gestiunii_deseurilor:
+        parent: app.formular.generic_unique
+        class: AppBundle\Service\DocumentForm\FormularEvidentaGestiuniiDeseurilorService
+
+    app.formular.convocator_cssm:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularConvocatorCSSMService
+
+    app.formular.Decizie_Componenta_CSSM:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDecizieComponentaCSSM
+    app.formular.Decizie_Personal_Cu_Atributii:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii
+    app.formular.Decizie_Comisie_Cercetare_Accidente:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDecizieComisieCercetareAccidente
+    app.formular.Decizie_Organizare_Activitate_SSM:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDecizieOrganizareActivitateSSM
+    app.formular.Proces_Verbal_Sedinta_CSSM:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularProcesVerbalSedintaCSSM
+    app.formular.Proces_Verbal_Control:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularProcesVerbalControl
+    app.formular.Permis_De_Lucru_Cu_Foc:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularPermisDeLucruCuFoc
+    app.formular.Decizie_Personal_Cu_Atributii_PSI:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributiiPSI
+    app.formular.Decizie_Personal_Cu_Atributii_2:
+        parent: app.formular.generic
+        class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii2
