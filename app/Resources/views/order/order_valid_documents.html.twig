@@ -75,14 +75,14 @@
                                 <span>{{ title }}</span>
                                 <br/>
                                 <p class="errorUpdateTitle" id="errorUpdateTitle{{ doc.cuid }}"></p>
-                            {% if doc.usageType == formularType and doc.formConfig != 'null' %}
+                            {% if doc.formConfig != 'null' %}
                                 <span class="small">{{ doc.formConfig | raw }}</span>
                             {% endif %}
                             </td>
-                            <td class="">{{ doc.usageType }}</td>
+                            <td class="">-</td>
                             <td class="">{{ doc.date|date('d-m-Y') }}</td>
                             <td class="">
-                                {% if doc.usageType == formularType and date(doc.date) > date() %}
+                                {% if date(doc.date) > date() %}
                                     {% set path = path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) %}
                                     {% if doc.currentStepNumber is defined %}
                                         {% set path = path ~ '?step=' ~ doc.currentStepNumber %}
@@ -136,7 +136,7 @@
                                 {% endif %}
                             </td>
                             <td class="">
-                                {% if doc.usageType == formularType and doc.discountedCreditValue is not null %}
+                                {% if doc.discountedCreditValue is not null %}
                                     {% set colorClass = (isUserException) ? "green" : ((doc.discountedCreditValue > 0) ? "red" : "green") %}
                                     <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument('{{ doc.cuid }}', '{{ doc.isDraft }}', '{{ doc.discountedCreditValue ? false : true }}', '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.name, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
                                         <div class="credit-icon">
@@ -148,11 +148,9 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        {% if doc.usageType == formularType %}
-                            <tr class="{{ (loop.index % 2) ? "odd" : "even" }}"><td colspan="6">
-                                <p class="error-formular" id="formularError{{ doc.cuid }}"></p>
-                            </td></tr>
-                        {% endif %}
+                        <tr class="{{ (loop.index % 2) ? "odd" : "even" }}"><td colspan="6">
+                            <p class="error-formular" id="formularError{{ doc.cuid }}"></p>
+                        </td></tr>
             {% endfor %}
             </tbody></table>
         {% else %}

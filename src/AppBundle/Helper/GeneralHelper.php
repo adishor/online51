@@ -13,6 +13,12 @@ use Doctrine\Common\Util\Inflector;
 
 class GeneralHelper
 {
+
+    public static function getControllerNameBySlug($slug)
+    {
+        return ucfirst(Inflector::camelize($slug));
+    }
+
     public static function getServiceIdBySlug($slug)
     {
         $formularId = Inflector::tableize(Inflector::camelize($slug));

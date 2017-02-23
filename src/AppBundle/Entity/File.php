@@ -95,7 +95,7 @@ abstract class File
      * @var \AppBundle\Entity\Folder
      *
      * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="files")
-     * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id", nullable=false)
      */
     private $subdomain;
 
@@ -325,6 +325,15 @@ abstract class File
         return $this->subdomain;
     }
 
+
+    public function getDomain()
+    {
+        if (empty($this->subdomain)) {
+            return null;
+        }
+
+        return $this->subdomain->getDomain();
+    }
 
     public function __toString()
     {

@@ -1,0 +1,73 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets filter='cssrewrite'
+    'assets/flowplayer/skin/minimalist.css'
+    %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    'assets/flowplayer/flowplayer.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block modal %}
+    {% include 'domain/domain_document_confirm_modal.html.twig' %}
+    {% include 'domain/domain_video_confirm_modal.html.twig' %}
+    {% include 'document_form/config/config_form_add_confirm_modal.html.twig' %}
+{% endblock modal %}
+
+{% block ccontainer %}
+    <div class="col-xs-3">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs clearfix" role="tablist">
+            {% for subdomainItem in domain.subdomains %}
+                {% if not subdomainItem.deleted %}
+                    {% set active = (subdomain.id == subdomainItem.id) ? "class=active" : "" %}
+                    <li {{ active }}><a href="{{ path("subdomain_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug }) }}">{{ subdomainItem.name | upper }}</a></li>
+
+                    {% if subdomainItem.folders is not empty and subdomain.id == subdomainItem.id %}
+                        <ul class="nav nav-tabs clearfix"  role="tablist">
+                            {% for folderItem in subdomainItem.folders %}
+                                {% set activeFolder = (folder.id == folderItem.id) ? "class=active" : "" %}
+                                <li {{ activeFolder }}>
+                                    <a class="submenu" href="{{ path("folder_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug, 'folder': folderItem.id }) }}">&nbsp;&nbsp;>&nbsp;&nbsp;{{ folderItem.name | upper }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <!-- Tab panes -->
+        <div class="tab-content domain-description">
+            {% if not subdomain.deleted %}
+                <div class="tab-pane active">
+                    <h3>{{ subdomain.name | upper }} - {{ folder.name | upper }}</h3>
+
+                    {% if files.video is not empty %}
+                        <h4>{{ 'domain.videos' | trans }}</h4>
+                        <ul>
+                            {% for video in files.video %}
+                                {% if (not video.deleted and video.youtubeLink) or (not video.deleted and video.media and not video.media.deleted) %}
+                                    {% include 'subdomain/_video.html.twig' with  { 'video' : video } %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

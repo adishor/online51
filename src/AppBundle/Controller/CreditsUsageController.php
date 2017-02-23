@@ -2,14 +2,40 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\File;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 
 class CreditsUsageController extends Controller
 {
+
+    /**
+     * @Route("/unlock-file/{file}", name="unlock_file")
+     * @ParamConverter("file", options={"mapping": {"file": "id"}})
+     */
+    public function unlockFile(File $file)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
+        $creditsUsageService = $this->get('app.credits_usage');
+        $creditsUsageService->createUnlockDocumentCreditUsage($user, $file);
+
+        $response = new Response(json_encode(array(
+            'success' => true,
+            'message' => $this->get('translator')->trans('domain.document.success'),
+            'credits' => $user->getCreditsTotal(),
+        )));
+
+        return $response;
+    }
 
     /**
      * @Route("/unlock-document", name="unlock_document")
@@ -56,8 +82,8 @@ class CreditsUsageController extends Controller
         if (null === $user) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
+
         $creditsUsageService = $this->get('app.credits_usage');
-        $creditsUsageService->updateValidUserCredits();
 
         $videoId = $request->request->get('videoId');
         $video = $this->getDoctrine()->getManager()->getRepository('AppBundle:Video')->find($videoId);
@@ -65,6 +91,7 @@ class CreditsUsageController extends Controller
         if (true === $creditsUsageService->isValidUserVideo($user->getId(), $videoId)) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.video.already-unlocked'));
         }
+
         if (($user->getCreditsTotal() - $video->getCreditValue() < 0) || (null === $user->getCreditsTotal())) {
             $response = new Response(json_encode(array('success' => false, 'message' => $this->get('translator')->trans('domain.video.no-credits'))));
 
@@ -94,6 +121,7 @@ class CreditsUsageController extends Controller
 
         $formularId = $request->request->get('formularId');
         $formularConfig = $request->request->get('data');
+
 
         return $this->processFormularAction($formularId, $formularConfig);
     }
@@ -143,8 +171,6 @@ class CreditsUsageController extends Controller
                 return $response;
             }
         }
-
-//        $creditsUsageService->updateValidUserCredits();
 
         $isDraft = ($discounted) ? $discountedIsDraft : false;
         if ($isDraft) {

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Inflector\Inflector;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
@@ -75,12 +76,6 @@ class Domain
      * @ORM\OneToMany(targetEntity="SubDomain", mappedBy="domain", cascade={"persist"})
      */
     private $subdomains;
-
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="Order", mappedBy="domains")
-     */
-    private $orders;
 
     /**
      *
@@ -308,39 +303,6 @@ class Domain
     }
 
     /**
-     * Add orders
-     *
-     * @param \AppBundle\Entity\Order $orders
-     * @return Domain
-     */
-    public function addOrder(\AppBundle\Entity\Order $orders)
-    {
-        $this->orders[] = $orders;
-
-        return $this;
-    }
-
-    /**
-     * Remove orders
-     *
-     * @param \AppBundle\Entity\Order $orders
-     */
-    public function removeOrder(\AppBundle\Entity\Order $orders)
-    {
-        $this->orders->removeElement($orders);
-    }
-
-    /**
-     * Get orders
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
-
-    /**
      * Set deleted
      *
      * @param boolean $deleted
@@ -444,6 +406,6 @@ class Domain
 
     public function generateSlugValue($values)
     {
-        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
+        return Inflector::tableize(Inflector::classify(reset($values)));
     }
 }

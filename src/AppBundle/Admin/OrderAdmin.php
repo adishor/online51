@@ -38,12 +38,6 @@ class OrderAdmin extends Admin
           ->from('AppBundle:Subscription', 's')
           ->where('s.deleted = 0');
 
-        $queryDomain = $this->modelManager
-          ->getEntityManager('AppBundle:Domain')
-          ->createQueryBuilder()
-          ->select('d')
-          ->from('AppBundle:Domain', 'd')
-          ->where('d.deleted = 0');
 
         $form->add('user', null, array(
           'query_builder' => $queryUser,
@@ -69,13 +63,6 @@ class OrderAdmin extends Admin
           ->add('domainAmount', 'hidden', array(
             'disabled' => $disabled
           ))
-          ->add('domains', 'sonata_type_model', array(
-            'query' => $queryDomain,
-            'expanded' => true,
-            'multiple' => true,
-            'btn_add' => false,
-            'disabled' => $disabled
-          ))
           ->add('mentions', null, array(
             'required' => true,
             'disabled' => $disabledActive
@@ -90,7 +77,6 @@ class OrderAdmin extends Admin
         $filter->add('user')
           ->add('subscription')
           ->add('active', null, array(), null, array('choices_as_values' => true))
-          ->add('domains')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -104,7 +90,6 @@ class OrderAdmin extends Admin
           ->add('valabilityDays')
           ->add('price')
           ->add('user')
-          ->add('domains')
           ->add('subscription')
           ->add('createdAt')
           ->add('approvedBy')
@@ -128,7 +113,6 @@ class OrderAdmin extends Admin
           ->add('creditValue')
           ->add('valabilityDays')
           ->add('price')
-          ->add('domains')
           ->add('subscription')
           ->add('createdAt')
           ->add('mentions')
@@ -150,11 +134,6 @@ class OrderAdmin extends Admin
         return parent::getTemplate($name);
     }
 
-    public function configureRoutes(RouteCollection $collection)
-    {
-        $collection->add('getDomains', 'getDomains');
-    }
-
     public function prePersist($object)
     {
         $object->setFirstActive(false);
@@ -168,7 +147,7 @@ class OrderAdmin extends Admin
 
     public function preUpdate($object)
     {
-        $object->setDomainAmount(count($object->getDomains()));
+//        $object->setDomainAmount(count($object->getDomains()));
 
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($object);

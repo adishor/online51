@@ -2,7 +2,13 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Document\EvidentaGestiuniiDeseurilor\EvidentaGestiuniiDeseurilor;
 use AppBundle\Entity\CreditsUsage;
+use AppBundle\Entity\Formular;
+use AppBundle\Entity\FormularConfig;
+use AppBundle\Entity\FormularCreditsUsage;
+use AppBundle\Entity\Video;
+use AppBundle\Entity\VideoCreditsUsage;
 use AppBundle\EventListener\Event\CreditUsedEvent;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -27,7 +33,7 @@ class CreditsUsageService
 
     public function createUnlockDocumentCreditUsage($user, $document)
     {
-        $creditsUsage = new CreditsUsage();
+        $creditsUsage = new DocumentCreditsUsage();
         $creditsUsage->setUser($user);
         $creditsUsage->setDocument($document);
         $user->setCreditsTotal($user->getCreditsTotal() - $document->getCreditValue());
@@ -43,29 +49,33 @@ class CreditsUsageService
         $this->entityManager->flush();
     }
 
-    public function createUnlockVideoCreditUsage($user, $video)
+    public function createUnlockVideoCreditUsage($user, Video $video)
     {
-        $creditsUsage = new CreditsUsage();
+        $creditValue = $video->getCreditValue();
+
+        $creditsUsage = new VideoCreditsUsage();
         $creditsUsage->setUser($user);
-        $creditsUsage->setVideo($video);
-        $user->setCreditsTotal($user->getCreditsTotal() - $video->getCreditValue());
-        $user->setLastCreditUpdate(new \DateTime());
+        $creditsUsage->setFile($video);
         $creditsUsage->setMentions($this->translator->trans('credit-usage.video-unlocked-by-user'));
         $expireDate = new \DateTime();
-        $expireDate->add(new \DateInterval('P' . $creditsUsage->getVideo()->getValabilityDays() . 'D'));
+        $expireDate->add(new \DateInterval('P' . $creditsUsage->getFile()->getValabilityDays() . 'D'));
         $creditsUsage->setExpireDate($expireDate);
-        $creditsUsage->setCredit($video->getCreditValue());
-        $creditsUsage->setUsageType(CreditsUsage::TYPE_VIDEO);
+        $creditsUsage->setCredit($creditValue);
         $creditsUsage->setMedia($video->getMedia());
+
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
+
+        $event = new CreditUsedEvent($video);
+        $this->eventDispatcher->dispatch('app.event.credits_used', $event);
     }
 
-    public function createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted, $formularData)
+    public function createUnlockFormularCreditUsage($user, Formular $formular, $formularConfigArray, $isDraft, $discounted, $formularData)
     {
-        $creditsUsage = new CreditsUsage();
+        $creditsUsage = new FormularCreditsUsage();
         $creditsUsage->setUser($user);
-        $creditsUsage->setFormular($formular);
+        $creditsUsage->setFile($formular);
+
         $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
         $creditsUsage->setMentions($this->translator->trans('credit-usage.formular-unlocked-by-user'));
 
@@ -73,23 +83,27 @@ class CreditsUsageService
             $expireDate = new \DateTime();
             $expireDate->add(new \DateInterval('P' . $formular->getValabilityDays() . 'D'));
         }
-        if (null !== $formular->getValabilityMonth()) {
-            $an = ((isset($formularConfig['an'])) ? $formularConfig['an'] : date('Y')) + 1;
-            $timestamp = strtotime($an . '-' . $formular->getValabilityMonth() . '-01 23:59:59');
-            $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
-        }
+
+        $year = ((isset($formularConfig['an'])) ? $formularConfig['an'] : date('Y')) + 1;
+        $timestamp = strtotime($year . '-' . EvidentaGestiuniiDeseurilor::$startMonth . '-01 23:59:59');
+        $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
+
+
         $creditsUsage->setExpireDate($expireDate);
         $creditsUsage->setCredit((!$this->userService->getIsUserException()) ? $creditValue : 0);
-        $creditsUsage->setUsageType(CreditsUsage::TYPE_FORMULAR);
-        $creditsUsage->setFormConfig(json_encode($formularConfig));
-        $creditsUsage->setFormData($formularData);
-        $creditsUsage->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
-        $creditsUsage->setIsFormConfigFinished(!$isDraft);
+
+        $formularConfig = new FormularConfig();
+        $formularConfig->setFormConfig(json_encode($formularConfigArray));
+        $formularConfig->setFormData($formularData);
+        $formularConfig->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
+        $formularConfig->setIsFormConfigFinished(!$isDraft);
+        $formularConfig->setFormularCreditsUsage($creditsUsage);
 
         $this->entityManager->persist($creditsUsage);
+        $this->entityManager->persist($formularConfig);
         $this->entityManager->flush();
 
-        $event = new CreditUsedEvent($creditValue);
+        $event = new CreditUsedEvent($formular);
         $this->eventDispatcher->dispatch('app.event.credits_used', $event);
 
         return $creditsUsage->getId();

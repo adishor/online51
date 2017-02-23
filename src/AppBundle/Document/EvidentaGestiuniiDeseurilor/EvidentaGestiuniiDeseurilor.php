@@ -18,6 +18,12 @@ class EvidentaGestiuniiDeseurilor
 
     /**
      * @var type
+     * @Type("integer")
+     */
+    static public $startMonth = 3;
+
+    /**
+     * @var type
      * @Type("boolean")
      */
     static public $oneStepFormConfig = TRUE;

@@ -8,14 +8,20 @@
 
 namespace AppBundle\EventListener\Event;
 
+use AppBundle\Entity\File;
 use Symfony\Component\EventDispatcher\Event;
 
 class CreditUsedEvent extends Event
 {
-    private $credits;
+    private $file;
 
-    public function __construct($credits)
+    public function __construct(File $file)
     {
-        $this->credits = $credits;
+        $this->file = $file;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
     }
 }

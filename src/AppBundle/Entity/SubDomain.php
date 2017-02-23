@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Inflector\Inflector;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
@@ -59,6 +60,12 @@ class SubDomain
      * @ORM\OneToMany(targetEntity="Folder", mappedBy="subdomain")
      */
     private $folders;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="File", mappedBy="subdomain")
+     */
+    private $files;
 
     /**
      *
@@ -200,6 +207,41 @@ class SubDomain
     }
 
     /**
+     * Add documents
+     *
+     * @param Folder $folder
+     * @return SubDomain
+     * @internal param \Application\Sonata\MediaBundle\Entity\Media $documents
+     */
+    public function addFile(File $file)
+    {
+        $this->files[] = $file;
+
+        return $this;
+    }
+
+    /**
+     * Remove documents
+     *
+     * @param Folder $folder
+     * @internal param \Application\Sonata\MediaBundle\Entity\Media $documents
+     */
+    public function removeFile(File $file)
+    {
+        $this->files->removeElement($file);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    /**
      * Set deleted
      *
      * @param boolean $deleted
@@ -257,7 +299,7 @@ class SubDomain
 
     public function generateSlugValue($values)
     {
-        return strtolower(str_replace(array("/", " "), array("-", ""), implode('-', $values)));
+        return Inflector::tableize(Inflector::classify(reset($values)));
     }
 
 }

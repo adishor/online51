@@ -59,16 +59,12 @@ class SubscriptionAdmin extends Admin
           ->add('valability', null, array(
               'disabled' => $disabled
           ))
-          ->add('domainAmount', null, array(
-              'disabled' => $disabled
-          ))
-          ->add('domains', 'sonata_type_model', $domainOptions);
+        ;
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name')
-          ->add('domains')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
@@ -78,8 +74,6 @@ class SubscriptionAdmin extends Admin
           ->add('price')
           ->add('credit')
           ->add('valability')
-          ->add('domainAmount')
-          ->add('domains')
           ->add('deleted');
     }
 
@@ -91,8 +85,6 @@ class SubscriptionAdmin extends Admin
           ->add('price')
           ->add('credit')
           ->add('valability')
-          ->add('domainAmount')
-          ->add('domains')
           ->add('deleted')
           ->add('deletedAt');
     }

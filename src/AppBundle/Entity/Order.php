@@ -150,13 +150,6 @@ class Order
 
     /**
      *
-     * @ORM\ManyToMany(targetEntity="Domain", inversedBy="orders")
-     * @ORM\JoinTable(name="order_domain")
-     */
-    private $domains;
-
-    /**
-     *
      * @var integer
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
@@ -194,7 +187,6 @@ class Order
     public function __construct()
     {
         $this->deleted = FALSE;
-        $this->domains = new ArrayCollection();
     }
 
     /**
@@ -527,39 +519,6 @@ class Order
     public function getSubscription()
     {
         return $this->subscription;
-    }
-
-    /**
-     * Add domains
-     *
-     * @param \AppBundle\Entity\Domain $domains
-     * @return Order
-     */
-    public function addDomain(\AppBundle\Entity\Domain $domains)
-    {
-        $this->domains[] = $domains;
-
-        return $this;
-    }
-
-    /**
-     * Remove domains
-     *
-     * @param \AppBundle\Entity\Domain $domains
-     */
-    public function removeDomain(\AppBundle\Entity\Domain $domains)
-    {
-        $this->domains->removeElement($domains);
-    }
-
-    /**
-     * Get domains
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDomains()
-    {
-        return $this->domains;
     }
 
     /**

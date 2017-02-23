@@ -77,7 +77,8 @@ class OrderController extends Controller
         $userId = $this->getUser()->getId();
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
 
-        $formularDocuments = $creditUsageRepository->findAllUserFormularDocuments($userId, ($request->query->get('mediaId') ? $request->query->get('mediaId') : null));
+        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, ($request->query->get('mediaId') ? $request->query->get('mediaId') : null));
+
         foreach ($formularDocuments as $index => $doc) {
 
             $serviceId = GeneralHelper::getServiceIdBySlug($doc['fslug']);
@@ -104,62 +105,62 @@ class OrderController extends Controller
             $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
         }
 
-        if ($request->query->has('mediaId')) {
+//        if ($request->query->has('mediaId')) {
             $validDocuments = $formularDocuments;
-        } else {
-            $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserVideos($userId), $formularDocuments);
-
-            //sort documents by domain Name - group them
-            usort($validDocuments, function ($item1, $item2) {
-                if ($item1['domain'] < $item2['domain']) {
-                    return -1;
-                }
-                if ($item1['domain'] > $item2['domain']) {
-                    return 1;
-                }
-
-                if (isset($item1['formConfigYear']) && isset($item2['formConfigYear'])) {
-                    if ((int) $item1['formConfigYear'] > (int) $item2['formConfigYear']) {
-                        return -1;
-                    }
-                    if ((int) $item1['formConfigYear'] < (int) $item2['formConfigYear']) {
-                        return 1;
-                    }
-                }
-
-                if ($item1['name'] < $item2['name']) {
-                    return -1;
-                }
-                if ($item1['name'] > $item2['name']) {
-                    return 1;
-                }
-
-                if ($item1['date']->format('d-m-Y') > $item2['date']->format('d-m-Y')) {
-                    return -1;
-                }
-                if ($item1['date']->format('d-m-Y') < $item2['date']->format('d-m-Y')) {
-                    return 1;
-                }
-
-                if (isset($item1['formConfigTipDeseu']) && isset($item2['formConfigTipDeseu'])) {
-                    if ($item1['formConfigTipDeseu'] < $item2['formConfigTipDeseu']) {
-                        return -1;
-                    }
-                    if ($item1['formConfigTipDeseu'] > $item2['formConfigTipDeseu']) {
-                        return 1;
-                    }
-                }
-
-                return 0;
-
-            });
-        }
+//        } else {
+//            $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserVideos($userId), $formularDocuments);
+//
+//            //sort documents by domain Name - group them
+//            usort($validDocuments, function ($item1, $item2) {
+//                if ($item1['domain'] < $item2['domain']) {
+//                    return -1;
+//                }
+//                if ($item1['domain'] > $item2['domain']) {
+//                    return 1;
+//                }
+//
+//                if (isset($item1['formConfigYear']) && isset($item2['formConfigYear'])) {
+//                    if ((int) $item1['formConfigYear'] > (int) $item2['formConfigYear']) {
+//                        return -1;
+//                    }
+//                    if ((int) $item1['formConfigYear'] < (int) $item2['formConfigYear']) {
+//                        return 1;
+//                    }
+//                }
+//
+//                if ($item1['name'] < $item2['name']) {
+//                    return -1;
+//                }
+//                if ($item1['name'] > $item2['name']) {
+//                    return 1;
+//                }
+//
+//                if ($item1['date']->format('d-m-Y') > $item2['date']->format('d-m-Y')) {
+//                    return -1;
+//                }
+//                if ($item1['date']->format('d-m-Y') < $item2['date']->format('d-m-Y')) {
+//                    return 1;
+//                }
+//
+//                if (isset($item1['formConfigTipDeseu']) && isset($item2['formConfigTipDeseu'])) {
+//                    if ($item1['formConfigTipDeseu'] < $item2['formConfigTipDeseu']) {
+//                        return -1;
+//                    }
+//                    if ($item1['formConfigTipDeseu'] > $item2['formConfigTipDeseu']) {
+//                        return 1;
+//                    }
+//                }
+//
+//                return 0;
+//
+//            });
+//        }
 
         return $this->render('order/order_valid_documents.html.twig', array(
-              'validDocuments' => $validDocuments,
+              'validDocuments' => $formularDocuments,
               'isUserException' => $this->get('app.user')->getIsUserException(),
-              'formularType' => CreditsUsage::TYPE_FORMULAR,
-              'videoType' => CreditsUsage::TYPE_VIDEO,
+              'formularType' => 'xx',//CreditsUsage::TYPE_FORMULAR,
+              'videoType' => 'yy',//CreditsUsage::TYPE_VIDEO,
             )
         );
     }

@@ -141,6 +141,7 @@ class UserService
 
     public function isDomainValidForUser($userId, $domainId)
     {
+        return true;
 
         if (empty($this->entityManager->getRepository('AppBundle:Order')->findValidUserDomain($userId, $domainId))) {
             return false;

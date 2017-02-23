@@ -53,14 +53,6 @@ class Subscription
      */
     private $description;
 
-    /**
-     *
-     * @var integer
-     *
-     * @Assert\GreaterThan(value = 0, message = "assert.at-least-0")
-     * @ORM\Column(type="integer")
-     */
-    private $domainAmount;
 
     /**
      *
@@ -93,14 +85,6 @@ class Subscription
 
     /**
      *
-     * @var \AppBundle\Entity\Domain
-     *
-     * @ORM\ManyToMany(targetEntity="Domain", inversedBy="subscriptions")
-     */
-    private $domains;
-
-    /**
-     *
      * @ORM\OneToMany(targetEntity="Order", mappedBy="subscription")
      */
     protected $orders;
@@ -123,7 +107,6 @@ class Subscription
 
     public function __construct()
     {
-        $this->domains = new ArrayCollection();
         $this->deleted = FALSE;
     }
 
@@ -207,29 +190,6 @@ class Subscription
     }
 
     /**
-     * Set domainAmount
-     *
-     * @param integer $domainAmount
-     * @return Subscription
-     */
-    public function setDomainAmount($domainAmount)
-    {
-        $this->domainAmount = $domainAmount;
-
-        return $this;
-    }
-
-    /**
-     * Get domainAmount
-     *
-     * @return integer
-     */
-    public function getDomainAmount()
-    {
-        return $this->domainAmount;
-    }
-
-    /**
      * Set price
      *
      * @param string $price
@@ -296,39 +256,6 @@ class Subscription
     public function getValability()
     {
         return $this->valability;
-    }
-
-    /**
-     * Add domains
-     *
-     * @param \AppBundle\Entity\Domain $domains
-     * @return Subscription
-     */
-    public function addDomain(\AppBundle\Entity\Domain $domains)
-    {
-        $this->domains[] = $domains;
-
-        return $this;
-    }
-
-    /**
-     * Remove domains
-     *
-     * @param \AppBundle\Entity\Domain $domains
-     */
-    public function removeDomain(\AppBundle\Entity\Domain $domains)
-    {
-        $this->domains->removeElement($domains);
-    }
-
-    /**
-     * Get domains
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDomains()
-    {
-        return $this->domains;
     }
 
     /**

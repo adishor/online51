@@ -1,4 +1,10 @@
 services:
+    app.form.flow.evidenta_gestiunii_deseurilor:
+        class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow
+        parent: craue.form.flow
+        scope: request
+        arguments: [@doctrine.orm.entity_manager]
+
 #    flows
     app.form.flow.Evidenta_Gestiunii_Deseurilor:
         class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow

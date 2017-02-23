@@ -14,6 +14,55 @@ use AppBundle\Entity\CreditsUsage;
 class CreditsUsageRepository extends EntityRepository
 {
 
+    /**
+     * @param $userId
+     * @param null $domainId
+     * @param null $subdomainId
+     * @return array
+     */
+    public function findAllValidUserFiles($userId, $domainId = null, $subdomainId = null)
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p.company, f.id as id, f.name, m.id as mid, cu.id as cuid, 
+                cu.createdAt as unlockDate, cu.credit, cu.expireDate as date, cu.usageType, cu.title, sd.name as subDomain, dom.name as domain')
+            ->from('AppBundle:CreditsUsage ', 'cu')
+            ->join('cu.file', 'f')
+            ->join('f.subdomain', 'sd')
+            ->join('sd.domain', 'dom')
+            ->join('cu.media', 'm')
+            ->join('cu.user', 'u')
+            ->join('u.profile', 'p')
+            ->where('cu.user = :user')
+            ->setParameter('user', $userId)
+            ->andWhere('cu.expireDate > :now')
+            ->setParameter('now', new \DateTime)
+            ->andWhere('f.deleted = FALSE')
+            ->andWhere('m.deleted = FALSE')
+            ->andWhere('cu.deleted = FALSE')
+            ->andWhere('sd.deleted = FALSE')
+            ->andWhere('dom.deleted = FALSE')
+        ;
+
+        if (null !== $subdomainId) {
+            $queryBuilder->andWhere('sd.id = :subdomainId')
+                ->setParameter('subdomainId', $subdomainId);
+        }
+
+        if (null !== $domainId) {
+            $queryBuilder->andWhere('dom.id = :domainId')
+                ->setParameter('domainId', $domainId);
+        }
+
+        $queryBuilder->addOrderBy('dom.id')
+            ->addOrderBy('sd.id')
+            ->addOrderBy('f.id', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
     public function findAllValidUserDocuments($userId, $domainId = null, $subdomainId = null)
     {
         $queryBuilder = $this->getEntityManager()
@@ -154,10 +203,12 @@ class CreditsUsageRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('p.company, f.name, f.slug as fslug, f.discountedCreditValue, m.id as mid, '
-            . 'cu.id as cuid, cu.formConfig, cu.formHash, cu.isFormConfigFinished, cu.usageType, cu.expireDate as date, cu.title, '
+            . 'cu.id as cuid, fc.formConfig, fc.formHash, fc.isFormConfigFinished, cu.expireDate as date, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
-          ->from('AppBundle:CreditsUsage', 'cu')
+//          ->select('cu, f, fc')
+          ->from('AppBundle:FormularCreditsUsage', 'cu')
           ->join('cu.formular', 'f')
+          ->leftJoin('cu.formularConfig', 'fc')
           ->join('cu.user', 'u')
           ->join('u.profile', 'p')
           ->join('f.subdomain', 'sd')
@@ -229,7 +280,7 @@ class CreditsUsageRepository extends EntityRepository
           ->select('v.id')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->join('cu.media', 'm')
-          ->join('cu.video', 'v')
+          ->join('AppBundle:Video', 'v', 'WITH', 'cu.file = v')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.expireDate > :now')
@@ -364,4 +415,22 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function getTotalUsedCreditsFromDate($userId, $fromDate)
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('sum(cu.credit)')
+            ->from('AppBundle:CreditsUsage', 'cu')
+            ->where('cu.user = :user')
+            ->andWhere('cu.deleted = FALSE')
+            ->setParameter('user', $userId)
+            ->andWhere('cu.createdAt >= :fromDate')
+            ->setParameter('fromDate', $fromDate)
+        ;
+
+        $query = $queryBuilder->getQuery();
+        $result = $query->getSingleScalarResult();
+
+        return ($result) ? $result : 0;
+    }
 }

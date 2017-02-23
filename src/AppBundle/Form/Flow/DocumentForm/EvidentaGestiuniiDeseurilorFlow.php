@@ -25,11 +25,11 @@ class EvidentaGestiuniiDeseurilorFlow extends FormFlow
 
     protected function loadStepsConfig()
     {
-        $creditsUsageId = $this->getRequest()->get('creditsUsageId');
-        $creditsUsage = $this->entityManager->getRepository('AppBundle:CreditsUsage')->find($creditsUsageId);
-        if (empty($creditsUsage)) {
-            throw new AccessDeniedHttpException('formular-documents.access-denied-expired');
-        }
+//        $creditsUsageId = $this->getRequest()->get('creditsUsageId');
+//        $creditsUsage = $this->entityManager->getRepository('AppBundle:CreditsUsage')->find($creditsUsageId);
+//        if (empty($creditsUsage)) {
+//            throw new AccessDeniedHttpException('formular-documents.access-denied-expired');
+//        }
 
         $stepConfig = array();
         if (EvidentaGestiuniiDeseurilor::$oneStepFormConfig) {

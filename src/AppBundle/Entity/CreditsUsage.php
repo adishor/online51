@@ -12,16 +12,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CreditsUsageRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({"document" = "DocumentCreditsUsage", "video" = "VideoCreditsUsage", "formular" = "FormularCreditsUsage"})
  * @HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class CreditsUsage
+abstract class CreditsUsage
 {
-    const TYPE_DOCUMENT = 'document';
-    const TYPE_FORMULAR = 'formular';
-    const TYPE_VIDEO = 'video';
-    const TYPE_EXPIRED = 'expired';
-
     /**
      *
      * @var integer
@@ -90,37 +88,6 @@ class CreditsUsage
      */
     private $media;
 
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $formConfig;
-
-    /**
-     *
-     * @var integer
-     *
-     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
-     */
-    private $isFormConfigFinished;
-
-    /**
-     *
-     * @var string JSON
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $formData;
-
-    /**
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", length=32, nullable=true)
-     */
-    private $formHash;
 
     /**
      *
@@ -367,98 +334,6 @@ class CreditsUsage
     }
 
     /**
-     * Set formConfig
-     *
-     * @param array $formConfig
-     * @return CreditsUsage
-     */
-    public function setFormConfig($formConfig)
-    {
-        $this->formConfig = $formConfig;
-
-        return $this;
-    }
-
-    /**
-     * Get formConfig
-     *
-     * @return array
-     */
-    public function getFormConfig()
-    {
-        return $this->formConfig;
-    }
-
-    /**
-     * Set isFormConfigFinished
-     *
-     * @param boolean $isFormConfigFinished
-     * @return CreditsUsage
-     */
-    public function setIsFormConfigFinished($isFormConfigFinished)
-    {
-        $this->isFormConfigFinished = $isFormConfigFinished;
-
-        return $this;
-    }
-
-    /**
-     * Get isFormConfigFinished
-     *
-     * @return boolean
-     */
-    public function getIsFormConfigFinished()
-    {
-        return $this->isFormConfigFinished;
-    }
-
-    /**
-     * Set formData
-     *
-     * @param array $formData
-     * @return CreditsUsage
-     */
-    public function setFormData($formData)
-    {
-        $this->formData = $formData;
-
-        return $this;
-    }
-
-    /**
-     * Get formData
-     *
-     * @return array
-     */
-    public function getFormData()
-    {
-        return $this->formData;
-    }
-
-    /**
-     * Set formHash
-     *
-     * @param string $formHash
-     * @return CreditsUsage
-     */
-    public function setFormHash($formHash)
-    {
-        $this->formHash = $formHash;
-
-        return $this;
-    }
-
-    /**
-     * Get formHash
-     *
-     * @return string
-     */
-    public function getFormHash()
-    {
-        return $this->formHash;
-    }
-
-    /**
      * Set document
      *
      * @param \AppBundle\Entity\Document $document
@@ -528,26 +403,4 @@ class CreditsUsage
         return ($this->getId() ? "Credit Usage" . " #" . $this->getId() : 'Create new');
     }
 
-    /**
-     * @param $currentStepNumber
-     */
-    public function setCurrentStepNumber($currentStepNumber)
-    {
-        $formConfig = json_decode($this->getFormConfig());
-        if (!isset($formConfig->currentStepNumber) || $formConfig->currentStepNumber < $currentStepNumber) {
-            $formConfig->currentStepNumber = $currentStepNumber;
-        }
-        $this->setFormConfig(json_encode($formConfig));
-    }
-
-
-    public function getCurrentStepNumber()
-    {
-        $formConfig = json_decode($this->getFormConfig());
-        if (isset($formConfig->currentStepNumber)) {
-            return $formConfig->currentStepNumber;
-        }
-
-        return null;
-    }
 }

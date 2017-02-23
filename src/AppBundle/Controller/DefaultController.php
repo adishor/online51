@@ -20,6 +20,9 @@ class DefaultController extends Controller
         $subscriptions = $this->getDoctrine()->getManager()
             ->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false));
 
+        $domains = $this->getDoctrine()->getManager()
+            ->getRepository('AppBundle:Domain')->findBy(array('deleted' => false));
+
         $isUserException = false;
         if ($this->getUser()) {
             $isUserException = $this->get('app.user')->getIsUserException($this->getUser()->getId());
@@ -28,6 +31,7 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig', array(
               'domains' => $domains,
               'subscriptions' => $subscriptions,
+              'domains' => $domains,
               'isUserException' => $isUserException,
         ));
     }

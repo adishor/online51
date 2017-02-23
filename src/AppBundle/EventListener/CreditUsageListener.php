@@ -37,39 +37,33 @@ class CreditUsageListener implements EventSubscriberInterface
     {
         $userId = $this->userService->getLoggedUserId();
         $user = $this->entityManager->find('ApplicationSonataUserBundle:User', $userId);
-        $userCredits = $user->getCreditsTotal();
 
-        $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
+        $yesterday = new \DateTime();
+        $yesterday->modify('-1 day');
 
-        $validBeforeCredits = $orderRepository->findValidUserCredits($userId, $user->getLastCreditUpdate());
+        $file = $event->getFile();
+        $creditValue = $file->getCreditValue();
 
-        $validNowCredits = $orderRepository->findValidUserCredits($userId);
+        if ($user->getLastCreditUpdate() < $yesterday) {
 
-        if (null !== $userCredits) {
-            $updatedCredits = min($userCredits, $validBeforeCredits) + ($validNowCredits - $validBeforeCredits);
+            $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
+            $creditsUsageRepository = $this->entityManager->getRepository('AppBundle:CreditsUsage');
+
+            $oldestValidOrder = $orderRepository->getOldestValidOrderByUserId($userId);
+            $validNowCredits = $orderRepository->findValidUserCredits($userId);
+
+            $usedCreditsFromDate = $creditsUsageRepository->getTotalUsedCreditsFromDate($userId, $oldestValidOrder->getStartDate());
+
+            $updatedCredits = $validNowCredits - $usedCreditsFromDate;
+
             $user->setCreditsTotal($updatedCredits);
             $user->setLastCreditUpdate(new \DateTime());
-            if ($userCredits > $updatedCredits) {
-                $this->createExpiredCreditUsage($user, $userCredits - $updatedCredits);
-            }
+        } else {
+            $usedCredits = $user->getCreditsTotal() - $creditValue;
+            $user->setCreditsTotal($usedCredits);
         }
+
         $this->entityManager->flush();
     }
 
-    private function createExpiredCreditUsage($user, $credit, $withFlush = false)
-    {
-        $creditsUsage = new CreditsUsage();
-        $creditsUsage->setUser($user);
-        $user->setLastCreditUpdate(new \DateTime());
-        $creditsUsage->setMentions($this->translator->trans('credit-usage.expired'));
-        $expireDate = new \DateTime();
-        $creditsUsage->setExpireDate($expireDate);
-        $creditsUsage->setCredit($credit);
-        $creditsUsage->setUsageType(CreditsUsage::TYPE_EXPIRED);
-        $this->entityManager->persist($creditsUsage);
-
-        if ($withFlush) {
-            $this->entityManager->flush();
-        }
-    }
 }

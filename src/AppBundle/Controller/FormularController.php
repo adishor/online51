@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\UniqueDocumentInterface;
+use AppBundle\Entity\FormularCreditsUsage;
 use AppBundle\Helper\GeneralHelper;
 use Doctrine\Common\Inflector\Inflector;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,15 +27,19 @@ class FormularController extends Controller
      */
     public function configFormularUniquenessAction(Formular $formular, Request $request)
     {
-        $name = Inflector::classify($formular->getSlug());
 
         $formularId = GeneralHelper::getServiceIdBySlug($formular->getSlug());
-        $formService = $this->get('app.formular.' . $formularId);
+        $formularService = $this->get('app.formular.' . $formularId);
 
-        if ($formService->hasToBeUnique()) {
+        if ($formularService->hasController()) {
+            $controllerName = GeneralHelper::getControllerNameBySlug($formular->getSlug());
+            $this->forward('AppBundle:Formular\\' . $controllerName . ':configFormularUniqueness');
+        }
+
+        if ($formularService->hasToBeUnique()) {
             $uniqueValues = $this->get('app.formular.' . $formularId)->getUniquenessValues($formular);
 
-            $entity = $formService->getEntity();
+            $entity = $formularService->getEntity();
 
             return $this->render('document_form/unique/' . $formularId . '_unique.html.twig', array(
                 'uniqueValues' => $uniqueValues,
@@ -48,7 +53,6 @@ class FormularController extends Controller
             'formular' => $formular,
             'isUserException' => $this->get('app.user')->getIsUserException(),
         ));
-
     }
 
 
@@ -57,27 +61,37 @@ class FormularController extends Controller
      * @ParamConverter("formular")
      * @ParamConverter("creditsUsage", options={"id" = "creditsUsageId"})
      */
-    public function showFormularAction(Request $request, Formular $formular, CreditsUsage $creditsUsage)
+    public function showFormularAction(Request $request, Formular $formular, FormularCreditsUsage $creditsUsage)
     {
 
         $user = $this->getUser();
-
-        $serviceId = GeneralHelper::getServiceIdBySlug($formular->getSlug());
-        $formularService = $this->get('app.formular.' . $serviceId);
 
         if (null === $user) {
             return $this->redirect($this->generateUrl('homepage'));
         }
 
+        $formularId = GeneralHelper::getServiceIdBySlug($formular->getSlug());
+        $formularService = $this->get('app.formular.' . $formularId);
 
-        $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
-        $flow->setId('app_form_flow_' . $formular->getSlug() . '_' . $creditsUsage->getId());
+        if ($formularService->hasController()) {
+            $controllerName = GeneralHelper::getControllerNameBySlug($formular->getSlug());
+            return $this->forward("AppBundle:Formular\\" . $controllerName . ":showFormular", array(
+                'request' => $request,
+                'formular' => $formular,
+                'creditsUsage' => $creditsUsage,
+                '_route' => $request->attributes->get('_route'),
+                '_route_params' => $request->attributes->get('_route_params'),
+            ));
+        }
 
-        if (empty($creditsUsage->getFormData())) {
+        $flow = $this->get('app.form.flow.' . $formularId); // must match the flow's service id
+        $flow->setId('app_form_flow_' . $formularId . '_' . $creditsUsage->getId());
+
+        if (empty($creditsUsage->getFormularConfig()->getFormData())) {
             $formData = $formularService->applyDefaultFormData($creditsUsage, $user);
         } else {
             $formData = $this->get('jms_serializer')
-                ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+                ->deserialize($creditsUsage->getFormularConfig()->getFormData(), $formularService->getEntity(), 'json');
         }
 
         $flow->bind($formData);
@@ -132,7 +146,7 @@ class FormularController extends Controller
 
 
 
-    private function handleForm($formularService, $creditsUsage, &$flow, &$form, &$formData)
+    private function handleForm($formularService, FormularCreditsUsage $creditsUsage, &$flow, &$form, &$formData)
     {
         if ($flow->isValid($form)) {
             $flow->saveCurrentStepData($form);
@@ -149,7 +163,7 @@ class FormularController extends Controller
                 $creditsUsage->setCurrentStepNumber($currentStepNumber);
             }
 
-            $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
+            $creditsUsage->getFormularConfig()->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
             if ($nextStep || $this->get('request')->request->has('btnSave')) {
@@ -180,7 +194,7 @@ class FormularController extends Controller
         $fileBody = $this->renderView('document_pdf_template/' . strtolower($formularService->getSlug()) . ".html.twig", array(
             'data' => $formData,
             'templateData' => $formTemplateData,
-            'formConfig' => json_decode($creditsUsage->getFormConfig())
+            'formConfig' => json_decode($creditsUsage->getFormularConfig()->getFormConfig())
         ));
         $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
 

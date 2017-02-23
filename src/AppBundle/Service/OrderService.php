@@ -60,28 +60,28 @@ class OrderService
         $order = new Order();
 
         $subscription = $this->entityManager->getRepository('AppBundle:Subscription')->find($subscriptionId);
-        if ($this->getTotalValidDomains($subscription) === $subscription->getDomainAmount()) {
-            foreach ($subscription->getDomains() as $domain) {
-                if (!$domain->getDeleted()) {
-                    $order->addDomain($domain);
-                }
-            }
-        } else {
-            if (null === $domains) {
-                $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
-                return false;
-            }
-        }
+//        if ($this->getTotalValidDomains($subscription) === $subscription->getDomainAmount()) {
+//            foreach ($subscription->getDomains() as $domain) {
+//                if (!$domain->getDeleted()) {
+//                    $order->addDomain($domain);
+//                }
+//            }
+//        } else {
+//            if (null === $domains) {
+//                $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
+//                return false;
+//            }
+//        }
 
-        if (null !== $domains) {
-            if (count($domains) !== $subscription->getDomainAmount()) {
-                $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
-                return false;
-            }
-            foreach ($domains as $key => $value) {
-                $order->addDomain($this->entityManager->getRepository('AppBundle:Domain')->find($key));
-            }
-        }
+//        if (null !== $domains) {
+//            if (count($domains) !== $subscription->getDomainAmount()) {
+//                $this->session->getFlashBag()->add('order-error', 'order.error.select-all-domains');
+//                return false;
+//            }
+//            foreach ($domains as $key => $value) {
+//                $order->addDomain($this->entityManager->getRepository('AppBundle:Domain')->find($key));
+//            }
+//        }
 
         $order->setUser($user);
         $order->setSubscription($subscription);
@@ -92,9 +92,12 @@ class OrderService
         $order->setMentions($this->translator->trans('subscription.bought'));
         $order->setActive(false);
         $order->setFirstActive(false);
+
         $this->entityManager->persist($order);
         $this->entityManager->flush();
+
         $this->session->getFlashBag()->add('order-success', 'success.order');
+
         $this->mailer->sendOrderInvoice($order, $this->generatePdfInvoice($order, $billingData, $fileProvider));
 
         return $order;

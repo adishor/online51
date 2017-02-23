@@ -3,12 +3,14 @@
 namespace AppBundle\Service\DocumentForm\Base;
 
 use AppBundle\Entity\CreditsUsage;
+use AppBundle\Entity\FormularCreditsUsage;
 use Doctrine\ORM\EntityManager;
 use JMS\Serializer\Serializer;
 
 abstract class FormularGeneric
 {
     protected $unique;
+    protected $hasController;
 
     protected $jmsSerializer;
     protected $entityManager;
@@ -21,6 +23,7 @@ abstract class FormularGeneric
         $this->fileLocator = $fileLocator;
 
         $this->unique = false;
+        $this->hasController = false;
     }
 
     public function hasToBeUnique()
@@ -28,9 +31,19 @@ abstract class FormularGeneric
         return $this->unique;
     }
 
+    public function hasController()
+    {
+        return $this->hasController;
+    }
+
     public function setUnique()
     {
         $this->unique = true;
+    }
+
+    public function setHasController()
+    {
+        $this->hasController = true;
     }
 
     public function checkValidity($user, $creditsUsage)
@@ -38,9 +51,11 @@ abstract class FormularGeneric
         if ($creditsUsage->getUser()->getId() !== $user->getId()) {
             return 'formular-documents.access-denied';
         }
+
         if (null === $creditsUsage->getFormular()) {
             return 'formular-documents.access-denied';
         }
+
         if (null !== $creditsUsage->getMedia()) {
            return 'formular-documents.access-denied';
         }
@@ -50,6 +65,6 @@ abstract class FormularGeneric
 
     abstract function getEntity();
 
-    abstract function applyDefaultFormData(CreditsUsage $creditsUsage, $user);
+    abstract function applyDefaultFormData(FormularCreditsUsage $creditsUsage, $user);
 
 }

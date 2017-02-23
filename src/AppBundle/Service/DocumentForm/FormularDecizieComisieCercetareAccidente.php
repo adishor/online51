@@ -30,4 +30,8 @@ class FormularDecizieComisieCercetareAccidente extends FormularGeneric implement
 
     }
 
+    function getEntity()
+    {
+        // TODO: Implement getEntity() method.
+    }
 }
