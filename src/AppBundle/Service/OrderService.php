@@ -49,6 +49,7 @@ class OrderService
 
         $unlockedDocuments = OrderHelper::addInfoToUnlockedDocuments($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserDocuments($userId));
         $allHistoryOrders = OrderHelper::addInfoToHistoryOrders($this->entityManager->getRepository('AppBundle:Order')->findAllHistoryOrders($userId));
+        $allHistoryOrders = array();
         $allExpiredCredits = OrderHelper::addInfoToExpiredCredits($this->entityManager->getRepository('AppBundle:CreditsUsage')->findAllUserExpiredCredit($userId));
 
         return OrderHelper::prepareCreditHistory($allHistoryOrders, $unlockedDocuments, $allExpiredCredits);
@@ -137,26 +138,6 @@ class OrderService
         $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
         $activeOrders = $orderRepository->findAllActiveUserOrders($userId);
         $bonusOrders = $orderRepository->findAllActiveBonusUserOrders($userId);
-        $sum = 0;
-        if (null !== $activeOrders) {
-            foreach ($activeOrders as $order) {
-                $sum += $order->getCreditValue();
-            }
-        }
-        if (null !== $bonusOrders) {
-            foreach ($bonusOrders as $order) {
-                $sum += $order->getCreditValue();
-            }
-        }
-
-        return $sum;
-    }
-
-    public function getCreditTotal($userId)
-    {
-        $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
-        $activeOrders = $orderRepository->findAllUserOrders($userId);
-        $bonusOrders = $orderRepository->findAllBonusUserOrders($userId);
         $sum = 0;
         if (null !== $activeOrders) {
             foreach ($activeOrders as $order) {

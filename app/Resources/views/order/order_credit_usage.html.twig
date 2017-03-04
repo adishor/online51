@@ -27,20 +27,12 @@
                                 <td>{{ loop.index }}</td>
                                 <td>{{ document.mentions }}</td>
                                 <td>
-                                    {% if document.documentId is not null %}
-                                        {{ (document.title is defined and document.title is not empty) ? document.title : document.documentName }}
-                                    {% endif %}
-                                    {% if document.videoId is not null %}
-                                        {{ (document.title is defined and document.title is not empty) ? document.title : document.videoName }}
-                                    {% endif %}
-                                    {% if document.formularId is not null %}
-                                        {{ (document.title is defined and document.title is not empty) ? document.title : document.formularName }}
-                                    {% endif %}
-                                    {% if document.usageType == formularType %}
-                                        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.cuid })) }}
+                                    {{ document.title }}
+                                    {% if document.discr == 'formular' %}
+                                        {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : document.id })) }}
                                     {% endif %}
                                 </td>
-                                <td>{{ document.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
+                                <td>{{ document.createdAt| localizeddate('medium', 'short', app.request.locale ) }}</td>
                                 <td>{{ document.credit }}</td>
                                 <td>{{ document.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                             </tr>    

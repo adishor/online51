@@ -1,0 +1,241 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets filter='cssrewrite'
+        'assets/flowplayer/skin/minimalist.css'
+    %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+          'assets/flowplayer/flowplayer.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block modal %}
+    {% include 'document_form/config/config_form_add_confirm_modal.html.twig' %}
+{% endblock modal %}
+
+{% block ccontainer %}
+    {% for flash_message in app.session.flashbag.get('document-generated-success') %}
+        <h4 class="color-green text-center first" >{{ flash_message|trans }}</h4>
+    {% endfor %}
+    
+    <div class="row">
+        <div class="col-xs-2">
+            <!-- Nav tabs -->
+            {% include 'order/my_documents/_menu_my_documents.html.twig' with { 'type' : type } %}
+        </div>
+        <div class="col-xs-10">
+            {% if app.request.query.get('mediaId') is not null %}
+                <a href="{{ path('show_valid_documents') }}">
+                    <button class="custom pull-right">{{ 'formular-documents.reset-filter'|trans }}</button>
+                </a>
+            {% endif %}
+            {#<h1 class="title-top">{{ 'formular-documents.title' | trans }}</h1>#}
+
+            {% set defaultDomain = '' %}
+            {% if validDocuments is not empty %}
+                {% for doc in validDocuments %}
+                    {% if defaultDomain != doc.domain %}
+                        {% if defaultDomain != '' %}
+                            </tbody></table>
+                        {% endif %}
+                        {% set defaultDomain = doc.domain %}
+                        <h2 class="subtitle">{{ doc.domain }}</h2>
+                        <table cellspacing="0" cellpadding="0" border="0" id="overview" class="display users documents clearfix dataTable valid-documents" aria-describedby="overview_info">
+                            <thead>
+                                <tr role="row">
+                                    <th>{{ 'formular-documents.name' | trans }}</th>
+                                    <th class="text-center">{{ 'formular-documents.type' | trans }}</th>
+                                    <th class="text-center">{{ 'formular-documents.date-expired' | trans }}</th>
+                                    <th class="text-center">{{ 'formular-documents.actions' | trans }}</th>
+                                    <th class="text-center">{{ 'formular-documents.new' | trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    {% endif %}
+                            <tr class="{{ (loop.index % 2) ? "odd" : "even" }}">
+                                <td class="">
+                                    {% set title = (doc.title is defined and doc.title is not empty) ? doc.title : doc.name %}
+                                    <a onclick="EditDocument(this);">
+                                        <img src="{{ asset('assets/images/edit.png') }}">
+                                    </a>
+                                    <span class="edit-valid-doc">
+                                        <a onclick="ConfirmEditDocument(this, '{{ doc.cuid }}');">
+                                            <img src="{{ asset('assets/images/OK.png') }}">
+                                        </a>
+                                        <a onclick="CancelEditDocument(this, '{{ title }}');">
+                                            <img src="{{ asset('assets/images/Close.png') }}">
+                                        </a>
+                                    </span>
+                                    <span>{{ title }}</span>
+                                    <br/>
+                                    <p class="errorUpdateTitle" id="errorUpdateTitle{{ doc.cuid }}"></p>
+                                {% if doc.formConfig != 'null' %}
+                                    <span class="small">{{ doc.formConfig | raw }}</span>
+                                {% endif %}
+                                </td>
+                                <td class="">-</td>
+                                <td class="">{{ doc.date|date('d-m-Y') }}</td>
+                                <td class="">
+                                    {% if date(doc.date) > date() %}
+                                        {% set path = path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) %}
+                                        {% if doc.currentStepNumber is defined %}
+                                            {% set path = path ~ '?step=' ~ doc.currentStepNumber %}
+                                        {% endif %}
+                                        <a href="{{ path }}">
+                                            <img alt="EditDocImg" src="{{ asset("assets/images/EditDoc.png") }}" id="EditDocImg" title="{{ 'formular-documents.edit' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                        </a>
+                                        {% if doc.mid is not null %}
+                                            {% set downloadPath = path('media_show', {'fileId': doc.mid }) %}
+                                            <a href="{{ downloadPath }}" target="_blank">
+                                                <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                            </a>
+                                        {% endif %}
+                                    {% elseif doc.usageType == videoType and doc.youtubeLink is not null %}
+                                        <a href="javascript:;" onclick="showVideoModal{{ doc.mid }}();">
+                                            <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                        </a>
+                                        <div class="modal fade bs-modal-sm m-video" id="showVideoModal{{ doc.mid }}" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog modal-sm" role="video">
+                                                <div class="modal-content">
+    {#                                                    <div class="modal-body flowplayer" data-embed="false">
+                                                        <video width="480" height="320">
+                                                            <source src='{% path doc.media, 'reference' %}' type='video/mp4' />
+                                                            <object id="flowplayer" data="{{ asset('assets/flowplayer/flowplayer.swf') }}" type="application/x-shockwave-flash" width="480" height="320" >
+                                                                <param name="movie" value="{{ asset('assets/flowplayer/flowplayer.swf') }}">
+                                                                <param name="allowfullscreen" value="true">
+                                                                <param name="flashvars" value="config={'clip':{'url':'{% path doc.media, 'reference' %}','autoPlay':false}}">
+                                                            </object>
+                                                        </video>
+                                                    </div>#}
+                                                    <div class="modal-body">
+                                                        <iframe width="480" height="270" src="https://www.youtube.com/embed/{{ doc.youtubeLink | youtube_id }}?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+                                                        {% if doc.mid %}
+                                                            <a href="{{ path('sonata_media_download', {'id': doc.mid }) }}">{{ 'Descarca video' | trans }}</a>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script type="text/javascript">
+                                            function showVideoModal{{ doc.mid }}()
+                                            {
+                                                $('#showVideoModal{{ doc.mid }}').modal();
+                                            }
+                                        </script>
+                                    {% elseif doc.mid is not null %}
+                                        {% set downloadPath = path('media_show', {'fileId': doc.mid }) %}
+                                        <a href="{{ downloadPath }}" target="_blank">
+                                            <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td class="">
+                                    {% if doc.discountedCreditValue is not null %}
+                                        {% set colorClass = (isUserException) ? "green" : ((doc.discountedCreditValue > 0) ? "red" : "green") %}
+                                        <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument('{{ doc.cuid }}', '{{ doc.isDraft }}', '{{ doc.discountedCreditValue ? false : true }}', '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.name, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
+                                            <div class="credit-icon">
+                                                <div class="credit-icon-value color-{{ colorClass }} create-new">
+                                                    {{ isUserException ? 0 : doc.discountedCreditValue }}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr class="{{ (loop.index % 2) ? "odd" : "even" }}"><td colspan="6">
+                                <p class="error-formular" id="formularError{{ doc.cuid }}"></p>
+                            </td></tr>
+                {% endfor %}
+                </tbody></table>
+            {% else %}
+                <p>{{ 'formular-documents.no-documents' | trans }}</p>
+            {% endif %}
+        </div>
+        <div class="clear-both"></div>
+    </div>
+                
+    <script type="text/javascript">
+        function createNewFormularDocument(creditUsageId, isDraft, creditValueIsZero, textBodyModal) {
+            {% if isUserException %}
+                AjaxCreateNewFormularDocument(creditUsageId); 
+            {% else %}
+                if (isDraft || creditValueIsZero) {
+                    AjaxCreateNewFormularDocument(creditUsageId);
+                } else {
+                    $('#configFormConfirmModalBody').text(textBodyModal);
+                    $('#configFormConfirmModalCreditUsageId').val(creditUsageId);
+                    $('#configFormAddConfirmModal').modal();
+                }
+            {% endif %}
+        }
+        
+        $('#configFormAddConfirmModalYes').click(function () {
+            $('#configFormAddConfirmModal').modal('toggle');
+            AjaxCreateNewFormularDocument(jQuery("#configFormConfirmModalCreditUsageId").val());
+        });
+
+        function AjaxCreateNewFormularDocument(creditUsageId)
+        {
+            $.ajax({
+                type: "POST",
+                url: '{{ path("unlock_formular_from_old") }}',
+                data: { 'creditUsageId': creditUsageId },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        $('#totalUserCredits').text(response.credits);
+                        var url = '{{ path('formular_show' , {'slug': 'slug', 'creditsUsageId': 'creditsUsageId' }) }}';
+                        window.location.href = url.replace("slug", response.formSlug).replace("creditsUsageId", response.creditsUsageId); 
+                    } else {
+                        $('#formularError' + creditUsageId).addClass('color-red');
+                        $('#formularError' + creditUsageId).text(response.message);
+                    }
+                }
+            });
+        }
+        
+        function EditDocument(elem) 
+        {
+            jQuery(elem).next().next().html("<input class='valid-doc-title' type='text' value='" + jQuery(elem).next().next().html() + "'>");
+            jQuery(elem).next().show();
+            jQuery(elem).hide();
+        }
+        
+        function ConfirmEditDocument(elem, creditUsageId)
+        {
+           var title = jQuery(elem).parent().next().children().val();
+           $.ajax({
+                type: "POST",
+                url: '{{ path("update_title_document") }}',
+                data: { 'creditUsageId': creditUsageId, 'title': title },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        jQuery(elem).parent().next().html(title);
+                        jQuery(elem).parent().prev().show();
+                        jQuery(elem).parent().hide();
+                    } else {
+                        $('#errorUpdateTitle' + creditUsageId).addClass('color-red');
+                        $('#errorUpdateTitle' + creditUsageId).text(response.message);
+                    }
+                }
+            });
+        }
+        
+        function CancelEditDocument(elem, text)
+        {
+            jQuery(elem).parent().next().html(text);
+            jQuery(elem).parent().prev().show();
+            jQuery(elem).parent().hide();
+        }
+    </script>
+{% endblock %}

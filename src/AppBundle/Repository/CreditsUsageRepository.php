@@ -174,38 +174,59 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
+    /**
+     * @param $userId
+     * @return array
+     *
+     */
     public function findAllUserDocuments($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
-          ->select('d.id as documentId, v.id as videoId, f.id as formularId, m.id as mediaId, '
-            . 'd.name as documentName, v.name as videoName, f.name as formularName, '
-            . 'cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate, cu.usageType, cu.id as cuid, cu.title')
+          ->select('cu')
           ->from('AppBundle:CreditsUsage', 'cu')
-          ->leftJoin('cu.document', 'd')
-          ->leftJoin('cu.video', 'v')
-          ->leftJoin('cu.formular', 'f')
-          ->leftJoin('cu.media', 'm')
           ->where('cu.user = :user')
           ->setParameter('user', $userId)
           ->andWhere('cu.deleted = FALSE')
-          ->andWhere('cu.usageType != :usage')
-          ->setParameter('usage', CreditsUsage::TYPE_EXPIRED)
-          ->orderBy('unlockDate', 'DESC');
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+          ->orderBy('cu.createdAt', 'DESC');
 
         $query = $queryBuilder->getQuery();
 
         return $query->getArrayResult();
     }
 
-    public function findAllUserFormularDocuments($userId, $mediaId = null)
+    public function findAllUserExpiredCredit($userId)
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('cu')
+            ->from('AppBundle:CreditsUsage', 'cu')
+            ->where('cu.user = :user')
+            ->setParameter('user', $userId)
+            ->andWhere('cu.deleted = FALSE')
+            ->andWhere('cu.expireDate <= :now')
+            ->setParameter('now', new \DateTime)
+            ->orderBy('cu.createdAt', 'DESC');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    /**
+     * @param $userId
+     * @param null $mediaId
+     * @return array
+     */
+    public function findAllUserFormularDocuments($userId, $mediaId = null, $slug = array(), $exclude = false)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('p.company, f.name, f.slug as fslug, f.discountedCreditValue, m.id as mid, '
             . 'cu.id as cuid, fc.formConfig, fc.formHash, fc.isFormConfigFinished, cu.expireDate as date, cu.title, '
             . 'sd.name as subDomain, dom.name as domain')
-//          ->select('cu, f, fc')
           ->from('AppBundle:FormularCreditsUsage', 'cu')
           ->join('cu.formular', 'f')
           ->leftJoin('cu.formularConfig', 'fc')
@@ -226,28 +247,26 @@ class CreditsUsageRepository extends EntityRepository
               ->setParameter('mediaId', $mediaId);
         }
 
-        $query = $queryBuilder->getQuery();
+        if (!empty($slug)) {
+            if (!$exclude) {
+                $queryBuilder
+                    ->andWhere('f.slug IN (:slug)')
+                    ;
+            } else {
+                $queryBuilder
+                    ->andWhere('f.slug NOT IN (:slug)');
+            }
 
-        return $query->getArrayResult();
-    }
-
-    public function findAllUserExpiredCredit($userId)
-    {
-        $queryBuilder = $this->getEntityManager()
-          ->createQueryBuilder()
-          ->select('cu.mentions, cu.createdAt as unlockDate, cu.credit, cu.expireDate')
-          ->from('AppBundle:CreditsUsage', 'cu')
-          ->where('cu.user = :user')
-          ->setParameter('user', $userId)
-          ->andWhere('cu.deleted = FALSE')
-          ->andWhere('cu.usageType = :expired')
-          ->setParameter('expired', CreditsUsage::TYPE_EXPIRED)
-          ->orderBy('unlockDate', 'DESC');
+            $queryBuilder
+                ->setParameter('slug', $slug);
+        }
 
         $query = $queryBuilder->getQuery();
 
         return $query->getArrayResult();
     }
+
+
 
     public function findValidUserDocument($userId, $documentId)
     {
@@ -346,17 +365,22 @@ class CreditsUsageRepository extends EntityRepository
         return $query->getArrayResult();
     }
 
-    public function findTotalUsedCredits($userId)
+    /**
+     * @param $userId
+     * @return int|mixed
+     */
+    public function getTotalUsedCredits($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
           ->select('sum(cu.credit)')
           ->from('AppBundle:CreditsUsage', 'cu')
           ->where('cu.user = :user')
-          ->andWhere('cu.usageType != :expired')
+          ->setParameter('user', $userId)
           ->andWhere('cu.deleted = FALSE')
-          ->setParameter('expired', CreditsUsage::TYPE_EXPIRED)
-          ->setParameter('user', $userId);
+          ->andWhere('cu.expireDate > :now')
+          ->setParameter('now', new \DateTime)
+        ;
 
         $query = $queryBuilder->getQuery();
         $result = $query->getSingleScalarResult();
@@ -364,7 +388,11 @@ class CreditsUsageRepository extends EntityRepository
         return ($result) ? $result : 0;
     }
 
-    public function findTotalExpiredCredits($userId)
+    /**
+     * @param $userId
+     * @return int|mixed
+     */
+    public function getTotalExpiredCredits($userId)
     {
         $queryBuilder = $this->getEntityManager()
           ->createQueryBuilder()
@@ -372,9 +400,10 @@ class CreditsUsageRepository extends EntityRepository
           ->from('AppBundle:CreditsUsage', 'cu')
           ->where('cu.user = :user')
           ->andWhere('cu.deleted = FALSE')
-          ->andWhere('cu.usageType = :expired')
-          ->setParameter('expired', CreditsUsage::TYPE_EXPIRED)
-          ->setParameter('user', $userId);
+          ->setParameter('user', $userId)
+          ->andWhere('cu.expireDate <= :now')
+          ->setParameter('now', new \DateTime)
+        ;
 
         $query = $queryBuilder->getQuery();
         $result = $query->getSingleScalarResult();

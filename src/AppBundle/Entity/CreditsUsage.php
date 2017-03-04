@@ -20,6 +20,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class CreditsUsage
 {
+
+    const TYPE_DOCUMENT = 'document';
+    const TYPE_FORMULAR = 'formular';
+    const TYPE_VIDEO = 'video';
+    const TYPE_EXPIRED = 'expired';
+
     /**
      *
      * @var integer
@@ -28,7 +34,7 @@ abstract class CreditsUsage
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      *
@@ -74,8 +80,9 @@ abstract class CreditsUsage
     /**
      *
      * @var \AppBundle\Entity\File
-     * @ORM\ManyToOne(targetEntity="File", inversedBy="creditsUsage")
-     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\File", inversedBy="creditsUsage")
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $file;
 
@@ -86,7 +93,7 @@ abstract class CreditsUsage
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", inversedBy="creditsUsage", cascade={"persist"})
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      */
-    private $media;
+    protected $media;
 
 
     /**
@@ -336,8 +343,9 @@ abstract class CreditsUsage
     /**
      * Set document
      *
-     * @param \AppBundle\Entity\Document $document
+     * @param File $file
      * @return CreditsUsage
+     * @internal param Document $document
      */
     public function setFile(\AppBundle\Entity\File $file = null)
     {

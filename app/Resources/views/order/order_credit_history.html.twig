@@ -42,7 +42,7 @@
                                         {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : item.cuid })) }}
                                     {% endif %}
                                 </td>
-                                <td>{{ item.unlockDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
+                                <td>{{ item.createdAt| localizeddate('medium', 'short', app.request.locale ) }}</td>
                                 <td>{{ item.expireDate| localizeddate('medium', 'short', app.request.locale ) }}</td>
                                 <td>{{ item.sign ~ item.credit }}</td>
                                 <td>{% if item.mentions != '' %}

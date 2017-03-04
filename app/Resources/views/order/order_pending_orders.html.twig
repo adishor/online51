@@ -26,7 +26,6 @@
                         <th class="text-center ">{{ 'order.nr'|trans }}</th>
                         <th class="text-center ">{{ 'order.order-nr'|trans }}</th>
                         <th class="text-center ">{{ 'order.subscription'|trans }}</th>
-                        <th class="text-center ">{{ 'order.domains'|trans }}</th>
                         <th class="text-center ">{{ 'order.credits'|trans }}</th>
                         <th class="text-center ">{{ 'order.valability'|trans }}</th>
                         <th class="text-center ">{{ 'order.price'|trans }}</th>
@@ -36,19 +35,6 @@
                                 <td>{{ loop.index }}</td>
                                 <td>#{{ "%06d"|format(order.id) }}</td>
                                 <td>{{ order.subscription.name }}</td>
-                                <td>
-                                    {% if order.domains is not empty %}
-                                        {% for domain in order.domains %}
-                                            {% if loop.last %}
-                                                {{ domain.name }}
-                                            {% else %}
-                                                {{ domain.name ~ ', ' }}
-                                            {% endif %}    
-                                        {% endfor %}
-                                    {% else %}
-                                        {{ 'order.no-domains'|trans }}
-                                    {% endif%}    
-                                </td>
                                 <td>{{ order.creditValue }}</td>
                                 <td>
                                     {{ order.subscription.valability }}

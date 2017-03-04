@@ -158,8 +158,8 @@ class CreditsUsageController extends Controller
         $user = $this->getUser();
         $userService = $this->get('app.user');
         $creditsUsageService = $this->get('app.credits_usage');
-
         $formular = $this->getDoctrine()->getManager()->getRepository('AppBundle:Formular')->find($formularId);
+
         if (!$userService->getIsUserException()) {
             $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
 

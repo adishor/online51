@@ -14,9 +14,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $domains = $this->getDoctrine()->getManager()
-            ->getRepository('AppBundle:Domain')->findBy(array('deleted' => false));
-
         $subscriptions = $this->getDoctrine()->getManager()
             ->getRepository('AppBundle:Subscription')->findBy(array('deleted' => false));
 

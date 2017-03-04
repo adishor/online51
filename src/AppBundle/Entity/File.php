@@ -36,7 +36,7 @@ abstract class File
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      *
@@ -45,7 +45,7 @@ abstract class File
      * @ORM\Column()
      * @Assert\NotBlank()
      */
-    private $name;
+    protected $name;
 
     /**
      *
@@ -54,7 +54,7 @@ abstract class File
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer")
      */
-    private $creditValue;
+    protected $creditValue;
 
 
     /**
@@ -63,7 +63,7 @@ abstract class File
      *
      * @ORM\OneToMany(targetEntity="CreditsUsage", mappedBy="file")
      */
-    private $creditsUsage;
+    protected $creditsUsage;
 
     /**
      *
@@ -72,7 +72,7 @@ abstract class File
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $valabilityDays;
+    protected $valabilityDays;
 
     /**
      *
@@ -80,7 +80,7 @@ abstract class File
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      *
@@ -88,7 +88,7 @@ abstract class File
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $deletedAt;
+    protected $deletedAt;
 
     /**
      *
@@ -97,7 +97,7 @@ abstract class File
      * @ORM\ManyToOne(targetEntity="SubDomain", inversedBy="files")
      * @ORM\JoinColumn(name="subdomain_id", referencedColumnName="id", nullable=false)
      */
-    private $subdomain;
+    protected $subdomain;
 
     /**
      *
@@ -106,7 +106,7 @@ abstract class File
      * @ORM\ManyToOne(targetEntity="Folder", inversedBy="files")
      * @ORM\JoinColumn(name="folder_id", referencedColumnName="id")
      */
-    private $folder;
+    protected $folder;
 
     /**
      * Constructor

@@ -11,6 +11,7 @@ namespace AppBundle\Controller\Formular;
 
 use AppBundle\Document\UniqueDocumentInterface;
 use AppBundle\Entity\FormularCreditsUsage;
+use AppBundle\Helper\GeneralHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Formular;
 use Symfony\Component\HttpFoundation\Request;
@@ -134,4 +135,46 @@ class EvidentaGestiuniiDeseurilorController extends Controller
         ));
     }
 
+    public function showDocumentsAction(Request $request)
+    {
+        $userId = $this->getUser()->getId();
+        $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
+
+        $mediaId = $request->query->get('mediaId') ? $request->query->get('mediaId') : null;
+        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, $mediaId, array('evidenta_gestiunii_deseurilor'));
+
+        foreach ($formularDocuments as $index => $doc) {
+            $formularService = $this->get('app.formular.evidenta_gestiunii_deseurilor');
+
+            if (method_exists($formularService, 'getTextForFormConfig') && !empty($doc['formConfig'])) {
+                $text = $formularService->getTextForFormConfig($doc['formConfig'], true);
+
+                if (!empty($doc['formConfig'])) {
+                    $formConfigValues = $formularService->getValuesForFormConfig($doc['formConfig']);
+
+                    if (isset($formConfigValues['an'])) {
+                        $formularDocuments[$index]['formConfigYear'] = $formConfigValues['an'];
+                    }
+
+                    if (isset($formConfigValues['tip_deseu'])) {
+                        $formularDocuments[$index]['formConfigTipDeseu'] = $formConfigValues['tip_deseu'];
+                    }
+
+                    if (isset($formConfigValues['currentStepNumber'])) {
+                        $formularDocuments[$index]['currentStepNumber'] = $formConfigValues['currentStepNumber'];
+                    }
+                }
+
+                $formularDocuments[$index]['formConfig'] = $this->get('translator')->trans($text['message'], $text['variables']);
+            }
+
+            $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
+        }
+
+        return $this->render('order/my_documents/order_egd_documents.html.twig', array(
+                'validDocuments' => $formularDocuments,
+                'isUserException' => $this->get('app.user')->getIsUserException(),
+            )
+        );
+    }
 }

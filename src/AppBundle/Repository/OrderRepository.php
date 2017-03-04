@@ -76,38 +76,25 @@ class OrderRepository extends EntityRepository
         return $query->getResult();
     }
 
-    public function findAllUserOrders($userId)
+    /**
+     * @param $userId
+     * @return array
+     */
+    public function getAllUserOrdersTotal($userId)
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('o')
+            ->select('sum(o.creditValue)')
             ->from('AppBundle:Order', 'o')
             ->where('o.active = TRUE')
             ->andWhere('o.user = :user')
             ->setParameter('user', $userId)
-            ->andWhere('o.subscription is not NULL')
             ->andWhere('o.deleted = FALSE');
 
         $query = $queryBuilder->getQuery();
+        $result = $query->getSingleScalarResult();
 
-        return $query->getResult();
-    }
-
-    public function findAllBonusUserOrders($userId)
-    {
-        $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o')
-            ->from('AppBundle:Order', 'o')
-            ->where('o.active = TRUE')
-            ->andWhere('o.user = :user')
-            ->setParameter('user', $userId)
-            ->andWhere('o.subscription is NULL')
-            ->andWhere('o.deleted = FALSE');
-
-        $query = $queryBuilder->getQuery();
-
-        return $query->getResult();
+        return ($result) ? $result : 0;
     }
 
     public function findAllPendingOrders($userId)

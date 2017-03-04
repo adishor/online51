@@ -224,7 +224,7 @@ subscription:
     not-logged-in: 'Abonamentele se pot comanda dupa acces in sistem:'
     no_subscription: 'Fara abonament'
     bought: 'Abonament achizitionat de utilizator.'
-    add-to-order: 'Adaugati la comanda'
+    add-to-order: 'Comanda'
     canceled: 'Anulata de utilizator'
     superadmin: 'Sunteti logat cu un cont de superadministrator.'
     demo-account: 'Sunteti logat cu un cont gratuit, pentru a trimite o comanda trebuie sa va activati contul folosind link-ul din partea dreapta.'

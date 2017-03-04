@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs clearfix" role="tablist">
+    <li {% if type =='egd' %} class="active" {% endif %}><a href="{{ path('show_valid_documents', { 'type' : 'egd' }) }}" id="nav-active-credits">FORMULARE MEDIU</a></li>
+    <li {% if type =='forms' %} class="active" {% endif %}><a href="{{ path('show_valid_documents', { 'type' : 'forms' }) }}" id="nav-usage">ALTE FORMULARE</a></li>
+    <li {% if type =='documents' %} class="active" {% endif %}><a href="{{ path('show_valid_documents', { 'type' : 'documents' }) }}" id="nav-usage">DOCUMENTE</a></li>
+    <li {% if type =='videos' %} class="active" {% endif %}><a href="{{ path('show_valid_documents', { 'type' : 'videos' }) }}" id="nav-usage">VIDEO</a></li>
+</ul>

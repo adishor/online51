@@ -33,6 +33,31 @@ class FormularCreditsUsage extends CreditsUsage
      */
     protected $formularConfig;
 
+
+    /**
+     * Set document
+     *
+     * @param File $file
+     * @return CreditsUsage
+     * @internal param Document $document
+     */
+    public function setFormular(\AppBundle\Entity\Formular $file = null)
+    {
+        $this->formular = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return \AppBundle\Entity\Document
+     */
+    public function getFormular()
+    {
+        return $this->formular;
+    }
+
     /**
      * Set formular config
      *

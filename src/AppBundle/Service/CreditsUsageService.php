@@ -73,8 +73,6 @@ class CreditsUsageService
     public function createUnlockFormularCreditUsage($user, Formular $formular, $formularConfigArray, $isDraft, $discounted, $formularData)
     {
         $creditsUsage = new FormularCreditsUsage();
-        $creditsUsage->setUser($user);
-        $creditsUsage->setFile($formular);
 
         $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
         $creditsUsage->setMentions($this->translator->trans('credit-usage.formular-unlocked-by-user'));
@@ -91,6 +89,9 @@ class CreditsUsageService
 
         $creditsUsage->setExpireDate($expireDate);
         $creditsUsage->setCredit((!$this->userService->getIsUserException()) ? $creditValue : 0);
+
+        $creditsUsage->setUser($user);
+        $creditsUsage->setFormular($formular);
 
         $formularConfig = new FormularConfig();
         $formularConfig->setFormConfig(json_encode($formularConfigArray));

@@ -9,6 +9,7 @@
 namespace AppBundle\EventListener;
 
 use AppBundle\EventListener\Event\CreditUsedEvent;
+use AppBundle\EventListener\Event\UpdateCreditsEvent;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManager;
 use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,12 +30,20 @@ class CreditUsageListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'app.event.credit_used' => 'handler'
+            'app.event.credit_used' => 'handlerCreditUsed',
+            'app.event.update_credits' => 'handlerUpdateCredits',
         );
     }
 
-    public function handler(CreditUsedEvent $event)
+    /**
+     * @param CreditUsedEvent $event
+     */
+    public function handlerCreditUsed(CreditUsedEvent $event)
     {
+        if ($this->userService->getIsUserException()) {
+            return;
+        }
+
         $userId = $this->userService->getLoggedUserId();
         $user = $this->entityManager->find('ApplicationSonataUserBundle:User', $userId);
 
@@ -45,19 +54,7 @@ class CreditUsageListener implements EventSubscriberInterface
         $creditValue = $file->getCreditValue();
 
         if ($user->getLastCreditUpdate() < $yesterday) {
-
-            $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
-            $creditsUsageRepository = $this->entityManager->getRepository('AppBundle:CreditsUsage');
-
-            $oldestValidOrder = $orderRepository->getOldestValidOrderByUserId($userId);
-            $validNowCredits = $orderRepository->findValidUserCredits($userId);
-
-            $usedCreditsFromDate = $creditsUsageRepository->getTotalUsedCreditsFromDate($userId, $oldestValidOrder->getStartDate());
-
-            $updatedCredits = $validNowCredits - $usedCreditsFromDate;
-
-            $user->setCreditsTotal($updatedCredits);
-            $user->setLastCreditUpdate(new \DateTime());
+            $this->updateCredits($user);
         } else {
             $usedCredits = $user->getCreditsTotal() - $creditValue;
             $user->setCreditsTotal($usedCredits);
@@ -66,4 +63,38 @@ class CreditUsageListener implements EventSubscriberInterface
         $this->entityManager->flush();
     }
 
+    /**
+     * @param UpdateCreditsEvent $event
+     */
+    public function handlerUpdateCredits(UpdateCreditsEvent $event)
+    {
+        if ($this->userService->getIsUserException()) {
+            return;
+        }
+
+        $userId = $event->getUserId();
+        $user = $this->entityManager->find('ApplicationSonataUserBundle:User', $userId);
+
+        $this->updateCredits($user);
+    }
+
+    /**
+     * @param $user
+     */
+    protected function updateCredits($user)
+    {
+        $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
+        $creditsUsageRepository = $this->entityManager->getRepository('AppBundle:CreditsUsage');
+
+        $userId = $user->getId();
+        $oldestValidOrder = $orderRepository->getOldestValidOrderByUserId($userId);
+        $validNowCredits = $orderRepository->findValidUserCredits($userId);
+
+        $usedCreditsFromDate = $creditsUsageRepository->getTotalUsedCreditsFromDate($userId, $oldestValidOrder->getStartDate());
+
+        $updatedCredits = $validNowCredits - $usedCreditsFromDate;
+
+        $user->setCreditsTotal($updatedCredits);
+        $user->setLastCreditUpdate(new \DateTime());
+    }
 }

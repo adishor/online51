@@ -2,6 +2,8 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\EventListener\Event\UpdateCreditsEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -21,6 +23,7 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     private $session;
     protected $userService;
     protected $creditsUsageService;
+    protected $eventDispatcher;
 
     /**
      * Constructor
@@ -28,12 +31,13 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
      * @param 	RouterInterface $router
      * @param 	Session $session
      */
-    public function __construct(RouterInterface $router, Session $session, UserService $userService, CreditsUsageService $creditsUsageService)
+    public function __construct(RouterInterface $router, Session $session, UserService $userService, CreditsUsageService $creditsUsageService, EventDispatcherInterface $eventDispatcher)
     {
         $this->router = $router;
         $this->session = $session;
         $this->userService = $userService;
         $this->creditsUsageService = $creditsUsageService;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -45,29 +49,32 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
+        $userId = $token->getUser()->getId();
+        $event = new UpdateCreditsEvent($userId);
+        $this->eventDispatcher->dispatch('app.event.update_credits', $event);
+
         // if AJAX login
         if ($request->isXmlHttpRequest()) {
             $isAdmin = $this->userService->isUserAdmin();
-            $array = array('success' => true, 'admin' => $isAdmin); // data to return via JSON
+            $array = array(
+                'success' => true,
+                'admin' => $isAdmin,
+            ); // data to return via JSON
+
             $response = new Response(json_encode($array));
             $request->getSession()->getFlashBag()->add('successful-login', 'success.login');
-            $this->creditsUsageService->updateValidUserCredits();
 
             return $response;
-
-            // if form login
-        } else {
-
-            if ($this->session->get('_security.main.target_path')) {
-
-                $url = $this->session->get('_security.main.target_path');
-            } else {
-
-                $url = $this->router->generate('homepage');
-            } // end if
-
-            return new RedirectResponse($url);
         }
+
+        // if form login
+        if ($this->session->get('_security.main.target_path')) {
+            $url = $this->session->get('_security.main.target_path');
+        } else {
+            $url = $this->router->generate('homepage');
+        } // end if
+
+        return new RedirectResponse($url);
     }
 
     /**
@@ -82,20 +89,21 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     {
         // if AJAX login
         if ($request->isXmlHttpRequest()) {
+            $array = array(
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ); // data to return via JSON
 
-            $array = array('success' => false, 'message' => $exception->getMessage()); // data to return via JSON
             $response = new Response(json_encode($array));
 
             return $response;
-
-            // if form login
-        } else {
-
-            // set authentication exception to session
-            $request->getSession()->set(SecurityContextInterface::AUTHENTICATION_ERROR, $exception);
-
-            return new RedirectResponse($this->router->generate('login_route'));
         }
+
+        // if form login
+        // set authentication exception to session
+        $request->getSession()->set(SecurityContextInterface::AUTHENTICATION_ERROR, $exception);
+
+        return new RedirectResponse($this->router->generate('login_route'));
     }
 
 }

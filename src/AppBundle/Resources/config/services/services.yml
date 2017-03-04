@@ -18,7 +18,7 @@ services:
     app.security.authentication_handler:
         class: AppBundle\Listener\AuthenticationHandler
         public: false
-        arguments: [@router, @session, @app.user, @app.credits_usage]
+        arguments: [@router, @session, @app.user, @app.credits_usage, @event_dispatcher]
     app.media.security.user_strategy:
         class: AppBundle\Security\Sonata\UserDownloadStrategy
         arguments: [@translator, @security.authorization_checker, @security.token_storage, @app.user, @app.credits_usage, @app.media]
@@ -40,5 +40,11 @@ services:
     app.event.credits_used:
         class: AppBundle\EventListener\CreditUsageListener
         tags:
-            - {name: kernel.event_listener, event: app.event.credits_used, method: handler}
+            - {name: kernel.event_listener, event: app.event.credits_used, method: handlerCreditUsed}
+        arguments: ['@app.user', '@doctrine.orm.entity_manager', '@translator']
+
+    app.event.update_credits:
+        class: AppBundle\EventListener\CreditUsageListener
+        tags:
+            - {name: kernel.event_listener, event: app.event.update_credits, method: handlerUpdateCredits}
         arguments: ['@app.user', '@doctrine.orm.entity_manager', '@translator']

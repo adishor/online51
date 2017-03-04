@@ -64,20 +64,23 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/information/valid-documents", name="show_valid_documents")
+     * @Route("/information/valid-documents/{type}", name="show_valid_documents", defaults={"type": "egd"})
      */
-    public function showValidDocumentsAction(Request $request)
+    public function showValidDocumentsAction(Request $request, $type)
     {
-
-        $user = $this->getUser();
-        if (null === $user) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        if ('egd' === $type) {
+            return $this->forward("AppBundle:Formular\\EvidentaGestiuniiDeseurilor:showDocuments", array(
+                'request' => $request,
+                '_route' => $request->attributes->get('_route'),
+                '_route_params' => $request->attributes->get('_route_params'),
+            ));
         }
 
         $userId = $this->getUser()->getId();
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
 
-        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, ($request->query->get('mediaId') ? $request->query->get('mediaId') : null));
+        $mediaId = $request->query->get('mediaId') ? $request->query->get('mediaId') : null;
+        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, $mediaId, array('evidenta_gestiunii_deseurilor'), true);
 
         foreach ($formularDocuments as $index => $doc) {
 
@@ -156,13 +159,17 @@ class OrderController extends Controller
 //            });
 //        }
 
-        return $this->render('order/order_valid_documents.html.twig', array(
+        return $this->render('order/my_documents/order_valid_documents.html.twig', array(
               'validDocuments' => $formularDocuments,
               'isUserException' => $this->get('app.user')->getIsUserException(),
-              'formularType' => 'xx',//CreditsUsage::TYPE_FORMULAR,
-              'videoType' => 'yy',//CreditsUsage::TYPE_VIDEO,
+              'type' => $type,
             )
         );
+    }
+
+    public function showEGdFormsAction()
+    {
+
     }
 
     /**
@@ -170,8 +177,11 @@ class OrderController extends Controller
      */
     public function showCreditUsageAction(Request $request)
     {
+        $creditsUsages = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findAllUserDocuments($this->getUser()->getId());
+        $pageUsage = $request->query->getInt('page-usage', 1);
+
         return $this->render('order/order_credit_usage.html.twig', array(
-              'unlockedDocuments' => $this->get('knp_paginator')->paginate($this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->findAllUserDocuments($this->getUser()->getId()), $request->query->getInt('page-usage', 1), $this->getParameter('pagination')['usage'], array('pageParameterName' => 'page-usage')),
+              'unlockedDocuments' => $this->get('knp_paginator')->paginate($creditsUsages, $pageUsage, $this->getParameter('pagination')['usage'], array('pageParameterName' => 'page-usage')),
               'formularType' => CreditsUsage::TYPE_FORMULAR
             )
         );
@@ -197,10 +207,13 @@ class OrderController extends Controller
     public function showCreditTotalsAction()
     {
         $userId = $this->getUser()->getId();
-        $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
-        $orderTotal = $this->get('app.order')->getCreditTotal($userId);
-        $usedCreditsTotal = $creditUsageRepository->findTotalUsedCredits($userId);
-        $expiredCreditsTotal = $creditUsageRepository->findTotalExpiredCredits($userId);
+        $entityManager = $this->getDoctrine()->getManager();
+        $creditUsageRepository = $entityManager->getRepository('AppBundle:CreditsUsage');
+        $orderRepository = $entityManager->getRepository('AppBundle:Order');
+
+        $orderTotal = $orderRepository->getAllUserOrdersTotal($userId);
+        $usedCreditsTotal = $creditUsageRepository->getTotalUsedCredits($userId);
+        $expiredCreditsTotal = $creditUsageRepository->getTotalExpiredCredits($userId);
 
         return $this->render('order/order_credit_totals.html.twig', array(
               'orderTotal' => $orderTotal,

@@ -46,15 +46,6 @@ class Order
 
     /**
      *
-     * @var integer
-     *
-     * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
-     * @ORM\Column(type="integer")
-     */
-    private $domainAmount;
-
-    /**
-     *
      * @var float
      *
      * @Assert\GreaterThanOrEqual(value = 0, message = "assert.at-least-0")
@@ -245,28 +236,6 @@ class Order
         return $this->valabilityDays;
     }
 
-    /**
-     * Set domainAmount
-     *
-     * @param integer $domainAmount
-     * @return Order
-     */
-    public function setDomainAmount($domainAmount)
-    {
-        $this->domainAmount = $domainAmount;
-
-        return $this;
-    }
-
-    /**
-     * Get domainAmount
-     *
-     * @return integer
-     */
-    public function getDomainAmount()
-    {
-        return $this->domainAmount;
-    }
 
     /**
      * Set price

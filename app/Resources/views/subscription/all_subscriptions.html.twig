@@ -132,7 +132,7 @@
                 $(document).ready(function () {
                     $(".craue_formflow_button_last").click(function() {
                         var id = '{{ subscription.name | lower | replace({' ':'_'}) }}';
-                        selectedId = $(".tab-pane.active .selecting-checkbox").attr("id");
+                        selectedId = $(".tab§-pane.active .selecting-checkbox").attr("id");
                         if (selectedId == id) {
                             $("#RegisterForm").submit();
                         }

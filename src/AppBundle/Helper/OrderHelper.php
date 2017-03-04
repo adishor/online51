@@ -49,7 +49,7 @@ class OrderHelper
         $creditHistoryItems = array_merge($allHistoryOrders, $unlockedDocuments, $allExpiredCredits);
         $expireDates = [];
         foreach ($creditHistoryItems as $key => $value) {
-            $expireDates[$key] = $value['unlockDate'];
+            $expireDates[$key] = $value['createdAt'];
         }
         array_multisort($expireDates, SORT_DESC, $creditHistoryItems);
 

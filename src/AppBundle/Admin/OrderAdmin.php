@@ -60,9 +60,6 @@ class OrderAdmin extends Admin
             'required' => false,
             'disabled' => $disabled
           ))
-          ->add('domainAmount', 'hidden', array(
-            'disabled' => $disabled
-          ))
           ->add('mentions', null, array(
             'required' => true,
             'disabled' => $disabledActive
@@ -147,8 +144,6 @@ class OrderAdmin extends Admin
 
     public function preUpdate($object)
     {
-//        $object->setDomainAmount(count($object->getDomains()));
-
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($object);
         $this->isActivated = (empty($original)) ? FALSE : $original['active'];
