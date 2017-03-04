@@ -87,24 +87,6 @@ class OrderController extends Controller
             $serviceId = GeneralHelper::getServiceIdBySlug($doc['fslug']);
             $formularService = $this->get('app.formular.' . $serviceId);
 
-            if (method_exists($formularService, 'getTextForFormConfig') && $doc['formConfig'] != 'null') {
-                $text = $formularService->getTextForFormConfig($doc['formConfig'], true);
-                if (method_exists($formularService, 'getValuesForFormConfig') && $doc['formConfig'] != 'null') {
-                    $formConfigValues = $formularService->getValuesForFormConfig($doc['formConfig']);
-
-                    if (isset($formConfigValues['an'])) {
-                        $formularDocuments[$index]['formConfigYear'] = $formConfigValues['an'];
-                    }
-                    if (isset($formConfigValues['tip_deseu'])) {
-                        $formularDocuments[$index]['formConfigTipDeseu'] = $formConfigValues['tip_deseu'];
-                    }
-
-                    if (isset($formConfigValues['currentStepNumber'])) {
-                        $formularDocuments[$index]['currentStepNumber'] = $formConfigValues['currentStepNumber'];
-                    }
-                }
-                $formularDocuments[$index]['formConfig'] = $this->get('translator')->trans($text['message'], $text['variables']);
-            }
             $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
         }
 

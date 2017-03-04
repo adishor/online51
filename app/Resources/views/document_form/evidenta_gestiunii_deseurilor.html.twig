@@ -9,13 +9,10 @@
 {% endblock %}
     
 {% block modal %}
-    {% if not creditsUsage.formularConfig.isFormConfigFinished %}
-        {% include "document_form/config/config_form_add_uniqueness_on_form_modal.html.twig" %}
-    {% endif %}
-    {% if flow.getCurrentStepNumber() == ((creditsUsage.formularConfig.isFormConfigFinished) ? 4 : 3) %}
+    {% if flow.getCurrentStepNumber() ==  4 %}
         {% include "document_form/config/confirm_generate_document_modal.html.twig" %}
     {% endif %}
-    {% if flow.getCurrentStepNumber() == ((creditsUsage.formularConfig.isFormConfigFinished) ? 3 : 2) %}
+    {% if flow.getCurrentStepNumber() == 3 %}
         {% set formData  = creditsUsage.formularConfig.formData | json_decode %}
         {% include "document_form/config/customize_agent_details_modal.html.twig" with {'agentiEconomici': formData._e_g_d_company } %}
     {% endif %}
@@ -40,12 +37,8 @@
     {% endfor %}
 
     <h4 class="color-red text-center first hidden" id="globalErrors"></h4>
-
-    {% if not creditsUsage.formularConfig.isFormConfigFinished %}
-        {% include "document_form/config/config_form_uniqueness_on_form_egd.html.twig" with {'creditsUsage': creditsUsage, 'isUserException': isUserException } %}
-    {% endif %}
     
-    {{ render(controller('AppBundle:Formular:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : creditsUsage.id, 'short' : false })) }}
+    {{ render(controller('AppBundle:Formular/EvidentaGestiuniiDeseurilor:getFormularDocumentsShortFormConfigurationText', {'creditUsageId' : creditsUsage.id, 'short' : true })) }}
 
     <div class="col-xs-2">
         {% include 'CraueFormFlowBundle:FormFlow:stepList.html.twig' %}
@@ -55,16 +48,7 @@
         <form class="formular-form" id="evidenta_gestiunii_deseurilor" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
             
-            {% if creditsUsage.formularConfig.isFormConfigFinished %}
-                {% if flow.getCurrentStepNumber() == 1 %}
-                    {{ form_row(form.operatia, 
-                    {'attr': {'class': 'operatia max-width-500', 
-                    'label_info': '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia1' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia2' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia3' | trans({'%link_contact%': path('contact') }),
-                } }) }}
-                {% endif %}
-            {% endif %}
-            
-            {% if flow.getCurrentStepNumber() == ((creditsUsage.formularConfig.isFormConfigFinished) ? 2 : 1) %}
+            {% if flow.getCurrentStepNumber() == 2 %}
                 {{ form_row(form.agentEconomic, 
                     {'attr': {'data-val': 'true',
                     'data-val-required': 'Acest camp este obligatoriu' | trans,
@@ -138,60 +122,10 @@
                         </li>
                     {% endfor %}
                 </ul>
-                {% if creditsUsage.formularConfig.isFormConfigFinished %}
-                    <a href="#" id="add-another-company">{{ 'Adauga o firma' | trans }}</a>
-                    <div class="color-red no-display" id="#error-no-company">{{ 'Adaugati cel putin 1 firma' | trans }}</div>
-                    <script type="text/javascript">
-                        // keep track of how many company fields have been rendered
-                        var companyCount = '{{ form.EGDCompany|length }}';
 
-                        jQuery(document).ready(function() {
-                            
-                            var companyList = jQuery('#company-fields-list');
-                                
-                            // add a delete link to all of the existing speaker form li elements
-                            companyList.find('li').each(function(index) {
-                                addCompanyFormDeleteLink($(this));
-                            });
-                            
-                            jQuery('#add-another-company').click(function(e) {
-                                e.preventDefault();
-                                jQuery('.no-display').hide();
-
-                                var companyList = jQuery('#company-fields-list');
-                                
-                                // grab the prototype template
-                                var newWidget = companyList.attr('data-prototype');
-                                // replace the "__name__" used in the id and name of the prototype
-                                // with a number that's unique to your companies
-                                newWidget = newWidget.replace(/__name__/g, companyCount);
-                                companyCount++;
-
-                                // create a new list element and add it to the list
-                                var newLi = jQuery('<li></li>').html(newWidget);
-                                newLi.appendTo(companyList);
-                                addCompanyFormDeleteLink(newLi);
-                                showTooltip(jQuery("input"));
-                            });
-                        })
-                        
-                        function addCompanyFormDeleteLink($companyFormLi) {
-                            var $removeFormA = $('<a href="#">{{ 'Sterge firma'|trans }}</a>');
-                            $companyFormLi.append($removeFormA);
-
-                            $removeFormA.on('click', function(e) {
-                                // prevent the link from creating a "#" on the URL
-                                e.preventDefault();
-
-                                // remove the li for the company form
-                                $companyFormLi.remove();
-                            });
-                        }
-                    </script>
-                {% endif %}
             {% endif %}
 
-            {% if flow.getCurrentStepNumber() == ((creditsUsage.formularConfig.isFormConfigFinished) ? 3 : 2) %}
+            {% if flow.getCurrentStepNumber() == 3 %}
                 <h3>{{'Generare deseuri' | trans}}
                     {{ include('document_form/base/form_label_info.html.twig', {'label_info': 'formular-documents.info.egd.chapter1' | trans }) }}
                 </h3>
@@ -496,7 +430,7 @@
                 {% endif %}
             {% endif %}
                 
-            {% if flow.getCurrentStepNumber() == ((creditsUsage.formularConfig.isFormConfigFinished) ? 2 : 1) %}
+            {% if flow.getCurrentStepNumber() == 2 %}
                 jQuery('.craue_formflow_button_last').click(function () {
                     if (!jQuery("#company-fields-list li").length) {
                         jQuery('.no-display').show();
@@ -557,12 +491,7 @@
                     responseFn(a);
                 }
             }); #}
-            
-            {% if not creditsUsage.formularConfig.isFormConfigFinished %}
-                jQuery("#evidenta_gestiunii_deseurilor input, #evidenta_gestiunii_deseurilor select, #evidenta_gestiunii_deseurilor textarea, #evidenta_gestiunii_deseurilor button").each(function(){
-                    jQuery(this).prop('disabled', 'true');
-                });
-            {% endif %}
+
         });
     </script>
 

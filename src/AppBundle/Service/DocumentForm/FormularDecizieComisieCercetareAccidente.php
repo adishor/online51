@@ -19,7 +19,7 @@ class FormularDecizieComisieCercetareAccidente extends FormularGeneric implement
 
     public function processHandleForm($creditsUsage, $flow, &$formData)
     {
-        if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
+        if ($flow->getCurrentStep() == 1) {
             $hour = $formData->getAccidentDate()->format('H:i');
             $formData->setAccidentHour($hour);
         }

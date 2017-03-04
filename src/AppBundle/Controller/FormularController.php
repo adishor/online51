@@ -120,33 +120,6 @@ class FormularController extends Controller
     }
 
 
-    /**
-     * @Route("/shortFormConfigurationText/{creditUsageId}", name="short_form_configuration_text")
-     */
-    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId, $short = true)
-    {
-        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
-        return new Response();
-
-        if ($creditsUsage->getFormConfig() && $creditsUsage->getFormConfig() != 'null') {
-            $formularService = $this->get('app.formular.' . $creditsUsage->getFormular()->getSlug());
-            $formularService->setName($creditsUsage->getFormular()->getSlug());
-            $text = $formularService->getTextForFormConfig($creditsUsage->getFormConfig(), $short);
-
-            if ($short) {
-                return new Response($this->get('translator')->trans($text['message'], $text['variables']));
-            } else {
-                return $this->render('document_form/config/full_configuration_text.html.twig', array(
-                    'message' => $this->get('translator')->trans($text['message'], $text['variables'])
-                ));
-            }
-        }
-
-        return new Response();
-    }
-
-
-
     private function handleForm($formularService, FormularCreditsUsage $creditsUsage, &$flow, &$form, &$formData)
     {
         if ($flow->isValid($form)) {
@@ -176,6 +149,8 @@ class FormularController extends Controller
 
                 $media = $this->generateDocument($formularService, $creditsUsage, $formData);
                 $creditsUsage->setMedia($media);
+                $creditsUsage->getFormularConfig()->setIsFormConfigFinished(true);
+
                 $this->getDoctrine()->getManager()->flush();
 
                 $this->get('session')->getFlashBag()->set('document-generated-success', 'success.document-generated');

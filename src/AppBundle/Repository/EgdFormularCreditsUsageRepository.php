@@ -23,15 +23,15 @@ class EgdFormularCreditsUsageRepository extends EntityRepository
 
     /**
      * @param $userId
-     * @param null $mediaId
      * @return array
+     * @internal param null $mediaId
      */
-    public function findAllUserFormularDocuments($userId, $mediaId = null)
+    public function findAllUserFormularDocuments($userId)
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('p.company, f.name, f.slug as fslug, f.discountedCreditValue, m.id as mid, '
-                . 'cu.id as cuid, fc.formConfig, fc.formHash, fc.isFormConfigFinished, cu.expireDate as date, cu.title, '
+                . 'cu.id as cuid, fc.formConfig, fc.formHash, fc.isFormConfigFinished, fc.year, fc.code, fc.step, cu.expireDate as date, cu.title, '
                 . 'sd.name as subDomain, dom.name as domain')
             ->from('AppBundle:EgdFormularCreditsUsage', 'cu')
             ->join('cu.formular', 'f')
@@ -46,12 +46,6 @@ class EgdFormularCreditsUsageRepository extends EntityRepository
             ->andWhere('cu.deleted = FALSE')
             ->addOrderBy('cu.expireDate', 'DESC')
             ->addOrderBy('cu.createdAt', 'DESC');
-
-        if ($mediaId !== null) {
-            $queryBuilder
-                ->andWhere('m.id = :mediaId')
-                ->setParameter('mediaId', $mediaId);
-        }
 
         $query = $queryBuilder->getQuery();
 

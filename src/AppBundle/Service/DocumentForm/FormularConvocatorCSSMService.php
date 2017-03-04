@@ -41,7 +41,7 @@ class FormularConvocatorCSSMService extends FormularGeneric
 
     public function processHandleForm($creditsUsage, $flow, &$formData)
     {
-        if ($flow->getCurrentStep() == 1 && $creditsUsage->getIsFormConfigFinished()) {
+        if ($flow->getCurrentStep() == 1) {
             $hour = $formData->getMeetingDate()->format('H:i');
 
             $formData->setCompanyCounty($formData->getCompanyCounty()->getId());

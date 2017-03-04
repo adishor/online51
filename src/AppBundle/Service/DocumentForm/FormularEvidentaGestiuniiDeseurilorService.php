@@ -66,16 +66,15 @@ class FormularEvidentaGestiuniiDeseurilorService extends FormularGeneric
         return array(
             'message' => (!$short) ? 'document-form.text.egd-full' : 'document-form.text.egd',
             'variables' => array(
-//                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "&&" . $formConfigValue['tip_deseu'],
-//                'year' => $formConfigValue['an'],
-//                'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'neselectat'
+                'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "&&" . $formConfigValue['tip_deseu'],
+                'year' => $formConfigValue['an'],
+                'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'neselectat'
             )
         );
     }
 
     public function applyDefaultFormData(CreditsUsage $creditsUsage, $user)
     {
-        var_dump(get_class($creditsUsage));
         $entityNamespace = $this->getEntity();
         $entity = new $entityNamespace();
 

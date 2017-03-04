@@ -120,8 +120,7 @@ class CreditsUsageController extends Controller
         }
 
         $formularId = $request->request->get('formularId');
-        $formularConfig = $request->request->get('data');
-
+        $formularConfig = $request->request->get('data', array());
 
         return $this->processFormularAction($formularId, $formularConfig);
     }
@@ -131,15 +130,29 @@ class CreditsUsageController extends Controller
      */
     public function createNewFormularDocumentAction(Request $request)
     {
-        $user = $this->getUser();
-        if (null === $user) {
-            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
-        }
-
         $creditUsageId = $request->request->get('creditUsageId');
         $creditUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:FormularCreditsUsage')->find($creditUsageId);
 
-        if ($creditUsage->getUser()->getId() != $user->getId()) {
+        if ($creditUsage->getUser()->getId() != $this->getUser()->getId()) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('invalid.data'));
+        }
+
+        $formularId = $creditUsage->getFormular()->getId();
+        $creditUsageFormularConfig = $creditUsage->getFormularConfig();
+        $formularData = $creditUsageFormularConfig->getFormData();
+
+        return $this->processFormularAction($formularId, array(), true, $formularData);
+    }
+
+    /**
+     * @Route("/createNewEgdFormularDocument", name="unlock_egd_formular_from_old")
+     */
+    public function createNewEgdFormularDocumentAction(Request $request)
+    {
+        $creditUsageId = $request->request->get('creditUsageId');
+        $creditUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:EgdFormularCreditsUsage')->find($creditUsageId);
+
+        if ($creditUsage->getUser()->getId() != $this->getUser()->getId()) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('invalid.data'));
         }
 
@@ -148,16 +161,11 @@ class CreditsUsageController extends Controller
         $formularData = $creditUsageFormularConfig->getFormData();
 
         $formularConfig = (json_decode($creditUsageFormularConfig->getFormConfig())) ? get_object_vars(json_decode($creditUsageFormularConfig->getFormConfig())) : null;
-        if (isset($formularConfig['an'])) {
-            $formularConfig['an'] = $formularConfig['an'] + 1;
-        }
 
-        $discountedIsDraft = !$creditUsageFormularConfig->getIsFormConfigFinished();
-
-        return $this->processFormularAction($formularId, $formularConfig, true, $discountedIsDraft, $formularData);
+        return $this->processFormularAction($formularId, $formularConfig, true, $formularData);
     }
 
-    private function processFormularAction($formularId, $formularConfig, $discounted = false, $discountedIsDraft = false, $formularData = NULL)
+    private function processFormularAction($formularId, $formularConfig = array(), $discounted = false, $formularData = null)
     {
         $user = $this->getUser();
         $userService = $this->get('app.user');
@@ -176,12 +184,7 @@ class CreditsUsageController extends Controller
             }
         }
 
-        $isDraft = ($discounted) ? $discountedIsDraft : false;
-        if ($isDraft) {
-            $this->get('session')->getFlashBag()->add('form-error', 'domain.formular.no-credits-used');
-        }
-
-        $creditsUsageId = $creditsUsageService->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $isDraft, $discounted, $formularData);
+        $creditsUsageId = $creditsUsageService->createUnlockFormularCreditUsage($user, $formular, $formularConfig, $discounted, $formularData);
 
         $response = new Response(json_encode(array(
               'success' => true,

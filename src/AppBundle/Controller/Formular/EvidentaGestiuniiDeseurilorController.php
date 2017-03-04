@@ -12,9 +12,14 @@ namespace AppBundle\Controller\Formular;
 use AppBundle\Document\UniqueDocumentInterface;
 use AppBundle\Entity\EgdFormularCreditsUsage;
 use AppBundle\Helper\GeneralHelper;
+use Application\Sonata\MediaBundle\Entity\Media;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Formular;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Filesystem\Filesystem;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class EvidentaGestiuniiDeseurilorController extends Controller
@@ -113,11 +118,13 @@ class EvidentaGestiuniiDeseurilorController extends Controller
 
                 $media = $this->generateDocument($formularService, $creditsUsage, $modelData);
                 $creditsUsage->setMedia($media);
+                $creditsUsage->getFormularConfig()->setIsFormConfigFinished(true);
+
                 $this->getDoctrine()->getManager()->flush();
 
                 $this->get('session')->getFlashBag()->set('document-generated-success', 'success.document-generated');
 
-                return $this->redirect($this->generateUrl('show_valid_documents') . '?mediaId=' . $media->getId());
+                return $this->redirect($this->generateUrl('show_valid_documents'));
             }
 
         }
@@ -139,8 +146,7 @@ class EvidentaGestiuniiDeseurilorController extends Controller
         $userId = $this->getUser()->getId();
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:EgdFormularCreditsUsage');
 
-        $mediaId = $request->query->get('mediaId') ? $request->query->get('mediaId') : null;
-        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, $mediaId);
+        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId);
 
         foreach ($formularDocuments as $index => $doc) {
             $formularService = $this->get('app.formular.evidenta_gestiunii_deseurilor');
@@ -158,12 +164,9 @@ class EvidentaGestiuniiDeseurilorController extends Controller
                     if (isset($formConfigValues['tip_deseu'])) {
                         $formularDocuments[$index]['formConfigTipDeseu'] = $formConfigValues['tip_deseu'];
                     }
-
-                    if (isset($formConfigValues['currentStepNumber'])) {
-                        $formularDocuments[$index]['currentStepNumber'] = $formConfigValues['currentStepNumber'];
-                    }
                 }
 
+                $formularDocuments[$index]['currentStepNumber'] = $doc['step'];
                 $formularDocuments[$index]['formConfig'] = $this->get('translator')->trans($text['message'], $text['variables']);
             }
 
@@ -176,4 +179,52 @@ class EvidentaGestiuniiDeseurilorController extends Controller
             )
         );
     }
+
+    /**
+     * @Route("/shortFormConfigurationText/{creditUsageId}", name="short_form_configuration_text")
+     */
+    public function getFormularDocumentsShortFormConfigurationTextAction($creditUsageId, $short = true)
+    {
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:EgdFormularCreditsUsage')->find($creditUsageId);
+
+        $formularService = $this->get('app.formular.evidenta_gestiunii_deseurilor');
+        $text = $formularService->getTextForFormConfig($creditsUsage->getFormularConfig()->getFormConfig(), $short);
+
+        if ($short) {
+            return new Response($this->get('translator')->trans($text['message'], $text['variables']));
+        }
+
+        return $this->render('document_form/config/full_configuration_text.html.twig', array(
+            'message' => $this->get('translator')->trans($text['message'], $text['variables'])
+        ));
+    }
+
+
+    private function generateDocument($formularService, $creditsUsage, $formData)
+    {
+        $filename = "EvidentaGestiuniiDeseurilor" . $creditsUsage->getId() . '.pdf';
+        $filePath = $this->getParameter('generated_documents_dir')  . 'evidenta_gestiunii_deseurilor/' . $filename;
+        $formTemplateData = (method_exists($formularService, 'calculateExtraTemplateData')) ? $formularService->calculateExtraTemplateData($formData) : null;
+        $fileBody = $this->renderView('document_pdf_template/evidenta_gestiunii_deseurilor.html.twig', array(
+            'data' => $formData,
+            'templateData' => $formTemplateData,
+            'formConfig' => json_decode($creditsUsage->getFormularConfig()->getFormConfig())
+        ));
+        $this->get('knp_snappy.pdf')->generateFromHtml($fileBody, $filePath);
+
+        $file = new UploadedFile($filePath, $filename);
+        $media = new Media();
+        $media->setBinaryContent($file);
+        $media->setName($filename);
+        $media->setProviderName('sonata.media.provider.file');
+        $media->setContext('default');
+        $media->setMediaType($media::FORM_GENERATED_TYPE);
+        $this->getDoctrine()->getManager()->persist($media);
+        $this->getDoctrine()->getManager()->flush();
+        $fs = new Filesystem();
+        $fs->remove($filePath);
+
+        return $media;
+    }
+
 }

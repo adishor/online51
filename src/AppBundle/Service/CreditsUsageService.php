@@ -48,6 +48,7 @@ class CreditsUsageService
         $creditsUsage->setCredit($document->getCreditValue());
         $creditsUsage->setUsageType(CreditsUsage::TYPE_DOCUMENT);
         $creditsUsage->setMedia($document->getMedia());
+
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
     }
@@ -73,7 +74,7 @@ class CreditsUsageService
         $this->eventDispatcher->dispatch('app.event.credits_used', $event);
     }
 
-    public function createUnlockFormularCreditUsage($user, Formular $formular, $formularConfigArray, $isDraft, $discounted, $formularData)
+    public function createUnlockFormularCreditUsage($user, Formular $formular, $formularConfigArray, $discounted, $formularData)
     {
         if ("evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
             $creditsUsage = new EgdFormularCreditsUsage();
@@ -89,10 +90,12 @@ class CreditsUsageService
             $expireDate->add(new \DateInterval('P' . $formular->getValabilityDays() . 'D'));
         }
 
-        $year = ((isset($formularConfigArray['an'])) ? $formularConfigArray['an'] : date('Y')) + 1;
-        $timestamp = strtotime($year . '-' . EvidentaGestiuniiDeseurilor::$startMonth . '-01 23:59:59');
-        $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
-
+        if ("evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
+            $formularConfigArray['an'] = !$discounted ?: $formularConfigArray['an'] + 1;
+            $expireYear = $formularConfigArray['an'] + 1;
+            $timestamp = strtotime($expireYear . '-' . EvidentaGestiuniiDeseurilor::$startMonth . '-01 23:59:59');
+            $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
+        }
 
         $creditsUsage->setExpireDate($expireDate);
         $creditsUsage->setCredit((!$this->userService->getIsUserException()) ? $creditValue : 0);
@@ -111,7 +114,7 @@ class CreditsUsageService
         $formularConfig->setFormConfig(json_encode($formularConfigArray));
         $formularConfig->setFormData($formularData);
         $formularConfig->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
-        $formularConfig->setIsFormConfigFinished(!$isDraft);
+        $formularConfig->setIsFormConfigFinished(false);
         $formularConfig->setFormularCreditsUsage($creditsUsage);
 
         $this->entityManager->persist($creditsUsage);
