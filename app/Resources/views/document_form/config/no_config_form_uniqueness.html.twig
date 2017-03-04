@@ -11,7 +11,8 @@
     });
     
     $('#configFormAddConfirmModalYes').click(function () {
-        if ($('#configFormConfirmModalFormularSlug').val() == '{{ formular.slug }}') {
+        var slug = $(this).parent().parent().find('#configFormConfirmModalFormularSlug').first().val();
+        if (slug == '{{ formular.slug }}') {
             $('#configFormAddConfirmModal').modal('toggle');
             AjaxCheckSubmitFormConfig_{{ formular.slug }}();
         }
@@ -27,7 +28,7 @@
                 if (response.success) {
                     $('#totalUserCredits').text(response.credits);
                     var url = '{{ path('formular_show' , {'slug': formular.slug, 'creditsUsageId': 'creditsUsageId' }) }}';
-                    window.location.href = url.replace("creditsUsageId", response.creditsUsageId); 
+                    window.location.href = url.replace("creditsUsageId", response.creditsUsageId);
                 } else {
                     $('#formularError' + {{ formular.id }}).addClass('color-red');
                     $('#formularError' + {{ formular.id }}).text(response.message);

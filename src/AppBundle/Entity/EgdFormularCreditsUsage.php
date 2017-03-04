@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: adriancalugar
- * Date: 13/02/2017
- * Time: 20:15
+ * Date: 04/03/2017
+ * Time: 12:58
  */
 
 namespace AppBundle\Entity;
@@ -14,11 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Validator\Constraints as CustomAssert;
 
 /**
- * @ORM\Entity()
+ * FormularCreditsUsage
+ *
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EgdFormularCreditsUsageRepository")
  */
-class FormularCreditsUsage extends CreditsUsage
+class EgdFormularCreditsUsage extends CreditsUsage
 {
-
     /**
      *
      * @var \AppBundle\Entity\File
@@ -28,7 +29,7 @@ class FormularCreditsUsage extends CreditsUsage
     protected $formular;
 
     /**
-     * @ORM\OneToOne(targetEntity="\AppBundle\Entity\FormularConfig", mappedBy="formularCreditsUsage", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="\AppBundle\Entity\EgdFormularConfig", mappedBy="formularCreditsUsage", cascade={"persist"})
      */
     protected $formularConfig;
 
@@ -63,7 +64,7 @@ class FormularCreditsUsage extends CreditsUsage
      * @param \AppBundle\Entity\FormularConfig $formularConfig
      * @return Ad
      */
-    public function setFormularConfig(\AppBundle\Entity\FormularConfig $formularConfig)
+    public function setFormularConfig(\AppBundle\Entity\EgdFormularConfig $formularConfig)
     {
         $this->formularConfig = $formularConfig;
 
@@ -78,6 +79,30 @@ class FormularCreditsUsage extends CreditsUsage
     public function getFormularConfig()
     {
         return $this->formularConfig;
+    }
+
+    /**
+     * @param $currentStepNumber
+     */
+    public function setCurrentStepNumber($currentStepNumber)
+    {
+        $formConfig = json_decode($this->getFormularConfig()->getFormConfig());
+        if (!isset($formConfig->currentStepNumber) || $formConfig->currentStepNumber < $currentStepNumber) {
+            $formConfig->currentStepNumber = $currentStepNumber;
+        }
+
+        $this->getFormularConfig()->setFormConfig(json_encode($formConfig));
+    }
+
+
+    public function getCurrentStepNumber()
+    {
+        $formConfig = json_decode($this->getFormularConfig()->getFormConfig());
+        if (isset($formConfig->currentStepNumber)) {
+            return $formConfig->currentStepNumber;
+        }
+
+        return null;
     }
 
 }

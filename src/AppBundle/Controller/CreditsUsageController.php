@@ -137,18 +137,22 @@ class CreditsUsageController extends Controller
         }
 
         $creditUsageId = $request->request->get('creditUsageId');
-        $creditUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage')->find($creditUsageId);
+        $creditUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:FormularCreditsUsage')->find($creditUsageId);
+
         if ($creditUsage->getUser()->getId() != $user->getId()) {
             throw new AccessDeniedHttpException($this->get('translator')->trans('invalid.data'));
         }
 
         $formularId = $creditUsage->getFormular()->getId();
-        $formularData = $creditUsage->getFormData();
-        $formularConfig = (json_decode($creditUsage->getFormConfig())) ? get_object_vars(json_decode($creditUsage->getFormConfig())) : null;
+        $creditUsageFormularConfig = $creditUsage->getFormularConfig();
+        $formularData = $creditUsageFormularConfig->getFormData();
+
+        $formularConfig = (json_decode($creditUsageFormularConfig->getFormConfig())) ? get_object_vars(json_decode($creditUsageFormularConfig->getFormConfig())) : null;
         if (isset($formularConfig['an'])) {
             $formularConfig['an'] = $formularConfig['an'] + 1;
         }
-        $discountedIsDraft = !$creditUsage->getIsFormConfigFinished();
+
+        $discountedIsDraft = !$creditUsageFormularConfig->getIsFormConfigFinished();
 
         return $this->processFormularAction($formularId, $formularConfig, true, $discountedIsDraft, $formularData);
     }

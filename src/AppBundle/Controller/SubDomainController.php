@@ -31,21 +31,13 @@ class SubDomainController extends Controller
 
         $repo = $this->getDoctrine()->getRepository('AppBundle:File');
         $files = $repo->findUserFileBySubdomain($userId, $subdomain->getId());
-//        die(var_dump($files));
-
-//            $validDocuments = $creditsUsageService->getValidUserDocuments($userId, $domain->getId(), $subdomain->getId());
-//            $validVideos = $creditsUsageService->getValidUserVideos($userId, $domain->getId(), $subdomain->getId());
-
 
         $isUserException = $userService->getIsUserException($userId);
-
         return $this->render('subdomain/show.html.twig', array(
               'domain' => $domain,
               'subdomain' => $subdomain,
               'files' => $files,
               'isValid' => $isValid,
-//              'validDocuments' => $validDocuments,
-//              'validVideos' => $validVideos,
               'isUserException' => $isUserException,
         ));
     }

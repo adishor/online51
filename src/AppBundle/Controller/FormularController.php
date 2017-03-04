@@ -59,9 +59,8 @@ class FormularController extends Controller
     /**
      * @Route("/showFormular/{slug}/{creditsUsageId}", name="formular_show")
      * @ParamConverter("formular")
-     * @ParamConverter("creditsUsage", options={"id" = "creditsUsageId"})
      */
-    public function showFormularAction(Request $request, Formular $formular, FormularCreditsUsage $creditsUsage)
+    public function showFormularAction(Request $request, Formular $formular, $creditsUsageId)
     {
 
         $user = $this->getUser();
@@ -75,6 +74,7 @@ class FormularController extends Controller
 
         if ($formularService->hasController()) {
             $controllerName = GeneralHelper::getControllerNameBySlug($formular->getSlug());
+            $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:EgdFormularCreditsUsage')->find($creditsUsageId);
             return $this->forward("AppBundle:Formular\\" . $controllerName . ":showFormular", array(
                 'request' => $request,
                 'formular' => $formular,
@@ -84,6 +84,7 @@ class FormularController extends Controller
             ));
         }
 
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:FormularCreditsUsage')->find($creditsUsageId);
         $flow = $this->get('app.form.flow.' . $formularId); // must match the flow's service id
         $flow->setId('app_form_flow_' . $formularId . '_' . $creditsUsage->getId());
 

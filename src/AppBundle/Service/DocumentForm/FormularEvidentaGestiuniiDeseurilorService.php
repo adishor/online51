@@ -4,6 +4,8 @@ namespace AppBundle\Service\DocumentForm;
 
 use AppBundle\Document\EvidentaGestiuniiDeseurilor\EvidentaGestiuniiDeseurilor;
 use AppBundle\Entity\CreditsUsage;
+use AppBundle\Entity\EgdFormularConfig;
+use AppBundle\Entity\EgdFormularCreditsUsage;
 use AppBundle\Entity\Formular;
 use AppBundle\Entity\FormularConfig;
 use AppBundle\Entity\FormularCreditsUsage;
@@ -71,8 +73,9 @@ class FormularEvidentaGestiuniiDeseurilorService extends FormularGeneric
         );
     }
 
-    public function applyDefaultFormData(FormularCreditsUsage $creditsUsage, $user)
+    public function applyDefaultFormData(CreditsUsage $creditsUsage, $user)
     {
+        var_dump(get_class($creditsUsage));
         $entityNamespace = $this->getEntity();
         $entity = new $entityNamespace();
 
@@ -351,7 +354,7 @@ class FormularEvidentaGestiuniiDeseurilorService extends FormularGeneric
      * @param $nextStep
      * @return
      */
-    public function processHandleForm(FormularConfig $formularConfig, EvidentaGestiuniiDeseurilor $modelData, $currentStep, $nextStep)
+    public function processHandleForm(EgdFormularConfig $formularConfig, EvidentaGestiuniiDeseurilor $modelData, $currentStep, $nextStep)
     {
         $modelData->setCurrentStep($currentStep);
 

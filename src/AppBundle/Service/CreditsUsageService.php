@@ -4,9 +4,12 @@ namespace AppBundle\Service;
 
 use AppBundle\Document\EvidentaGestiuniiDeseurilor\EvidentaGestiuniiDeseurilor;
 use AppBundle\Entity\CreditsUsage;
+use AppBundle\Entity\EgdFormularConfig;
+use AppBundle\Entity\EgdFormularCreditsUsage;
 use AppBundle\Entity\Formular;
 use AppBundle\Entity\FormularConfig;
 use AppBundle\Entity\FormularCreditsUsage;
+use AppBundle\Entity\OtherFormularConfig;
 use AppBundle\Entity\Video;
 use AppBundle\Entity\VideoCreditsUsage;
 use AppBundle\EventListener\Event\CreditUsedEvent;
@@ -72,7 +75,11 @@ class CreditsUsageService
 
     public function createUnlockFormularCreditUsage($user, Formular $formular, $formularConfigArray, $isDraft, $discounted, $formularData)
     {
-        $creditsUsage = new FormularCreditsUsage();
+        if ("evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
+            $creditsUsage = new EgdFormularCreditsUsage();
+        } else {
+            $creditsUsage = new FormularCreditsUsage();
+        }
 
         $creditValue = ($discounted) ? $formular->getDiscountedCreditValue() : $formular->getCreditValue();
         $creditsUsage->setMentions($this->translator->trans('credit-usage.formular-unlocked-by-user'));
@@ -82,7 +89,7 @@ class CreditsUsageService
             $expireDate->add(new \DateInterval('P' . $formular->getValabilityDays() . 'D'));
         }
 
-        $year = ((isset($formularConfig['an'])) ? $formularConfig['an'] : date('Y')) + 1;
+        $year = ((isset($formularConfigArray['an'])) ? $formularConfigArray['an'] : date('Y')) + 1;
         $timestamp = strtotime($year . '-' . EvidentaGestiuniiDeseurilor::$startMonth . '-01 23:59:59');
         $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
 
@@ -93,7 +100,14 @@ class CreditsUsageService
         $creditsUsage->setUser($user);
         $creditsUsage->setFormular($formular);
 
-        $formularConfig = new FormularConfig();
+        if ("evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
+            $formularConfig = new EgdFormularConfig();
+            $formularConfig->setYear($formularConfigArray['an']);
+            $formularConfig->setCode($formularConfigArray['tip_deseu']);
+        } else {
+            $formularConfig = new FormularConfig();
+        }
+
         $formularConfig->setFormConfig(json_encode($formularConfigArray));
         $formularConfig->setFormData($formularData);
         $formularConfig->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));

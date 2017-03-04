@@ -8,7 +8,7 @@ use AppBundle\Service\DocumentForm\Base\FormularFormConfigTextInterface;
 use AppBundle\Service\DocumentForm\Base\FormularFormDefaultInterface;
 use AppBundle\Service\DocumentForm\Base\FormularFormProcessInterface;
 
-class FormularConvocatorCSSMService extends FormularGeneric implements FormularFormConfigTextInterface, FormularFormProcessInterface
+class FormularConvocatorCSSMService extends FormularGeneric
 {
 
     public function getTextForFormConfig($formConfig, $short = false)
@@ -32,7 +32,10 @@ class FormularConvocatorCSSMService extends FormularGeneric implements FormularF
         $entity->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
         $entity->setCompanyCity($user->getProfile()->getCity() ? $user->getProfile()->getCity()->getId() : NULL);
         $entity->setCompanyCounty($user->getProfile()->getCounty() ? $user->getProfile()->getCounty()->getId() : NULL);
-        $creditsUsage->setFormData($this->jmsSerializer->serialize($entity, 'json'));
+
+        $formularConfig = $creditsUsage->getFormularConfig();
+        $formularConfig->setFormData($this->jmsSerializer->serialize($entity, 'json'));
+
         $this->entityManager->flush();
     }
 

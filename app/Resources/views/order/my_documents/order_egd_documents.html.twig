@@ -39,7 +39,6 @@
                     <thead>
                         <tr role="row">
                             <th>{{ 'formular-documents.name' | trans }}</th>
-                            <th class="text-center">{{ 'formular-documents.type' | trans }}</th>
                             <th class="text-center">{{ 'formular-documents.date-expired' | trans }}</th>
                             <th class="text-center">{{ 'formular-documents.actions' | trans }}</th>
                             <th class="text-center">{{ 'formular-documents.new' | trans }}</th>
@@ -68,7 +67,6 @@
                                     <span class="small">{{ doc.formConfig | raw }}</span>
                                 {% endif %}
                             </td>
-                            <td class="">-</td>
                             <td class="">{{ doc.date|date('d-m-Y') }}</td>
                             <td class="">
                                 {% if date(doc.date) > date() %}

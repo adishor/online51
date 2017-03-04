@@ -14,7 +14,7 @@ services:
         parent: app.formular.generic_unique
         class: AppBundle\Service\DocumentForm\FormularEvidentaGestiuniiDeseurilorService
 
-    app.formular.convocator_cssm:
+    app.formular.convocator_c_s_s_m:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularConvocatorCSSMService
 

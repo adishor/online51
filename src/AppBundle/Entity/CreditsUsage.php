@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CreditsUsageRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"document" = "DocumentCreditsUsage", "video" = "VideoCreditsUsage", "formular" = "FormularCreditsUsage"})
+ * @ORM\DiscriminatorMap({"document" = "DocumentCreditsUsage", "video" = "VideoCreditsUsage", "formular" = "FormularCreditsUsage", "egd" = "EgdFormularCreditsUsage"})
  * @HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */

@@ -17,7 +17,7 @@
         <form class="formular-form" id="convocator_cssm" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
             
-            {% set formData  = creditsUsage.formData | json_decode %}
+            {% set formData  = creditsUsage.formularConfig.formData | json_decode %}
             
             {{ form_row(form.company, { 'attr': {'data-val': 'true',
                 'data-val-required': 'Acest camp este obligatoriu' | trans,

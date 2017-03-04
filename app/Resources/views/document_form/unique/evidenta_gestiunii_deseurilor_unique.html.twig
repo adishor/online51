@@ -230,6 +230,7 @@
                 AjaxCheckSubmitFormConfig();
             {% else %}
                 $('#configFormConfirmModalBody').text('{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : formular.name, '%for_what%' : 'modal.config-form-add-confirm.egd' | trans, '%credits%': formular.creditValue, '%plural%' : (formular.creditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');
+                $('#configFormConfirmModalFormularSlug').val('{{ formular.slug }}');
                 $('#configFormAddConfirmModal').modal();
             {% endif %}
         }
@@ -266,11 +267,14 @@
     });
     
     $('#configFormAddConfirmModalYes').click(function () {
-        $('#configFormAddConfirmModal').modal('toggle');
-        AjaxCheckSubmitFormConfig();
+        var slug = $(this).parent().parent().find('#configFormConfirmModalFormularSlug').first().val();
+        if (slug == '{{ formular.slug }}') {
+            $('#configFormAddConfirmModal').modal('toggle');
+            AjaxCheckSubmitFormConfig_egd();
+        }
     });
     
-    function AjaxCheckSubmitFormConfig() {
+    function AjaxCheckSubmitFormConfig_egd() {
         $.ajax({
             type: "POST",
             url: '{{ path('unlock_formular') }}',

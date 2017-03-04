@@ -10,7 +10,7 @@
 namespace AppBundle\Controller\Formular;
 
 use AppBundle\Document\UniqueDocumentInterface;
-use AppBundle\Entity\FormularCreditsUsage;
+use AppBundle\Entity\EgdFormularCreditsUsage;
 use AppBundle\Helper\GeneralHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Formular;
@@ -44,7 +44,7 @@ class EvidentaGestiuniiDeseurilorController extends Controller
     }
 
 
-    public function showFormularAction(Request $request, Formular $formular, FormularCreditsUsage $creditsUsage)
+    public function showFormularAction(Request $request, Formular $formular, EgdFormularCreditsUsage $creditsUsage)
     {
         $user = $this->getUser();
 
@@ -102,8 +102,7 @@ class EvidentaGestiuniiDeseurilorController extends Controller
                 }
             }
 
-            $creditsUsage->setCurrentStepNumber($nextStep);
-
+            $formularConfig->setStep($nextStep);
             $formularConfig->setFormData($this->get('jms_serializer')->serialize($modelData, 'json'));
 
             $this->getDoctrine()->getManager()->flush();
@@ -126,7 +125,7 @@ class EvidentaGestiuniiDeseurilorController extends Controller
         $formTemplateData = $formularService->calculateExtraTemplateData($modelData);
         $form = $flow->createForm();
 
-        return $this->render('document_form/' . strtolower($formular->getSlug()) . ".html.twig", array(
+        return $this->render('document_form/evidenta_gestiunii_deseurilor.html.twig', array(
             'form' => $form->createView(),
             'flow' => $flow,
             'creditsUsage' => $creditsUsage,
@@ -138,10 +137,10 @@ class EvidentaGestiuniiDeseurilorController extends Controller
     public function showDocumentsAction(Request $request)
     {
         $userId = $this->getUser()->getId();
-        $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
+        $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:EgdFormularCreditsUsage');
 
         $mediaId = $request->query->get('mediaId') ? $request->query->get('mediaId') : null;
-        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, $mediaId, array('evidenta_gestiunii_deseurilor'));
+        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, $mediaId);
 
         foreach ($formularDocuments as $index => $doc) {
             $formularService = $this->get('app.formular.evidenta_gestiunii_deseurilor');

@@ -65,6 +65,6 @@ abstract class FormularGeneric
 
     abstract function getEntity();
 
-    abstract function applyDefaultFormData(FormularCreditsUsage $creditsUsage, $user);
+    abstract function applyDefaultFormData(CreditsUsage $creditsUsage, $user);
 
 }
