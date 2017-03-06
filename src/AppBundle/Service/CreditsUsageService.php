@@ -91,7 +91,7 @@ class CreditsUsageService
         }
 
         if ("evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
-            $formularConfigArray['an'] = !$discounted ?: $formularConfigArray['an'] + 1;
+            $formularConfigArray['an'] = !$discounted ? $formularConfigArray['an'] : $formularConfigArray['an'] + 1;
             $expireYear = $formularConfigArray['an'] + 1;
             $timestamp = strtotime($expireYear . '-' . EvidentaGestiuniiDeseurilor::$startMonth . '-01 23:59:59');
             $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));

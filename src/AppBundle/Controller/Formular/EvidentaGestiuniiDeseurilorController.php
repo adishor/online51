@@ -60,7 +60,9 @@ class EvidentaGestiuniiDeseurilorController extends Controller
         $formularService = $this->get('app.formular.evidenta_gestiunii_deseurilor');
 
         $flow = $this->get('app.form.flow.evidenta_gestiunii_deseurilor'); // must match the flow's service id
-        $flow->setId('app_form_flow_evidenta_gestiunii_deseurilor_' . $creditsUsage->getId());
+
+        $flowId = 'app_form_flow_evidenta_gestiunii_deseurilor_' . $creditsUsage->getId();
+        $flow->setId($flowId);
         $flow->setRequest($request);
 
         $formularConfig = $creditsUsage->getFormularConfig();
@@ -81,18 +83,19 @@ class EvidentaGestiuniiDeseurilorController extends Controller
         // form of the current step
         $form = $flow->createForm();
 
+
         if ($flow->isValid($form)) {
             $flow->saveCurrentStepData($form);
 
             $currentStep = $flow->getCurrentStepNumber();
             $nextStep = false;
 
+            $formularConfig = $creditsUsage->getFormularConfig();
+            $formConfig = $formularConfig->getFormConfig();
+
             if ($flow->nextStep()) {
                 $nextStep = $flow->getCurrentStepNumber();
             }
-
-            $formularConfig = $creditsUsage->getFormularConfig();
-            $formConfig = $formularConfig->getFormConfig();
 
             $modelData = $formularService->processHandleForm($formularConfig, $modelData, $currentStep, $nextStep);
 
@@ -107,8 +110,20 @@ class EvidentaGestiuniiDeseurilorController extends Controller
                 }
             }
 
-            $formularConfig->setStep($nextStep);
             $formularConfig->setFormData($this->get('jms_serializer')->serialize($modelData, 'json'));
+
+            if ($nextStep && $request->get($flowId . '_transition') == 'save') {
+                if ($currentStep == $formularConfig->getStep()) {
+                    $flow->invalidateStepData($currentStep);
+                }
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->redirect($this->generateUrl('show_valid_documents'));
+            }
+
+            if ($nextStep > $formularConfig->getStep()) {
+                $formularConfig->setStep($nextStep);
+            }
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -199,6 +214,53 @@ class EvidentaGestiuniiDeseurilorController extends Controller
         ));
     }
 
+
+    /**
+     * @Route("/update-agent-quantities", name="update_agent_quantities")
+     */
+    public function updateAgentQuantities(Request $request)
+    {
+        $user = $this->getUser();
+        if (null === $user) {
+            throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
+        }
+
+        $creditUsageId = $request->request->get('creditUsageId');
+        $creditsUsage = $this->getDoctrine()->getManager()->getRepository('AppBundle:EgdFormularCreditsUsage')->find($creditUsageId);
+        if ((!$creditsUsage) || ($creditsUsage->getUser()->getId() != $user->getId())) {
+            return new Response(json_encode(array(
+                'success' => false,
+                'message' => $this->get('translator')->trans('invalid.data')
+            )));
+        }
+
+        $index = $request->request->get('indexMonth');
+        $agentsQuantity = $request->request->get('agentsQuantity');
+
+        $formularConfig = $creditsUsage->getFormularConfig();
+        if (empty($formularConfig)) {
+            return new Response(json_encode(array(
+                'success' => false,
+                'message' => $this->get('translator')->trans('invalid.data')
+            )));
+        }
+
+        $formData = json_decode($formularConfig->getFormData());
+
+        foreach ($formData->_e_g_d1_generare_deseuri[$index]->agent_economic as $key => $agent) {
+            $formData->_e_g_d1_generare_deseuri[$index]->agent_economic[$key]->cantitate_deseu = $agentsQuantity[$key];
+        }
+
+        $formularConfig->setFormData(json_encode($formData));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->merge($creditsUsage);
+        $em->flush();
+
+        return new Response(json_encode(array(
+            'success' => true
+        )));
+    }
 
     private function generateDocument($formularService, $creditsUsage, $formData)
     {

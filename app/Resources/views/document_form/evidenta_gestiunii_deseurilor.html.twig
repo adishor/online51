@@ -47,7 +47,14 @@
         {% form_theme form with 'document_form/base/form_fields.html.twig' %}
         <form class="formular-form" id="evidenta_gestiunii_deseurilor" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
-            
+
+            {% if flow.getCurrentStepNumber() == 1 %}
+                {{ form_row(form.operatia,
+                {'attr': {'class': 'operatia max-width-500',
+                    'label_info': '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia1' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia2' | trans ~ '<br/>' ~ '<img src="' ~ asset('assets/images/error.png') ~ '"/> ' ~ 'formular-documents.info.egd.operatia3' | trans({'%link_contact%': path('contact') })
+                } }) }}
+            {% endif %}
+
             {% if flow.getCurrentStepNumber() == 2 %}
                 {{ form_row(form.agentEconomic, 
                     {'attr': {'data-val': 'true',
@@ -122,7 +129,55 @@
                         </li>
                     {% endfor %}
                 </ul>
+                <a href="#" id="add-another-company">{{ 'Adauga o firma' | trans }}</a>
+                <div class="color-red no-display" id="#error-no-company">{{ 'Adaugati cel putin 1 firma' | trans }}</div>
+                <script type="text/javascript">
+                    // keep track of how many company fields have been rendered
+                    var companyCount = '{{ form.EGDCompany|length }}';
 
+                    jQuery(document).ready(function() {
+
+                        var companyList = jQuery('#company-fields-list');
+
+                        // add a delete link to all of the existing speaker form li elements
+                        companyList.find('li').each(function(index) {
+                            addCompanyFormDeleteLink($(this));
+                        });
+
+                        jQuery('#add-another-company').click(function(e) {
+                            e.preventDefault();
+                            jQuery('.no-display').hide();
+
+                            var companyList = jQuery('#company-fields-list');
+
+                            // grab the prototype template
+                            var newWidget = companyList.attr('data-prototype');
+                            // replace the "__name__" used in the id and name of the prototype
+                            // with a number that's unique to your companies
+                            newWidget = newWidget.replace(/__name__/g, companyCount);
+                            companyCount++;
+
+                            // create a new list element and add it to the list
+                            var newLi = jQuery('<li></li>').html(newWidget);
+                            newLi.appendTo(companyList);
+                            addCompanyFormDeleteLink(newLi);
+                            showTooltip(jQuery("input"));
+                        });
+                    })
+
+                    function addCompanyFormDeleteLink($companyFormLi) {
+                        var $removeFormA = $('<a href="#">{{ 'Sterge firma'|trans }}</a>');
+                        $companyFormLi.append($removeFormA);
+
+                        $removeFormA.on('click', function(e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
+
+                            // remove the li for the company form
+                            $companyFormLi.remove();
+                        });
+                    }
+                </script>
             {% endif %}
 
             {% if flow.getCurrentStepNumber() == 3 %}
@@ -186,6 +241,7 @@
                                     {% set sum = sum + agent.cantitate_deseu %}
                                 {% endif %}
                             {% endfor %}
+
                             {% if formConfig.operatia == 3 %}
                                 {% set valid = true %}                                   
                                 {% if sum != formData._e_g_d1_generare_deseuri[key].cantitate_deseu_valorificata %}
@@ -239,10 +295,10 @@
                         <td class="width-105-px text-left">{{ 'TOTAL' | trans }}</td>
                         <td id="EGD1CantitateDeseuGenerateTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuGenerateTotal | number_format(2) }}</td>
                         {% if formConfig.operatia == 3 %}
-                        <td id="EGD1CantitateDeseuValorificataTotal" class="text-right {{ (formData._e_g_d_company | length > 1) ? "width80" : "" }}">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuValorificataTotal | number_format(2) }}</td>
+                            <td id="EGD1CantitateDeseuValorificataTotal" class="text-right {{ (formData._e_g_d_company | length > 1) ? "width80" : "" }}">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuValorificataTotal | number_format(2) }}</td>
                         {% endif %}
                         {% if formConfig.operatia == 4 %}
-                        <td id="EGD1CantitateDeseuEliminataTotal" class="text-right {{ (formData._e_g_d_company | length > 1) ? "width80" : "" }}">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuEliminataTotal | number_format(2) }}</td>
+                            <td id="EGD1CantitateDeseuEliminataTotal" class="text-right {{ (formData._e_g_d_company | length > 1) ? "width80" : "" }}">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuEliminataTotal | number_format(2) }}</td>
                         {% endif %}
                         <td id="EGD1CantitateDeseuInStocTotal" class="text-right">{{ formTemplateData.EGDTotals.EGD1CantitateDeseuInStocTotal | number_format(2) }}</td>
                     </tr>
@@ -258,7 +314,7 @@
                             var value = jQuery(".EGD1CantitateDeseuEliminata" + key).val();
                         {% endif %}
 
-                        var text = '{{ 'Suma cantitatilor introduse trebuie sa fie exact:' | trans ~ ' %value% (' ~ formData.unitate_masura ~ ')' }}';
+                        var text = '{{ 'Suma cantitatilor introduse trebuie sa fie egala cu ' | trans ~ ' %value% (' ~ formData.unitate_masura ~ ')' }}';
                         text = text.replace('%value%', value);
                         jQuery('#customizeAgentDetailsModalTotal').text(text);
                         jQuery('#configTotalSum').val(value);
@@ -431,7 +487,7 @@
             {% endif %}
                 
             {% if flow.getCurrentStepNumber() == 2 %}
-                jQuery('.craue_formflow_button_last').click(function () {
+                jQuery('.craue_formflow_button_last, .craue_formflow_button_save').click(function () {
                     if (!jQuery("#company-fields-list li").length) {
                         jQuery('.no-display').show();
                         return false;
@@ -450,7 +506,7 @@
                 });
             {% endif %}
                
-            jQuery('.craue_formflow_button_last').click(function () {               
+            jQuery('.craue_formflow_button_last, .craue_formflow_button_save').click(function () {
                 var errorNoAddAgent = 0;
                 jQuery(this).parent().parent().find('.addAgent-validation-error').each(function () {
                     errorNoAddAgent = errorNoAddAgent + 1;

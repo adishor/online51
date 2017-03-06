@@ -48,3 +48,8 @@ services:
         tags:
             - {name: kernel.event_listener, event: app.event.update_credits, method: handlerUpdateCredits}
         arguments: ['@app.user', '@doctrine.orm.entity_manager', '@translator']
+
+    app.event.egd.get_steps:
+        class: AppBundle\EventListener\EgdFormFlowListener
+        tags:
+            - {name: kernel.event_listener, event: flow.get_steps, method: onGetSteps}

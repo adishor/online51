@@ -1,4 +1,6 @@
 {% set renderBackButton = flow.getCurrentStepNumber() in (flow.getFirstStepNumber() + 1) .. flow.getLastStepNumber() %}
+{% set renderSaveButton = flow.getCurrentStepNumber() in (flow.getFirstStepNumber() + 1) .. flow.getLastStepNumber() - 1 %}
+
 <div class="craue_formflow_buttons craue_formflow_button_count_{% if renderBackButton %}3{% else %}2{% endif %}">
 	{#
 		Default button (the one trigged by pressing the enter/return key) must be defined first.
@@ -14,7 +16,12 @@
                 {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
             </button>
         {%- endif -%}
-	
+
+    {% if renderSaveButton %}
+        <button class="craue_formflow_button_save save" type="submit" name="{{ flow.getFormTransitionKey() }}" value="save" formnovalidate="formnovalidate">
+            {{- 'button.save' | trans({}, 'CraueFormFlowBundle') -}}
+        </button>
+    {% endif %}
 
 	{% if renderBackButton %}
 		{# see http://www.html5rocks.com/en/tutorials/forms/html5forms/ #}
