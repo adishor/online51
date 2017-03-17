@@ -2,19 +2,27 @@
 
 namespace AppBundle\Service\DocumentForm;
 
+use AppBundle\Entity\CreditsUsage;
 use AppBundle\Service\DocumentForm\Base\FormularGeneric;
 use AppBundle\Service\DocumentForm\Base\FormularFormDefaultInterface;
 use AppBundle\Service\DocumentForm\Base\FormularFormProcessInterface;
 
-class FormularDecizieComisieCercetareAccidente extends FormularGeneric implements FormularFormDefaultInterface, FormularFormProcessInterface
+class FormularDecizieComisieCercetareAccidente extends FormularGeneric
 {
 
-    public function applyDefaultFormData($creditsUsage, $formData, $user)
+    function applyDefaultFormData(CreditsUsage $creditsUsage, $user)
     {
-        $formData->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
-        $formData->setCompanyAddress(($user->getProfile() ? $user->getProfile()->getAddress() : "") . ", " . ($user->getProfile() ? $user->getProfile()->getCity() : "") . ", " . ($user->getProfile() ? $user->getProfile()->getCounty() : ""));
-        $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
+        $entityNamespace = $this->getEntity();
+        $entity = new $entityNamespace();
+
+        $entity->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
+        $entity->setCompanyAddress(($user->getProfile() ? $user->getProfile()->getAddress() : "") . ", " . ($user->getProfile() ? $user->getProfile()->getCity() : "") . ", " . ($user->getProfile() ? $user->getProfile()->getCounty() : ""));
+
+        $formularConfig = $creditsUsage->getFormularConfig();
+        $formularConfig->setFormData($this->jmsSerializer->serialize($entity, 'json'));
+
         $this->entityManager->flush();
+
     }
 
     public function processHandleForm($creditsUsage, $flow, &$formData)
@@ -25,13 +33,15 @@ class FormularDecizieComisieCercetareAccidente extends FormularGeneric implement
         }
     }
 
-    public function processEndHandleForm(&$formData)
-    {
-
-    }
 
     function getEntity()
     {
-        // TODO: Implement getEntity() method.
+        return 'AppBundle\Document\DecizieComisieCercetareAccidente\DecizieComisieCercetareAccidente';
+    }
+
+
+    public function getName()
+    {
+        return 'decizie_comisie_cercetare_accidente';
     }
 }

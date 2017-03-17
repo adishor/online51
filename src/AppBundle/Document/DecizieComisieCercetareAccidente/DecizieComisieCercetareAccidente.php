@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\DecizieComisieCercetareAccidente;
+namespace AppBundle\Document\DecizieComisieCercetareAccidente;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
+use AppBundle\Document\Common\Person;
 
 class DecizieComisieCercetareAccidente
 {
@@ -30,13 +30,13 @@ class DecizieComisieCercetareAccidente
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $administrator;
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\NotBlank()
      */
     protected $undersigned;
@@ -74,7 +74,7 @@ class DecizieComisieCercetareAccidente
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $members;

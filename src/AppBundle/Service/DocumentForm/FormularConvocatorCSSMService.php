@@ -11,19 +11,10 @@ use AppBundle\Service\DocumentForm\Base\FormularFormProcessInterface;
 class FormularConvocatorCSSMService extends FormularGeneric
 {
 
-    public function getTextForFormConfig($formConfig, $short = false)
-    {
-
-        $formConfigD = json_decode($formConfig);
-
-        return ($formConfigD) ? array(
-            'message' => 'document-form.text.ccssm',
-            'variables' => array(
-                'day' => $formConfigD->data,
-                'hour' => $formConfigD->ora,
-            )) : NULL;
-    }
-
+    /**
+     * @param CreditsUsage $creditsUsage
+     * @param $user
+     */
     public function applyDefaultFormData(CreditsUsage $creditsUsage, $user)
     {
         $entityNamespace = $this->getEntity();
@@ -39,6 +30,21 @@ class FormularConvocatorCSSMService extends FormularGeneric
         $this->entityManager->flush();
     }
 
+    public function getTextForFormConfig($formConfig, $short = false)
+    {
+
+        $formConfigD = json_decode($formConfig);
+
+        return ($formConfigD) ? array(
+            'message' => 'document-form.text.ccssm',
+            'variables' => array(
+                'day' => $formConfigD->data,
+                'hour' => $formConfigD->ora,
+            )) : NULL;
+    }
+
+
+
     public function processHandleForm($creditsUsage, $flow, &$formData)
     {
         if ($flow->getCurrentStep() == 1) {
@@ -49,19 +55,21 @@ class FormularConvocatorCSSMService extends FormularGeneric
 
             $formConfig['data'] = $formData->getMeetingDate()->format('d/m/Y');
             $formConfig['ora'] = $hour;
-            $creditsUsage->setFormConfig(json_encode($formConfig));
+            $creditsUsage->getFormularConfig()->setFormConfig(json_encode($formConfig));
 
             $formData->setMeetingHour($hour);
         }
-    }
-
-    public function processEndHandleForm(&$formData)
-    {
-
     }
 
     function getEntity()
     {
         return 'AppBundle\Document\ConvocatorCSSM\ConvocatorCSSM';
     }
+
+
+    public function getName()
+    {
+        return 'convocator_cssm';
+    }
+
 }

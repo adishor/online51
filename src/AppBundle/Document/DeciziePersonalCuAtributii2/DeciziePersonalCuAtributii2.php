@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\DeciziePersonalCuAtributii2;
+namespace AppBundle\Document\DeciziePersonalCuAtributii2;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
+use AppBundle\Document\Common\Person;
 
 class DeciziePersonalCuAtributii2
 {
@@ -30,14 +30,14 @@ class DeciziePersonalCuAtributii2
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $administrator;
 
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $workersAttributions;

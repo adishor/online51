@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\DecizieOrganizareActivitateSSM;
+namespace AppBundle\Document\DecizieOrganizareActivitateSSM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
+use AppBundle\Document\Common\Person;
 
 class DecizieOrganizareActivitateSSM
 {
@@ -30,20 +30,20 @@ class DecizieOrganizareActivitateSSM
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $administrator;
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $designedWorkerForPreventionProtection;
 
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $membersForPreventionProtectionService;
@@ -51,7 +51,7 @@ class DecizieOrganizareActivitateSSM
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $leaders;

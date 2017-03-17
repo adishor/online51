@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\ProcesVerbalControl;
+namespace AppBundle\Document\ProcesVerbalControl;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
-use AppBundle\Entity\DocumentForm\ProcesVerbalControl\ProcesVerbalControlQuestion;
+use AppBundle\Document\Common\Person;
+use AppBundle\Document\ProcesVerbalControl\ProcesVerbalControlQuestion;
 
 class ProcesVerbalControl
 {
@@ -46,14 +46,14 @@ class ProcesVerbalControl
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $administrator;
 
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $participants;
@@ -61,7 +61,7 @@ class ProcesVerbalControl
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\ProcesVerbalControl\ProcesVerbalControlQuestion>")
+     * @Type("array<AppBundle\Document\ProcesVerbalControl\ProcesVerbalControlQuestion>")
      * @Assert\Count(min="1")
      */
     protected $organizationalQuestions;

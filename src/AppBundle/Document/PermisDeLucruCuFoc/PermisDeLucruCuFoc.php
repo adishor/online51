@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\PermisDeLucruCuFoc;
+namespace AppBundle\Document\PermisDeLucruCuFoc;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
+use AppBundle\Document\Common\Person;
 
 class PermisDeLucruCuFoc
 {
@@ -30,13 +30,13 @@ class PermisDeLucruCuFoc
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $personWithWorkPermitForFire;
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $helpPersonForWorkWithFire;
 
@@ -131,19 +131,19 @@ class PermisDeLucruCuFoc
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $measure9SurveillanceBy;
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $measure11AssuredBy;
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $measure12SurveillanceBy;
 

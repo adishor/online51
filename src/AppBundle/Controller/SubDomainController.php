@@ -20,24 +20,22 @@ class SubDomainController extends Controller
     public function showSubDomainAction(Domain $domain, SubDomain $subdomain)
     {
 
-
-        $isValid = $isUserException = false;
-        $validDocuments = $validVideos = null;
-
-        $userId = $this->getUser()->getId();
-        $userService = $this->get('app.user');
-        $creditsUsageService = $this->get('app.credits_usage');
-        $isValid = $userService->isDomainValidForUser($userId, $domain->getId());
-
         $repo = $this->getDoctrine()->getRepository('AppBundle:File');
-        $files = $repo->findUserFileBySubdomain($userId, $subdomain->getId());
+        $files = $repo->getFilesBySubdomain($subdomain->getId());
 
-        $isUserException = $userService->getIsUserException($userId);
+        $isUserException = false;
+
+        if ($this->getUser()) {
+            $userId = $this->getUser()->getId();
+            $userService = $this->get('app.user');
+
+            $isUserException = $userService->getIsUserException($userId);
+        }
+
         return $this->render('subdomain/show.html.twig', array(
               'domain' => $domain,
               'subdomain' => $subdomain,
               'files' => $files,
-              'isValid' => $isValid,
               'isUserException' => $isUserException,
         ));
     }

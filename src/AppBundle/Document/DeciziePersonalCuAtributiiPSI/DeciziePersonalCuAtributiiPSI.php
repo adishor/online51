@@ -5,7 +5,7 @@ namespace AppBundle\Document\DeciziePersonalCuAtributiiPSI;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
+use AppBundle\Document\Common\Person;
 
 class DeciziePersonalCuAtributiiPSI
 {
@@ -30,14 +30,14 @@ class DeciziePersonalCuAtributiiPSI
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $administrator;
 
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $workersAttributions;
@@ -45,7 +45,7 @@ class DeciziePersonalCuAtributiiPSI
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $interventionTeam;

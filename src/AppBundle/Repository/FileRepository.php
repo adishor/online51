@@ -16,16 +16,23 @@ use Doctrine\ORM\Query\Expr;
 class FileRepository extends EntityRepository
 {
 
-    public function findUserFileBySubdomain($userId, $subdomainId)
+    /**
+     * @param $folderId
+     * @return array
+     */
+    public function getFilesBySubdomain($subdomainId)
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('f', 'sd', 'cu')
-            ->from('AppBundle:File ', 'f')
-            ->join('f.subdomain', 'sd')
-            ->leftJoin('f.creditsUsage', 'cu', 'WITH', 'cu.user = :userId AND cu.expireDate > :now')
-            ->setParameter('userId', $userId)
-            ->setParameter('now', new \DateTime)
+            ->select('f, sd, fd')
+            ->from('AppBundle:File', 'f')
+            ->leftJoin('f.subdomain', 'sd')
+            ->leftJoin('f.folder', 'fd')
+            ->where('sd.id = :subdomain_id')
+            ->andWhere('fd.id is NULL')
+            ->setParameter('subdomain_id', $subdomainId)
+            ->andWhere('sd.deleted = 0')
+            ->andWhere('f.deleted = 0')
         ;
 
         $query = $queryBuilder->getQuery();
@@ -46,6 +53,10 @@ class FileRepository extends EntityRepository
         return $returnArray;
     }
 
+    /**
+     * @param $folderId
+     * @return array
+     */
     public function getFilesByFolder($folderId)
     {
         $queryBuilder = $this->getEntityManager()

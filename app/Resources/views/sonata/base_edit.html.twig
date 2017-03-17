@@ -127,6 +127,8 @@
                     var documentId = $("#{{ admin.uniqId }}_document option:selected").val();
 
                     var url = '{{ admin.generateUrl('getDocumentCreditValue') }}';
+                    alert(url);
+
                     $.post(url, { documentId: documentId }, function(data){
                         $("#{{ admin.uniqId }}_credit").val(data).prop("readonly", false);
                         $("#{{ admin.uniqId }}_video").removeAttr("disabled");
@@ -143,6 +145,7 @@
                     var videoId = $("#{{ admin.uniqId }}_video option:selected").val();
 
                     var url = '{{ admin.generateUrl('getVideoCreditValue') }}';
+
                     $.post(url, { videoId: videoId }, function(data){
                         $("#{{ admin.uniqId }}_credit").val(data).prop("readonly", false);
                         $("#{{ admin.uniqId }}_document").removeAttr("disabled");
@@ -156,12 +159,12 @@
           {% endif %}
 
           {% if admin.formFieldDescriptions.subdomain is defined %}
-
+alert('aici');
             var subdomainSelector = $("#{{ admin.uniqId }}_subdomain");
             subdomainSelector.change(updateCategories()); // Bind the function to updateCategories
             subdomainSelector.change(); // Manual trigger to update categories in Document load.
 
-            function updateCategories(){
+            function updateCategories() {
                 return function () {
                     var selectedSubdomain = $("#{{ admin.uniqId }}_subdomain option:selected").val();
                     var folder = $("#{{ admin.uniqId }}_folder");
@@ -173,7 +176,7 @@
                     var objectId = '{{ admin.id(object) }}'
 
                     var url = '{{ admin.generateUrl('getFolders') }}';
-
+alert(url);
                     $.post(url, { subdomainId: selectedSubdomain }, function(data){
                         folder.empty().append(data);
                     },"text");

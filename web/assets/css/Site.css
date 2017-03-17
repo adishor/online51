@@ -410,23 +410,23 @@ table.users td:nth-child(6), table.users td:nth-child(5), table.users td:nth-chi
 }
 
 table.users.documents td:nth-child(1),table.users.documents th:nth-child(1){
-    width:46%;
+    width:37%;
 }
 
 table.users.documents td:nth-child(2),table.users.documents th:nth-child(2){
-    width:8%;
+    width:10%;
 }
 table.users.documents td:nth-child(3),table.users.documents th:nth-child(3) {
     width:15%;
 }
 table.users.documents td:nth-child(4),table.users.documents th:nth-child(4){
-    width:10%;
+    width:13%;
 }
 table.users.documents td:nth-child(2), table.users.documents td:nth-child(3),table.users.documents td:nth-child(4),table.users.documents td:nth-child(5), table.users.documents td:nth-child(6) {
     text-align:center;
 }
 table.users.documents td:nth-child(5), table.users.documents th:nth-child(5) {
-    width:20%;
+    width:25%;
 }
 
 .formular {
@@ -2335,4 +2335,8 @@ p.fa-icon a:hover {
 
 .addAgent-validation-error {
     border: 1px solid red;
+}
+
+.floated-left {
+    float: left;
 }

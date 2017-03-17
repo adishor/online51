@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
@@ -81,6 +82,7 @@ class FolderAdmin extends Admin
             }
             $choices[$domain->getName()] = $subdomains;
         }
+
         //get all subdomains that are not associated
         $subdomainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:SubDomain');
         $noDomainSubdomains = $subdomainEm->getRepository('AppBundle:SubDomain')->createQueryBuilder('s')
@@ -89,6 +91,10 @@ class FolderAdmin extends Admin
             ->getQuery()
             ->getResult();
         $choices['No Domain'] = $noDomainSubdomains;
+
         return $choices;
     }
+
+
+
 }

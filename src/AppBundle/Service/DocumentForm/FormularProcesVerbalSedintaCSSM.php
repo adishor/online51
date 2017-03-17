@@ -2,18 +2,35 @@
 
 namespace AppBundle\Service\DocumentForm;
 
+use AppBundle\Entity\CreditsUsage;
 use AppBundle\Service\DocumentForm\Base\FormularGeneric;
-use AppBundle\Service\DocumentForm\Base\FormularFormDefaultInterface;
 
-class FormularProcesVerbalSedintaCSSM extends FormularGeneric implements FormularFormDefaultInterface
+class FormularProcesVerbalSedintaCSSM extends FormularGeneric
 {
 
-    public function applyDefaultFormData($creditsUsage, $formData, $user)
+    function applyDefaultFormData(CreditsUsage $creditsUsage, $user)
     {
-        $formData->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
-        $formData->setCompanyCity($user->getProfile() ? $user->getProfile()->getCity() : "");
-        $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
+        $entityNamespace = $this->getEntity();
+        $entity = new $entityNamespace();
+
+        $entity->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
+        $entity->setCompanyCity($user->getProfile() ? $user->getProfile()->getCity() : "");
+
+        $formularConfig = $creditsUsage->getFormularConfig();
+        $formularConfig->setFormData($this->jmsSerializer->serialize($entity, 'json'));
+
         $this->entityManager->flush();
+
     }
 
+    function getEntity()
+    {
+        return 'AppBundle\Document\ProcesVerbalSedintaCSSM\ProcesVerbalSedintaCSSM';
+    }
+
+
+    public function getName()
+    {
+        return 'proces_verbal_sedinta_c_s_s_m';
+    }
 }

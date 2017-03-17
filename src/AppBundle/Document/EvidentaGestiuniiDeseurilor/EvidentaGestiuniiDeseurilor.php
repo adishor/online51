@@ -166,6 +166,14 @@ class EvidentaGestiuniiDeseurilor
     /**
      *
      * @var type
+     * @Type("string")
+     * @Assert\NotBlank()
+     */
+    protected $cantitateDeseu;
+
+    /**
+     *
+     * @var type
      * @Type("array<AppBundle\Document\EvidentaGestiuniiDeseurilor\EGDCompany>")
      * @Assert\Count(min="1")
      */
@@ -202,6 +210,7 @@ class EvidentaGestiuniiDeseurilor
     public function __construct()
     {
         $this->lastYearInStock = 0;
+        $this->cantitateDeseu = 0;
 
         $this->EGD1GenerareDeseuri = new ArrayCollection();
         $EGD1 = [];
@@ -443,6 +452,16 @@ class EvidentaGestiuniiDeseurilor
     public function setLastYearInStock($lastYearInStock)
     {
         $this->lastYearInStock = $lastYearInStock;
+    }
+
+    public function getCantitateDeseu()
+    {
+        return $this->cantitateDeseu;
+    }
+
+    public function setCantitateDeseu($lastYearInStock)
+    {
+        $this->cantitateDeseu = $lastYearInStock;
     }
 
 }

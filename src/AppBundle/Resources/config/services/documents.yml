@@ -18,30 +18,38 @@ services:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularConvocatorCSSMService
 
-    app.formular.Decizie_Componenta_CSSM:
+    app.formular.decizie_componenta_c_s_s_m:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDecizieComponentaCSSM
-    app.formular.Decizie_Personal_Cu_Atributii:
+
+    app.formular.decizie_personal_cu_atributii:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii
-    app.formular.Decizie_Comisie_Cercetare_Accidente:
+
+    app.formular.decizie_comisie_cercetare_accidente:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDecizieComisieCercetareAccidente
-    app.formular.Decizie_Organizare_Activitate_SSM:
+
+    app.formular.decizie_organizare_activitate_s_s_m:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDecizieOrganizareActivitateSSM
-    app.formular.Proces_Verbal_Sedinta_CSSM:
+
+    app.formular.proces_verbal_sedinta_c_s_s_m:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularProcesVerbalSedintaCSSM
-    app.formular.Proces_Verbal_Control:
+
+    app.formular.proces_verbal_control:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularProcesVerbalControl
-    app.formular.Permis_De_Lucru_Cu_Foc:
+
+    app.formular.permis_de_lucru_cu_foc:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularPermisDeLucruCuFoc
-    app.formular.Decizie_Personal_Cu_Atributii_PSI:
+
+    app.formular.decizie_personal_cu_atributii_p_s_i:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributiiPSI
-    app.formular.Decizie_Personal_Cu_Atributii_2:
+
+    app.formular.decizie_personal_cu_atributii2:
         parent: app.formular.generic
         class: AppBundle\Service\DocumentForm\FormularDeciziePersonalCuAtributii2

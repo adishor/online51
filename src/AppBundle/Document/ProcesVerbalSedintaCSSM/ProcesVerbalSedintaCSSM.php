@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\ProcesVerbalSedintaCSSM;
+namespace AppBundle\Document\ProcesVerbalSedintaCSSM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
-use AppBundle\Entity\DocumentForm\Common\ConvocatorCSSMPunct;
+use AppBundle\Document\Common\Person;
+use AppBundle\Document\Common\ConvocatorCSSMPunct;
 
 class ProcesVerbalSedintaCSSM
 {
@@ -53,34 +53,34 @@ class ProcesVerbalSedintaCSSM
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $president;
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $secretary;
 
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $members;
 
     /**
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      */
     protected $doctor;
 
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\ConvocatorCSSMPunct>")
+     * @Type("array<AppBundle\Document\Common\ConvocatorCSSMPunct>")
      * @Assert\Count(min="1")
      */
     protected $meetingPoints;

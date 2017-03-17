@@ -63,6 +63,12 @@ class Folder
 
     /**
      *
+     * @ORM\OneToMany(targetEntity="File", mappedBy="subdomain")
+     */
+    private $files;
+
+    /**
+     *
      * @var integer
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default":0})
@@ -160,6 +166,42 @@ class Folder
     public function getSubdomain()
     {
         return $this->subdomain;
+    }
+
+
+    /**
+     * Add documents
+     *
+     * @param Folder $folder
+     * @return SubDomain
+     * @internal param \Application\Sonata\MediaBundle\Entity\Media $documents
+     */
+    public function addFile(File $file)
+    {
+        $this->files[] = $file;
+
+        return $this;
+    }
+
+    /**
+     * Remove documents
+     *
+     * @param Folder $folder
+     * @internal param \Application\Sonata\MediaBundle\Entity\Media $documents
+     */
+    public function removeFile(File $file)
+    {
+        $this->files->removeElement($file);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 
 

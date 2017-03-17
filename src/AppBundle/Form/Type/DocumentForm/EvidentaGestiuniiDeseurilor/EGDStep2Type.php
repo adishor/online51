@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Type\DocumentForm\EvidentaGestiuniiDeseurilor;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -15,6 +16,7 @@ class EGDStep2Type extends AbstractType
     {
         $builder
           ->add('lastYearInStock', TextType::class)
+          ->add('cantitateDeseu', HiddenType::class)
           ->add('EGD1GenerareDeseuri', CollectionType::class, array(
               'entry_type' => EGD1GenerareDeseuriType::class,
         ));

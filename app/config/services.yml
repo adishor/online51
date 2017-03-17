@@ -67,7 +67,7 @@ services:
             - [setTemplates, [{ base_list_field: sonata/video_base_list_field.html.twig }]]
     admin.formular:
         class: AppBundle\Admin\FormularAdmin
-        arguments: [~, AppBundle\Entity\Formular, ~]
+        arguments: [~, AppBundle\Entity\Formular, AppBundle:Admin\Formular]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.formular, group: sonata_media }
     admin.profile:

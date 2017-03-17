@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\ProcesVerbalControl;
+namespace AppBundle\Document\ProcesVerbalControl;
 
 use JMS\Serializer\Annotation\Type;
 use Symfony\Component\Validator\Constraints as Assert;

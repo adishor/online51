@@ -99,13 +99,11 @@ class FormularController extends Controller
 
         // form of the current step
         $form = $flow->createForm();
-        if (method_exists($formularService, 'applyFormCustomization')) {
-            $formularService->applyFormCustomization($flow, $form, $creditsUsage);
-        }
 
-        $response = $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData);
+        $response = $this->handleForm($request, $formularService, $creditsUsage, $formularId, $flow, $form, $formData);
+
         if ($response) {
-            return $this->redirect($this->generateUrl('show_valid_documents') . '?mediaId=' . $response);
+            return $this->redirect($this->generateUrl('show_valid_documents', array('type' => 'forms')));
         }
 
         $formTemplateData = (method_exists($formularService, 'calculateExtraTemplateData')) ? $formularService->calculateExtraTemplateData($formData) : null;
@@ -120,54 +118,58 @@ class FormularController extends Controller
     }
 
 
-    private function handleForm($formularService, FormularCreditsUsage $creditsUsage, &$flow, &$form, &$formData)
+    private function handleForm(Request $request, $formularService, FormularCreditsUsage $creditsUsage, $formularId, &$flow, &$form, &$formData)
     {
-        if ($flow->isValid($form)) {
-            $flow->saveCurrentStepData($form);
-            if (method_exists($formularService, 'processHandleForm')) {
-                $formularService->processHandleForm($creditsUsage, $flow, $formData);
-            }
-            $nextStep = $flow->nextStep();
-            if (!$nextStep && method_exists($formularService, 'processEndHandleForm')) {
-                $formularService->processEndHandleForm($formData);
-            }
-
-            $currentStepNumber = $flow->getCurrentStepNumber();
-            if ($currentStepNumber > 1) {
-                $creditsUsage->setCurrentStepNumber($currentStepNumber);
-            }
+        if ($request->isMethod('POST')) {
 
             $creditsUsage->getFormularConfig()->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
             $this->getDoctrine()->getManager()->flush();
 
-            if ($nextStep || $this->get('request')->request->has('btnSave')) {
-                // form for the next step
-                $form = $flow->createForm();
-            } else {
-                // flow finished
-                $flow->reset(); // remove step data from the session
+            if ($flow->isValid($form)) {
+                $flow->saveCurrentStepData($form);
 
-                $media = $this->generateDocument($formularService, $creditsUsage, $formData);
-                $creditsUsage->setMedia($media);
-                $creditsUsage->getFormularConfig()->setIsFormConfigFinished(true);
+                if (method_exists($formularService, 'processHandleForm')) {
+                    $formularService->processHandleForm($creditsUsage, $flow, $formData);
+                }
 
-                $this->getDoctrine()->getManager()->flush();
+                $nextStep = $flow->nextStep();
+                if (!$nextStep && method_exists($formularService, 'processEndHandleForm')) {
+                    $formularService->processEndHandleForm($formData);
+                }
 
-                $this->get('session')->getFlashBag()->set('document-generated-success', 'success.document-generated');
+                $currentStepNumber = $flow->getCurrentStepNumber();
+                if ($currentStepNumber > 1) {
+                    $creditsUsage->setCurrentStepNumber($currentStepNumber);
+                }
 
-                return $media->getId();
+
+                if ($nextStep || $this->get('request')->request->has('btnSave')) {
+                    // form for the next step
+                    $form = $flow->createForm();
+                } else {
+                    // flow finished
+                    $flow->reset(); // remove step data from the session
+
+                    $media = $this->generateDocument($formularId, $creditsUsage, $formData, $formularId);
+                    $creditsUsage->setMedia($media);
+                    $creditsUsage->getFormularConfig()->setIsFormConfigFinished(true);
+
+                    $this->getDoctrine()->getManager()->flush();
+
+                    return true;
+                }
             }
-
-            return false;
         }
+
+        return false;
     }
 
-    private function generateDocument($formularService, $creditsUsage, $formData)
+    private function generateDocument($formularService, $creditsUsage, $formData, $formularId)
     {
-        $filename = $formularService->getName() . $creditsUsage->getId() . '.pdf';
-        $filePath = $this->getParameter('generated_documents_dir') . strtolower($formularService->getSlug()) . '/' . $filename;
+        $filename = $formularId . $creditsUsage->getId() . '.pdf';
+        $filePath = $this->getParameter('generated_documents_dir') . $formularId . '/' . $filename;
         $formTemplateData = (method_exists($formularService, 'calculateExtraTemplateData')) ? $formularService->calculateExtraTemplateData($formData) : null;
-        $fileBody = $this->renderView('document_pdf_template/' . strtolower($formularService->getSlug()) . ".html.twig", array(
+        $fileBody = $this->renderView('document_pdf_template/' . $formularId . ".html.twig", array(
             'data' => $formData,
             'templateData' => $formTemplateData,
             'formConfig' => json_decode($creditsUsage->getFormularConfig()->getFormConfig())

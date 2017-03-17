@@ -2,17 +2,36 @@
 
 namespace AppBundle\Service\DocumentForm;
 
+use AppBundle\Entity\CreditsUsage;
 use AppBundle\Service\DocumentForm\Base\FormularGeneric;
 use AppBundle\Service\DocumentForm\Base\FormularFormDefaultInterface;
 
-class FormularProcesVerbalControl extends FormularGeneric implements FormularFormDefaultInterface
+class FormularProcesVerbalControl extends FormularGeneric
 {
 
-    public function applyDefaultFormData($creditsUsage, $formData, $user)
+    function applyDefaultFormData(CreditsUsage $creditsUsage, $user)
     {
-        $formData->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
-        $creditsUsage->setFormData($this->jmsSerializer->serialize($formData, 'json'));
+        $entityNamespace = $this->getEntity();
+        $entity = new $entityNamespace();
+
+        $entity->setCompany($user->getProfile() ? $user->getProfile()->getCompany() : "");
+
+        $formularConfig = $creditsUsage->getFormularConfig();
+        $formularConfig->setFormData($this->jmsSerializer->serialize($entity, 'json'));
+
         $this->entityManager->flush();
+
+    }
+
+    function getEntity()
+    {
+        return 'AppBundle\Document\ProcesVerbalControl\ProcesVerbalControl';
+    }
+
+
+    public function getName()
+    {
+        return 'proces_verbal_control';
     }
 
 }

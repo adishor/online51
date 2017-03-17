@@ -139,7 +139,8 @@ class CreditsUsageController extends Controller
 
         $formularId = $creditUsage->getFormular()->getId();
         $creditUsageFormularConfig = $creditUsage->getFormularConfig();
-        $formularData = $creditUsageFormularConfig->getFormData();
+
+        $formularData = (json_decode($creditUsageFormularConfig->getFormData())) ? get_object_vars(json_decode($creditUsageFormularConfig->getFormData())) : null;
 
         return $this->processFormularAction($formularId, array(), true, $formularData);
     }
@@ -158,8 +159,8 @@ class CreditsUsageController extends Controller
 
         $formularId = $creditUsage->getFormular()->getId();
         $creditUsageFormularConfig = $creditUsage->getFormularConfig();
-        $formularData = $creditUsageFormularConfig->getFormData();
 
+        $formularData = (json_decode($creditUsageFormularConfig->getFormData())) ? get_object_vars(json_decode($creditUsageFormularConfig->getFormData())) : null;
         $formularConfig = (json_decode($creditUsageFormularConfig->getFormConfig())) ? get_object_vars(json_decode($creditUsageFormularConfig->getFormConfig())) : null;
 
         return $this->processFormularAction($formularId, $formularConfig, true, $formularData);
@@ -180,6 +181,7 @@ class CreditsUsageController extends Controller
                     'success' => false,
                     'message' => $this->get('translator')->trans('domain.formular.no-credits'),
                 )));
+
                 return $response;
             }
         }

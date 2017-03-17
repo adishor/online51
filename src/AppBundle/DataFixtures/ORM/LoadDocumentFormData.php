@@ -33,6 +33,7 @@ class LoadDocumentFormData extends AbstractFixture implements OrderedFixtureInte
         $manager->persist($formular1);
         $manager->persist($formular2);
         $manager->persist($formular3);
+
         $manager->flush();
     }
 

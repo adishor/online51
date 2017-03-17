@@ -5,62 +5,66 @@ services:
         scope: request
         arguments: [@doctrine.orm.entity_manager]
 
-#    flows
-    app.form.flow.Evidenta_Gestiunii_Deseurilor:
-        class: AppBundle\Form\Flow\DocumentForm\EvidentaGestiuniiDeseurilorFlow
-        parent: craue.form.flow
-        scope: request
-        arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Convocator_CSSM:
+    app.form.flow.convocator_c_s_s_m:
         class: AppBundle\Form\Flow\DocumentForm\ConvocatorCSSMFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Componenta_CSSM:
+
+    app.form.flow.decizie_componenta_c_s_s_m:
         class: AppBundle\Form\Flow\DocumentForm\DecizieComponentaCSSMFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Personal_Cu_Atributii:
+
+    app.form.flow.decizie_personal_cu_atributii:
         class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributiiFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Comisie_Cercetare_Accidente:
+
+    app.form.flow.decizie_comisie_cercetare_accidente:
         class: AppBundle\Form\Flow\DocumentForm\DecizieComisieCercetareAccidenteFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Organizare_Activitate_SSM:
+
+    app.form.flow.decizie_organizare_activitate_s_s_m:
         class: AppBundle\Form\Flow\DocumentForm\DecizieOrganizareActivitateSSMFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Proces_Verbal_Sedinta_CSSM:
+
+    app.form.flow.proces_verbal_sedinta_c_s_s_m:
         class: AppBundle\Form\Flow\DocumentForm\ProcesVerbalSedintaCSSMFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Proces_Verbal_Control:
+
+    app.form.flow.proces_verbal_control:
         class: AppBundle\Form\Flow\DocumentForm\ProcesVerbalControlFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Permis_De_Lucru_Cu_Foc:
+
+    app.form.flow.permis_de_lucru_cu_foc:
         class: AppBundle\Form\Flow\DocumentForm\PermisDeLucruCuFocFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Personal_Cu_Atributii_PSI:
+
+    app.form.flow.decizie_personal_cu_atributii_p_s_i:
         class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributiiPSIFlow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
-    app.form.flow.Decizie_Personal_Cu_Atributii_2:
+
+    app.form.flow.decizie_personal_cu_atributii2:
         class: AppBundle\Form\Flow\DocumentForm\DeciziePersonalCuAtributii2Flow
         parent: craue.form.flow
         scope: request
         arguments: [@doctrine.orm.entity_manager]
+
     app.form.flow.register:
         class: AppBundle\Form\Flow\RegisterFlow
         parent: craue.form.flow

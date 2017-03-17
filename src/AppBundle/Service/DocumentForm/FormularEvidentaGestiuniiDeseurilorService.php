@@ -67,7 +67,6 @@ class FormularEvidentaGestiuniiDeseurilorService extends FormularGeneric
             'message' => (!$short) ? 'document-form.text.egd-full' : 'document-form.text.egd',
             'variables' => array(
                 'waste-type' => ($short) ? $formConfigValue['tip_deseu_cod'] : $formConfigValue['tip_deseu_cod'] . "&&" . $formConfigValue['tip_deseu'],
-                'year' => $formConfigValue['an'],
                 'operation' => isset($formConfigD->operatia) ? $formConfigValue['operatia'] : 'neselectat'
             )
         );
@@ -92,12 +91,6 @@ class FormularEvidentaGestiuniiDeseurilorService extends FormularGeneric
 
         return $entity;
     }
-
-    public function applyFormCustomization($flow, $form, $creditsUsage)
-    {
-
-    }
-
 
     private function getParameters()
     {

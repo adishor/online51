@@ -74,7 +74,7 @@ class CreditsUsageService
         $this->eventDispatcher->dispatch('app.event.credits_used', $event);
     }
 
-    public function createUnlockFormularCreditUsage($user, Formular $formular, $formularConfigArray, $discounted, $formularData)
+    public function createUnlockFormularCreditUsage($user, Formular $formular, $formularConfigArray = array(), $discounted = false, $formularData = null)
     {
         if ("evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
             $creditsUsage = new EgdFormularCreditsUsage();
@@ -92,6 +92,7 @@ class CreditsUsageService
 
         if ("evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
             $formularConfigArray['an'] = !$discounted ? $formularConfigArray['an'] : $formularConfigArray['an'] + 1;
+
             $expireYear = $formularConfigArray['an'] + 1;
             $timestamp = strtotime($expireYear . '-' . EvidentaGestiuniiDeseurilor::$startMonth . '-01 23:59:59');
             $expireDate = new \DateTime(date('Y-m-t H:i:s', $timestamp));
@@ -112,7 +113,36 @@ class CreditsUsageService
         }
 
         $formularConfig->setFormConfig(json_encode($formularConfigArray));
-        $formularConfig->setFormData($formularData);
+        if (!empty($formularData)) {
+            if ($discounted && "evidenta_gestiunii_deseurilor" === $formular->getSlug()) {
+                $formularData['last_year_in_stock'] = $formularData['cantitate_deseu'];
+                $formularData['cantitate_deseu'] = 0;
+
+                foreach ($formularData['_e_g_d1_generare_deseuri'] as $index => $value) {
+                    $value->cantitate_deseu_generate = $value->cantitate_deseu_valorificata = $value->cantitate_deseu_eliminata = $value->cantitate_deseu_in_stoc = 0;
+                    $value->agent_economic = array();
+                    $formularData['_e_g_d1_generare_deseuri'][$index] = $value;
+                }
+
+                foreach ($formularData['_e_g_d2_stocare_tratare_transport_deseuri'] as $index => $value) {
+                    $value->stocare_cantitate = $value->tratare_cantitate = 0;
+                    $formularData['_e_g_d2_stocare_tratare_transport_deseuri'][$index] = $value;
+                }
+
+                foreach ($formularData['_e_g_d3_valorificare_deseuri'] as $index => $value) {
+                    $value->cantitate_deseu_valorificata = 0;
+                    $formularData['_e_g_d3_valorificare_deseuri'][$index] = $value;
+                }
+
+                foreach ($formularData['_e_g_d4_eliminare_deseuri'] as $index => $value) {
+                    $value->cantitate_deseu_eliminata = 0;
+                    $formularData['_e_g_d4_eliminare_deseuri'][$index] = $value;
+                }
+            }
+
+            $formularConfig->setFormData(json_encode($formularData));
+        }
+
         $formularConfig->setFormHash(md5(json_encode($user->getId()) . json_encode($formularConfig)));
         $formularConfig->setIsFormConfigFinished(false);
         $formularConfig->setFormularCreditsUsage($creditsUsage);

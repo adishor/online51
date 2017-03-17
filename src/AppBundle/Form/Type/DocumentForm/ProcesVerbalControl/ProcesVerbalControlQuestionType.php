@@ -27,7 +27,7 @@ class ProcesVerbalControlQuestionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\DocumentForm\ProcesVerbalControl\ProcesVerbalControlQuestion',
+            'data_class' => 'AppBundle\Document\ProcesVerbalControl\ProcesVerbalControlQuestion',
             'cascade_validation' => true,
         ));
     }

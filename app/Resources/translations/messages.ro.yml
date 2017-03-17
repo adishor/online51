@@ -1,6 +1,7 @@
 ## YAML Template.
 register:
     title: 'Inregistrare'
+    title-demo: 'Inregistrare cont gratuit'
     subscription: 'Pentru finalizarea inregistrarii este necesar sa comandati un abonament'
 form:
     label:
@@ -150,6 +151,7 @@ formular-documents:
     actions: Actiuni
     new: Creare document nou
     date-expired: Data expirare
+    year: Anul
     expired: Expirat
     edit: Continuare editare document
     download: Descarca document
@@ -552,7 +554,7 @@ document-form:
         egd:
             form-general-error: 'Eroare la creare document! </br> Asigurati-va ca toate campurile sunt completate.'
     text:
-        egd: ' <span><b>Tip deseu:</b> waste-type; <b>Operatia:</b> operation; <b>Anul:</b> year; </span>'
+        egd: ' <span><b>Tip deseu:</b> waste-type; <b>Operatia:</b> operation;</span>'
         egd-full: '<b>Tip deseu:</b> waste-type'
         egd-operatia-unselect: neselectat
         ccssm: '<span>Ziua: <b>day</b>; Ora: <b>hour</b>; </span>'

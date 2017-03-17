@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Entity\DocumentForm\DeciziePersonalCuAtributii;
+namespace AppBundle\Document\DeciziePersonalCuAtributii;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
-use AppBundle\Entity\DocumentForm\Common\Person;
+use AppBundle\Document\Common\Person;
 
 class DeciziePersonalCuAtributii
 {
@@ -31,7 +31,7 @@ class DeciziePersonalCuAtributii
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $workersLeaders;
@@ -39,7 +39,7 @@ class DeciziePersonalCuAtributii
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $workersCarsDriven;
@@ -47,7 +47,7 @@ class DeciziePersonalCuAtributii
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $workersFirstAid;
@@ -55,7 +55,7 @@ class DeciziePersonalCuAtributii
     /**
      *
      * @var type
-     * @Type("array<AppBundle\Entity\Document\Common\Person>")
+     * @Type("array<AppBundle\Document\Common\Person>")
      * @Assert\Count(min="1")
      */
     protected $workersResponsible;

@@ -56,7 +56,6 @@
                                     <th class="text-center">{{ 'formular-documents.type' | trans }}</th>
                                     <th class="text-center">{{ 'formular-documents.date-expired' | trans }}</th>
                                     <th class="text-center">{{ 'formular-documents.actions' | trans }}</th>
-                                    <th class="text-center">{{ 'formular-documents.new' | trans }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,18 +134,6 @@
                                         {% set downloadPath = path('media_show', {'fileId': doc.mid }) %}
                                         <a href="{{ downloadPath }}" target="_blank">
                                             <img alt="DownloadsDocImg" src="{{ asset("assets/images/DownloadsDoc.png") }}" id="DownloadsDocImg" title="{{ 'formular-documents.download' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
-                                        </a>
-                                    {% endif %}
-                                </td>
-                                <td class="">
-                                    {% if doc.discountedCreditValue is not null %}
-                                        {% set colorClass = (isUserException) ? "green" : ((doc.discountedCreditValue > 0) ? "red" : "green") %}
-                                        <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument('{{ doc.cuid }}', '{{ doc.isDraft }}', '{{ doc.discountedCreditValue ? false : true }}', '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.name, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
-                                            <div class="credit-icon">
-                                                <div class="credit-icon-value color-{{ colorClass }} create-new">
-                                                    {{ isUserException ? 0 : doc.discountedCreditValue }}
-                                                </div>
-                                            </div>
                                         </a>
                                     {% endif %}
                                 </td>
