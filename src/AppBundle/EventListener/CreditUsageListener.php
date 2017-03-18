@@ -75,13 +75,13 @@ class CreditUsageListener implements EventSubscriberInterface
         $userId = $event->getUserId();
         $user = $this->entityManager->find('ApplicationSonataUserBundle:User', $userId);
 
-        $this->updateCredits($user);
+        $this->updateCredits($user, true);
     }
 
     /**
      * @param $user
      */
-    protected function updateCredits($user)
+    protected function updateCredits($user, $withFlush = false)
     {
         $orderRepository = $this->entityManager->getRepository('AppBundle:Order');
         $creditsUsageRepository = $this->entityManager->getRepository('AppBundle:CreditsUsage');
@@ -96,5 +96,9 @@ class CreditUsageListener implements EventSubscriberInterface
 
         $user->setCreditsTotal($updatedCredits);
         $user->setLastCreditUpdate(new \DateTime());
+
+        if ($withFlush) {
+            $this->entityManager->flush();
+        }
     }
 }

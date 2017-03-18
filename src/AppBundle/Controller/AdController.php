@@ -20,8 +20,8 @@ class AdController extends Controller
                     $location = file_get_contents('http://ip-api.com/json/' . $_SERVER['REMOTE_ADDR']);
                     if (FALSE !== $location) {
                         $location = json_decode($location);
-                        if (isset($location->region_name)) {
-                            $countyName = str_replace("Judetul ", "", $location->region_name);
+                        if (isset($location->regionName)) {
+                            $countyName = str_replace("Judetul ", "", $location->regionName);
                         }
                     }
                 }
