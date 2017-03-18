@@ -19,17 +19,18 @@ class SubDomainController extends Controller
      */
     public function showSubDomainAction(Domain $domain, SubDomain $subdomain)
     {
-
-        $repo = $this->getDoctrine()->getRepository('AppBundle:File');
-        $files = $repo->getFilesBySubdomain($subdomain->getId());
-
         $isUserException = false;
+        $files = array();
 
         if ($this->getUser()) {
             $userId = $this->getUser()->getId();
             $userService = $this->get('app.user');
 
             $isUserException = $userService->getIsUserException($userId);
+
+
+            $repo = $this->getDoctrine()->getRepository('AppBundle:File');
+            $files = $repo->getFilesBySubdomain($subdomain->getId());
         }
 
         return $this->render('subdomain/show.html.twig', array(
@@ -48,9 +49,15 @@ class SubDomainController extends Controller
      */
     public function showFolderAction(Domain $domain, SubDomain $subdomain, Folder $folder)
     {
-        $repo = $this->getDoctrine()->getRepository('AppBundle:File');
-        $files = $repo->getFilesByFolderOrganizedByType($folder->getId());
-        $isUserException = $this->get('app.user')->getIsUserException($this->getUser()->getId());
+        $isUserException = false;
+        $files = array();
+
+        if ($this->getUser()) {
+            $isUserException = $this->get('app.user')->getIsUserException($this->getUser()->getId());
+            $repo = $this->getDoctrine()->getRepository('AppBundle:File');
+            $files = $repo->getFilesByFolderOrganizedByType($folder->getId());
+        }
+
 
         return $this->render('subdomain/folder_show.html.twig', array(
             'domain' => $domain,
