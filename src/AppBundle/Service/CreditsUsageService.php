@@ -4,6 +4,8 @@ namespace AppBundle\Service;
 
 use AppBundle\Document\EvidentaGestiuniiDeseurilor\EvidentaGestiuniiDeseurilor;
 use AppBundle\Entity\CreditsUsage;
+use AppBundle\Entity\Document;
+use AppBundle\Entity\DocumentCreditsUsage;
 use AppBundle\Entity\EgdFormularConfig;
 use AppBundle\Entity\EgdFormularCreditsUsage;
 use AppBundle\Entity\Formular;
@@ -34,23 +36,26 @@ class CreditsUsageService
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function createUnlockDocumentCreditUsage($user, $document)
+    public function createUnlockDocumentCreditUsage($user, Document $document)
     {
+        $creditValue = $document->getCreditValue();
+
         $creditsUsage = new DocumentCreditsUsage();
         $creditsUsage->setUser($user);
-        $creditsUsage->setDocument($document);
-        $user->setCreditsTotal($user->getCreditsTotal() - $document->getCreditValue());
-        $user->setLastCreditUpdate(new \DateTime());
+        $creditsUsage->setFile($document);
+
         $creditsUsage->setMentions($this->translator->trans('credit-usage.document-unlocked-by-user'));
         $expireDate = new \DateTime();
-        $expireDate->add(new \DateInterval('P' . $creditsUsage->getDocument()->getValabilityDays() . 'D'));
+        $expireDate->add(new \DateInterval('P' . $creditsUsage->getFile()->getValabilityDays() . 'D'));
         $creditsUsage->setExpireDate($expireDate);
-        $creditsUsage->setCredit($document->getCreditValue());
-        $creditsUsage->setUsageType(CreditsUsage::TYPE_DOCUMENT);
+        $creditsUsage->setCredit($creditValue);
         $creditsUsage->setMedia($document->getMedia());
 
         $this->entityManager->persist($creditsUsage);
         $this->entityManager->flush();
+
+        $event = new CreditUsedEvent($document);
+        $this->eventDispatcher->dispatch('app.event.credits_used', $event);
     }
 
     public function createUnlockVideoCreditUsage($user, Video $video)

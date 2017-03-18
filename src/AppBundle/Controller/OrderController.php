@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Admin\ProfileController;
 use AppBundle\Helper\GeneralHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -79,70 +80,67 @@ class OrderController extends Controller
         $userId = $this->getUser()->getId();
         $creditUsageRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:CreditsUsage');
 
-        $mediaId = $request->query->get('mediaId') ? $request->query->get('mediaId') : null;
-        $formularDocuments = $creditUsageRepository->findalluserformulardocuments($userId, $mediaId, array('evidenta_gestiunii_deseurilor'), true);
-
-        foreach ($formularDocuments as $index => $doc) {
-
-            $serviceId = GeneralHelper::getServiceIdBySlug($doc['fslug']);
-            $formularService = $this->get('app.formular.' . $serviceId);
-
-            $formularDocuments[$index]['isDraft'] = !$doc['isFormConfigFinished'];
+        if ($type == 'forms') {
+            $validDocuments = $creditUsageRepository->findAllValidUserFormularDocuments($userId);
+        } else if ($type == 'documents') {
+            $validDocuments = $creditUsageRepository->findAllValidUserDocuments($userId);
+        } else {
+            $validDocuments = $creditUsageRepository->findAllValidUserVideos($userId);
         }
 
-//        if ($request->query->has('mediaId')) {
-            $validDocuments = $formularDocuments;
+        //        if ($request->query->has('mediaId')) {
+//            $validDocuments = $formularDocuments;
 //        } else {
 //            $validDocuments = array_merge($creditUsageRepository->findAllValidUserDocuments($userId), $creditUsageRepository->findAllValidUserVideos($userId), $formularDocuments);
 //
-//            //sort documents by domain Name - group them
-//            usort($validDocuments, function ($item1, $item2) {
-//                if ($item1['domain'] < $item2['domain']) {
-//                    return -1;
-//                }
-//                if ($item1['domain'] > $item2['domain']) {
-//                    return 1;
-//                }
-//
-//                if (isset($item1['formConfigYear']) && isset($item2['formConfigYear'])) {
-//                    if ((int) $item1['formConfigYear'] > (int) $item2['formConfigYear']) {
-//                        return -1;
-//                    }
-//                    if ((int) $item1['formConfigYear'] < (int) $item2['formConfigYear']) {
-//                        return 1;
-//                    }
-//                }
-//
-//                if ($item1['name'] < $item2['name']) {
-//                    return -1;
-//                }
-//                if ($item1['name'] > $item2['name']) {
-//                    return 1;
-//                }
-//
-//                if ($item1['date']->format('d-m-Y') > $item2['date']->format('d-m-Y')) {
-//                    return -1;
-//                }
-//                if ($item1['date']->format('d-m-Y') < $item2['date']->format('d-m-Y')) {
-//                    return 1;
-//                }
-//
-//                if (isset($item1['formConfigTipDeseu']) && isset($item2['formConfigTipDeseu'])) {
-//                    if ($item1['formConfigTipDeseu'] < $item2['formConfigTipDeseu']) {
-//                        return -1;
-//                    }
-//                    if ($item1['formConfigTipDeseu'] > $item2['formConfigTipDeseu']) {
-//                        return 1;
-//                    }
-//                }
-//
-//                return 0;
-//
-//            });
+            //sort documents by domain Name - group them
+            usort($validDocuments, function ($item1, $item2) {
+                if ($item1['domain'] < $item2['domain']) {
+                    return -1;
+                }
+                if ($item1['domain'] > $item2['domain']) {
+                    return 1;
+                }
+
+                if (isset($item1['formConfigYear']) && isset($item2['formConfigYear'])) {
+                    if ((int) $item1['formConfigYear'] > (int) $item2['formConfigYear']) {
+                        return -1;
+                    }
+                    if ((int) $item1['formConfigYear'] < (int) $item2['formConfigYear']) {
+                        return 1;
+                    }
+                }
+
+                if ($item1['name'] < $item2['name']) {
+                    return -1;
+                }
+                if ($item1['name'] > $item2['name']) {
+                    return 1;
+                }
+
+                if ($item1['date']->format('d-m-Y') > $item2['date']->format('d-m-Y')) {
+                    return -1;
+                }
+                if ($item1['date']->format('d-m-Y') < $item2['date']->format('d-m-Y')) {
+                    return 1;
+                }
+
+                if (isset($item1['formConfigTipDeseu']) && isset($item2['formConfigTipDeseu'])) {
+                    if ($item1['formConfigTipDeseu'] < $item2['formConfigTipDeseu']) {
+                        return -1;
+                    }
+                    if ($item1['formConfigTipDeseu'] > $item2['formConfigTipDeseu']) {
+                        return 1;
+                    }
+                }
+
+                return 0;
+
+            });
 //        }
 
         return $this->render('order/my_documents/order_valid_documents.html.twig', array(
-              'validDocuments' => $formularDocuments,
+              'validDocuments' => $validDocuments,
               'isUserException' => $this->get('app.user')->getIsUserException(),
               'type' => $type,
             )

@@ -53,14 +53,14 @@ services:
             - { name: sonata.admin, manager_type: orm, label: admin_label.area, group: admin_group_website }
     admin.document:
         class: AppBundle\Admin\DocumentAdmin
-        arguments: [~, AppBundle\Entity\Document, ~]
+        arguments: [~, AppBundle\Entity\Document, AppBundle:Admin\Formular]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.document, group: sonata_media }
         calls:
             - [setTemplates, [{ base_list_field: sonata/document_base_list_field.html.twig }]]
     admin.video:
         class: AppBundle\Admin\VideoAdmin
-        arguments: [~, AppBundle\Entity\Video, AppBundle:Admin\Video]
+        arguments: [~, AppBundle\Entity\Video, AppBundle:Admin\Formular]
         tags:
             - { name: sonata.admin, manager_type: orm, label: admin_label.video, group: sonata_media }
         calls:

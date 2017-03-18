@@ -47,7 +47,6 @@ class CreditsUsageController extends Controller
             throw new AccessDeniedHttpException($this->get('translator')->trans('domain.not-logged-in'));
         }
         $creditsUsageService = $this->get('app.credits_usage');
-        $creditsUsageService->updateValidUserCredits();
 
         $documentId = $request->request->get('documentId');
         $document = $this->getDoctrine()->getManager()->getRepository('AppBundle:Document')->find($documentId);

@@ -95,6 +95,9 @@ class FolderAdmin extends Admin
         return $choices;
     }
 
-
+    public function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('getFolders', 'getFolders');
+    }
 
 }

@@ -28,10 +28,10 @@ class CreditsUsageAdmin extends Admin
           ->setParameter('role', '%"ROLE_SUPER_ADMIN"%');
 
         $queryDocument = $this->modelManager
-          ->getEntityManager('AppBundle:Document')
+          ->getEntityManager('AppBundle:File')
           ->createQueryBuilder()
           ->select('d')
-          ->from('AppBundle:Document', 'd')
+          ->from('AppBundle:File', 'd')
           ->where('d.deleted = 0');
 
         $queryVideo = $this->modelManager
@@ -45,9 +45,9 @@ class CreditsUsageAdmin extends Admin
               'query_builder' => $queryUser,
               'disabled' => $disabled
           ))
-          ->add('document', null, array(
+          ->add('File', null, array(
               'query_builder' => $queryDocument,
-              'empty_value' => 'No Document',
+              'empty_value' => 'No File',
               'required' => false,
               'disabled' => ($this->getSubject()->getFormular()) ? true : $disabled
           ))
@@ -74,9 +74,9 @@ class CreditsUsageAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('user')
-          ->add('document')
-          ->add('formular')
-          ->add('video')
+          ->add('file')
+//          ->add('formular')
+//          ->add('video')
           ->add('credit')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
@@ -86,9 +86,9 @@ class CreditsUsageAdmin extends Admin
         $list->addIdentifier('id')
           ->add('createdAt')
           ->add('user')
-          ->add('document')
-          ->add('formular')
-          ->add('video')
+          ->add('file')
+//          ->add('formular')
+//          ->add('video')
           ->add('media')
           ->add('credit')
           ->add('mentions')
@@ -104,9 +104,9 @@ class CreditsUsageAdmin extends Admin
     protected function configureShowFields(ShowMapper $show)
     {
         $show->add('user')
-          ->add('document')
-          ->add('formular')
-          ->add('video')
+          ->add('file')
+//          ->add('formular')
+//          ->add('video')
           ->add('media', null, array(
               'template' => 'sonata/credits_usage_base_show_field.html.twig',
           ))

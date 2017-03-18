@@ -1,0 +1,15 @@
+<div class="row new-evaluation">
+    <div class="col-xs-2">
+        <div class="credit-icon">
+            <div class="credit-icon-value color-{{ isUserException ? "green" : ((formular.creditValue > 0) ? "red" : "green") }}">
+                {{ isUserException ? 0 : formular.creditValue }}
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-10">
+        <a id="{{ formular.slug }}" class="show-form-config">
+            <h4>{{ formular.name }}</h4>
+        </a>
+    </div>
+    {{ render(controller('AppBundle:Formular:configFormularUniqueness', {'slug': formular.slug, 'request' : app.request })) }}
+</div>

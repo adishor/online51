@@ -77,15 +77,15 @@
                                     <span>{{ title }}</span>
                                     <br/>
                                     <p class="errorUpdateTitle" id="errorUpdateTitle{{ doc.cuid }}"></p>
-                                {% if doc.formConfig != 'null' %}
-                                    <span class="small">{{ doc.formConfig | raw }}</span>
-                                {% endif %}
+                                {#{% if doc.formConfig is defined and doc.formConfig != 'null' %}#}
+                                    {#<span class="small">{{ doc.formConfig | raw }}</span>#}
+                                {#{% endif %}#}
                                 </td>
                                 <td class="">-</td>
                                 <td class="">{{ doc.date|date('d-m-Y') }}</td>
                                 <td class="">
                                     {% if date(doc.date) > date() %}
-                                        {% set path = path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) %}
+                                        {% set path = path('formular_show' , {'slug': doc.slug, 'creditsUsageId': doc.cuid }) %}
                                         {% if doc.currentStepNumber is defined %}
                                             {% set path = path ~ '?step=' ~ doc.currentStepNumber %}
                                         {% endif %}

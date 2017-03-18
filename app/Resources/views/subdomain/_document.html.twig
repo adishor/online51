@@ -1,0 +1,35 @@
+{% set downloadPath = path('media_show', {'fileId': document.media|sonata_urlsafeid }) %}
+<div class="row new-evaluation">
+    {% if validDocuments[document.id] is defined or isUserException %}
+        <a href="{{ downloadPath }}" target="_blank">
+            <div class="col-xs-2">
+                <div class="credit-icon">
+                    <div class="credit-icon-value color-green">
+                        {{ 0 }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-10">
+                <h4>{{ document.name }}</h4>
+            </div>
+        </a>
+        {% if not isUserException and validDocuments[document.id] != 'FREE' %}
+            <p class="document-info" >{{ "domain.document.available-until"|trans({ '%date%' : validDocuments[document.id]| localizeddate('medium', 'short', app.request.locale ) })  }}</p>
+        {% endif %}
+    {% else %}
+        <a id="downloadLink{{ document.id }}" href ="javascript:;" onclick="
+                javascript:DocumentConfirmPopup('{{ 'modal.document-confirm.body'|trans({'%title%': document.name, '%credits%': document.creditValue, '%plural%' : (document.creditValue == 1) ? 'modal.document-confirm.credit'|trans : 'modal.document-confirm.credits'|trans }) }}', '{{ path('unlock_document') }}', {{ document.id }}, '{{ downloadPath }}');">
+            <div class="col-xs-2">
+                <div class="credit-icon">
+                    <div id="documentIcon{{ document.id }}" class="credit-icon-value color-{{ (document.creditValue > 0) ? "red" : "green" }}">
+                        {{ document.creditValue }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-10">
+                <h4>{{ document.name }}</h4>
+            </div>
+        </a>
+        <p class="document-info" id="errorOrSuccess{{document.id}}" hidden="hidden"></p>
+    {% endif %}
+</div>

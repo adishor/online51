@@ -23,12 +23,16 @@ class VideoController extends Controller
             ->getRepository('AppBundle:SubDomain')
             ->find($subdomainId);
 
-        $folders = $subdomain->getFolders();
+        if (!empty($subdomain)) {
+            $folders = $subdomain->getFolders();
 
-        foreach($folders as $fd){
-            $html .= '<option value="' . $fd->getId().'" >' . $fd->getName() . '</option>';
+            foreach ($folders as $fd) {
+                $html .= '<option value="' . $fd->getId().'" >' . $fd->getName() . '</option>';
+            }
+
+            return new Response($html, 200);
         }
 
-        return new Response($html, 200);
+        return new Response();
     }
 }

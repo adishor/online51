@@ -75,6 +75,10 @@ class FileRepository extends EntityRepository
         return $query->getResult();
     }
 
+    /**
+     * @param $folderId
+     * @return array
+     */
     public function getFilesByFolderOrganizedByType($folderId)
     {
         $files = $this->getFilesByFolder($folderId);

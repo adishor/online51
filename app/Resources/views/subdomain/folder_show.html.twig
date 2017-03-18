@@ -56,7 +56,18 @@
                 <div class="tab-pane active">
                     <h3>{{ subdomain.name | upper }} - {{ folder.name | upper }}</h3>
 
-                    {% if files.video is not empty %}
+                    {% if files.document is defined  and files.document|length > 0 %}
+                        <h4>{{ 'domain.documents' | trans }}</h4>
+                        <ul>
+                            {% for document in files.document %}
+                                {% if (not document.deleted and document.media and not document.media.deleted) %}
+                                    {% include 'subdomain/_document.html.twig' with  { 'document' : document } %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% if files.video is defined and files.video|length > 0 %}
                         <h4>{{ 'domain.videos' | trans }}</h4>
                         <ul>
                             {% for video in files.video %}
@@ -66,6 +77,18 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
+
+                    {% if files.formular is defined and files.formular|length > 0 %}
+                        <h4>{{ 'domain.formulars' | trans }}</h4>
+                        <ul>
+                            {% for formular in files.formular %}
+                                {% if not formular.deleted %}
+                                    {% include 'subdomain/_formular.html.twig' with  { 'formular' : formular } %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
                 </div>
             {% endif %}
         </div>
