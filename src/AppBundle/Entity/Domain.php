@@ -66,13 +66,6 @@ class Domain
 
     /**
      *
-     * @ORM\ManyToMany(targetEntity="Subscription", mappedBy="domains", cascade={"persist"})
-     * @ORM\JoinTable(name="subscription_domain")
-     */
-    private $subscriptions;
-
-    /**
-     *
      * @ORM\OneToMany(targetEntity="SubDomain", mappedBy="domain", cascade={"persist"})
      */
     private $subdomains;

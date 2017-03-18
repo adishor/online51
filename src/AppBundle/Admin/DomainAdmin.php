@@ -15,6 +15,7 @@ class DomainAdmin extends Admin
 
     public function configureFormFields(FormMapper $form)
     {
+        die('z');
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         //get all subdomains associated to domains
@@ -49,25 +50,25 @@ class DomainAdmin extends Admin
             'disabled' => $disabled
         );
 
-        $querySubscription = $this->modelManager
-          ->getEntityManager('AppBundle:Subscription')
-          ->createQueryBuilder()
-          ->select('s')
-          ->from('AppBundle:Subscription', 's')
-          ->where('s.deleted = 0');
-
-        $subscriptionsOptions = array(
-            'query' => $querySubscription,
-            'expanded' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'required' => false,
-            'disabled' => $disabled
-        );
-
-        if ($this->getSubject()->getDeleted()) {
-            $subscriptionsOptions['btn_add'] = FALSE;
-        }
+//        $querySubscription = $this->modelManager
+//          ->getEntityManager('AppBundle:Subscription')
+//          ->createQueryBuilder()
+//          ->select('s')
+//          ->from('AppBundle:Subscription', 's')
+//          ->where('s.deleted = 0');
+//
+//        $subscriptionsOptions = array(
+//            'query' => $querySubscription,
+//            'expanded' => false,
+//            'multiple' => true,
+//            'by_reference' => false,
+//            'required' => false,
+//            'disabled' => $disabled
+//        );
+//
+//        if ($this->getSubject()->getDeleted()) {
+//            $subscriptionsOptions['btn_add'] = FALSE;
+//        }
 
         $form->add('name', null, array(
               'disabled' => $disabled
@@ -85,7 +86,7 @@ class DomainAdmin extends Admin
               'disabled' => $disabled
           ))
           ->add('subdomains', 'entity', $subdomainsOptions)
-          ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions)
+//          ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions)
           ->add('demoDomain', null, array(
               'required' => false,
               'disabled' => $disabled
@@ -100,16 +101,17 @@ class DomainAdmin extends Admin
     {
         $filter->add('name')
           ->add('subdomains')
-          ->add('subscriptions')
+//          ->add('subscriptions')
           ->add('deleted', null, array(), null, array('choices_as_values' => true));
     }
 
     public function configureListFields(ListMapper $list)
     {
+
         $list->addIdentifier('name')
           ->add('dedicated')
           ->add('subdomains')
-          ->add('subscriptions')
+//          ->add('subscriptions')
           ->add('deleted');
     }
 
@@ -120,7 +122,7 @@ class DomainAdmin extends Admin
           ->add('description', 'html')
           ->add('dedicated')
           ->add('subdomains')
-          ->add('subscriptions')
+//          ->add('subscriptions')
           ->add('demoDomain')
           ->add('demoCreditValue')
           ->add('deleted')
