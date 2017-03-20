@@ -86,7 +86,6 @@ class DomainAdmin extends Admin
               'disabled' => $disabled
           ))
           ->add('subdomains', 'entity', $subdomainsOptions)
-//          ->add('subscriptions', 'sonata_type_model', $subscriptionsOptions)
           ->add('demoDomain', null, array(
               'required' => false,
               'disabled' => $disabled

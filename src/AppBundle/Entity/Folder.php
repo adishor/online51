@@ -20,7 +20,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table()
  * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @UniqueEntity("name", message="assert.unique.name")
  */
 class Folder
 {

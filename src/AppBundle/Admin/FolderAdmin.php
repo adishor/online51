@@ -21,8 +21,18 @@ class FolderAdmin extends Admin
 {
     public function configureFormFields(FormMapper $form)
     {
-
         $disabled = (boolean)($this->getSubject()->getDeleted());
+
+        $subdomainsOptions = array(
+            'expanded' => false,
+            'multiple' => false,
+            'by_reference' => true,
+            'required' => false,
+            'class' => 'AppBundle:SubDomain',
+            'empty_value' => 'No Subdomain',
+            'choices' => $this->getFolderChoices($form),
+            'disabled' => $disabled
+        );
 
         $form->add('name', null, array(
             'disabled' => $disabled
@@ -32,16 +42,7 @@ class FolderAdmin extends Admin
             'required' => false,
             'disabled' => $disabled
         ))
-        ->add('subdomain', 'entity',  array(
-            'class' => 'AppBundle:SubDomain',
-            'choices' => $this->getFolderChoices($form),
-            'empty_value' => 'No SubDomain',
-            'expanded' => false,
-            'multiple' => false,
-            'by_reference' => false,
-            'required' => false,
-            'disabled' => $disabled
-        ));
+        ->add('subdomain', null, $subdomainsOptions);
     }
 
     public function configureDatagridFilters(DatagridMapper $filter)
@@ -82,7 +83,6 @@ class FolderAdmin extends Admin
             }
             $choices[$domain->getName()] = $subdomains;
         }
-
         //get all subdomains that are not associated
         $subdomainEm = $formMapper->getAdmin()->getModelManager()->getEntityManager('AppBundle:SubDomain');
         $noDomainSubdomains = $subdomainEm->getRepository('AppBundle:SubDomain')->createQueryBuilder('s')
