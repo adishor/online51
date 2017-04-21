@@ -58,6 +58,8 @@
                 <div class="tab-pane active">
                     <h3>{{ subdomain.name | upper }} - {{ folder.name | upper }}</h3>
 
+                    {{ folder.description | raw }}
+
                     {% if files.document is defined  and files.document|length > 0 %}
                         <h4>{{ 'domain.documents' | trans }}</h4>
                         <ul>
