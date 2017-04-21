@@ -36,9 +36,11 @@
                     {% if subdomainItem.folders is not empty and subdomain.id == subdomainItem.id %}
                         <ul class="nav nav-tabs clearfix"  role="tablist">
                         {% for folderItem in subdomainItem.folders %}
+                            {% if not folderItem.deleted %}
                             <li>
                                 <a class="submenu" href="{{ path("folder_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug, 'folder': folderItem.id }) }}">&nbsp;&nbsp;>&nbsp;&nbsp;{{ folderItem.name | upper }}</a>
                             </li>
+                            {% endif %}
                         {% endfor %}
                         </ul>
                     {% endif %}

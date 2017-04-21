@@ -15,7 +15,6 @@ class DomainAdmin extends Admin
 
     public function configureFormFields(FormMapper $form)
     {
-        die('z');
         $disabled = ($this->getSubject()->getDeleted()) ? TRUE : FALSE;
 
         //get all subdomains associated to domains
