@@ -22,7 +22,9 @@ class FormularController extends Controller
             $folders = $subdomain->getFolders();
 
             foreach ($folders as $fd) {
-                $html .= '<option value="' . $fd->getId().'" >' . $fd->getName() . '</option>';
+                if (!$fd->getDeleted()) {
+                    $html .= '<option value="' . $fd->getId().'" >' . $fd->getName() . '</option>';
+                }
             }
 
             return new Response($html, 200);

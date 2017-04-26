@@ -39,7 +39,7 @@
                                 {% if not folderItem.deleted %}
                                     {% set activeFolder = (folder.id == folderItem.id) ? "class=active" : "" %}
                                     <li {{ activeFolder }}>
-                                        <a class="submenu" href="{{ path("folder_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug, 'folder': folderItem.id }) }}">&nbsp;&nbsp;>&nbsp;&nbsp;{{ folderItem.name | upper }}</a>
+                                        <a class="submenu" href="{{ path("folder_show", {'domain': domain.slug, 'subdomain': subdomainItem.slug, 'folder': folderItem.id }) }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ folderItem.name | upper }}</a>
                                     </li>
                                 {% endif %}
                             {% endfor %}

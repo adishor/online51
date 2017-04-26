@@ -58,7 +58,7 @@
         </script>
     {% else %}
         <a id="showLink{{ video.id }}" href ="javascript:;" onclick="javascript:VideoConfirmPopup('{{ 'modal.video-confirm.body'|trans({'%title%': video.name, '%credits%': video.creditValue, '%plural%' : (video.creditValue == 1) ? 'modal.video-confirm.credit'|trans : 'modal.video-confirm.credits'|trans }) }}', '{{ path('unlock_video') }}', '{{ video.id }}', '{% path video.media, 'reference' %}', '{{ (video.media) ? path('sonata_media_download', {'id': video.media|sonata_urlsafeid }) : "" }}', '{{ (video.youtubeLink) ? video.youtubeLink | youtube_id : '' }}', '{{ asset('assets/flowplayer/flowplayer.swf') }}' );">
-            <div class="col-xs-2">
+            <div class="col-xs-2" style="width: auto;">
                 <div class="credit-icon">
                     <div id="documentIcon{{ video.id }}" class="credit-icon-value color-{{ (video.creditValue > 0) ? "red" : "green" }}">
                         {{ video.creditValue }}
