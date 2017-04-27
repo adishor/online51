@@ -1,6 +1,8 @@
 {% for ad in ads %}
     <p class="text-center">
-        <img class="responsiv" src="{% path ad.image, 'big' %}" alt="" />
+        <a href="{{ ad.url }}" target="_blank">
+            <img class="responsiv" src="{% path ad.image, 'big' %}" alt="{{ ad.name }}" />
+        </a>
     </p>
 {% endfor %}
 

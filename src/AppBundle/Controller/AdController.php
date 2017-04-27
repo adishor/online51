@@ -18,7 +18,8 @@ class AdController extends Controller
                     $countyName = $this->getUser()->getProfile()->getCounty()->getName();
                 } else {
                     $location = file_get_contents('http://ip-api.com/json/' . $_SERVER['REMOTE_ADDR']);
-                    if (FALSE !== $location) {
+
+                    if (!empty($location)) {
                         $location = json_decode($location);
                         if (isset($location->regionName)) {
                             $countyName = str_replace("Judetul ", "", $location->regionName);
@@ -27,9 +28,12 @@ class AdController extends Controller
                 }
             }
 
+
+
             if ($countyName) {
                 $areasCounty = $this->getDoctrine()->getManager()->getRepository('AppBundle:ROArea')
                   ->findAllByCounty(strtolower(str_replace(array("/", " "), array("-", ""), $countyName)));
+
                 if (count($areasCounty)) {
                     foreach ($areasCounty as $areaItem) {
                         $areas[] = $areaItem->getSlug();
@@ -38,8 +42,10 @@ class AdController extends Controller
             } else {
                 $areas[] = $this->getParameter('default_ads_area_slug');
             }
+
             $this->get('session')->set('areas', $areas);
         }
+
 
         $ads = $this->getDoctrine()->getManager()
             ->getRepository('AppBundle:Ad')->findAllByAreas($this->get('session')->get('areas'));

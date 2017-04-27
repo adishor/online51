@@ -45,6 +45,16 @@ class Ad
      */
     protected $areas;
 
+
+    /**
+     *
+     * @var string
+     *
+     * @ORM\Column()
+     */
+    protected $url;
+
+
     /**
      * Constructor
      */
@@ -147,6 +157,22 @@ class Ad
     public function __toString()
     {
         return ($this->getId() ? $this->getName() : 'Create new');
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
     }
 
 }

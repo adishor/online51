@@ -55,6 +55,7 @@ class AdAdmin extends Admin
               )
           ))
           ->add('areas', 'sonata_type_model', $areasOptions)
+          ->add('url', 'url')
         ;
     }
 
