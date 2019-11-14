@@ -4280,14 +4280,8 @@
             "version": "2.3.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sidz/SonataMediaBundle.git",
+                "url": "https://github.com/sonata-project/SonataMediaBundle.git",
                 "reference": "15a251e7a9e80acc481e6e7bd0576efb19fb1b7a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sidz/SonataMediaBundle/zipball/15a251e7a9e80acc481e6e7bd0576efb19fb1b7a",
-                "reference": "15a251e7a9e80acc481e6e7bd0576efb19fb1b7a",
-                "shasum": ""
             },
             "require": {
                 "friendsofsymfony/rest-bundle": "~1.1",

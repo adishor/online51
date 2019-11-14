@@ -285,6 +285,7 @@ mail:
         valability: 'Abonamentul este valabil '
         price: 'Pretul abonamentului este de %price% RON.'
         invoice-attached: 'In atasament gasiti factura proforma aferenta comenzii.'
+        invoice-paid-status-change: 'Dupa plata facturii proforma, veti primi un mail cu confirmarea activarii abonamentului ales.'
         subject: 'Comanda trimisa!'
     form-expire-notification:
         message: 'Accesul la completare pentru formularul formName, formText expira pe expireDate.'
@@ -324,6 +325,7 @@ login:
     label: 'Acces abonati'
     forgot: 'Am uitat parola!'
     free: 'Creare cont gratuit'
+    create-account: 'Creare cont'
     user-information: 'Informatii'
     change-password: 'Schimbare parola'
     change-user-information: 'Editare informatii'

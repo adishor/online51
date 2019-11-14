@@ -37,7 +37,11 @@ class DefaultController extends Controller
         $domains = $this->getDoctrine()->getManager()
             ->getRepository('AppBundle:Domain')->findBy(array('deleted' => false));
 
+        $user = $this->getUser();
+	$accType = $user != null ? $user->getProfile()->getAccountType() : 0;
+
         return $this->render('default/menu.html.twig', array(
+              'accType' => $accType,
               'domains' => $domains
         ));
     }

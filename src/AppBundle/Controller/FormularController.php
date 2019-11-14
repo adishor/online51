@@ -24,21 +24,21 @@ class FormularController extends Controller
      */
     public function showFormularAction(Request $request, Formular $formular, CreditsUsage $creditsUsage)
     {
-
         $user = $this->getUser();
-        $formularService = $this->get('app.formular.' . $formular->getSlug());
-        $formularService->setName($formular->getSlug());
 
         if (null === $user) {
             return $this->redirect($this->generateUrl('homepage'));
         }
 
+        $formularService = $this->get('app.formular.' . $formular->getSlug());
+        $formularService->setName($formular->getSlug());
 
         $flow = $this->get('app.form.flow.' . $formular->getSlug()); // must match the flow's service id
         $flow->setId('app_form_flow_' . $formular->getSlug() . '_' . $creditsUsage->getId());
         $creditsUsageId = $request->get('creditsUsageId');
 
-        if (empty($creditsUsage->getFormData())) {
+        $cuFormDAta = $creditsUsage->getFormData();
+        if (empty($cuFormDAta)) {
             $entity = $formularService->getEntity();
             $formData = new $entity();
             if (method_exists($formularService, 'applyDefaultFormData')) {
@@ -47,10 +47,21 @@ class FormularController extends Controller
             $flow->bind($formData);
         } else {
             $formData = $this->get('jms_serializer')
-                ->deserialize($creditsUsage->getFormData(), $formularService->getEntity(), 'json');
+                ->deserialize($cuFormDAta, $formularService->getEntity(), 'json');
+
+            if ($creditsUsage->hasFormStorageData()) {
+                $h = json_decode($creditsUsage->getFormStorageData(), true);
+                $x = $flow->getStorage();
+
+                $id = $creditsUsage->getId();
+                $x->set('app_form_flow_' . $formular->getSlug() . '_' . $id . '_data', $h);
+
+                $flow->setStorage($x);
+            }
 
             $flow->bind($formData);
         }
+
 
         // form of the current step
         $form = $flow->createForm();
@@ -58,7 +69,8 @@ class FormularController extends Controller
             $formularService->applyFormCustomization($flow, $form, $creditsUsage);
         }
 
-        $response = $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData);
+
+        $response = $this->handleForm($formularService, $creditsUsage, $flow, $form, $formData, $formular->getSlug());
         if ($response) {
             return $this->redirect($this->generateUrl('show_valid_documents') . '?mediaId=' . $response);
         }
@@ -74,9 +86,10 @@ class FormularController extends Controller
         ));
     }
 
-    public function handleForm($formularService, $creditsUsage, &$flow, &$form, &$formData)
+    public function handleForm($formularService, $creditsUsage, &$flow, &$form, &$formData, $slug)
     {
         if ($flow->isValid($form)) {
+
             $flow->saveCurrentStepData($form);
             if (method_exists($formularService, 'processHandleForm')) {
                 $formularService->processHandleForm($creditsUsage, $flow, $formData);
@@ -91,7 +104,17 @@ class FormularController extends Controller
                 $creditsUsage->setCurrentStepNumber($currentStepNumber);
             }
 
-            $creditsUsage->setFormData($this->get('jms_serializer')->serialize($formData, 'json'));
+            $serializedFormData = $this->get('jms_serializer')->serialize($formData, 'json');
+
+            $x = $flow->getStorage();
+            $id = $creditsUsage->getId();
+            $z = $x->get("app_form_flow_" . $slug . "_" . $id . "_data");
+
+            $storageSerializedFormData = $this->get('jms_serializer')->serialize($z, 'json');
+
+            $creditsUsage->setFormStorageData($storageSerializedFormData);
+            $creditsUsage->setFormData($serializedFormData);
+
             $this->getDoctrine()->getManager()->flush();
 
             if ($nextStep || $this->get('request')->request->has('btnSave')) {

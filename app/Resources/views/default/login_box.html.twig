@@ -16,6 +16,11 @@
 {% if app.user %}
     <div class="login-form" id="loginDiv">
         <p class="first text-center text-small">{{ 'login.user-information'|trans }}</p>
+
+        <p class="text-center">
+            Bine ai venit, <b>{{ app.user.profile.name }}</b>
+        </p>
+
         <h4 class="text-center">{{ 'total-credits'|trans }}</h4>
         {% if app.user.creditsTotal %}
             <h4 id="totalUserCredits" class="text-center">{{ app.user.creditsTotal }}</h4>
@@ -51,7 +56,8 @@
             <br class="clear" />
             <div class="fa-icon-section">
                 <p class="last fa-icon fa fa-key"><a onclick="ResetPasswordShow();" href="#">{{ 'login.forgot'|trans }}</a></p>
-                <p class="last fa-icon fa fa-unlock"><a href="{{ path('create_demo_account') }}">{{ 'login.free'|trans }}</a></p>
+{#                <p class="last fa-icon fa fa-unlock"><a href="{{ path('create_demo_account') }}">{{ 'login.free'|trans }}</a></p>#}
+                <p class="last fa-icon fa fa-unlock"><a href="{{ path('register') }}">{{ 'login.create-account'|trans }}</a></p>
             </div>
         </div>
     </form>

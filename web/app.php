@@ -1,5 +1,8 @@
 <?php
 
+//header('HTTP/1.0 403 Forbidden');
+//exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
+
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 

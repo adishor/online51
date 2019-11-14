@@ -60,6 +60,7 @@ class UserService
         $profile->setCounty($data->getProfile()->getCounty());
         $profile->setCity($data->getProfile()->getCity());
         $profile->setAddress($data->getProfile()->getAddress());
+        $profile->setAccountType(0);
         $mediaId = $this->session->get('tmpMedia');
         if ($mediaId) {
             $profile->setImage($this->entityManager->getRepository('ApplicationSonataMediaBundle:Media')->find($mediaId));
@@ -113,8 +114,9 @@ class UserService
         $profile->setBank(NULL);
         $profile->setPhone(NULL);
         $profile->setAddress(NULL);
-        $profile->setFunction('');
+        $profile->setFunction(NULL);
         $profile->setDemoAccount(true);
+        $profile->setAccountType(0);
         $user->setProfile($profile);
 
         $this->entityManager->persist($user);

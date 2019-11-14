@@ -98,6 +98,16 @@ class ProfileAdmin extends Admin
               'required' => false,
               'disabled' => $disabled
           ))
+          ->add('accountType', 'choice', array(
+              'choices' => array(
+                  Profile::BOTH_SECTIONS => 'Both',
+                  Profile::DESEURI_SECTION => 'Deseuri',
+                  Profile::OTHERS_SECTION => 'Others'
+              ),
+              'required' => true,
+              'disabled' => $disabled
+          ))
+
           ->add('cui', null, array(
               'required' => false,
               'disabled' => $disabled

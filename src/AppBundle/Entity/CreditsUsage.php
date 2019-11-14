@@ -131,6 +131,14 @@ class CreditsUsage
 
     /**
      *
+     * @var string JSON
+     *
+     * @ORM\Column(type="json_array", nullable=true)
+     */
+    private $formStorageData;
+
+    /**
+     *
      * @var string
      *
      * @ORM\Column(type="string", length=32, nullable=true)
@@ -448,6 +456,44 @@ class CreditsUsage
     public function getFormData()
     {
         return $this->formData;
+    }
+
+    /**
+     * Set formData
+     *
+     * @param array $formData
+     * @return CreditsUsage
+     */
+    public function setFormStorageData($formData)
+    {
+        $this->formStorageData = $formData;
+
+        return $this;
+    }
+
+    /**
+     * Set formData
+     *
+     * @param array $formData
+     * @return CreditsUsage
+     */
+    public function hasFormStorageData()
+    {
+        if (!empty($this->formStorageData))
+            return true;
+
+        return false;
+    }
+
+
+    /**
+     * Get formData
+     *
+     * @return array
+     */
+    public function getFormStorageData()
+    {
+        return $this->formStorageData;
     }
 
     /**

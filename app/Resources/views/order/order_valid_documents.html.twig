@@ -84,9 +84,6 @@
                             <td class="">
                                 {% if doc.usageType == formularType and date(doc.date) > date() %}
                                     {% set path = path('formular_show' , {'slug': doc.fslug, 'creditsUsageId': doc.cuid }) %}
-                                    {% if doc.currentStepNumber is defined %}
-                                        {% set path = path ~ '?step=' ~ doc.currentStepNumber %}
-                                    {% endif %}
                                     <a href="{{ path }}">
                                         <img alt="EditDocImg" src="{{ asset("assets/images/EditDoc.png") }}" id="EditDocImg" title="{{ 'formular-documents.edit' | trans }}" class="image-cursor-pointer table-users-overview-actions-image-space">
                                     </a>
@@ -138,7 +135,7 @@
                             <td class="">
                                 {% if doc.usageType == formularType and doc.discountedCreditValue is not null %}
                                     {% set colorClass = (isUserException) ? "green" : ((doc.discountedCreditValue > 0) ? "red" : "green") %}
-                                    <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument('{{ doc.cuid }}', '{{ doc.isDraft }}', '{{ doc.discountedCreditValue ? false : true }}', '{{ 'modal.config-form-add-confirm.body'|trans({'%title%' : doc.name, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
+                                    <a title="{{ 'formular-documents.new-documents' | trans }}" onclick="createNewFormularDocument('{{ doc.cuid }}', '{{ doc.isDraft }}', '{{ doc.discountedCreditValue ? false : true }}', '{{ 'modal.config-form-add-confirm.body-no-config'|trans({'%title%' : doc.name, '%credits%': doc.discountedCreditValue, '%plural%' : (doc.discountedCreditValue == 1) ? 'modal.config-form-add-confirm.credit'|trans : 'modal.config-form-add-confirm.credits'|trans }) }}');">
                                         <div class="credit-icon">
                                             <div class="credit-icon-value color-{{ colorClass }} create-new">
                                                 {{ isUserException ? 0 : doc.discountedCreditValue }}

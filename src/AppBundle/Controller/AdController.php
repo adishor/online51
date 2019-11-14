@@ -17,7 +17,7 @@ class AdController extends Controller
                 if ($this->getUser() && $this->getUser()->getProfile()->getCounty()) {
                     $countyName = $this->getUser()->getProfile()->getCounty()->getName();
                 } else {
-                    $location = file_get_contents('http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR']);
+                    $location = file_get_contents('http://api.ipstack.com/' . $_SERVER['REMOTE_ADDR']. '?access_key=34dc748a78e24c736067b1550e87224e');
                     if (FALSE !== $location) {
                         $location = json_decode($location);
                         if (isset($location->region_name)) {

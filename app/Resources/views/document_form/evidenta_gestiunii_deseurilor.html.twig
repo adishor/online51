@@ -1,5 +1,7 @@
 {% extends "base.html.twig" %}
 
+{% set formConfig  = creditsUsage.formConfig | json_decode %}
+{% set formData  = creditsUsage.formData | json_decode %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -16,15 +18,14 @@
         {% include "document_form/config/confirm_generate_document_modal.html.twig" %}
     {% endif %}
     {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 3 : 2) %}
-        {% set formData  = creditsUsage.formData | json_decode %}
-        {% include "document_form/config/customize_agent_details_modal.html.twig" with {'agentiEconomici': formData._e_g_d_company } %}
+        {% if formData._e_g_d_company is defined %}
+            {% include "document_form/config/customize_agent_details_modal.html.twig" with {'agentiEconomici': formData._e_g_d_company } %}
+        {% else %}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
 {% block ccontainer %}
-    {% set formConfig  = creditsUsage.formConfig | json_decode %}
-    {% set formData  = creditsUsage.formData | json_decode %}
-
     <h2 class="title">{{ 'Evidenta Gestiunii Deseurilor' | trans }}</h2>
 
     {% for flash_message in app.session.flashbag.get('form-success') %}
@@ -215,7 +216,7 @@
                     <tr>
                         <th class="text-center width-35-px" rowspan="3">{{ 'Nr.' | trans }}</th>
                         <th class="text-center width-105-px" rowspan="3">{{ 'Luna' | trans }}</th>
-                        <th class="text-center" colspan="3">{{ 'Cantitatea de deseuri' | trans }}<span> ({{ 'U/M aleasa este ' ~ formData.unitate_masura }})</span></th>
+{#                        <th class="text-center" colspan="3">{{ 'Cantitatea de deseuri' | trans }}<span> ({{ 'U/M aleasa este ' ~ formData.unitate_masura }})</span></th>#}
                     </tr>
                     <tr>
                         <th class="text-center" rowspan="2">{{ 'Generate' | trans }}</th>
@@ -347,8 +348,9 @@
                                 }
                             }
                         });
-                                                
                         jQuery('#customizeAgentDetailsModal').modal();
+                                                console.log('aici');
+                        // jQuery('#customizeAgentDetailsModal').modal();
                     }
                     
                     $('#customizeAgentDetailsModalYes').click(function () {
@@ -383,6 +385,12 @@
                         
                     });
                 </script>
+            {% endif %}
+
+            {% if flow.getCurrentStepNumber() == ((creditsUsage.isFormConfigFinished) ? 4 : 3) %}
+                <h3>{{'Generare document final' | trans}}</h3>
+                <p>{{ 'Formularul tau a fost salvat cu succes. Poti reveni oricand sa modifici/completezi datele salvate, utilizand meniul "Documentele mele".' | trans }}</p>
+                <p>{{ 'Apasand butonul "Finalizeaza" de mai jos vei genera documentul final.' | trans }}</p>
             {% endif %}
 
             <div class="hidden">{{ form_rest(form) }}</div>

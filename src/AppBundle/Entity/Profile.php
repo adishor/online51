@@ -20,6 +20,9 @@ class Profile
     const NO_EMPLOYEES_0_9 = 2;
     const NO_EMPLOYEES_10_49 = 3;
     const NO_EMPLOYEES_OVER_50 = 4;
+    const BOTH_SECTIONS = 0;
+    const DESEURI_SECTION = 1;
+    const OTHERS_SECTION = 2;
 
     /**
      *
@@ -167,6 +170,13 @@ class Profile
      */
     protected $deletedAt;
 
+    /**
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default":0})
+     */
+    protected $accountType;
 
     /**
      * @ORM\OneToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", inversedBy="profile", cascade={"persist", "remove"})
@@ -546,6 +556,17 @@ class Profile
     }
 
     /**
+     * Get accountType
+     *
+     * @return integer
+     */
+    public function getAccountType()
+    {
+        return $this->accountType;
+    }
+
+
+    /**
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
@@ -557,6 +578,20 @@ class Profile
 
         return $this;
     }
+
+    /**
+     * Set accountType
+     *
+     * @param integer $accountType
+     * @return Profile
+     */
+    public function setAccountType($accountType)
+    {
+        $this->accountType = $accountType;
+
+        return $this;
+    }
+
 
     /**
      * Get deletedAt
